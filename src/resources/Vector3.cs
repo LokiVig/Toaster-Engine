@@ -67,6 +67,16 @@ public struct Vector3
         }
     }
 
+    public static Vector3 Normalize(Vector3 vector)
+    {
+        return vector.Normalized();
+    }
+
+    public readonly override string ToString()
+    {
+        return $"<{x:0.###}, {y:0.###}, {z:0.###}>";
+    }
+
     #region OPERATORS
     public static bool operator ==(Vector3 in1, Vector3 in2)
     {

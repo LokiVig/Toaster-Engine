@@ -6,9 +6,9 @@ namespace DoomNET.Resources;
 public class Ray
 {
     /// <summary>
-    /// Trace a ray from a specified starting position to a direction, with ignore flags and length values
+    /// Trace a ray from a specified starting position (<see cref="Vector3"/>) to a direction (<see cref="Vector3"/>), with <see cref="RayIgnore"/> flags and length values
     /// </summary>
-    /// <returns><see langword="true"></langword> and the object we hit, <see langword="false"/> and <see langword="null"/> if nothing was hit.</returns>
+    /// <returns><see langword="true"/> and the <see langword="object"/> we hit, <see langword="false"/> and <see langword="null"/> if nothing was hit.</returns>
     public static bool Trace(Vector3 startPos, Vector3 direction, out object hitObject, RayIgnore ignore = RayIgnore.None, float length = float.MaxValue)
     {
         Vector3 rayEnd = (startPos + direction.Normalized()) * length;

@@ -69,6 +69,25 @@ public class Entity
     // Things to do every frame
     protected virtual void Update()
     {
+        HandleMovement();
+    }
+
+    private void HandleMovement()
+    {
+        position += velocity * DoomNET.deltaTime;
+
+        Vector3 drag = 0.01f * DoomNET.deltaTime * velocity.Normalized();
+        velocity -= drag;
+
+        if (velocity.Magnitude() < 0.001f)
+        {
+            velocity = new();
+        }
+
+        if (position >= 8196)
+        {
+            throw new IndexOutOfRangeException($"Entity {id} out of valid area! ({position.ToString()})");
+        }
     }
 
     /// <summary>
@@ -96,6 +115,14 @@ public class Entity
     }
 
     /// <summary>
+    /// Gets this entity's velocity
+    /// </summary>
+    public Vector3 GetVelocity()
+    {
+        return velocity;
+    }
+
+    /// <summary>
     /// Gets this entity's bounding box
     /// </summary>
     public BBox GetBBox()
@@ -106,16 +133,16 @@ public class Entity
     /// <summary>
     /// Is this entity alive?
     /// </summary>
-    /// <returns>True if alive, false if dead</returns>
+    /// <returns><see langword="true"/> if alive, <see langword="false"/> if dead</returns>
     public bool IsAlive()
     {
         return alive;
     }
 
     /// <summary>
-    /// Set the target of this entity, e.g. an enemy should target the player
+    /// Set the target of this entity, e.g. an enemy should target the <see cref="Player"/>
     /// </summary>
-    /// <param name="target">The specific entity we wish to target, 0 should always be the player</param>
+    /// <param name="target">The specific entity we wish to target, 0 should always be the <see cref="Player"/></param>
     public void SetTarget(Entity target)
     {
         // Can't target a dead entity
@@ -128,21 +155,30 @@ public class Entity
     }
 
     /// <summary>
-    /// Set the target of this entity by an ID, e.g. an enemy should target the player
+    /// Set the target of this entity by an ID, e.g. an enemy should target the <see cref="Player"/>
     /// </summary>
-    /// <param name="targetID">The ID of the entity we wish to target, 0 should always be the player</param>
+    /// <param name="targetID">The ID of the entity we wish to target, 0 should always be the <see cref="Player"/></param>
     public void SetTarget(string targetID)
     {
         target = DoomNET.file.FindEntity(targetID);
     }
 
     /// <summary>
-    /// Set this entity's position by a Vector3
+    /// Set this entity's position by a <see cref="Vector3"/>
     /// </summary>
     /// <param name="position">The new, desired position of this entity</param>
     public void SetPosition(Vector3 position)
     {
         this.position = position;
+    }
+
+    /// <summary>
+    /// Set this entity's velocity by a <see cref="Vector3"/>
+    /// </summary>
+    /// <param name="velocity">The new, desired velocity of this entity</param>
+    public void SetVelocity(Vector3 velocity)
+    {
+        this.velocity = velocity;
     }
 
     /// <summary>

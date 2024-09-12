@@ -32,8 +32,28 @@ public class WTFFile
     /// <param name="brush">The brush that we're to add to this file</param>
     public void AddBrush(Brush brush)
     {
-        // Add the wall to the list
+        // Add the brush to the list
         brushes.Add(brush);
+    }
+
+    /// <summary>
+    /// Remove a brush from the list of this WTF file
+    /// </summary>
+    /// <param name="brush">The brush that we're to remove from this file</param>
+    public void RemoveBrush(Brush brush)
+    {
+        // Remove the brush from the list
+        brushes.Remove(brush);
+    }
+
+    /// <summary>
+    /// Remove the entity from the entities list
+    /// </summary>
+    /// <param name="entity">Desired entity to remove</param>
+    /// <param name="id">ID of the entity we wish to remove</param>
+    public void RemoveEntity(Entity entity, string id = null)
+    {
+        entities.Remove((entity, id));
     }
 
     public List<(Entity entities, string id)> GetEntities()

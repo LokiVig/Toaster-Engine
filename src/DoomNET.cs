@@ -27,6 +27,9 @@ public class DoomNET
 
         file = new();
 
+        Player player = new();
+        player.SetVelocity(new Vector3(1.5f, 2.5f, 0.5f));
+
         file.AddEntity(new Player(), "0");
         file.AddEntity(new TestNPC(), "1");
         file.AddBrush(new Brush(new Vector3(-1.5f, -1.5f, -1.5f), new Vector3(1.5f, 1.5f, 1.5f)));

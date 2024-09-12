@@ -6,7 +6,7 @@ namespace DoomNET.WTF;
 /// <summary>
 /// A brush, a collection of 6 solid faces, stretching from one point to another, defined with a bounding box
 /// </summary>
-public class Brush
+public struct Brush
 {
     private BBox bbox { get; set; } = new(); // The extents of this brush, bbox.mins.z being the very bottom, bbox.maxs.z being the top
     private string id { get; set; } // The id of this brush, can be set by the mapper, it can connect to another brush that's 
@@ -53,5 +53,8 @@ public class Brush
     {
         desiredEntity.SetBBox(bbox);
         desiredEntity.SetPosition(GetCenter());
+
+        DoomNET.file.RemoveBrush(this);
+        DoomNET.file.AddEntity(desiredEntity);
     }
 }
