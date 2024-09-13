@@ -78,6 +78,9 @@ public struct Vector3
     }
 
     #region OPERATORS
+    public static Vector3 operator +(Vector3 in1) => in1;
+    public static Vector3 operator -(Vector3 in1) => new Vector3(-in1.x, -in1.y, -in1.z);
+
     public static bool operator ==(Vector3 in1, Vector3 in2)
     {
         return in1.x == in2.x && in1.y == in2.y && in1.z == in2.z;
@@ -229,16 +232,31 @@ public struct Vector3
 
     public static Vector3 operator /(Vector3 in1, Vector3 in2)
     {
+        if (in1 == 0 || in2 == 0)
+        {
+            throw new DivideByZeroException();
+        }
+
         return new Vector3(in1.x / in2.x, in1.y / in2.y, in1.z / in2.z);
     }
 
     public static Vector3 operator /(Vector3 in1, float in2)
     {
+        if (in1 == 0 || in2 == 0)
+        {
+            throw new DivideByZeroException();
+        }
+
         return new Vector3(in1.x / in2, in1.y / in2, in1.z / in2);
     }
 
     public static Vector3 operator /(float in1, Vector3 in2)
     {
+        if (in1 == 0 || in2 == 0)
+        {
+            throw new DivideByZeroException();
+        }
+
         return new Vector3(in1 / in2.x, in1 / in2.y, in1 / in2.z);
     }
 
