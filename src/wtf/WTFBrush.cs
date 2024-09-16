@@ -41,7 +41,7 @@ public struct Brush
 
     public Vector3 GetCenter()
     {
-        return bbox.maxs - bbox.mins; // This is sure not to work
+        return (bbox.maxs - bbox.mins) / 2 + bbox.mins; // THANK YOU RUSSELL 🙏
     }
 
     public BBox GetBBox()

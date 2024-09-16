@@ -16,7 +16,7 @@ public class BBox
     /// Is this BBox intersecting with another?
     /// </summary>
     /// <param name="other">The other BBox to check for intersections</param>
-    /// <returns>True if intersecting with the other, false if not</returns>
+    /// <returns><see langword="true"/> if intersecting with the other, <see langword="false"/> if not</returns>
     public bool Intersecting(BBox other)
     {
 

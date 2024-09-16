@@ -23,7 +23,7 @@ public class DoomNET
     public void Initialize()
     {
         // DEBUG! Load a test map
-        // file = WTFLoader.LoadFile("maps/test.wtf");
+        //file = WTFLoader.LoadFile("maps/test.wtf");
 
         file = new();
 
@@ -36,7 +36,7 @@ public class DoomNET
 
         WTFSaver.SaveFile("maps/test.wtf", file);
 
-        if (Ray.Trace(new Vector3(), file.GetBrushes()[0].GetCenter(), out object hit))
+        if (Ray.Trace(new Vector3(), file.GetBrushes()[0].GetCenter(), out object hit, RayIgnore.Entities))
         {
             Console.WriteLine($"Wuhyippe!!! We hit {hit}!!!");
         }
