@@ -43,4 +43,9 @@ public class BBox
 
         return false;
     }
+
+    public Vector3 GetCenter()
+    {
+        return (maxs - mins) / 2 + mins; // THANK YOU RUSSELL 🙏
+    }
 }

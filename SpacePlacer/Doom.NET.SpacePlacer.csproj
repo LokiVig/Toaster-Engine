@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>DoomNET.SpacePlacer</RootNamespace>
+    <AssemblyName>DoomNET.SpacePlacer</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <BaseOutputPath>$(SolutionDir)build\</BaseOutputPath>
+    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+    <StartupObject></StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Doom.NET.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Qt.DotNet.Adapter">
+      <HintPath>lib\Qt.DotNet.Adapter.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

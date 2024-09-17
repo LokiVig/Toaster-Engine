@@ -70,7 +70,7 @@ public class WTFFile
         }
     }
 
-    public List<(Entity entities, string id)> GetEntities()
+    public List<Entity> GetEntities()
     {
         return entities;
     }
@@ -111,9 +111,9 @@ public class WTFFile
         for (int i = 0; i < entities.Count; i++)
         {
             // If entities[i]'s ID fits with the input ID, return that entity
-            if (entities[i].id == id)
+            if (entities[i].GetID() == id)
             {
-                return entities[i].entity;
+                return entities[i];
             }
         }
 

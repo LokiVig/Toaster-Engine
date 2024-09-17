@@ -17,7 +17,7 @@ public class Ray
         if (!ignore.HasFlag(RayIgnore.Entities))
         {
             // Check every entity
-            foreach ((Entity entity, string id) in DoomNET.file?.GetEntities())
+            foreach (Entity entity in DoomNET.file?.GetEntities())
             {
                 // Are we intersecting with this entity's bounding box?
                 if (entity.GetBBox().Intersecting(rayEnd))

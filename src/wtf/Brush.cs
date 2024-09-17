@@ -10,6 +10,7 @@ public struct Brush
 {
     private BBox bbox { get; set; } = new(); // The extents of this brush, bbox.mins.z being the very bottom, bbox.maxs.z being the top
     private string id { get; set; } // The id of this brush, can be set by the mapper, it can connect to another brush that's 
+    private Vector3[] points { get; set; } = new Vector3[6];
 
     public Brush()
     {

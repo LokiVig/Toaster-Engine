@@ -6,4 +6,9 @@
     <BaseOutputPath>$(SolutionDir)build\</BaseOutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="SpacePlacer\**" />
+    <EmbeddedResource Remove="SpacePlacer\**" />
+    <None Remove="SpacePlacer\**" />
+  </ItemGroup>
 </Project>
