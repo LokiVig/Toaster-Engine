@@ -140,6 +140,14 @@ public class Entity
     }
 
     /// <summary>
+    /// Sets this entity's ID
+    /// </summary>
+    public void SetID(string id)
+    {
+        this.id = id;
+    }
+
+    /// <summary>
     /// Set the target of this entity, e.g. an enemy should target the <see cref="Player"/>
     /// </summary>
     /// <param name="target">The specific entity we wish to target, 0 should always be the <see cref="Player"/></param>
@@ -315,7 +323,7 @@ public class Entity
             // Call the OnDeath event
             OnDeath();
         }
-        else if (health < -25.0f) // Should they gib?
+        else if (health <= -25.0f) // Should they gib?
         {
             // Call the OnXDeath event
             OnXDeath();
