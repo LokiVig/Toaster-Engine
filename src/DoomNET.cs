@@ -28,11 +28,14 @@ public class DoomNET
         file = new();
 
         Player player = new();
-        player.SetVelocity(new Vector3(1.5f, 2.5f, 0.5f));
+        player.SetVelocity(new Vector3(1.5f, 0.25f, 0f));
+
+        TestNPC npc = new();
+        npc.SetVelocity(new Vector3(-0.5f, -25.0f, 0f));
 
         file.AddEntity(player);
-        file.AddEntity(new TestNPC());
-        file.AddBrush(new Brush(new Vector3(-1.5f, -1.5f, -1.5f), new Vector3(1.5f, 1.5f, 1.5f)));
+        file.AddEntity(npc);
+        file.AddBrush(new Brush(new Vector3(-21.5f, -15.5f, -31.5f), new Vector3(25.5f, 34.5f, 0.5f)));
 
         WTFSaver.SaveFile("maps/test.wtf", file);
 
@@ -72,6 +75,15 @@ public class DoomNET
             // Lock the FPS to 60
             float elapsedTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
             float timeToWait = (1.0f / 60.0f) - elapsedTime;
+
+            for (int i = 0; i < file.GetEntities().Count; i++)
+            {
+                Console.SetCursorPosition(0, i + 1);
+                Console.Write($"Entity {file.GetEntities()[i].GetID()} Position: {file.GetEntities()[i].GetPosition().ToString()}");
+
+                Console.SetCursorPosition(0, i + 3);
+                Console.Write($"Entity {file.GetEntities()[i].GetID()} Velocity: {file.GetEntities()[i].GetVelocity().ToString()}");
+            }
 
             if (timeToWait > 0)
             {

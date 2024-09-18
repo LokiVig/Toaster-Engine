@@ -12,9 +12,4 @@
   <ItemGroup>
     <ProjectReference Include="..\Doom.NET.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Qt.DotNet.Adapter">
-      <HintPath>lib\Qt.DotNet.Adapter.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 </Project>

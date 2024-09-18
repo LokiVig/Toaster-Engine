@@ -22,7 +22,7 @@ public class Entity
     private System.Numerics.Quaternion rotation { get; set; } // This entity's current rotation
 
     protected virtual float health { get; set; } // The amount of health this entity has
-    
+
     private bool alive; // Is this entity alive?
 
     private Entity target; // The entity this entity's targeting
@@ -74,19 +74,15 @@ public class Entity
 
     private void HandleMovement()
     {
-        position += velocity * DoomNET.deltaTime;
+        position += velocity * DoomNET.deltaTime * DoomNET.deltaTime;
 
-        Vector3 drag = 0.01f * DoomNET.deltaTime * velocity.Normalized();
+        Vector3 drag = velocity.Normalized() * 0.1f * DoomNET.deltaTime;
+
         velocity -= drag;
 
-        if (velocity.Magnitude() < 0.001f)
+        if (velocity.Magnitude() < 0.1f)
         {
             velocity = new();
-        }
-
-        if (position >= 8196)
-        {
-            throw new IndexOutOfRangeException($"Entity {id} out of valid area! ({position.ToString()})");
         }
     }
 
@@ -211,7 +207,7 @@ public class Entity
     /// Subtract this entity's health by the parameter and trigger related events
     /// </summary>
     /// <param name="damage">The amount of damage this entity should take</param>
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         // Lower this entity's health by the set amount of damage
         health -= damage;

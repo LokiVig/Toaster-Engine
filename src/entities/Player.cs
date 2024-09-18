@@ -7,7 +7,7 @@ public class Player : Entity
     protected override EntityTypes type => EntityTypes.Player; // This entity is of type Player
     protected override float health => 100.0f;
 
-    private float armor = 0.0f;
+    private float armor = 0.0f; // Remove a certain amount of damage if armor isn't 0, and decrease the armor value when taking damage
 
     public Player() : base() { }
 
@@ -19,7 +19,25 @@ public class Player : Entity
     {
         base.Update();
 
+        // Take user inputs to make this player move
         HandleInput();
+    }
+
+    public override void TakeDamage(float damage)
+    {
+        // Take half amount of damage if we have armor
+        if (armor > 0.0f)
+        {
+            armor -= damage;
+            health -= damage / 2;
+        }
+        else if (armor <= 0.0f) // Take regular amount of damage if no armor
+        {
+            health -= damage;
+        }
+
+        // We have taken damage, OnDamage call!
+        OnDamage();
     }
 
     /// <summary>
