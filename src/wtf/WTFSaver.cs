@@ -14,36 +14,36 @@ public class WTFSaver
     /// Save a WTF file to a specified path
     /// </summary>
     /// <param name="path">The path of the WTF file, already specified if WTFLoader.file and/or its filepath isn't null</param>
-    public static void SaveFile(string path = null, WTFFile file = null)
+    public static void SaveFile(string path, WTFFile inFile)
     {
         // A local variable for storing the file
-        WTFFile currFile;
+        WTFFile file;
 
         // If we already have a file open, set the path to the current file
-        if (DoomNET.file != null && !string.IsNullOrEmpty(DoomNET.file.filepath))
+        if (DoomNET.file != null && !string.IsNullOrEmpty(DoomNET.file.directory))
         {
-            currFile = DoomNET.file;
-            path = currFile.filepath;
+            file = DoomNET.file;
+            path = file.directory;
         }
-        else if (file != null) // If the input file wasn't null, set this file to the input file
+        else if (inFile != null) // If the input file wasn't null, set it accordingly
         {
-            currFile = file;
+            file = inFile;
         }
-        else
+        else // We couldn't find a file to save, error!
         {
-            throw new NullReferenceException("Error saving file, inFile == null && WTFLoader.file == null!");
+            throw new NullReferenceException("Error saving file, SaveFile().inFile == null && DoomNET.file == null!");
         }
 
         // Call the file's OnSave function
-        currFile.OnSave();
+        file.OnSave();
 
         // Set the file's filepath if it wasn't already sourced from the file itself
-        if (currFile.filepath != path)
+        if (file.directory != path)
         {
-            currFile.filepath = path;
+            file.directory = path;
         }
 
         // Write the WTF file to the path
-        File.WriteAllText(path, JsonSerializer.Serialize(currFile, Program.serializerOptions));
+        File.WriteAllText(path, JsonSerializer.Serialize(file, Program.serializerOptions));
     }
 }

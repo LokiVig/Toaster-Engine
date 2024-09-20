@@ -17,12 +17,9 @@ public class BBox
     /// </summary>
     /// <param name="other">The other BBox to check for intersections</param>
     /// <returns><see langword="true"/> if intersecting with the other, <see langword="false"/> if not</returns>
-    public bool Intersecting(BBox other)
+    public bool IntersectingWith(BBox other)
     {
-
-        if ((mins.x <= other.maxs.x && maxs.x >= other.mins.x) &&
-            (mins.y <= other.maxs.y && maxs.y >= other.mins.y) &&
-            (mins.z <= other.maxs.z && maxs.y >= other.mins.z))
+        if (mins <= other.maxs && maxs >= other.mins)
         {
             OnIntersect?.Invoke();
             return true;
@@ -31,11 +28,9 @@ public class BBox
         return false;
     }
 
-    public bool Intersecting(Vector3 point)
+    public bool IntersectingWith(Vector3 point)
     {
-        if ((point.x >= mins.x && point.x <= maxs.x) &&
-            (point.y >= mins.y && point.y <= maxs.y) &&
-            (point.z >= mins.z && point.z <= maxs.z))
+        if (point >= mins && point <= maxs)
         {
             OnIntersect?.Invoke();
             return true;

@@ -6,7 +6,7 @@ using System;
 namespace DoomNET.Resources;
 
 /// <summary>
-/// Struct defining a position in 3 dimensions (Z -> up)
+/// Struct defining a point in 3 dimensions (Z -> up)
 /// </summary>
 public struct Vector3
 {
@@ -276,7 +276,7 @@ public struct Vector3
                     return z;
 
                 default:
-                    return 0;
+                    throw new IndexOutOfRangeException();
             }
         }
         set
@@ -296,8 +296,7 @@ public struct Vector3
                     break;
 
                 default:
-                    x = y = z = value;
-                    break;
+                    throw new IndexOutOfRangeException();
             }
         }
     }

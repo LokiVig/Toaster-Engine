@@ -8,9 +8,8 @@ namespace DoomNET.WTF;
 /// </summary>
 public struct Brush
 {
-    private BBox bbox { get; set; } = new(); // The extents of this brush, bbox.mins.z being the very bottom, bbox.maxs.z being the top
-    private string id { get; set; } // The id of this brush, can be set by the mapper, it can connect to another brush that's 
-    private Vector3[] points { get; set; } = new Vector3[6];
+    public BBox bbox { get; set; } = new(); // The extents of this brush, bbox.mins.z being the very bottom, bbox.maxs.z being the top
+    public string id { get; set; } // The id of this brush, can be set by the mapper
 
     public Brush()
     {
@@ -40,9 +39,20 @@ public struct Brush
         DoomNET.file?.AddBrush(this);
     }
 
-    public Vector3 GetCenter()
+    /// <summary>
+    /// Set the ID of this brush
+    /// </summary>
+    public void SetID(string id)
     {
-        return (bbox.maxs - bbox.mins) / 2 + bbox.mins; // THANK YOU RUSSELL 🙏
+        this.id = id;
+    }
+
+    /// <summary>
+    /// Get the ID of this brush
+    /// </summary>
+    public string GetID()
+    {
+        return id;
     }
 
     public BBox GetBBox()
@@ -50,10 +60,13 @@ public struct Brush
         return bbox;
     }
 
+    /// <summary>
+    /// Turn this brush into an entity
+    /// </summary>
     public void TurnIntoEntity(Entity desiredEntity)
     {
         desiredEntity.SetBBox(bbox);
-        desiredEntity.SetPosition(GetCenter());
+        desiredEntity.SetPosition(bbox.GetCenter());
 
         DoomNET.file.RemoveBrush(this);
         DoomNET.file.AddEntity(desiredEntity);

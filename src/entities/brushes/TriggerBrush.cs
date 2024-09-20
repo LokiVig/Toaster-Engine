@@ -24,11 +24,13 @@ public class TriggerBrush : Entity
     private Vector3 vValue; // Event Vector3 value
     private BBox bValue; // Event BBox value
 
-    protected override EntityTypes type => EntityTypes.TriggerBrush; // This entity is of type TriggerBrush
+    public override EntityTypes type => EntityTypes.TriggerBrush; // This entity is of type TriggerBrush
 
     protected override void OnSpawn()
     {
         base.OnSpawn();
+
+        GetBBox().OnIntersect += OnTrigger;
 
         // Reset standard values
         triggerCount = 0;
@@ -37,7 +39,6 @@ public class TriggerBrush : Entity
         switch (triggerOn)
         {
             default: // !!! IMPLEMENT DIFFERENT TriggerOn EVENTS !!!
-                GetBBox().OnIntersect += OnTrigger;
                 break;
         }
 

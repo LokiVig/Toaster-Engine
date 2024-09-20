@@ -4,8 +4,8 @@ namespace DoomNET.Entities;
 
 public class Player : Entity
 {
-    protected override EntityTypes type => EntityTypes.Player; // This entity is of type Player
-    protected override float health => 100.0f;
+    public override EntityTypes type => EntityTypes.Player; // This entity is of type Player
+    public override float health => 100.0f;
 
     private float armor = 0.0f; // Remove a certain amount of damage if armor isn't 0, and decrease the armor value when taking damage
 

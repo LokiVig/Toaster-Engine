@@ -2,3 +2,5 @@
 obj/*
 build/*
 .vs/*
+
+SpacePlacer/obj/*

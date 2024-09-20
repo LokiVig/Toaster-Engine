@@ -11,10 +11,17 @@ namespace DoomNET.WTF;
 /// </summary>
 public class WTFFile
 {
-    private List<Entity> entities { get; set; } = new(); // List of entities (and their IDs) in this WTF file
-    private List<Brush> brushes { get; set; } = new(); // All of the brushes in this WTF file
+    public List<Entity> entities { get; set; } = new(); // List of entities in this WTF file
+    public List<Brush> brushes { get; set; } = new(); // All of the brushes in this WTF file
 
-    public string filepath { get; set; } // The directory of which this WTF file is saved at
+    public string directory { get; set; } // The directory of which this WTF file is saved at
+
+    public WTFFile() { }
+
+    public WTFFile(string directory)
+    {
+        this.directory = directory;
+    }
 
     /// <summary>
     /// Add an entity to the entities list
@@ -44,6 +51,21 @@ public class WTFFile
     {
         // Remove the brush from the list
         brushes.Remove(brush);
+    }
+
+    /// <summary>
+    /// Remove a brush from the list of this WTF using its ID
+    /// </summary>
+    /// <param name="id">The ID of the brush we're to remove from this file</param>
+    public void RemoveBrush(string id)
+    {
+        foreach (Brush brush in brushes)
+        {
+            if (brush.GetID() == id)
+            {
+                brushes.Remove(brush);
+            }
+        }
     }
 
     /// <summary>
@@ -91,12 +113,12 @@ public class WTFFile
         // For every entity, set their ID to i, 0 should always be the player
         for (int i = 0; i < entities.Count; i++)
         {
-            entities[i].SetID($"{i}");
+            entities[i].SetID($"entity {i}");
         }
 
         for (int i = 0; i < brushes.Count; i++)
         {
-            //brushes.ElementAt(i).id = $"brush {i}";
+            brushes[i].SetID($"brush {i}");
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Threading;
 using System.Diagnostics;
 
@@ -39,7 +40,7 @@ public class DoomNET
 
         WTFSaver.SaveFile("maps/test.wtf", file);
 
-        if (Ray.Trace(new Vector3(), file.GetBrushes()[0].GetCenter(), out object hit, RayIgnore.Entities))
+        if (Ray.Trace(new Vector3(), file.GetEntities()[1].GetPosition(), out object hit, RayIgnore.Brushes, [player, npc]))
         {
             Console.WriteLine($"Wuhyippe!!! We hit {hit}!!!");
         }
@@ -51,13 +52,16 @@ public class DoomNET
         // The game is now active
         active = true;
 
+        // Initialize a window to render upon
+
+
         // Initialize the update function
         Update();
     }
 
     /// <summary>
     /// Things to do every frame, game-wise<br></br>
-    /// This includes calling every other update function that needs it
+    /// This includes calling every other update function that updates every frame
     /// </summary>
     public void Update()
     {
@@ -65,6 +69,7 @@ public class DoomNET
 
         while (active)
         {
+
             // Calculate deltaTime
             deltaTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
             watch.Restart();
@@ -75,15 +80,6 @@ public class DoomNET
             // Lock the FPS to 60
             float elapsedTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
             float timeToWait = (1.0f / 60.0f) - elapsedTime;
-
-            for (int i = 0; i < file.GetEntities().Count; i++)
-            {
-                Console.SetCursorPosition(0, i + 1);
-                Console.Write($"Entity {file.GetEntities()[i].GetID()} Position: {file.GetEntities()[i].GetPosition().ToString()}");
-
-                Console.SetCursorPosition(0, i + 3);
-                Console.Write($"Entity {file.GetEntities()[i].GetID()} Velocity: {file.GetEntities()[i].GetVelocity().ToString()}");
-            }
 
             if (timeToWait > 0)
             {

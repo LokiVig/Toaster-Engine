@@ -1,27 +1,27 @@
 ﻿using System;
 
-using DoomNET.Resources;
 using DoomNET.WTF;
+using DoomNET.Resources;
 
 namespace DoomNET.Entities;
 
 /// <summary>
-/// An entity, usually living and with health, also moving
+/// An entity, usually living and with health, also moving with velocity
 /// </summary>
 public class Entity
 {
-    private Vector3 position { get; set; } // This entity's current position
+    public Vector3 position { get; set; } // This entity's current position
     private Vector3 velocity; // This entity's current velocity
 
-    private BBox bbox { get; set; } // This entity's bounding box
+    public BBox bbox { get; set; } // This entity's bounding box
 
-    protected virtual EntityTypes type { get; set; } // This entity's type, e.g. brush entity or other
+    public virtual EntityTypes type { get; set; } // This entity's type, e.g. brush entity or other
 
-    private string id { get; set; }
+    public string id { get; set; } // This entity's identifier
 
-    private System.Numerics.Quaternion rotation { get; set; } // This entity's current rotation
+    public System.Numerics.Quaternion rotation { get; set; } // This entity's current rotation
 
-    protected virtual float health { get; set; } // The amount of health this entity has
+    public virtual float health { get; set; } // The amount of health this entity has
 
     private bool alive; // Is this entity alive?
 
@@ -66,21 +66,27 @@ public class Entity
         OnSpawn();
     }
 
-    // Things to do every frame
+    /// <summary>
+    /// Things to do every frame
+    /// </summary>
     protected virtual void Update()
     {
         HandleMovement();
     }
 
+    /// <summary>
+    /// Handle movement, caused by velocity
+    /// </summary>
     private void HandleMovement()
     {
+        // Position is affected by velocity
         position += velocity * DoomNET.deltaTime * DoomNET.deltaTime;
 
-        Vector3 drag = velocity.Normalized() * 0.1f * DoomNET.deltaTime;
+        // Velocity decreases with time (effectively drag)
+        velocity *= (1 - 0.1f * DoomNET.deltaTime);
 
-        velocity -= drag;
-
-        if (velocity.Magnitude() < 0.1f)
+        // If the velocity's magnitude <= 0.1, it's effectively zero, so zero it out for the sake of ease
+        if (velocity.Magnitude() <= 0.1f)
         {
             velocity = new();
         }

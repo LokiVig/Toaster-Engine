@@ -6,7 +6,7 @@ using System;
 namespace DoomNET.Resources;
 
 /// <summary>
-/// Struct defining a position in 2 dimensions
+/// Struct defining a point in 2 dimensions
 /// </summary>
 public struct Vector2
 {
@@ -148,32 +148,32 @@ public struct Vector2
 
     public static bool operator <=(Vector2 in1, Vector2 in2)
     {
-        return in1 < in2 || in1 == in2;
+        return !(in1 > in2);
     }
 
     public static bool operator <=(Vector2 in1, float in2)
     {
-        return in1 < in2 || in1 == in2;
+        return !(in1 > in2);
     }
 
     public static bool operator <=(float in1, Vector2 in2)
     {
-        return in1 < in2 || in1 == in2;
+        return !(in1 > in2);
     }
 
     public static bool operator >=(Vector2 in1, Vector2 in2)
     {
-        return in1 > in2 || in1 == in2;
+        return !(in1 < in2);
     }
 
     public static bool operator >=(Vector2 in1, float in2)
     {
-        return in1 > in2 || in1 == in2;
+        return !(in1 < in2);
     }
 
     public static bool operator >=(float in1, Vector2 in2)
     {
-        return in1 > in2 || in1 == in2;
+        return !(in1 < in2);
     }
 
     public static Vector2 operator +(Vector2 in1, Vector2 in2)
@@ -200,7 +200,7 @@ public struct Vector2
     {
         return new Vector2(in1.x - in2, in1.y - in2);
     }
-    
+
     public static Vector2 operator -(float in1, Vector2 in2)
     {
         return new Vector2(in1 - in2.x, in1 - in2.y);
@@ -264,7 +264,7 @@ public struct Vector2
                     return y;
 
                 default:
-                    return 0;
+                    throw new IndexOutOfRangeException();
             }
         }
         set
@@ -278,6 +278,9 @@ public struct Vector2
                 case 1:
                     y = value;
                     break;
+
+                default:
+                    throw new IndexOutOfRangeException();
             }
         }
     }
