@@ -15,7 +15,9 @@ public class Program
 
     public static void Main()
     {
-        DoomNET doomNET = new();
-        doomNET.Initialize();
+        using (DoomNET game = new(800, 600, "Doom.NET"))
+        {
+            game.Initialize();
+        }
     }
 }

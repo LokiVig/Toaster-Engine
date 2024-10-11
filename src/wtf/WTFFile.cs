@@ -92,6 +92,9 @@ public class WTFFile
         }
     }
 
+    /// <summary>
+    /// Returns this file's list of entities
+    /// </summary>
     public List<Entity> GetEntities()
     {
         return entities;
