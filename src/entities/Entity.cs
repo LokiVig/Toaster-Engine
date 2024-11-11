@@ -6,7 +6,7 @@ using DoomNET.Resources;
 namespace DoomNET.Entities;
 
 /// <summary>
-/// An entity, usually living and with health, also moving with velocity
+/// An entity, usually living and with health, also moving with velocities and gravity applied to it
 /// </summary>
 public class Entity
 {
@@ -26,6 +26,8 @@ public class Entity
     private bool alive; // Is this entity alive?
 
     private Entity target; // The entity this entity's targeting
+
+    private Entity lastAttacker; // The last entity to attack this entity
 
     public Entity()
     {
@@ -213,8 +215,22 @@ public class Entity
     /// Subtract this entity's health by the parameter and trigger related events
     /// </summary>
     /// <param name="damage">The amount of damage this entity should take</param>
-    public virtual void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage, Entity source = null)
     {
+        // We've been damaged by someone or something!
+        // How queer! We must log this to the console immediately!!
+        Console.WriteLine($"Entity \"{GetID()}\" took damage.\n" +
+                          $"\tDamage: {damage}\n" +
+                          $"\tSource: {(source != null ? source + $" (\"{source.GetID()}\")" : "N/A")}\n" +
+                          $"\tNew health: {health - damage}\n");
+
+        //
+        // I guess we're taking damage now
+        //
+
+        // Set the last attacker variable appropriately
+        lastAttacker = source;
+
         // Lower this entity's health by the set amount of damage
         health -= damage;
 
@@ -227,7 +243,7 @@ public class Entity
     /// Call non-input-taking event
     /// </summary>
     /// <param name="eEvent">Desired event to do to this entity</param>
-    public void OnEvent(EntityEvent eEvent)
+    public void OnEvent(EntityEvent eEvent, Entity source = null)
     {
         switch (eEvent)
         {
@@ -252,12 +268,12 @@ public class Entity
     /// </summary>
     /// <param name="eEvent">Desired event to do to this entity</param>
     /// <param name="iValue">Value as int</param>
-    public void OnEvent(EntityEvent eEvent, int iValue)
+    public void OnEvent(EntityEvent eEvent, int iValue, Entity source = null)
     {
         switch (eEvent)
         {
             case EntityEvent.TakeDamage: // This entity should take iValue damage
-                TakeDamage(iValue);
+                TakeDamage(iValue, source);
                 break;
         }
     }
@@ -267,12 +283,12 @@ public class Entity
     /// </summary>
     /// <param name="eEvent">Desired event to do to this entity</param>
     /// <param name="fValue">Value as float</param>
-    public void OnEvent(EntityEvent eEvent, float fValue)
+    public void OnEvent(EntityEvent eEvent, float fValue, Entity source = null)
     {
         switch (eEvent)
         {
             case EntityEvent.TakeDamage: // This entity should take fValue damage
-                TakeDamage(fValue);
+                TakeDamage(fValue, source);
                 break;
         }
     }
@@ -282,7 +298,7 @@ public class Entity
     /// </summary>
     /// <param name="eEvent">Desired event to do to this entity</param>
     /// <param name="vValue">Value as Vector3</param>
-    public void OnEvent(EntityEvent eEvent, Vector3 vValue)
+    public void OnEvent(EntityEvent eEvent, Vector3 vValue, Entity source = null)
     {
         switch (eEvent)
         {
@@ -297,7 +313,7 @@ public class Entity
     /// </summary>
     /// <param name="eEvent">Desired event to do to this entity</param>
     /// <param name="bValue">Value as BBox</param>
-    public void OnEvent(EntityEvent eEvent, BBox bValue)
+    public void OnEvent(EntityEvent eEvent, BBox bValue, Entity source = null)
     {
         switch (eEvent)
         {
@@ -320,7 +336,7 @@ public class Entity
     /// </summary>
     protected virtual void OnDamage()
     {
-        if (health < 0) // Is this entity now considered dead?
+        if (health <= 0) // Is this entity now considered dead?
         {
             // Call the OnDeath event
             OnDeath();
@@ -342,6 +358,10 @@ public class Entity
 
         // Remove this entity from the update list
         DoomNET.OnUpdate -= Update;
+
+        // Log to the console that this entity has died!
+        Console.WriteLine($"Entity {this} (\"{GetID()}\") has died.\n" +
+                          $"\tLast attacker: {lastAttacker}");
     }
 
     /// <summary>
@@ -352,14 +372,4 @@ public class Entity
         // Also trigger OnDeath, but replace their sprite with a gory version
         OnDeath();
     }
-}
-
-public enum EntityEvent
-{
-    None, // Do nothing
-    Kill, // Kill the entity
-    Delete, // Delete the entity as a whole
-    TakeDamage, // Make this entity take damage
-    SetPosition, // Set this entity's position
-    SetBBox, // Set this entity's BBox
 }

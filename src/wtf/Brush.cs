@@ -11,10 +11,7 @@ public struct Brush
     public BBox bbox { get; set; } = new(); // The extents of this brush, bbox.mins.z being the very bottom, bbox.maxs.z being the top
     public string id { get; set; } // The id of this brush, can be set by the mapper
 
-    public Brush()
-    {
-        DoomNET.file?.AddBrush(this);
-    }
+    public Brush() { }
 
     /// <summary>
     /// Create a brush with specified mins and maxs, and add it to the current WTF file
@@ -25,8 +22,6 @@ public struct Brush
     {
         bbox.mins = mins;
         bbox.maxs = maxs;
-
-        DoomNET.file?.AddBrush(this);
     }
 
     /// <summary>
@@ -35,8 +30,6 @@ public struct Brush
     public Brush(BBox bbox)
     {
         this.bbox = bbox;
-
-        DoomNET.file?.AddBrush(this);
     }
 
     /// <summary>
@@ -48,6 +41,14 @@ public struct Brush
     }
 
     /// <summary>
+    /// Set the BBox of this brush
+    /// </summary>
+    public void SetBBox(BBox bbox)
+    {
+        this.bbox = bbox;
+    }
+
+    /// <summary>
     /// Get the ID of this brush
     /// </summary>
     public string GetID()
@@ -55,6 +56,9 @@ public struct Brush
         return id;
     }
 
+    /// <summary>
+    /// Get the BBox of this brush
+    /// </summary>
     public BBox GetBBox()
     {
         return bbox;

@@ -1,5 +1,6 @@
 ﻿using DoomNET.WTF;
 using DoomNET.Resources;
+using System;
 
 namespace DoomNET.Entities;
 
@@ -8,29 +9,28 @@ namespace DoomNET.Entities;
 /// </summary>
 public class TriggerBrush : Entity
 {
-    private Entity targetEnt; // The entity we wish to target
-    private EntityEvent desiredEvent; // The desired event
+    public Entity targetEntity { get; set; } // The entity we wish to target
+    public EntityEvent targetEvent { get; set; } // The desired event
 
-    private TriggerOn triggerOn; // When should this trigger, trigger?
-    private TriggerType triggerType; // Which type of trigger is this?
+    public TriggerOn triggerOn { get; set; } // When should this trigger, trigger?
+    public TriggerType triggerType { get; set; } // Which type of trigger is this?
+    public TriggerBy triggerBy { get; set; } // What should this trigger trigger from?
 
-    private int triggerCount; // The amount of times this trigger has been triggered
-    private int maxTriggerCount; // The max amount of thimes this trigger should be triggered
+    private int triggeredCount; // The amount of times this trigger has been triggered
+    public int triggerCount { get; set; } // The max amount of times this trigger should be triggered
 
     private bool hasTriggered; // Determines whether or not this trigger has already been triggered
 
-    private int iValue; // Event int value
-    private float fValue; // Event float value
-    private Vector3 vValue; // Event Vector3 value
-    private BBox bValue; // Event BBox value
+    public int iValue { get; set; } // Event int value
+    public float fValue { get; set; } // Event float value
+    public Vector3 vValue { get; set; } // Event Vector3 value
+    public BBox bValue { get; set; } // Event BBox value
 
     public override EntityTypes type => EntityTypes.TriggerBrush; // This entity is of type TriggerBrush
 
     protected override void OnSpawn()
     {
         base.OnSpawn();
-
-        GetBBox().OnIntersect += OnTrigger;
 
         // Reset standard values
         triggerCount = 0;
@@ -41,25 +41,19 @@ public class TriggerBrush : Entity
             default: // !!! IMPLEMENT DIFFERENT TriggerOn EVENTS !!!
                 break;
         }
+    }
 
-        switch (triggerType)
+    protected override void Update()
+    {
+        // Check if any entity is intersecting with us
+        foreach (Entity entity in DoomNET.file?.entities)
         {
-            case TriggerType.Once: // Only trigger once
-                if (hasTriggered)
-                {
-                    GetBBox().OnIntersect -= OnTrigger;
-                }
+            if (bbox.IntersectingWith(entity.GetPosition()))
+            {
+                // If they are, we bbox.OnIntersect triggers!
+                OnTrigger();
                 break;
-
-            case TriggerType.Count: // Trigger only a certain amount of times
-                if (triggerCount >= maxTriggerCount)
-                {
-                    GetBBox().OnIntersect -= OnTrigger;
-                }
-                break;
-
-            case TriggerType.Multiple: // Always trigger, there is no stopping it.
-                break;
+            }
         }
     }
 
@@ -68,29 +62,71 @@ public class TriggerBrush : Entity
     /// </summary>
     public void OnTrigger()
     {
+        switch (triggerType)
+        {
+            case TriggerType.Once: // Only trigger once
+                if (hasTriggered)
+                {
+                    return;
+                }
+                break;
+
+            case TriggerType.Count: // Trigger only a certain amount of times
+                if (triggeredCount >= triggerCount)
+                {
+                    return;
+                }
+                break;
+
+            case TriggerType.Multiple: // Always trigger, there is no stopping it.
+            default: // Also the default
+                break;
+        }
+
+        switch (triggerBy)
+        {
+            // Find a way to change which thing can trigger this trigger!
+            case TriggerBy.All:
+            case TriggerBy.Players:
+            case TriggerBy.NPCs:
+                break;
+        }
+
+        Console.WriteLine($"TriggerBrush \"{GetID()}\" has been triggered.\n" +
+                                $"\tTarget: {targetEntity} (\"{targetEntity.GetID()}\")\n" +
+                                $"\tEvent: {targetEvent}\n" +
+                                $"\tValues:\n" +
+                                    $"\t\tiValue: {iValue}\n" +
+                                    $"\t\tfValue: {fValue}\n" +
+                                    $"\t\tvValue: {vValue}\n" +
+                                    $"\t\tbValue: {bValue}\n" +
+                                $"\tTrigger type: {triggerType}\n" +
+                                $"\tTrigger by: {triggerBy}\n" +
+                                $"\tTrigger on: {triggerOn}\n");
+
         if (iValue != 0) // Int value event
         {
-            targetEnt.OnEvent(desiredEvent, iValue);
+            targetEntity.OnEvent(targetEvent, iValue, this);
         }
         else if (fValue != 0) // Float value event
         {
-            targetEnt.OnEvent(desiredEvent, fValue);
+            targetEntity.OnEvent(targetEvent, fValue, this);
         }
         else if (vValue != 0) // Vector3 value event
         {
-            targetEnt.OnEvent(desiredEvent, vValue);
+            targetEntity.OnEvent(targetEvent, vValue, this);
         }
         else if (bValue != null) // BBox value event
         {
-            targetEnt.OnEvent(desiredEvent, bValue);
+            targetEntity.OnEvent(targetEvent, bValue, this);
         }
         else // Regular event, not taking any inputs
         {
-            targetEnt.OnEvent(desiredEvent);
+            targetEntity.OnEvent(targetEvent, this);
         }
 
         // We've triggered this trigger, set the bool to true and increase the count
-        triggerCount++;
+        triggeredCount++;
         hasTriggered = true;
     }
 }
@@ -98,13 +134,20 @@ public class TriggerBrush : Entity
 public enum TriggerOn
 {
     Trigger, // Either on enter or exit
-    Enter, // Only when an ent has entered
-    Exit // Only when an ent has left
+    Enter, // Only when an entity has entered
+    Exit // Only when an entity has left
+}
+
+public enum TriggerBy
+{
+    All, // Trigger by all things
+    Players, // Trigger only by players
+    NPCs, // Trigger only by NPCs
 }
 
 public enum TriggerType
 {
     Once, // Triggers once, then removes itself
-    Count, // Triggers x amount of times before being removed
+    Count, // Triggers X amount of times before being removed
     Multiple // Can trigger multiple times
 }
