@@ -31,7 +31,7 @@ public class WTFSaver
         }
         else // We couldn't find a file to save, error!
         {
-            throw new NullReferenceException("Error saving file, SaveFile().inFile == null & DoomNET.file == null!");
+            throw new NullReferenceException("Error saving file, SaveFile().inFile == null && DoomNET.file == null!");
         }
 
         // Call the file's OnSave function

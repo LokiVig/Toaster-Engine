@@ -5,14 +5,10 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <BaseOutputPath>$(SolutionDir)build\</BaseOutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <RootNamespace>DoomNET</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="SpacePlacer\**" />
     <EmbeddedResource Remove="SpacePlacer\**" />
     <None Remove="SpacePlacer\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="OpenTK" Version="4.8.2" />
   </ItemGroup>
 </Project>

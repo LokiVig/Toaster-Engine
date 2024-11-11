@@ -8,7 +8,7 @@ namespace DoomNET.SpacePlacer;
 
 public class SpacePlacer
 {
-    private WTFFile file;
+    private WTFFile openFile;
     private float deltaTime;
     private bool active;
 
@@ -44,7 +44,7 @@ public class SpacePlacer
             // Call all the necessary update functions
             OnUpdate?.Invoke();
 
-            // Handle FPS locking - to 60 max
+            // Handle FPS locking - to 60FPS max
             float elapsedTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
             float timeToWait = (1.0f / 60.0f) - elapsedTime;
 
@@ -57,12 +57,12 @@ public class SpacePlacer
 
     private void LoadMap(string directory)
     {
-        file = WTFLoader.LoadFile(directory);
+        DoomNET.file = openFile = WTFLoader.LoadFile(directory);
     }
 
     private void SaveMap()
     {
-        WTFSaver.SaveFile(file?.directory, file);
+        WTFSaver.SaveFile(openFile?.directory, openFile);
     }
 
     private void SaveMap(WTFFile file)
