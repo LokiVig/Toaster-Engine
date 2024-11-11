@@ -264,10 +264,10 @@ public class Entity
     }
 
     /// <summary>
-    /// Call an event that takes an integer for a value
+    /// Call an event that takes an <see langword="int"/> for a value.
     /// </summary>
-    /// <param name="eEvent">Desired event to do to this entity</param>
-    /// <param name="iValue">Value as int</param>
+    /// <param name="eEvent">Desired event to do to this entity.</param>
+    /// <param name="iValue">Value as <see langword="int"/>.</param>
     public void OnEvent(EntityEvent eEvent, int iValue, Entity source = null)
     {
         switch (eEvent)
@@ -279,10 +279,10 @@ public class Entity
     }
 
     /// <summary>
-    /// Call an event that takes a float for a value
+    /// Call an event that takes a <see langword="float"/> for a value.
     /// </summary>
-    /// <param name="eEvent">Desired event to do to this entity</param>
-    /// <param name="fValue">Value as float</param>
+    /// <param name="eEvent">Desired event to do to this entity.</param>
+    /// <param name="fValue">Value as <see langword="float"/>.</param>
     public void OnEvent(EntityEvent eEvent, float fValue, Entity source = null)
     {
         switch (eEvent)
@@ -294,10 +294,24 @@ public class Entity
     }
 
     /// <summary>
-    /// Call an event that takes a Vector3 for a value
+    /// Call an event hat takes a <see langword="bool"/> for a value.
     /// </summary>
-    /// <param name="eEvent">Desired event to do to this entity</param>
-    /// <param name="vValue">Value as Vector3</param>
+    /// <param name="eEvent">Desired event to do to this entity.</param>
+    /// <param name="bValue">Value as <see langword="bool"/>.</param>
+    public void OnEvent(EntityEvent eEvent, bool bValue, Entity source = null)
+    {
+        switch (eEvent)
+        {
+            default:
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Call an event that takes a <see cref="Vector3"/> for a value.
+    /// </summary>
+    /// <param name="eEvent">Desired event to do to this entity.</param>
+    /// <param name="vValue">Value as <see cref="Vector3"/>.</param>
     public void OnEvent(EntityEvent eEvent, Vector3 vValue, Entity source = null)
     {
         switch (eEvent)
@@ -309,16 +323,16 @@ public class Entity
     }
 
     /// <summary>
-    /// Call an event that takes a BBox for a value
+    /// Call an event that takes a <see cref="BBox"/> for a value.
     /// </summary>
-    /// <param name="eEvent">Desired event to do to this entity</param>
-    /// <param name="bValue">Value as BBox</param>
-    public void OnEvent(EntityEvent eEvent, BBox bValue, Entity source = null)
+    /// <param name="eEvent">Desired event to do to this entity.</param>
+    /// <param name="bbValue">Value as <see cref="BBox"/>.</param>
+    public void OnEvent(EntityEvent eEvent, BBox bbValue, Entity source = null)
     {
         switch (eEvent)
         {
             case EntityEvent.SetBBox: // Set this entity's BBox according to bValue
-                SetBBox(bValue);
+                SetBBox(bbValue);
                 break;
         }
     }

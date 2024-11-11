@@ -23,8 +23,9 @@ public class TriggerBrush : Entity
 
     public int iValue { get; set; } // Event int value
     public float fValue { get; set; } // Event float value
+    public int bValue { get; set; } // Event bool value (-1 = none, 0 = false, 1 = true)
     public Vector3 vValue { get; set; } // Event Vector3 value
-    public BBox bValue { get; set; } // Event BBox value
+    public BBox bbValue { get; set; } // Event BBox value
 
     public override EntityTypes type => EntityTypes.TriggerBrush; // This entity is of type TriggerBrush
 
@@ -99,7 +100,7 @@ public class TriggerBrush : Entity
                                     $"\t\tiValue: {iValue}\n" +
                                     $"\t\tfValue: {fValue}\n" +
                                     $"\t\tvValue: {vValue}\n" +
-                                    $"\t\tbValue: {bValue}\n" +
+                                    $"\t\tbbValue: {bbValue}\n" +
                                 $"\tTrigger type: {triggerType}\n" +
                                 $"\tTrigger by: {triggerBy}\n" +
                                 $"\tTrigger on: {triggerOn}\n");
@@ -108,22 +109,29 @@ public class TriggerBrush : Entity
         {
             targetEntity.OnEvent(targetEvent, iValue, this);
         }
-        else if (fValue != 0) // Float value event
+
+        if (fValue != 0) // Float value event
         {
             targetEntity.OnEvent(targetEvent, fValue, this);
         }
-        else if (vValue != 0) // Vector3 value event
+
+        if (bValue != -1)
+        {
+            targetEntity.OnEvent(targetEvent, bValue == 1 ? true : false, this);
+        }
+
+        if (vValue != 0) // Vector3 value event
         {
             targetEntity.OnEvent(targetEvent, vValue, this);
         }
-        else if (bValue != null) // BBox value event
+
+        if (bbValue != null) // BBox value event
         {
-            targetEntity.OnEvent(targetEvent, bValue, this);
+            targetEntity.OnEvent(targetEvent, bbValue, this);
         }
-        else // Regular event, not taking any inputs
-        {
-            targetEntity.OnEvent(targetEvent, this);
-        }
+
+        // Regular event, not taking any special inputs
+        targetEntity.OnEvent(targetEvent, this);
 
         // We've triggered this trigger, set the bool to true and increase the count
         triggeredCount++;

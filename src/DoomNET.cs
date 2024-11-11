@@ -18,6 +18,9 @@ public class DoomNET
 
     public static float deltaTime;
 
+    public static int windowWidth = 1280;
+    public static int windowHeight = 720;
+
     private IntPtr window;
     private IntPtr renderer;
 
@@ -31,10 +34,10 @@ public class DoomNET
 
         file = new();
 
-        TestNPC npc = new(new Vector3(-50.3f, 23.9f, 7.6f), new BBox(new Vector3(16.0f, 16.0f, 64.0f), new Vector3(-16.0f, -16.0f, 0.0f)));
-        npc.SetVelocity(new Vector3(-0.5f, -25.0f, 0f));
+        TestNPC npc = new TestNPC(new Vector3(-7.5f, 3.5f, 1.25f), new BBox(new Vector3(16.0f, 16.0f, 64.0f), new Vector3(-16.0f, -16.0f, 0.0f)));
+        npc.SetVelocity(new Vector3(25.37f, -253.0f, 15.0f));
 
-        TriggerBrush trigger = new();
+        TriggerBrush trigger = new TriggerBrush();
         trigger.SetBBox(new BBox(new Vector3(-15.0f, -15.0f, -15.0f), new Vector3(15.0f, 15.0f, 15.0f)));
         trigger.triggerType = TriggerType.Once;
         trigger.triggerBy = TriggerBy.Players;
@@ -43,8 +46,8 @@ public class DoomNET
         trigger.targetEntity = npc;
         trigger.fValue = 500.0f;
 
-        Player player = new(new Vector3(50.0f, 50.0f, 50.0f), new BBox(new Vector3(32.0f, 32.0f, 64.0f), new Vector3(-32.0f, -32.0f, 0.0f)));
-        player.SetVelocity(new Vector3(1.5f, 0.25f, 0f));
+        Player player = new Player(new Vector3(7.5f, 3.5f, 1.25f), new BBox(new Vector3(32.0f, 32.0f, 64.0f), new Vector3(-32.0f, -32.0f, 0.0f)));
+        player.SetVelocity(new Vector3(-25.37f, 0.0f, 15.0f));
 
         file.AddEntity(player);
         file.AddEntity(npc);
@@ -77,7 +80,7 @@ public class DoomNET
         }
 
         // Create a new window given a title, size, and passes it a flag indicating it should be shown
-        window = SDL.SDL_CreateWindow("Doom.NET", SDL.SDL_WINDOWPOS_CENTERED, SDL.SDL_WINDOWPOS_CENTERED, 1280, 720, SDL.SDL_WindowFlags.SDL_WINDOW_SHOWN);
+        window = SDL.SDL_CreateWindow("Doom.NET", SDL.SDL_WINDOWPOS_CENTERED, SDL.SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, SDL.SDL_WindowFlags.SDL_WINDOW_SHOWN);
 
         if (window == IntPtr.Zero)
         {
@@ -180,8 +183,13 @@ public class DoomNET
             return;
         }
 
-        // DEBUG: Draw the deltatime
-        DisplayText($"Deltatime: {deltaTime}", 200, 25);
+        // DEBUG: Draw the deltatime & FPS
+        DisplayText($"Deltatime: {deltaTime:0.###}", 200, 25);
+        DisplayText($"FPS: {deltaTime / 0.1 * 6000:0.#}", 100, 25, y: 25);
+
+        // DEBUG: Display the player's position & velocity
+        DisplayText($"Player pos: {file.entities[0].position}", 300, 25, y: 720 - 25);
+        DisplayText($"Player vel: {file.entities[0].GetVelocity()}", 300, 25, y: 720 - 50);
 
         // Switches out the currently presented render surface with the one we just did work on
         SDL.SDL_RenderPresent(renderer);
@@ -190,13 +198,13 @@ public class DoomNET
     /// <summary>
     /// Draw text onto the SDL rendered window.
     /// </summary>
-    public void DisplayText(string text, int width, int height, int x = 0, int y = 0)
+    public void DisplayText(string text, int width, int height, int pt = 17, int x = 0, int y = 0)
     {
-        IntPtr sans = SDL_ttf.TTF_OpenFont($"{Environment.CurrentDirectory}\\resources\\fonts\\COUR.TTF", 17);
+        IntPtr font = SDL_ttf.TTF_OpenFont($"{Environment.CurrentDirectory}\\resources\\fonts\\COUR.TTF", pt);
 
-        if (sans == IntPtr.Zero)
+        if (font == IntPtr.Zero)
         {
-            Console.WriteLine($"There was an issue with getting font.\n" +
+            Console.WriteLine($"There was an issue with getting a font.\n" +
                                 $"\t{SDL.SDL_GetError()}\n");
             return;
         }
@@ -204,13 +212,13 @@ public class DoomNET
         SDL.SDL_Color black = new SDL.SDL_Color();
         black.r = black.g = black.b = 0; black.a = 255;
 
-        IntPtr surfaceMessage = SDL_ttf.TTF_RenderText_Solid(sans, text, black);
+        IntPtr surfaceMessage = SDL_ttf.TTF_RenderText_Solid(font, text, black);
 
         IntPtr message = SDL.SDL_CreateTextureFromSurface(renderer, surfaceMessage);
 
         SDL.SDL_Rect messageRect;
-        messageRect.x = 0;
-        messageRect.y = 0;
+        messageRect.x = x;
+        messageRect.y = y;
         messageRect.w = width;
         messageRect.h = height;
 
@@ -218,7 +226,7 @@ public class DoomNET
 
         SDL.SDL_FreeSurface(surfaceMessage);
         SDL.SDL_DestroyTexture(message);
-        SDL_ttf.TTF_CloseFont(sans);
+        SDL_ttf.TTF_CloseFont(font);
     }
 
     /// <summary>
