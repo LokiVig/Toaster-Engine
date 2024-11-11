@@ -1,7 +1,5 @@
-﻿using System.Text.Json;
-using System.Collections.Generic;
-
-using DoomNET.Entities;
+﻿using System;
+using System.Text.Json;
 
 namespace DoomNET;
 
@@ -13,11 +11,10 @@ public class Program
         AllowTrailingCommas = true
     };
 
+    [STAThread]
     public static void Main()
     {
-        using (DoomNET game = new(800, 600, "Doom.NET"))
-        {
-            game.Initialize();
-        }
+        DoomNET game = new DoomNET();
+        game.Initialize();
     }
 }

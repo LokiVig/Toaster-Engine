@@ -13,4 +13,12 @@ public class TestNPC : Entity
     public TestNPC(Vector3 position) : base(position) { }
 
     public TestNPC(Vector3 position, BBox bbox) : base(position, bbox) { }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        // Handle movements
+        HandleMovement();
+    }
 }

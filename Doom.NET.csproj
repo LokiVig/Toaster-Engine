@@ -6,6 +6,7 @@
     <BaseOutputPath>$(SolutionDir)build\</BaseOutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RootNamespace>DoomNET</RootNamespace>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="SpacePlacer\**" />
@@ -13,6 +14,6 @@
     <None Remove="SpacePlacer\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="OpenTK" Version="4.8.2" />
+    <PackageReference Include="Sayers.SDL2.Core" Version="1.0.11" />
   </ItemGroup>
 </Project>

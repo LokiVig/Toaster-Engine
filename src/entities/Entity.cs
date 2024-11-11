@@ -73,13 +73,13 @@ public class Entity
     /// </summary>
     protected virtual void Update()
     {
-        HandleMovement();
+
     }
 
     /// <summary>
     /// Handle movement, caused by velocity
     /// </summary>
-    private void HandleMovement()
+    protected void HandleMovement()
     {
         // Position is affected by velocity
         position += velocity * DoomNET.deltaTime * DoomNET.deltaTime;

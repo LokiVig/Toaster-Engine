@@ -19,6 +19,9 @@ public class Player : Entity
     {
         base.Update();
 
+        // Handle movements
+        HandleMovement();
+
         // Take user inputs to make this player move
         HandleInput();
     }

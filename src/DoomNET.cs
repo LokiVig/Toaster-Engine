@@ -1,11 +1,6 @@
-﻿using OpenTK.Graphics.OpenGL4;
-using OpenTK.Windowing.Common;
-using OpenTK.Windowing.Desktop;
-using OpenTK.Windowing.GraphicsLibraryFramework;
+﻿using SDL2;
 
 using System;
-using System.Windows;
-using System.Threading;
 using System.Diagnostics;
 
 using DoomNET.WTF;
@@ -14,34 +9,17 @@ using DoomNET.Resources;
 
 namespace DoomNET;
 
-public class DoomNET : GameWindow
+public class DoomNET
 {
     public static event Action OnUpdate;
     public static WTFFile file;
 
+    public bool active;
+
     public static float deltaTime;
 
-    private float[] vertices =
-    {
-         0.5f,  0.5f, 0.0f,  // Top right
-         0.5f, -0.5f, 0.0f,  // Bottom right
-        -0.5f, -0.5f, 0.0f,  // Bottom left
-        -0.5f,  0.5f, 0.0f   // Top left
-    };
-
-    private uint[] indices =
-    {
-        0, 1, 3, // First triangle
-        1, 2, 3, // Second triangle
-    };
-
-    private Shader shader;
-
-    private int elementBufferObject;
-    private int vertexBufferObject;
-    private int vertexArrayObject;
-
-    public DoomNET(int width, int height, string title) : base(GameWindowSettings.Default, new NativeWindowSettings() { ClientSize = (width, height), Title = title }) { }
+    private IntPtr window;
+    private IntPtr renderer;
 
     /// <summary>
     /// Initialize the game
@@ -76,81 +54,181 @@ public class DoomNET : GameWindow
 
         Ray.Trace(player, npc, out object hitObject, RayIgnore.None, trigger);
 
-        // Initialize a window to render upon
-        Run();
+        // Initialize an SDL window
+        SetupSDL();
+
+        // Now we can run the game every frame
+        Update();
+
+        // Clean up everything SDL-wise
+        CleanUpSDL();
     }
 
     /// <summary>
-    /// Effectively the same as <see cref="Initialize"/>
+    /// Setup an SDL window and renderer
     /// </summary>
-    protected override void OnLoad()
+    private void SetupSDL()
     {
-        base.OnLoad();
+        if (SDL.SDL_Init(SDL.SDL_INIT_VIDEO) < 0)
+        {
+            Console.WriteLine($"There was an issue initializing SDL.\n" +
+                                    $"\t{SDL.SDL_GetError()}\n");
+            return;
+        }
 
-        GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        // Create a new window given a title, size, and passes it a flag indicating it should be shown
+        window = SDL.SDL_CreateWindow("Doom.NET", SDL.SDL_WINDOWPOS_CENTERED, SDL.SDL_WINDOWPOS_CENTERED, 1280, 720, SDL.SDL_WindowFlags.SDL_WINDOW_SHOWN);
 
-        vertexBufferObject = GL.GenBuffer();
-        GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferObject);
-        GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
+        if (window == IntPtr.Zero)
+        {
+            Console.WriteLine($"There was an issue creating the window.\n" +
+                                    $"\t{SDL.SDL_GetError()}\n");
+            return;
+        }
 
-        vertexArrayObject = GL.GenVertexArray();
-        GL.BindVertexArray(vertexArrayObject);
-        GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
-        GL.EnableVertexAttribArray(0);
+        // Creates a new SDL hardware renderer using the default graphics device with vsync enabled
+        renderer = SDL.SDL_CreateRenderer(window, -1, SDL.SDL_RendererFlags.SDL_RENDERER_ACCELERATED | SDL.SDL_RendererFlags.SDL_RENDERER_PRESENTVSYNC);
 
-        elementBufferObject = GL.GenBuffer();
-        GL.BindBuffer(BufferTarget.ElementArrayBuffer, elementBufferObject);
-        GL.BufferData(BufferTarget.ElementArrayBuffer, indices.Length * sizeof(uint), indices, BufferUsageHint.StaticDraw);
+        if (renderer == IntPtr.Zero)
+        {
+            Console.WriteLine($"There was an issue creating the renderer.\n" +
+                                    $"\t{SDL.SDL_GetError()}\n");
+            return;
+        }
 
-        shader = new Shader("../../../src/shaders/shader.vert", "../../../src/shaders/shader.frag");
-        shader.Use();
+        // Initializes SDL_image for use with png files
+        if (SDL_image.IMG_Init(SDL_image.IMG_InitFlags.IMG_INIT_PNG) == 0)
+        {
+            Console.WriteLine($"There was an issue initializing SDL2_Image.\n" +
+                                    $"\t{SDL.SDL_GetError()}\n");
+            return;
+        }
+
+        // Initializes SDL_ttf for use with text rendering
+        if (SDL_ttf.TTF_Init() != 0)
+        {
+            Console.WriteLine($"There was an issue initializing SDL_TTF.\n" +
+                                    $"\t{SDL.SDL_GetError()}\n");
+            return;
+        }
+
+        SDL.SDL_SetRenderDrawBlendMode(renderer, SDL.SDL_BlendMode.SDL_BLENDMODE_BLEND);
     }
 
     /// <summary>
     /// Things to do every frame, game-wise<br/>
     /// This includes calling every other update function that updates every frame
     /// </summary>
-    protected override void OnUpdateFrame(FrameEventArgs e)
+    private void Update()
     {
-        base.OnUpdateFrame(e);
+        // Start the loop
+        active = true;
 
+        // Stopwatch to calculate delta time with
         Stopwatch watch = Stopwatch.StartNew();
 
-        // Calculate deltaTime
-        deltaTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
-        watch.Restart();
+        while (active)
+        {
+            // Calculate deltaTime
+            deltaTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
+            watch.Restart();
 
-        // Call the OnUpdate event, so everything else that should update also updates with us
-        OnUpdate?.Invoke();
+            // Call the OnUpdate event, so everything else that should update also updates with us
+            OnUpdate?.Invoke();
+
+            // Poll SDL events and render everything necessary on the window
+            PollEventsSDL();
+            RenderSDL();
+        }
     }
 
-    protected override void OnRenderFrame(FrameEventArgs e)
+    /// <summary>
+    /// Handle polling events
+    /// </summary>
+    private void PollEventsSDL()
     {
-        base.OnRenderFrame(e);
-
-        GL.Clear(ClearBufferMask.ColorBufferBit);
-
-        shader.Use();
-        GL.BindVertexArray(vertexArrayObject);
-        GL.DrawElements(PrimitiveType.Triangles, indices.Length, DrawElementsType.UnsignedInt, 0);
-
-        SwapBuffers();
+        // Check to see if there are any events and continue to do so until the queue is empty
+        while (SDL.SDL_PollEvent(out SDL.SDL_Event e) == 1)
+        {
+            switch (e.type)
+            {
+                case SDL.SDL_EventType.SDL_QUIT:
+                    active = false;
+                    break;
+            }
+        }
     }
 
-    protected override void OnUnload()
+    /// <summary>
+    /// Things to do that will allow the rendering of SDL
+    /// </summary>
+    private void RenderSDL()
     {
-        base.OnUnload();
+        // Sets the color that the screen will be cleared with
+        if (SDL.SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255) < 0)
+        {
+            Console.WriteLine($"There was an issue with setting the render draw color.\n" +
+                                $"\t{SDL.SDL_GetError()}\n");
+            return;
+        }
 
-        GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-        GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
-        GL.BindVertexArray(0);
-        GL.UseProgram(0);
+        // Clears the current render surface
+        if (SDL.SDL_RenderClear(renderer) < 0)
+        {
+            Console.WriteLine($"There was an issue with clearing the render surface.\n" +
+                                $"\t{SDL.SDL_GetError()}\n");
+            return;
+        }
 
-        GL.DeleteBuffer(vertexBufferObject);
-        GL.DeleteVertexArray(vertexArrayObject);
+        // DEBUG: Draw the deltatime
+        DisplayText($"Deltatime: {deltaTime}", 200, 25);
 
-        GL.DeleteProgram(shader.handle);
+        // Switches out the currently presented render surface with the one we just did work on
+        SDL.SDL_RenderPresent(renderer);
+    }
 
-        shader.Dispose();
+    /// <summary>
+    /// Draw text onto the SDL rendered window.
+    /// </summary>
+    public void DisplayText(string text, int width, int height, int x = 0, int y = 0)
+    {
+        IntPtr sans = SDL_ttf.TTF_OpenFont($"{Environment.CurrentDirectory}\\resources\\fonts\\COUR.TTF", 17);
+
+        if (sans == IntPtr.Zero)
+        {
+            Console.WriteLine($"There was an issue with getting font.\n" +
+                                $"\t{SDL.SDL_GetError()}\n");
+            return;
+        }
+
+        SDL.SDL_Color black = new SDL.SDL_Color();
+        black.r = black.g = black.b = 0; black.a = 255;
+
+        IntPtr surfaceMessage = SDL_ttf.TTF_RenderText_Solid(sans, text, black);
+
+        IntPtr message = SDL.SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+
+        SDL.SDL_Rect messageRect;
+        messageRect.x = 0;
+        messageRect.y = 0;
+        messageRect.w = width;
+        messageRect.h = height;
+
+        SDL.SDL_RenderCopy(renderer, message, (IntPtr)null, ref messageRect);
+
+        SDL.SDL_FreeSurface(surfaceMessage);
+        SDL.SDL_DestroyTexture(message);
+        SDL_ttf.TTF_CloseFont(sans);
+    }
+
+    /// <summary>
+    /// Appropriately clean up everything with SDL
+    /// </summary>
+    private void CleanUpSDL()
+    {
+        // Clean up the resources that were created
+        SDL.SDL_DestroyRenderer(renderer);
+        SDL.SDL_DestroyWindow(window);
+        SDL.SDL_Quit();
     }
 }
