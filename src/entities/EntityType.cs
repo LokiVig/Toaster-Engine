@@ -1,6 +1,6 @@
 ﻿namespace DoomNET.Entities;
 
-public enum EntityTypes
+public enum EntityType
 {
     None,
     

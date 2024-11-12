@@ -4,7 +4,7 @@ namespace DoomNET.Entities;
 
 public class DamageableBrush : Entity
 {
-    public override EntityTypes type => EntityTypes.DamageableBrush; // This entity is of type DamageableBrush
+    public override EntityType type => EntityType.DamageableBrush; // This entity is of type DamageableBrush
 
     protected override void OnSpawn()
     {

@@ -1,7 +1,7 @@
-﻿using DoomNET.WTF;
+﻿using System;
+
+using DoomNET.WTF;
 using DoomNET.Entities;
-using System;
-using System.Numerics;
 
 namespace DoomNET.Resources;
 

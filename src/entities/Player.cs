@@ -1,11 +1,15 @@
-﻿using DoomNET.Resources;
+﻿using DoomNET.Rendering;
+using DoomNET.Resources;
 
 namespace DoomNET.Entities;
 
 public class Player : Entity
 {
-    public override EntityTypes type => EntityTypes.Player; // This entity is of type Player
+    public override EntityType type => EntityType.Player; // This entity is of type Player
     public override float health => 100.0f;
+    public override bool visible => false;
+
+    public Camera camera;
 
     private float armor = 0.0f; // Remove a certain amount of damage taken if armor isn't 0, and decrease the armor value when taking damage
 
@@ -14,6 +18,13 @@ public class Player : Entity
     public Player(Vector3 position) : base(position) { }
 
     public Player(Vector3 position, BBox bbox) : base(position, bbox) { }
+
+    protected override void OnSpawn()
+    {
+        base.OnSpawn();
+
+        camera = new Camera(bbox.maxs - 12 /* (64 - 12 => 52) */, rotation);
+    }
 
     protected override void Update()
     {

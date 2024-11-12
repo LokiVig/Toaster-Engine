@@ -220,12 +220,12 @@ public struct Vector3
         return new Vector3(in1.x * in2.x, in1.y * in2.y, in1.z * in2.z);
     }
 
-    public static Vector3 operator *(Vector3 in1, dynamic in2)
+    public static Vector3 operator *(Vector3 in1, float in2)
     {
         return new Vector3(in1.x * in2, in1.y * in2, in1.z * in2);
     }
 
-    public static Vector3 operator *(dynamic in1, Vector3 in2)
+    public static Vector3 operator *(float in1, Vector3 in2)
     {
         return new Vector3(in1 * in2.x, in1 * in2.y, in1 * in2.z);
     }

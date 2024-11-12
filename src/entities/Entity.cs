@@ -11,22 +11,18 @@ namespace DoomNET.Entities;
 public class Entity
 {
     public Vector3 position { get; set; } // This entity's current position
-    private Vector3 velocity; // This entity's current velocity
-
     public BBox bbox { get; set; } // This entity's bounding box
-
-    public virtual EntityTypes type { get; set; } // This entity's type, e.g. brush entity or other
-
     public string id { get; set; } // This entity's identifier
+    public Vector3 rotation { get; set; } // This entity's current rotation
 
-    public System.Numerics.Quaternion rotation { get; set; } // This entity's current rotation
-
+    public virtual EntityType type { get; set; } // This entity's type, e.g. brush entity or other
     public virtual float health { get; set; } // The amount of health this entity has
+    public virtual bool visible { get; set; } = true; // Is this entity visible? This is used by the raytracer to determine whether we should
+                                                      // render this entity or not
 
+    private Vector3 velocity; // This entity's current velocity
     private bool alive; // Is this entity alive?
-
     private Entity target; // The entity this entity's targeting
-
     private Entity lastAttacker; // The last entity to attack this entity
 
     public Entity()
@@ -87,10 +83,10 @@ public class Entity
         // Velocity decreases with time (effectively drag)
         velocity *= (1 - 0.1f * DoomNET.deltaTime);
 
-        // If the velocity's magnitude <= 0.1, it's effectively zero, so zero it out for the sake of ease
-        if (velocity.Magnitude() <= 0.1f)
+        // If the velocity's magnitude <= 0.5, it's effectively zero, so zero it out for the sake of ease
+        if (velocity.Magnitude() <= 0.5f)
         {
-            velocity = new();
+            velocity = new Vector3(0);
         }
     }
 

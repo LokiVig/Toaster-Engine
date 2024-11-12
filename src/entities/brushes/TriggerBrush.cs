@@ -23,11 +23,12 @@ public class TriggerBrush : Entity
 
     public int iValue { get; set; } // Event int value
     public float fValue { get; set; } // Event float value
-    public int bValue { get; set; } // Event bool value (-1 = none, 0 = false, 1 = true)
+    public int bValue { get; set; } = -1; // Event bool value (-1 = none, 0 = false, 1 = true)
     public Vector3 vValue { get; set; } // Event Vector3 value
     public BBox bbValue { get; set; } // Event BBox value
 
-    public override EntityTypes type => EntityTypes.TriggerBrush; // This entity is of type TriggerBrush
+    public override EntityType type => EntityType.TriggerBrush; // This entity is of type TriggerBrush
+    public override bool visible => false; // This entity is invisible to the raytracer
 
     protected override void OnSpawn()
     {
@@ -100,6 +101,7 @@ public class TriggerBrush : Entity
                                     $"\t\tiValue: {iValue}\n" +
                                     $"\t\tfValue: {fValue}\n" +
                                     $"\t\tvValue: {vValue}\n" +
+                                    $"\t\tbValue: {(bValue > -1 ? (bValue == 0 ? "False" : "True") : "")}\n" +
                                     $"\t\tbbValue: {bbValue}\n" +
                                 $"\tTrigger type: {triggerType}\n" +
                                 $"\tTrigger by: {triggerBy}\n" +
