@@ -14,13 +14,13 @@ public class WTFSaver
     /// Save a WTF file to a specified path
     /// </summary>
     /// <param name="path">The path of the WTF file, already specified if WTFLoader.file and/or its filepath isn't null</param>
-    public static void SaveFile(string path, WTFFile inFile)
+    public static void SaveFile( string path, WTFFile inFile )
     {
         // A local variable for storing the file
         WTFFile file;
 
         // If we already have a file open, set the path to the current file
-        if (DoomNET.file != null && !string.IsNullOrEmpty(DoomNET.file.directory))
+        if (DoomNET.file != null && !string.IsNullOrEmpty( DoomNET.file.directory ))
         {
             file = DoomNET.file;
             path = file.directory;
@@ -31,7 +31,7 @@ public class WTFSaver
         }
         else // We couldn't find a file to save, error!
         {
-            throw new NullReferenceException("Error saving file, SaveFile().inFile == null & DoomNET.file == null!");
+            throw new NullReferenceException( "Error saving file, SaveFile().inFile == null & DoomNET.file == null!" );
         }
 
         // Call the file's OnSave function
@@ -44,6 +44,6 @@ public class WTFSaver
         }
 
         // Write the WTF file to the path
-        File.WriteAllText(path, JsonSerializer.Serialize(file, Program.serializerOptions));
+        File.WriteAllText( path, JsonSerializer.Serialize( file, Program.serializerOptions ) );
     }
 }

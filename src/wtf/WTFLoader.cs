@@ -14,16 +14,16 @@ public class WTFLoader
     /// <param name="directory">The specified path to the WTF file</param>
     /// <param name="outFile">An output file, for external uses</param>
     /// <exception cref="FileNotFoundException"></exception>
-    public static void LoadFile(string directory, out WTFFile outFile)
+    public static void LoadFile( string directory, out WTFFile outFile )
     {
         // Couldn't find file from the input path! Throw an exception
-        if (!File.Exists(directory))
+        if (!File.Exists( directory ))
         {
-            throw new FileNotFoundException($"Couldn't find WTF file at \"{directory}\".");
+            throw new FileNotFoundException( $"Couldn't find WTF file at \"{directory}\"." );
         }
 
         // Deserialize the file through JSON
-        outFile = JsonSerializer.Deserialize<WTFFile>(File.OpenRead(directory), Program.serializerOptions);
+        outFile = JsonSerializer.Deserialize<WTFFile>( File.OpenRead( directory ), Program.serializerOptions );
     }
 
     /// <summary>
@@ -31,10 +31,10 @@ public class WTFLoader
     /// </summary>
     /// <param name="directory">The specified path to the WTF file</param>
     /// <returns>The desired file as a variable</returns>
-    public static WTFFile LoadFile(string directory)
+    public static WTFFile LoadFile( string directory )
     {
         WTFFile file;
-        LoadFile(directory, out file);
+        LoadFile( directory, out file );
         return file;
     }
 }

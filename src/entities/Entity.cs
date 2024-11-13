@@ -13,7 +13,7 @@ public class Entity
     public Vector3 position { get; set; } // This entity's current position
     public BBox bbox { get; set; } // This entity's bounding box
     public string id { get; set; } // This entity's identifier
-    public Vector3 rotation { get; set; } // This entity's current rotation
+    public Quaternion rotation { get; set; } // This entity's current rotation
 
     public virtual EntityType type { get; set; } // This entity's type, e.g. brush entity or other
     public virtual float health { get; set; } // The amount of health this entity has
@@ -32,14 +32,14 @@ public class Entity
         Spawn();
     }
 
-    public Entity(Vector3 position)
+    public Entity( Vector3 position )
     {
         this.position = position;
         bbox = new();
         Spawn();
     }
 
-    public Entity(Vector3 position, BBox bbox)
+    public Entity( Vector3 position, BBox bbox )
     {
         this.position = position;
         this.bbox = bbox;
@@ -81,12 +81,12 @@ public class Entity
         position += velocity * DoomNET.deltaTime * DoomNET.deltaTime;
 
         // Velocity decreases with time (effectively drag)
-        velocity *= (1 - 0.1f * DoomNET.deltaTime);
+        velocity *= ( 1 - 0.1f * DoomNET.deltaTime );
 
         // If the velocity's magnitude <= 0.5, it's effectively zero, so zero it out for the sake of ease
         if (velocity.Magnitude() <= 0.5f)
         {
-            velocity = new Vector3(0);
+            velocity = new Vector3( 0 );
         }
     }
 
@@ -142,7 +142,7 @@ public class Entity
     /// <summary>
     /// Sets this entity's ID
     /// </summary>
-    public void SetID(string id)
+    public void SetID( string id )
     {
         this.id = id;
     }
@@ -151,7 +151,7 @@ public class Entity
     /// Set the target of this entity, e.g. an enemy should target the <see cref="Player"/>
     /// </summary>
     /// <param name="target">The specific entity we wish to target, 0 should always be the <see cref="Player"/></param>
-    public void SetTarget(Entity target)
+    public void SetTarget( Entity target )
     {
         // Can't target a dead entity
         if (!target.IsAlive())
@@ -166,16 +166,16 @@ public class Entity
     /// Set the target of this entity by an ID, e.g. an enemy should target the <see cref="Player"/>
     /// </summary>
     /// <param name="targetID">The ID of the entity we wish to target, 0 should always be the <see cref="Player"/></param>
-    public void SetTarget(string targetID)
+    public void SetTarget( string targetID )
     {
-        target = DoomNET.file.FindEntity(targetID);
+        target = DoomNET.file.FindEntity( targetID );
     }
 
     /// <summary>
     /// Set this entity's position by a <see cref="Vector3"/>
     /// </summary>
     /// <param name="position">The new, desired position of this entity</param>
-    public void SetPosition(Vector3 position)
+    public void SetPosition( Vector3 position )
     {
         this.position = position;
     }
@@ -184,16 +184,25 @@ public class Entity
     /// Set this entity's velocity by a <see cref="Vector3"/>
     /// </summary>
     /// <param name="velocity">The new, desired velocity of this entity</param>
-    public void SetVelocity(Vector3 velocity)
+    public void SetVelocity( Vector3 velocity )
     {
         this.velocity = velocity;
+    }
+
+    /// <summary>
+    /// Set this entity's rotation from a <see cref="Quaternion"/>
+    /// </summary>
+    /// <param name="rotation">The new, desired rotation of this entity</param>
+    public void SetRotation( Quaternion rotation )
+    {
+        this.rotation = rotation;
     }
 
     /// <summary>
     /// Main use for this is for when a brush is turned into an entity
     /// </summary>
     /// <param name="bbox">The new bounding box of this entity</param>
-    public void SetBBox(BBox bbox)
+    public void SetBBox( BBox bbox )
     {
         this.bbox = bbox;
     }
@@ -202,7 +211,7 @@ public class Entity
     /// Face the current entity towards another, e.g. the player
     /// </summary>
     /// <param name="entity">The desired entity we wish to look at</param>
-    public void LookAtEntity(Entity entity = null)
+    public void LookAtEntity( Entity entity = null )
     {
         // Do math
     }
@@ -211,14 +220,14 @@ public class Entity
     /// Subtract this entity's health by the parameter and trigger related events
     /// </summary>
     /// <param name="damage">The amount of damage this entity should take</param>
-    public virtual void TakeDamage(float damage, Entity source = null)
+    public virtual void TakeDamage( float damage, Entity source = null )
     {
         // We've been damaged by someone or something!
         // How queer! We must log this to the console immediately!!
-        Console.WriteLine($"Entity \"{GetID()}\" took damage.\n" +
+        Console.WriteLine( $"Entity \"{GetID()}\" took damage.\n" +
                           $"\tDamage: {damage}\n" +
-                          $"\tSource: {(source != null ? source + $" (\"{source.GetID()}\")" : "N/A")}\n" +
-                          $"\tNew health: {health - damage}\n");
+                          $"\tSource: {( source != null ? source + $" (\"{source.GetID()}\")" : "N/A" )}\n" +
+                          $"\tNew health: {health - damage}\n" );
 
         //
         // I guess we're taking damage now
@@ -239,7 +248,7 @@ public class Entity
     /// Call non-input-taking event
     /// </summary>
     /// <param name="eEvent">Desired event to do to this entity</param>
-    public void OnEvent(EntityEvent eEvent, Entity source = null)
+    public void OnEvent( EntityEvent eEvent, Entity source = null )
     {
         switch (eEvent)
         {
@@ -264,12 +273,12 @@ public class Entity
     /// </summary>
     /// <param name="eEvent">Desired event to do to this entity.</param>
     /// <param name="iValue">Value as <see langword="int"/>.</param>
-    public void OnEvent(EntityEvent eEvent, int iValue, Entity source = null)
+    public void OnEvent( EntityEvent eEvent, int iValue, Entity source = null )
     {
         switch (eEvent)
         {
             case EntityEvent.TakeDamage: // This entity should take iValue damage
-                TakeDamage(iValue, source);
+                TakeDamage( iValue, source );
                 break;
         }
     }
@@ -279,12 +288,12 @@ public class Entity
     /// </summary>
     /// <param name="eEvent">Desired event to do to this entity.</param>
     /// <param name="fValue">Value as <see langword="float"/>.</param>
-    public void OnEvent(EntityEvent eEvent, float fValue, Entity source = null)
+    public void OnEvent( EntityEvent eEvent, float fValue, Entity source = null )
     {
         switch (eEvent)
         {
             case EntityEvent.TakeDamage: // This entity should take fValue damage
-                TakeDamage(fValue, source);
+                TakeDamage( fValue, source );
                 break;
         }
     }
@@ -294,7 +303,7 @@ public class Entity
     /// </summary>
     /// <param name="eEvent">Desired event to do to this entity.</param>
     /// <param name="bValue">Value as <see langword="bool"/>.</param>
-    public void OnEvent(EntityEvent eEvent, bool bValue, Entity source = null)
+    public void OnEvent( EntityEvent eEvent, bool bValue, Entity source = null )
     {
         switch (eEvent)
         {
@@ -308,12 +317,22 @@ public class Entity
     /// </summary>
     /// <param name="eEvent">Desired event to do to this entity.</param>
     /// <param name="vValue">Value as <see cref="Vector3"/>.</param>
-    public void OnEvent(EntityEvent eEvent, Vector3 vValue, Entity source = null)
+    public void OnEvent( EntityEvent eEvent, Vector3 vValue, Entity source = null )
     {
         switch (eEvent)
         {
             case EntityEvent.SetPosition: // Set this entity's position according to vValue
-                SetPosition(vValue);
+                SetPosition( vValue );
+                break;
+        }
+    }
+
+    public void OnEvent( EntityEvent eEvent, Quaternion qValue, Entity source = null )
+    {
+        switch (eEvent)
+        {
+            case EntityEvent.SetRotation:
+                SetRotation( qValue );
                 break;
         }
     }
@@ -323,12 +342,12 @@ public class Entity
     /// </summary>
     /// <param name="eEvent">Desired event to do to this entity.</param>
     /// <param name="bbValue">Value as <see cref="BBox"/>.</param>
-    public void OnEvent(EntityEvent eEvent, BBox bbValue, Entity source = null)
+    public void OnEvent( EntityEvent eEvent, BBox bbValue, Entity source = null )
     {
         switch (eEvent)
         {
             case EntityEvent.SetBBox: // Set this entity's BBox according to bValue
-                SetBBox(bbValue);
+                SetBBox( bbValue );
                 break;
         }
     }
@@ -370,8 +389,8 @@ public class Entity
         DoomNET.OnUpdate -= Update;
 
         // Log to the console that this entity has died!
-        Console.WriteLine($"Entity {this} (\"{GetID()}\") has died.\n" +
-                          $"\tLast attacker: {lastAttacker}");
+        Console.WriteLine( $"Entity {this} (\"{GetID()}\") has died.\n" +
+                          $"\tLast attacker: {lastAttacker}" );
     }
 
     /// <summary>

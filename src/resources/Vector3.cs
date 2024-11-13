@@ -1,7 +1,9 @@
-﻿#pragma warning disable CS0659
+﻿#pragma warning disable CS0660
 #pragma warning disable CS0661
 
 using System;
+
+using DoomNET.Rendering;
 
 namespace DoomNET.Resources;
 
@@ -19,38 +21,38 @@ public struct Vector3
         x = y = z = 0.0f;
     }
 
-    public Vector3(float xyz)
+    public Vector3( float xyz )
     {
         x = y = z = xyz;
     }
 
-    public Vector3(float x, float y)
+    public Vector3( float x, float y )
     {
         this.x = x;
         this.y = y;
         this.z = 0;
     }
 
-    public Vector3(float x, float y, float z)
+    public Vector3( float x, float y, float z )
     {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public static float DistanceBetween(Vector3 source, Vector3 dest)
+    public static float DistanceBetween( Vector3 source, Vector3 dest )
     {
-        return (source - dest).Magnitude();
+        return ( source - dest ).Magnitude();
     }
 
-    public float DistanceTo(Vector3 other)
+    public float DistanceTo( Vector3 other )
     {
-        return (this - other).Magnitude();
+        return ( this - other ).Magnitude();
     }
 
     public float Magnitude()
     {
-        return (float)Math.Sqrt(x * x + y * y + z * z);
+        return (float)Math.Sqrt( x * x + y * y + z * z );
     }
 
     public Vector3 Normalized()
@@ -59,7 +61,7 @@ public struct Vector3
 
         if (magnitude > 0)
         {
-            return new Vector3(x / magnitude, y / magnitude, z / magnitude);
+            return new Vector3( x / magnitude, y / magnitude, z / magnitude );
         }
         else
         {
@@ -67,9 +69,25 @@ public struct Vector3
         }
     }
 
-    public static Vector3 Normalize(Vector3 vector)
+    public static Vector3 Normalize( Vector3 vector )
     {
         return vector.Normalized();
+    }
+
+    public static Vector3 ScreenToWorldDirection( int x, int y, Camera camera )
+    {
+        // Convert screen coordinates to world coordinates
+        float aspectRatio = (float)DoomNET.windowWidth / DoomNET.windowHeight;
+        float fovScale = (float)Math.Tan( camera.fieldOfView * 0.5 * Math.PI / 180 );
+
+        float px = ( 2 * ( ( x + 0.5f ) / DoomNET.windowWidth ) - 1 ) * aspectRatio * fovScale;
+        float py = ( 1 - 2 * ( ( y + 0.5f ) / DoomNET.windowHeight ) ) * fovScale;
+
+        // Get the screen direction vector
+        Vector3 screenDirection = new Vector3( px, py, -1 ).Normalized();
+
+        // Transform by the camera's orientation
+        return camera.TransformDirection( screenDirection );
     }
 
     public readonly override string ToString()
@@ -78,189 +96,180 @@ public struct Vector3
     }
 
     #region OPERATORS
-    public static Vector3 operator +(Vector3 in1) => in1;
-    public static Vector3 operator -(Vector3 in1) => new Vector3(-in1.x, -in1.y, -in1.z);
+    public static Vector3 operator +( Vector3 lhs ) => lhs;
+    public static Vector3 operator -( Vector3 lhs ) => new Vector3( -lhs.x, -lhs.y, -lhs.z );
 
-    public static bool operator ==(Vector3 in1, Vector3 in2)
+    public static bool operator ==( Vector3 lhs, Vector3 rhs )
     {
-        return in1.x == in2.x && in1.y == in2.y && in1.z == in2.z;
+        return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
     }
 
-    public static bool operator ==(Vector3 in1, float in2)
+    public static bool operator ==( Vector3 lhs, float rhs )
     {
-        return in1.x == in2 && in1.y == in2 && in1.z == in2;
+        return lhs.x == rhs && lhs.y == rhs && lhs.z == rhs;
     }
 
-    public static bool operator ==(float in1, Vector3 in2)
+    public static bool operator ==( float lhs, Vector3 rhs )
     {
-        return in1 == in2.x && in1 == in2.y && in1 == in2.z;
+        return lhs == rhs.x && lhs == rhs.y && lhs == rhs.z;
     }
 
-    public override bool Equals(object obj)
+    public static bool operator !=( Vector3 lhs, Vector3 rhs )
     {
-        if (obj.GetType() == typeof(Vector3))
-        {
-            return this == (Vector3)obj;
-        }
-        else if (obj.GetType() == typeof(float))
-        {
-            return this == (float)obj;
-        }
-
-        return false;
+        return !( lhs == rhs );
     }
 
-    public static bool operator !=(Vector3 in1, Vector3 in2)
+    public static bool operator !=( Vector3 lhs, float rhs )
     {
-        return !(in1 == in2);
+        return !( lhs == rhs );
     }
 
-    public static bool operator !=(Vector3 in1, float in2)
+    public static bool operator !=( float lhs, Vector3 rhs )
     {
-        return !(in1 == in2);
+        return !( lhs == rhs );
     }
 
-    public static bool operator !=(float in1, Vector3 in2)
+    public static bool operator <( Vector3 lhs, Vector3 rhs )
     {
-        return !(in1 == in2);
+        return lhs.x - rhs.x < 0 && lhs.y - rhs.y < 0 && lhs.z - rhs.z < 0;
     }
 
-    public static bool operator <(Vector3 in1, Vector3 in2)
+    public static bool operator <( Vector3 lhs, float rhs )
     {
-        return in1.x - in2.x < 0 && in1.y - in2.y < 0 && in1.z - in2.z < 0;
+        return lhs.x - rhs < 0 && lhs.y - rhs < 0 && lhs.z - rhs < 0;
     }
 
-    public static bool operator <(Vector3 in1, float in2)
+    public static bool operator <( float lhs, Vector3 rhs )
     {
-        return in1.x - in2 < 0 && in1.y - in2 < 0 && in1.z - in2 < 0;
+        return lhs - rhs.x < 0 && lhs - rhs.y < 0 && lhs - rhs.z < 0;
     }
 
-    public static bool operator <(float in1, Vector3 in2)
+    public static bool operator >( Vector3 lhs, Vector3 rhs )
     {
-        return in1 - in2.x < 0 && in1 - in2.y < 0 && in1 - in2.z < 0;
+        return lhs.x - rhs.x > 0 && lhs.y - rhs.y > 0 && lhs.z - rhs.z > 0;
     }
 
-    public static bool operator >(Vector3 in1, Vector3 in2)
+    public static bool operator >( Vector3 lhs, float rhs )
     {
-        return in1.x - in2.x > 0 && in1.y - in2.y > 0 && in1.z - in2.z > 0;
+        return lhs.x - rhs > 0 && lhs.y - rhs > 0 && lhs.z - rhs > 0;
     }
 
-    public static bool operator >(Vector3 in1, float in2)
+    public static bool operator >( float lhs, Vector3 rhs )
     {
-        return in1.x - in2 > 0 && in1.y - in2 > 0 && in1.z - in2 > 0;
+        return lhs - rhs.x > 0 && lhs - rhs.y > 0 && lhs - rhs.z > 0;
     }
 
-    public static bool operator >(float in1, Vector3 in2)
+    public static bool operator <=( Vector3 lhs, Vector3 rhs )
     {
-        return in1 - in2.x > 0 && in1 - in2.y > 0 && in1 - in2.z > 0;
+        return !( lhs > rhs );
     }
 
-    public static bool operator <=(Vector3 in1, Vector3 in2)
+    public static bool operator <=( Vector3 lhs, float rhs )
     {
-        return !(in1 > in2);
+        return !( lhs > rhs );
     }
 
-    public static bool operator <=(Vector3 in1, float in2)
+    public static bool operator <=( float lhs, Vector3 rhs )
     {
-        return !(in1 > in2);
+        return !( lhs > rhs );
     }
 
-    public static bool operator <=(float in1, Vector3 in2)
+    public static bool operator >=( Vector3 lhs, Vector3 rhs )
     {
-        return !(in1 > in2);
+        return !( lhs < rhs );
     }
 
-    public static bool operator >=(Vector3 in1, Vector3 in2)
+    public static bool operator >=( Vector3 lhs, float rhs )
     {
-        return !(in1 < in2);
+        return !( lhs < rhs );
     }
 
-    public static bool operator >=(Vector3 in1, float in2)
+    public static bool operator >=( float lhs, Vector3 rhs )
     {
-        return !(in1 < in2);
+        return !( lhs < rhs );
     }
 
-    public static bool operator >=(float in1, Vector3 in2)
+    public static Vector3 operator +( Vector3 lhs, Vector3 rhs )
     {
-        return !(in1 < in2);
+        return new Vector3( lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z );
     }
 
-    public static Vector3 operator +(Vector3 in1, Vector3 in2)
+    public static Vector3 operator +( Vector3 lhs, float rhs )
     {
-        return new Vector3(in1.x + in2.x, in1.y + in2.y, in1.z + in2.z);
+        return new Vector3( lhs.x + rhs, lhs.y + rhs, lhs.z + rhs );
     }
 
-    public static Vector3 operator +(Vector3 in1, float in2)
+    public static Vector3 operator +( float lhs, Vector3 rhs )
     {
-        return new Vector3(in1.x + in2, in1.y + in2, in1.z + in2);
+        return new Vector3( lhs + rhs.x, lhs + rhs.y, lhs + rhs.z );
     }
 
-    public static Vector3 operator +(float in1, Vector3 in2)
+    public static Vector3 operator -( Vector3 lhs, Vector3 rhs )
     {
-        return new Vector3(in1 + in2.x, in1 + in2.y, in1 + in2.z);
+        return new Vector3( lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z );
     }
 
-    public static Vector3 operator -(Vector3 in1, Vector3 in2)
+    public static Vector3 operator -( Vector3 lhs, float rhs )
     {
-        return new Vector3(in1.x - in2.x, in1.y - in2.y, in1.z - in2.z);
+        return new Vector3( lhs.x - rhs, lhs.y - rhs, lhs.z - rhs );
     }
 
-    public static Vector3 operator -(Vector3 in1, float in2)
+    public static Vector3 operator -( float lhs, Vector3 rhs )
     {
-        return new Vector3(in1.x - in2, in1.y - in2, in1.z - in2);
+        return new Vector3( lhs - rhs.x, lhs - rhs.y, lhs - rhs.z );
     }
 
-    public static Vector3 operator -(float in1, Vector3 in2)
+    public static Vector3 operator *( Vector3 lhs, Vector3 rhs )
     {
-        return new Vector3(in1 - in2.x, in1 - in2.y, in1 - in2.z);
+        return new Vector3( lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z );
     }
 
-    public static Vector3 operator *(Vector3 in1, Vector3 in2)
+    public static Vector3 operator *( Vector3 lhs, float rhs )
     {
-        return new Vector3(in1.x * in2.x, in1.y * in2.y, in1.z * in2.z);
+        return new Vector3( lhs.x * rhs, lhs.y * rhs, lhs.z * rhs );
     }
 
-    public static Vector3 operator *(Vector3 in1, float in2)
+    public static Vector3 operator *( float lhs, Vector3 rhs )
     {
-        return new Vector3(in1.x * in2, in1.y * in2, in1.z * in2);
+        return new Vector3( lhs * rhs.x, lhs * rhs.y, lhs * rhs.z );
     }
 
-    public static Vector3 operator *(float in1, Vector3 in2)
+    public static Vector3 operator /( Vector3 lhs, Vector3 rhs )
     {
-        return new Vector3(in1 * in2.x, in1 * in2.y, in1 * in2.z);
-    }
-
-    public static Vector3 operator /(Vector3 in1, Vector3 in2)
-    {
-        if (in1 == 0 || in2 == 0)
+        if (lhs == 0 || rhs == 0)
         {
             throw new DivideByZeroException();
         }
 
-        return new Vector3(in1.x / in2.x, in1.y / in2.y, in1.z / in2.z);
+        return new Vector3( lhs.x / rhs.x, lhs.y / rhs.y, lhs.z / rhs.z );
     }
 
-    public static Vector3 operator /(Vector3 in1, float in2)
+    public static Vector3 operator /( Vector3 lhs, float rhs )
     {
-        if (in1 == 0 || in2 == 0)
+        if (lhs == 0 || rhs == 0)
         {
             throw new DivideByZeroException();
         }
 
-        return new Vector3(in1.x / in2, in1.y / in2, in1.z / in2);
+        return new Vector3( lhs.x / rhs, lhs.y / rhs, lhs.z / rhs );
     }
 
-    public static Vector3 operator /(float in1, Vector3 in2)
+    public static Vector3 operator /( float lhs, Vector3 rhs )
     {
-        if (in1 == 0 || in2 == 0)
+        if (lhs == 0 || rhs == 0)
         {
             throw new DivideByZeroException();
         }
 
-        return new Vector3(in1 / in2.x, in1 / in2.y, in1 / in2.z);
+        return new Vector3( lhs / rhs.x, lhs / rhs.y, lhs / rhs.z );
     }
 
-    public float this[int i]
+    public static explicit operator float( Vector3 lhs )
+    {
+        return lhs.Magnitude();
+    }
+
+    public float this[ int i ]
     {
         get
         {

@@ -16,16 +16,17 @@ public class TriggerBrush : Entity
     public TriggerType triggerType { get; set; } // Which type of trigger is this?
     public TriggerBy triggerBy { get; set; } // What should this trigger trigger from?
 
-    private int triggeredCount; // The amount of times this trigger has been triggered
     public int triggerCount { get; set; } // The max amount of times this trigger should be triggered
-
-    private bool hasTriggered; // Determines whether or not this trigger has already been triggered
 
     public int iValue { get; set; } // Event int value
     public float fValue { get; set; } // Event float value
     public int bValue { get; set; } = -1; // Event bool value (-1 = none, 0 = false, 1 = true)
     public Vector3 vValue { get; set; } // Event Vector3 value
+    public Quaternion qValue { get; set; } // Event Quaternion value
     public BBox bbValue { get; set; } // Event BBox value
+
+    private int triggeredCount; // The amount of times this trigger has been triggered
+    private bool hasTriggered; // Determines whether or not this trigger has already been triggered
 
     public override EntityType type => EntityType.TriggerBrush; // This entity is of type TriggerBrush
     public override bool visible => false; // This entity is invisible to the raytracer
@@ -50,7 +51,7 @@ public class TriggerBrush : Entity
         // Check if any entity is intersecting with us
         foreach (Entity entity in DoomNET.file?.entities)
         {
-            if (bbox.IntersectingWith(entity.GetPosition()))
+            if (bbox.IntersectingWith( entity.GetPosition() ))
             {
                 // If they are, we bbox.OnIntersect triggers!
                 OnTrigger();
@@ -94,46 +95,52 @@ public class TriggerBrush : Entity
                 break;
         }
 
-        Console.WriteLine($"TriggerBrush \"{GetID()}\" has been triggered.\n" +
+        Console.WriteLine( $"TriggerBrush \"{GetID()}\" has been triggered.\n" +
                                 $"\tTarget: {targetEntity} (\"{targetEntity.GetID()}\")\n" +
                                 $"\tEvent: {targetEvent}\n" +
                                 $"\tValues:\n" +
                                     $"\t\tiValue: {iValue}\n" +
                                     $"\t\tfValue: {fValue}\n" +
+                                    $"\t\tbValue: {( bValue > -1 ? ( bValue == 0 ? "False" : "True" ) : "" )}\n" +
                                     $"\t\tvValue: {vValue}\n" +
-                                    $"\t\tbValue: {(bValue > -1 ? (bValue == 0 ? "False" : "True") : "")}\n" +
+                                    $"\t\tqValue: {qValue}\n" +
                                     $"\t\tbbValue: {bbValue}\n" +
                                 $"\tTrigger type: {triggerType}\n" +
                                 $"\tTrigger by: {triggerBy}\n" +
-                                $"\tTrigger on: {triggerOn}\n");
+                                $"\tTrigger on: {triggerOn}\n" );
 
         if (iValue != 0) // Int value event
         {
-            targetEntity.OnEvent(targetEvent, iValue, this);
+            targetEntity.OnEvent( targetEvent, iValue, this );
         }
 
         if (fValue != 0) // Float value event
         {
-            targetEntity.OnEvent(targetEvent, fValue, this);
+            targetEntity.OnEvent( targetEvent, fValue, this );
         }
 
-        if (bValue != -1)
+        if (bValue != -1) // Bool value event
         {
-            targetEntity.OnEvent(targetEvent, bValue == 1 ? true : false, this);
+            targetEntity.OnEvent( targetEvent, bValue == 1 ? true : false, this );
         }
 
         if (vValue != 0) // Vector3 value event
         {
-            targetEntity.OnEvent(targetEvent, vValue, this);
+            targetEntity.OnEvent( targetEvent, vValue, this );
+        }
+
+        if (qValue != 0) // Quaternion value event
+        {
+            targetEntity.OnEvent( targetEvent, qValue, this );
         }
 
         if (bbValue != null) // BBox value event
         {
-            targetEntity.OnEvent(targetEvent, bbValue, this);
+            targetEntity.OnEvent( targetEvent, bbValue, this );
         }
 
         // Regular event, not taking any special inputs
-        targetEntity.OnEvent(targetEvent, this);
+        targetEntity.OnEvent( targetEvent, this );
 
         // We've triggered this trigger, set the bool to true and increase the count
         triggeredCount++;

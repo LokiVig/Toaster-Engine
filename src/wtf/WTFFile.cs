@@ -18,7 +18,7 @@ public class WTFFile
 
     public WTFFile() { }
 
-    public WTFFile(string directory)
+    public WTFFile( string directory )
     {
         this.directory = directory;
     }
@@ -27,42 +27,42 @@ public class WTFFile
     /// Add an entity to the entities list
     /// </summary>
     /// <param name="entity">Input entity</param>
-    public void AddEntity(Entity entity)
+    public void AddEntity( Entity entity )
     {
-        entities.Add(entity);
+        entities.Add( entity );
     }
 
     /// <summary>
     /// Add a brush to the list of this WTF file
     /// </summary>
     /// <param name="brush">The brush that we're to add to this file</param>
-    public void AddBrush(Brush brush)
+    public void AddBrush( Brush brush )
     {
         // Add the brush to the list
-        brushes.Add(brush);
+        brushes.Add( brush );
     }
 
     /// <summary>
     /// Remove a brush from the list of this WTF file
     /// </summary>
     /// <param name="brush">The brush that we're to remove from this file</param>
-    public void RemoveBrush(Brush brush)
+    public void RemoveBrush( Brush brush )
     {
         // Remove the brush from the list
-        brushes.Remove(brush);
+        brushes.Remove( brush );
     }
 
     /// <summary>
     /// Remove a brush from the list of this WTF using its ID
     /// </summary>
     /// <param name="id">The ID of the brush we're to remove from this file</param>
-    public void RemoveBrush(string id)
+    public void RemoveBrush( string id )
     {
         foreach (Brush brush in brushes)
         {
             if (brush.GetID() == id)
             {
-                brushes.Remove(brush);
+                brushes.Remove( brush );
             }
         }
     }
@@ -71,22 +71,22 @@ public class WTFFile
     /// Remove the entity from the entities list
     /// </summary>
     /// <param name="entity">Desired entity to remove</param>
-    public void RemoveEntity(Entity entity)
+    public void RemoveEntity( Entity entity )
     {
-        entities.Remove(entity);
+        entities.Remove( entity );
     }
 
     /// <summary>
     /// Remove the entity from the entities list
     /// </summary>
     /// <param name="id">Desired entity to remove</param>
-    public void RemoveEntity(string id)
+    public void RemoveEntity( string id )
     {
         foreach (Entity entity in entities)
         {
             if (entity.GetID() == id)
             {
-                entities.Remove(entity);
+                entities.Remove( entity );
             }
         }
     }
@@ -97,6 +97,25 @@ public class WTFFile
     public List<Entity> GetEntities()
     {
         return entities;
+    }
+
+    /// <summary>
+    /// Gets the player entity from the map's list of entities
+    /// </summary>
+    public Player GetPlayer()
+    {
+        // Check every entity in our entities list
+        foreach (Entity ent in entities)
+        {
+            if (ent is Player)
+            {
+                return ent as Player;
+            }
+        }
+
+        // If there is no player
+        // Should this really be possible?
+        return null;
     }
 
     /// <summary>
@@ -115,12 +134,12 @@ public class WTFFile
         // For every entity, set their ID to i, 0 should always be the player
         for (int i = 0; i < entities.Count; i++)
         {
-            entities[i].SetID($"entity {i}");
+            entities[ i ].SetID( $"entity {i}" );
         }
 
         for (int i = 0; i < brushes.Count; i++)
         {
-            brushes[i].SetID($"brush {i}");
+            brushes[ i ].SetID( $"brush {i}" );
         }
     }
 
@@ -129,15 +148,15 @@ public class WTFFile
     /// </summary>
     /// <param name="id">A specific ID of an entity</param>
     /// <returns>The desired entity appropriate to the argument ID</returns>
-    public Entity FindEntity(string id)
+    public Entity FindEntity( string id )
     {
         // Get the id of every entity
         for (int i = 0; i < entities.Count; i++)
         {
             // If entities[i]'s ID fits with the input ID, return that entity
-            if (entities[i].GetID() == id)
+            if (entities[ i ].GetID() == id)
             {
-                return entities[i];
+                return entities[ i ];
             }
         }
 

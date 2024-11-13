@@ -20,8 +20,7 @@ public class DoomNET
     public static int windowWidth = 1280;
     public static int windowHeight = 720;
 
-    private IntPtr window;
-    private IntPtr renderer;
+    private Renderer renderer;
 
     /// <summary>
     /// Initialize the game
@@ -33,37 +32,37 @@ public class DoomNET
 
         file = new();
 
-        TestNPC npc = new TestNPC(new Vector3(52, 52, 50), new BBox(new Vector3(16.0f, 16.0f, 64.0f), new Vector3(-16.0f, -16.0f, 0.0f)));
-        npc.SetVelocity(new Vector3(0f, 25.0f, 0f));
+        TestNPC npc = new TestNPC( new Vector3( 50, 55, 50 ), new BBox( new Vector3( 16.0f, 16.0f, 64.0f ), new Vector3( -16.0f, -16.0f, 0.0f ) ) );
+        npc.SetVelocity( new Vector3( 0f, 0f, 0f ) );
 
         TriggerBrush trigger = new TriggerBrush();
-        trigger.SetBBox(new BBox(new Vector3(-15.0f, -15.0f, -15.0f), new Vector3(15.0f, 15.0f, 15.0f)));
+        trigger.SetBBox( new BBox( new Vector3( -15.0f, -15.0f, -15.0f ), new Vector3( 15.0f, 15.0f, 15.0f ) ) );
         trigger.triggerType = TriggerType.Once;
         trigger.triggerBy = TriggerBy.Players;
         trigger.triggerOn = TriggerOn.Trigger;
         trigger.targetEvent = EntityEvent.TakeDamage;
         trigger.targetEntity = npc;
-        trigger.fValue = 500.0f;
+        trigger.fValue = 100.0f;
 
-        Player player = new Player(new Vector3(50.0f, 50.0f, 50.0f), new BBox(new Vector3(32.0f, 32.0f, 64.0f), new Vector3(-32.0f, -32.0f, 0.0f)));
-        player.SetVelocity(new Vector3(1.5f, 0.25f, 0f));
+        Player player = new Player( new Vector3( 50.0f, 50.0f, 50.0f ), new BBox( new Vector3( 32.0f, 32.0f, 64.0f ), new Vector3( -32.0f, -32.0f, 0.0f ) ) );
+        player.SetVelocity( new Vector3( 1.5f, 0.25f, 0f ) );
 
-        file.AddEntity(player);
-        file.AddEntity(npc);
-        file.AddEntity(trigger);
+        file.AddEntity( player );
+        file.AddEntity( npc );
+        file.AddEntity( trigger );
 
-        WTFSaver.SaveFile("maps/test.wtf", file);
+        WTFSaver.SaveFile( "maps/test.wtf", file );
 
-        Ray.Trace(player, npc, out object hitObject, RayIgnore.None, trigger);
+        Ray.Trace( player, npc, out object hitObject, RayIgnore.None, trigger );
 
         // Initialize an SDL window
-        Renderer.Setup(out window, out renderer);
+        renderer = new Renderer();
 
         // Now we can run the game every frame
         Update();
 
         // Clean up everything SDL-wise
-        Renderer.CleanUp(window, renderer);
+        renderer.CleanUp();
     }
 
     /// <summary>
@@ -88,8 +87,8 @@ public class DoomNET
             OnUpdate?.Invoke();
 
             // Poll SDL events and render everything necessary on the window
-            Renderer.PollEvents();
-            Renderer.Render(renderer);
+            renderer.PollEvents();
+            renderer.Render();
         }
     }
 }
