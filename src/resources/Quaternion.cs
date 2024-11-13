@@ -7,7 +7,10 @@ namespace DoomNET.Resources;
 
 public struct Quaternion
 {
-    public float x, y, z, w;
+    public float x { get; set; }
+    public float y { get; set; }
+    public float z { get; set; }
+    public float w { get; set; }
 
     public Quaternion()
     {

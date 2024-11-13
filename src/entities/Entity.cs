@@ -12,8 +12,8 @@ public class Entity
 {
     public Vector3 position { get; set; } // This entity's current position
     public BBox bbox { get; set; } // This entity's bounding box
-    public string id { get; set; } // This entity's identifier
     public Quaternion rotation { get; set; } // This entity's current rotation
+    public string id { get; set; } // This entity's identifier
 
     public virtual EntityType type { get; set; } // This entity's type, e.g. brush entity or other
     public virtual float health { get; set; } // The amount of health this entity has

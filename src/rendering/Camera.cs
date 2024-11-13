@@ -1,7 +1,5 @@
 ﻿using DoomNET.Resources;
-
-using System;
-
+                                         
 namespace DoomNET.Rendering;
 
 public class Camera

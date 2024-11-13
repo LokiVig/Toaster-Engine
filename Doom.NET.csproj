@@ -10,8 +10,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="SpacePlacer\**" />
+    <Compile Remove="Tests\**" />
     <EmbeddedResource Remove="SpacePlacer\**" />
+    <EmbeddedResource Remove="Tests\**" />
     <None Remove="SpacePlacer\**" />
+    <None Remove="Tests\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Sayers.SDL2.Core" Version="1.0.11" />
