@@ -1,6 +1,7 @@
-﻿using DoomNET.WTF;
+﻿using System;
+
+using DoomNET.WTF;
 using DoomNET.Resources;
-using System;
 
 namespace DoomNET.Entities;
 
@@ -39,7 +40,7 @@ public class TriggerBrush : Entity
         triggerCount = 0;
         hasTriggered = false;
 
-        switch (triggerOn)
+        switch ( triggerOn )
         {
             default: // !!! IMPLEMENT DIFFERENT TriggerOn EVENTS !!!
                 break;
@@ -49,9 +50,9 @@ public class TriggerBrush : Entity
     protected override void Update()
     {
         // Check if any entity is intersecting with us
-        foreach (Entity entity in DoomNET.file?.entities)
+        foreach ( Entity entity in DoomNET.file?.entities )
         {
-            if (bbox.IntersectingWith( entity.GetPosition() ))
+            if ( bbox.IntersectingWith( entity.GetPosition() ) )
             {
                 // If they are, we bbox.OnIntersect triggers!
                 OnTrigger();
@@ -65,17 +66,17 @@ public class TriggerBrush : Entity
     /// </summary>
     public void OnTrigger()
     {
-        switch (triggerType)
+        switch ( triggerType )
         {
             case TriggerType.Once: // Only trigger once
-                if (hasTriggered)
+                if ( hasTriggered )
                 {
                     return;
                 }
                 break;
 
             case TriggerType.Count: // Trigger only a certain amount of times
-                if (triggeredCount >= triggerCount)
+                if ( triggeredCount >= triggerCount )
                 {
                     return;
                 }
@@ -86,7 +87,7 @@ public class TriggerBrush : Entity
                 break;
         }
 
-        switch (triggerBy)
+        switch ( triggerBy )
         {
             // Find a way to change which thing can trigger this trigger!
             case TriggerBy.All:
@@ -109,32 +110,32 @@ public class TriggerBrush : Entity
                                 $"\tTrigger by: {triggerBy}\n" +
                                 $"\tTrigger on: {triggerOn}\n" );
 
-        if (iValue != 0) // Int value event
+        if ( iValue != 0 ) // Int value event
         {
             targetEntity.OnEvent( targetEvent, iValue, this );
         }
 
-        if (fValue != 0) // Float value event
+        if ( fValue != 0 ) // Float value event
         {
             targetEntity.OnEvent( targetEvent, fValue, this );
         }
 
-        if (bValue != -1) // Bool value event
+        if ( bValue != -1 ) // Bool value event
         {
             targetEntity.OnEvent( targetEvent, bValue == 1 ? true : false, this );
         }
 
-        if (vValue != 0) // Vector3 value event
+        if ( vValue != 0 ) // Vector3 value event
         {
             targetEntity.OnEvent( targetEvent, vValue, this );
         }
 
-        if (qValue != 0) // Quaternion value event
+        if ( qValue != 0 ) // Quaternion value event
         {
             targetEntity.OnEvent( targetEvent, qValue, this );
         }
 
-        if (bbValue != null) // BBox value event
+        if ( bbValue != null ) // BBox value event
         {
             targetEntity.OnEvent( targetEvent, bbValue, this );
         }

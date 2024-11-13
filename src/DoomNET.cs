@@ -51,7 +51,7 @@ public class DoomNET
         file.AddEntity( npc );
         file.AddEntity( trigger );
 
-        WTFSaver.SaveFile( "maps/test.wtf", file );
+        WTFFile.SaveFile( "maps/test.wtf", file );
 
         Ray.Trace( player, npc, out object hitObject, RayIgnore.None, trigger );
 

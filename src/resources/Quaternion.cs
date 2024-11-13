@@ -109,32 +109,32 @@ public struct Quaternion
 
     public static bool operator <( Quaternion lhs, Quaternion rhs )
     {
-        return lhs.x - rhs.x < 0 && lhs.y - rhs.y < 0 && lhs.z - rhs.z < 0 && lhs.w - rhs.w < 0;
+        return lhs.Length() - rhs.Length() < 0;
     }
 
     public static bool operator <( Quaternion lhs, float rhs )
     {
-        return lhs.x - rhs < 0 && lhs.y - rhs < 0 && lhs.z - rhs < 0 && lhs.w - rhs < 0;
+        return lhs.Length() - rhs < 0;
     }
 
     public static bool operator <( float lhs, Quaternion rhs )
     {
-        return lhs - rhs.x < 0 && lhs - rhs.y < 0 && lhs - rhs.z < 0 && lhs - rhs.w < 0;
+        return lhs - rhs.Length() < 0;
     }
 
     public static bool operator >( Quaternion lhs, Quaternion rhs )
     {
-        return lhs.x - rhs.x > 0 && lhs.y - rhs.y > 0 && lhs.z - rhs.z > 0 && lhs.w - rhs.w > 0;
+        return lhs.Length() - rhs.Length() > 0;
     }
 
     public static bool operator >( Quaternion lhs, float rhs )
     {
-        return lhs.x - rhs > 0 && lhs.y - rhs > 0 && lhs.z - rhs > 0 && lhs.w - rhs > 0;
+        return lhs.Length() - rhs > 0;
     }
 
     public static bool operator >( float lhs, Quaternion rhs )
     {
-        return lhs - rhs.x > 0 && lhs - rhs.y > 0 && lhs - rhs.z > 0 && lhs - rhs.w > 0;
+        return lhs - rhs.Length() > 0;
     }
 
     public static bool operator <=( Quaternion lhs, Quaternion rhs )

@@ -59,7 +59,7 @@ public struct Vector3
     {
         float magnitude = Magnitude();
 
-        if (magnitude > 0)
+        if ( magnitude > 0 )
         {
             return new Vector3( x / magnitude, y / magnitude, z / magnitude );
         }
@@ -131,32 +131,32 @@ public struct Vector3
 
     public static bool operator <( Vector3 lhs, Vector3 rhs )
     {
-        return lhs.x - rhs.x < 0 && lhs.y - rhs.y < 0 && lhs.z - rhs.z < 0;
+        return lhs.Magnitude() - rhs.Magnitude() < 0;
     }
 
     public static bool operator <( Vector3 lhs, float rhs )
     {
-        return lhs.x - rhs < 0 && lhs.y - rhs < 0 && lhs.z - rhs < 0;
+        return lhs.Magnitude() - rhs < 0;
     }
 
     public static bool operator <( float lhs, Vector3 rhs )
     {
-        return lhs - rhs.x < 0 && lhs - rhs.y < 0 && lhs - rhs.z < 0;
+        return lhs - rhs.Magnitude() < 0;
     }
 
     public static bool operator >( Vector3 lhs, Vector3 rhs )
     {
-        return lhs.x - rhs.x > 0 && lhs.y - rhs.y > 0 && lhs.z - rhs.z > 0;
+        return lhs.Magnitude() - rhs.Magnitude() > 0;
     }
 
     public static bool operator >( Vector3 lhs, float rhs )
     {
-        return lhs.x - rhs > 0 && lhs.y - rhs > 0 && lhs.z - rhs > 0;
+        return lhs.Magnitude() - rhs > 0;
     }
 
     public static bool operator >( float lhs, Vector3 rhs )
     {
-        return lhs - rhs.x > 0 && lhs - rhs.y > 0 && lhs - rhs.z > 0;
+        return lhs - rhs.Magnitude() > 0;
     }
 
     public static bool operator <=( Vector3 lhs, Vector3 rhs )
@@ -236,7 +236,7 @@ public struct Vector3
 
     public static Vector3 operator /( Vector3 lhs, Vector3 rhs )
     {
-        if (lhs == 0 || rhs == 0)
+        if ( lhs == 0 || rhs == 0 )
         {
             throw new DivideByZeroException();
         }
@@ -246,7 +246,7 @@ public struct Vector3
 
     public static Vector3 operator /( Vector3 lhs, float rhs )
     {
-        if (lhs == 0 || rhs == 0)
+        if ( lhs == 0 || rhs == 0 )
         {
             throw new DivideByZeroException();
         }
@@ -256,7 +256,7 @@ public struct Vector3
 
     public static Vector3 operator /( float lhs, Vector3 rhs )
     {
-        if (lhs == 0 || rhs == 0)
+        if ( lhs == 0 || rhs == 0 )
         {
             throw new DivideByZeroException();
         }
@@ -273,7 +273,7 @@ public struct Vector3
     {
         get
         {
-            switch (i)
+            switch ( i )
             {
                 case 0:
                     return x;
@@ -290,7 +290,7 @@ public struct Vector3
         }
         set
         {
-            switch (i)
+            switch ( i )
             {
                 case 0:
                     x = value;

@@ -1,5 +1,7 @@
-﻿using DoomNET.Resources;
-                                         
+﻿using System;
+
+using DoomNET.Resources;
+
 namespace DoomNET.Rendering;
 
 public class Camera
@@ -22,5 +24,16 @@ public class Camera
     {
         // Transform the screen direction into world space using the camera's orientation vectors
         return rotation * screenDirection;
+    }
+
+    public Vector2 Project( Vector3 point )
+    {
+        float fovFactor = (float)Math.Tan( fieldOfView * 0.5f * Math.PI / 180 );
+
+        return new Vector2
+            (
+                ( point.x / point.z ) * fovFactor * DoomNET.windowWidth,
+                ( point.y / point.z ) * fovFactor * DoomNET.windowHeight
+            );
     }
 }

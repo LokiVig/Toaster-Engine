@@ -1,3 +1,5 @@
+using DoomNET.Resources;
+
 using SDL2;
 
 using System;
@@ -8,7 +10,7 @@ public class Renderer
 {
     public static IntPtr[] fonts;
 
-    private Raytracer rt;
+    private Rasterizer rasterizer;
     private IntPtr window;
     private IntPtr renderer;
 
@@ -25,7 +27,7 @@ public class Renderer
     /// </summary>
     public void Setup()
     {
-        if (SDL.SDL_Init( SDL.SDL_INIT_VIDEO ) < 0)
+        if ( SDL.SDL_Init( SDL.SDL_INIT_VIDEO ) < 0 )
         {
             Console.WriteLine( $"There was an issue initializing SDL.\n" +
                                     $"\t{SDL.SDL_GetError()}\n" );
@@ -35,7 +37,7 @@ public class Renderer
         // Create a new window given a title, size, and pass it a flag indicating it should be shown
         window = SDL.SDL_CreateWindow( "Doom.NET", SDL.SDL_WINDOWPOS_CENTERED, SDL.SDL_WINDOWPOS_CENTERED, DoomNET.windowWidth, DoomNET.windowHeight, SDL.SDL_WindowFlags.SDL_WINDOW_SHOWN );
 
-        if (window == IntPtr.Zero)
+        if ( window == IntPtr.Zero )
         {
             Console.WriteLine( $"There was an issue creating the window.\n" +
                                     $"\t{SDL.SDL_GetError()}\n" );
@@ -45,7 +47,7 @@ public class Renderer
         // Creates a new SDL hardware renderer using the default graphics device with vsync enabled
         renderer = SDL.SDL_CreateRenderer( window, -1, SDL.SDL_RendererFlags.SDL_RENDERER_ACCELERATED | SDL.SDL_RendererFlags.SDL_RENDERER_PRESENTVSYNC );
 
-        if (renderer == IntPtr.Zero)
+        if ( renderer == IntPtr.Zero )
         {
             Console.WriteLine( $"There was an issue creating the renderer.\n" +
                                     $"\t{SDL.SDL_GetError()}\n" );
@@ -53,7 +55,7 @@ public class Renderer
         }
 
         // Initializes SDL_image for use with png files
-        if (SDL_image.IMG_Init( SDL_image.IMG_InitFlags.IMG_INIT_PNG ) == 0)
+        if ( SDL_image.IMG_Init( SDL_image.IMG_InitFlags.IMG_INIT_PNG ) == 0 )
         {
             Console.WriteLine( $"There was an issue initializing SDL2_Image.\n" +
                                     $"\t{SDL.SDL_GetError()}\n" );
@@ -61,12 +63,15 @@ public class Renderer
         }
 
         // Initializes SDL_ttf for use with text rendering
-        if (SDL_ttf.TTF_Init() != 0)
+        if ( SDL_ttf.TTF_Init() != 0 )
         {
             Console.WriteLine( $"There was an issue initializing SDL_TTF.\n" +
                                     $"\t{SDL.SDL_GetError()}\n" );
             return;
         }
+
+        // Initialize the rasterizer
+        rasterizer = new Rasterizer( renderer );
 
         // Fill the font array
         fonts =
@@ -74,9 +79,6 @@ public class Renderer
             SDL_ttf.TTF_OpenFont($"{Environment.CurrentDirectory}\\resources\\fonts\\COUR.TTF", 17),
             // Add more fonts...
         ];
-
-        // Initialize the raytracer
-        rt = new Raytracer( renderer );
 
         SDL.SDL_SetRenderDrawBlendMode( renderer, SDL.SDL_BlendMode.SDL_BLENDMODE_BLEND );
     }
@@ -87,9 +89,9 @@ public class Renderer
     public void PollEvents()
     {
         // Check to see if there are any events and continue to do so until the queue is empty
-        while (SDL.SDL_PollEvent( out SDL.SDL_Event e ) == 1)
+        while ( SDL.SDL_PollEvent( out SDL.SDL_Event e ) == 1 )
         {
-            switch (e.type)
+            switch ( e.type )
             {
                 case SDL.SDL_EventType.SDL_QUIT:
                     DoomNET.active = false;
@@ -103,23 +105,30 @@ public class Renderer
     /// </summary>
     public void Render()
     {
-        if (SDL.SDL_GetError() != "")
+        if ( SDL.SDL_GetError() != "" )
         {
             Console.WriteLine( "Error rendering scene.\n" +
                                 $"\t{SDL.SDL_GetError()}\n" );
             return;
         }
 
+        // Sets the color that the screen will be cleared with
+        if ( SDL.SDL_SetRenderDrawColor( renderer, 135, 206, 235, 255 ) < 0 )
+        {
+            Console.WriteLine( $"There was an issue with setting the render draw color.\n" +
+                                $"\t{SDL.SDL_GetError()}\n" );
+            return;
+        }
+
         // Clears the current render surface
-        if (SDL.SDL_RenderClear( renderer ) < 0)
+        if ( SDL.SDL_RenderClear( renderer ) < 0 )
         {
             Console.WriteLine( $"There was an issue with clearing the render surface.\n" +
                                 $"\t{SDL.SDL_GetError()}\n" );
             return;
         }
 
-        // Render the scene using our raytracer
-        rt.Render();
+        rasterizer.DrawTriangle( new Triangle( new Vertex( 65, 65, 45 ), new Vertex( 45, 65, 45 ), new Vertex( 45, 65, 65 ) ) );
 
         // DEBUG: Show the deltatime
         DisplayText( $"Deltatime: {DoomNET.deltaTime:0.###}", 0, 200, 25 );
@@ -141,7 +150,7 @@ public class Renderer
     {
         IntPtr font = fonts[ fontIndex ];
 
-        if (font == IntPtr.Zero)
+        if ( font == IntPtr.Zero )
         {
             Console.WriteLine( $"There was an issue with getting a font.\n" +
                                 $"\t{SDL.SDL_GetError()}\n" );
@@ -177,7 +186,7 @@ public class Renderer
         SDL.SDL_DestroyWindow( window );
 
         // Cleanup all the fonts we've called
-        foreach (IntPtr font in fonts)
+        foreach ( IntPtr font in fonts )
         {
             SDL_ttf.TTF_CloseFont( font );
         }

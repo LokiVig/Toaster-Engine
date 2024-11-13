@@ -31,8 +31,8 @@ public class Vector3Test
 
         Console.WriteLine( "Testing addition..." );
 
-        // Do 500 tests
-        for (int i = 0; i < 500; i++)
+        // Do 5000 tests
+        for ( int i = 0; i < 5000; i++ )
         {
             Vector3 expected = new Vector3
                 (
@@ -45,21 +45,21 @@ public class Vector3Test
             Vector3 value2 = new Vector3( value2_x, value2_y, value2_z );
             Vector3 result = value1 + value2;
 
-            Console.WriteLine( $"(Test #{i+1}) value1 ({value1}) + value2 ({value2}) = {result} (expected: {expected})" );
+            Console.WriteLine( $"(Test #{i + 1}) value1 ({value1}) + value2 ({value2}) = {result} (expected: {expected})" );
 
-            if (result != expected)
+            if ( result != expected )
             {
                 errorCount++;
                 errorList.Add( (value1, value2, result, expected) );
             }
         }
 
-        // Add spacing between comments and errorList
-        Console.WriteLine( "\n\n" );
-
-        if (errorCount > 0)
+        if ( errorCount > 0 )
         {
-            for (int i = 0; i < errorCount; i++)
+            // Add spacing between comments and errorList
+            Console.WriteLine( "\n\n" );
+
+            for ( int i = 0; i < errorCount; i++ )
             {
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) + value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
@@ -76,8 +76,8 @@ public class Vector3Test
 
         Console.WriteLine( "Testing subtraction..." );
 
-        // Do 500 tests
-        for (int i = 0; i < 500; i++)
+        // Do 5000 tests
+        for ( int i = 0; i < 5000; i++ )
         {
             Vector3 expected = new Vector3
                 (
@@ -92,19 +92,19 @@ public class Vector3Test
 
             Console.WriteLine( $"(Test #{i + 1}) value1 ({value1}) - value2 ({value2}) = {result} (expected: {expected})" );
 
-            if (result != expected)
+            if ( result != expected )
             {
                 errorCount++;
                 errorList.Add( (value1, value2, result, expected) );
             }
         }
 
-        // Add spacing between comments and errorList
-        Console.WriteLine( "\n\n" );
-
-        if (errorCount > 0)
+        if ( errorCount > 0 )
         {
-            for (int i = 0; i < errorCount; i++)
+            // Add spacing between comments and errorList
+            Console.WriteLine( "\n\n" );
+
+            for ( int i = 0; i < errorCount; i++ )
             {
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) - value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
@@ -121,8 +121,8 @@ public class Vector3Test
 
         Console.WriteLine( "Testing multiplication..." );
 
-        // Do 500 tests
-        for (int i = 0; i < 500; i++)
+        // Do 5000 tests
+        for ( int i = 0; i < 5000; i++ )
         {
             Vector3 expected = new Vector3
                 (
@@ -137,19 +137,19 @@ public class Vector3Test
 
             Console.WriteLine( $"(Test #{i + 1}) value1 ({value1}) * value2 ({value2}) = {result} (expected: {expected})" );
 
-            if (result != expected)
+            if ( result != expected )
             {
                 errorCount++;
                 errorList.Add( (value1, value2, result, expected) );
             }
         }
 
-        // Add spacing between comments and errorList
-        Console.WriteLine( "\n\n" );
-
-        if (errorCount > 0)
+        if ( errorCount > 0 )
         {
-            for (int i = 0; i < errorCount; i++)
+            // Add spacing between comments and errorList
+            Console.WriteLine( "\n\n" );
+
+            for ( int i = 0; i < errorCount; i++ )
             {
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) * value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
@@ -158,7 +158,7 @@ public class Vector3Test
         }
     }
 
-    [TestMethod("Multiplication (Float)")]
+    [TestMethod( "Multiplication (Float)" )]
     public void TestMultiplicationFloat()
     {
         int errorCount = 0;
@@ -166,8 +166,8 @@ public class Vector3Test
 
         Console.WriteLine( "Testing multiplication..." );
 
-        // Do 500 tests
-        for (int i = 0; i < 500; i++)
+        // Do 5000 tests
+        for ( int i = 0; i < 5000; i++ )
         {
             Vector3 expected = new Vector3
                 (
@@ -182,19 +182,19 @@ public class Vector3Test
 
             Console.WriteLine( $"(Test #{i + 1}) value1 ({value1}) * value2 ({value2}) = {result} (expected: {expected})" );
 
-            if (result != expected)
+            if ( result != expected )
             {
                 errorCount++;
                 errorList.Add( (value1, value2, result, expected) );
             }
         }
 
-        // Add spacing between comments and errorList
-        Console.WriteLine( "\n\n" );
-
-        if (errorCount > 0)
+        if ( errorCount > 0 )
         {
-            for (int i = 0; i < errorCount; i++)
+            // Add spacing between comments and errorList
+            Console.WriteLine( "\n\n" );
+
+            for ( int i = 0; i < errorCount; i++ )
             {
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) * value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
@@ -211,8 +211,8 @@ public class Vector3Test
 
         Console.WriteLine( "Testing division..." );
 
-        // Do 500 tests
-        for (int i = 0; i < 500; i++)
+        // Do 5000 tests
+        for ( int i = 0; i < 5000; i++ )
         {
             Vector3 expected = new Vector3
                 (
@@ -227,19 +227,19 @@ public class Vector3Test
 
             Console.WriteLine( $"(Test #{i + 1}) value1 ({value1}) / value2 ({value2}) = {result} (expected: {expected})" );
 
-            if (result != expected)
+            if ( result != expected )
             {
                 errorCount++;
                 errorList.Add( (value1, value2, result, expected) );
             }
         }
 
-        // Add spacing between comments and errorList
-        Console.WriteLine( "\n\n" );
-
-        if (errorCount > 0)
+        if ( errorCount > 0 )
         {
-            for (int i = 0; i < errorCount; i++)
+            // Add spacing between comments and errorList
+            Console.WriteLine( "\n\n" );
+
+            for ( int i = 0; i < errorCount; i++ )
             {
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) / value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
@@ -248,7 +248,7 @@ public class Vector3Test
         }
     }
 
-    [TestMethod("Division (Float)")]
+    [TestMethod( "Division (Float)" )]
     public void TestDivisionFloat()
     {
         int errorCount = 0;
@@ -256,8 +256,8 @@ public class Vector3Test
 
         Console.WriteLine( "Testing division..." );
 
-        // Do 500 tests
-        for (int i = 0; i < 500; i++)
+        // Do 5000 tests
+        for ( int i = 0; i < 5000; i++ )
         {
             value2_x = rand.Next( randMin, randMax );
 
@@ -274,21 +274,103 @@ public class Vector3Test
 
             Console.WriteLine( $"(Test #{i + 1}) value1 ({value1}) / value2 ({value2}) = {result} (expected: {expected})" );
 
-            if (result != expected)
+            if ( result != expected )
             {
                 errorCount++;
                 errorList.Add( (value1, value2, result, expected) );
             }
         }
 
-        // Add spacing between comments and errorList
-        Console.WriteLine( "\n\n" );
-
-        if (errorCount > 0)
+        if ( errorCount > 0 )
         {
-            for (int i = 0; i < errorCount; i++)
+            // Add spacing between comments and errorList
+            Console.WriteLine( "\n\n" );
+
+            for ( int i = 0; i < errorCount; i++ )
             {
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) / value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
+            }
+
+            throw new Exception( $"errorCount > 0 (errorCount: {errorCount})! This means we have at least *an* error." );
+        }
+    }
+
+    [TestMethod( "Less Than (<)" )]
+    public void TestLessThan()
+    {
+        int errorCount = 0;
+        List<(Vector3 value1, Vector3 value2, bool result, bool expected)> errorList = new();
+
+        Console.WriteLine( "Testing less than (<)..." );
+
+        // Do 5000 tests
+        for ( int i = 0; i < 5000; i++ )
+        {
+            Vector3 value1 = new Vector3( value1_x = rand.Next( randMin, randMax ), value1_y = rand.Next( randMin, randMax ), value1_z = rand.Next( randMin, randMax ) );
+            Vector3 value2 = new Vector3( value2_x = rand.Next( randMin, randMax ), value2_y = rand.Next( randMin, randMax ), value2_z = rand.Next( randMin, randMax ) );
+
+            bool expected = (float)Math.Sqrt( value1_x * value1_x + value1_y * value1_y + value1_z * value1_z ) - (float)Math.Sqrt( value2_x * value2_x + value2_y * value2_y + value2_z * value2_z ) < 0;
+
+            bool result = value1 < value2;
+
+            Console.WriteLine( $"(Test #{i + 1}) value1 ({value1}) < value2 ({value2}) ? {result} (expected: {expected})" );
+
+            if ( result != expected )
+            {
+                errorCount++;
+                errorList.Add( (value1, value2, result, expected) );
+            }
+        }
+
+        if ( errorCount > 0 )
+        {
+            // Add spacing between comments and errorList
+            Console.WriteLine( "\n\n" );
+
+            for ( int i = 0; i < errorCount; i++ )
+            {
+                Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) < value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
+            }
+
+            throw new Exception( $"errorCount > 0 (errorCount: {errorCount})! This means we have at least *an* error." );
+        }
+    }
+
+    [TestMethod( "Greater than (>)" )]
+    public void TestGreaterThan()
+    {
+        int errorCount = 0;
+        List<(Vector3 value1, Vector3 value2, bool result, bool expected)> errorList = new();
+
+        Console.WriteLine( "Testing greater than (>)..." );
+
+        // Do 5000 tests
+        for ( int i = 0; i < 5000; i++ )
+        {
+            Vector3 value1 = new Vector3( value1_x = rand.Next( randMin, randMax ), value1_y = rand.Next( randMin, randMax ), value1_z = rand.Next( randMin, randMax ) );
+            Vector3 value2 = new Vector3( value2_x = rand.Next( randMin, randMax ), value2_y = rand.Next( randMin, randMax ), value2_z = rand.Next( randMin, randMax ) );
+
+            bool expected = (float)Math.Sqrt(value1_x * value1_x + value1_y * value1_y + value1_z * value1_z) - (float)Math.Sqrt(value2_x * value2_x + value2_y * value2_y + value2_z * value2_z) > 0;
+
+            bool result = value1 > value2;
+
+            Console.WriteLine( $"(Test #{i + 1}) value1 ({value1}) > value2 ({value2}) ? {result} (expected: {expected})" );
+
+            if ( result != expected )
+            {
+                errorCount++;
+                errorList.Add( (value1, value2, result, expected) );
+            }
+        }
+
+        if ( errorCount > 0 )
+        {
+            // Add spacing between comments and errorList
+            Console.WriteLine( "\n\n" );
+
+            for ( int i = 0; i < errorCount; i++ )
+            {
+                Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) > value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
 
             throw new Exception( $"errorCount > 0 (errorCount: {errorCount})! This means we have at least *an* error." );

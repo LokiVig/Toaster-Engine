@@ -1,7 +1,6 @@
 ﻿using DoomNET.Entities;
-using DoomNET.Resources;
 
-namespace DoomNET.WTF;
+namespace DoomNET.Resources;
 
 /// <summary>
 /// A brush, a collection of 6 solid faces, stretching from one point to another, defined with a bounding box
@@ -18,7 +17,7 @@ public struct Brush
     /// </summary>
     /// <param name="mins">The minimum values, e.g. bottom of the brush</param>
     /// <param name="maxs">The maximum values, e.g. top of the brush</param>
-    public Brush( Vector3 mins, Vector3 maxs )
+    public Brush(Vector3 mins, Vector3 maxs)
     {
         bbox.mins = mins;
         bbox.maxs = maxs;
@@ -27,7 +26,7 @@ public struct Brush
     /// <summary>
     /// Create a brush with a specified bbox, and add it to the current WTF file
     /// </summary>
-    public Brush( BBox bbox )
+    public Brush(BBox bbox)
     {
         this.bbox = bbox;
     }
@@ -35,7 +34,7 @@ public struct Brush
     /// <summary>
     /// Set the ID of this brush
     /// </summary>
-    public void SetID( string id )
+    public void SetID(string id)
     {
         this.id = id;
     }
@@ -43,7 +42,7 @@ public struct Brush
     /// <summary>
     /// Set the BBox of this brush
     /// </summary>
-    public void SetBBox( BBox bbox )
+    public void SetBBox(BBox bbox)
     {
         this.bbox = bbox;
     }
@@ -67,12 +66,12 @@ public struct Brush
     /// <summary>
     /// Turn this brush into an entity
     /// </summary>
-    public void TurnIntoEntity( Entity desiredEntity )
+    public void TurnIntoEntity(Entity desiredEntity)
     {
-        desiredEntity.SetBBox( bbox );
-        desiredEntity.SetPosition( bbox.GetCenter() );
+        desiredEntity.SetBBox(bbox);
+        desiredEntity.SetPosition(bbox.GetCenter());
 
-        DoomNET.file.RemoveBrush( this );
-        DoomNET.file.AddEntity( desiredEntity );
+        DoomNET.file.RemoveBrush(this);
+        DoomNET.file.AddEntity(desiredEntity);
     }
 }

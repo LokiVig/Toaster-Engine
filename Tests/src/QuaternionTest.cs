@@ -33,8 +33,8 @@ public class QuaternionTests
 
         Console.WriteLine( "Testing addition...\n" );
 
-        // Do 500 tests
-        for (int i = 0; i < 500; i++)
+        // Do 5000 tests
+        for ( int i = 0; i < 5000; i++ )
         {
             // Get a random expected addition
             Quaternion expected = new Quaternion
@@ -52,19 +52,19 @@ public class QuaternionTests
 
             Console.WriteLine( $"(Test #{i + 1}) value1 ({value1}) + value2 ({value2}) = {result} (expected: {expected})" );
 
-            if (result != expected) // Returns an error if they aren't equal!
+            if ( result != expected ) // Returns an error if they aren't equal!
             {
                 errorCount++;
                 errorList.Add( (value1, value2, result, expected) );
             }
         }
 
-        // Add spacing between comments and errorList
-        Console.WriteLine( "\n\n" );
-
-        if (errorCount != 0)
+        if ( errorCount > 0 )
         {
-            for (int i = 0; i < errorCount; i++)
+            // Add spacing between comments and errorList
+            Console.WriteLine( "\n\n" );
+
+            for ( int i = 0; i < errorCount; i++ )
             {
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) + value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
@@ -81,8 +81,8 @@ public class QuaternionTests
 
         Console.WriteLine( "Testing subtraction...\n" );
 
-        // Do 500 tests
-        for (int i = 0; i < 500; i++)
+        // Do 5000 tests
+        for ( int i = 0; i < 5000; i++ )
         {
             // Get a random expected addition
             Quaternion expected = new Quaternion
@@ -100,19 +100,19 @@ public class QuaternionTests
 
             Console.WriteLine( $"(Test #{i + 1}) value1 ({value1}) - value2 ({value2}) = {result} (expected: {expected})" );
 
-            if (result != expected) // Returns an error if they aren't equal!
+            if ( result != expected ) // Returns an error if they aren't equal!
             {
                 errorCount++;
                 errorList.Add( (value1, value2, result, expected) );
             }
         }
 
-        // Add spacing between comments and errorList
-        Console.WriteLine( "\n\n" );
-
-        if (errorCount != 0)
+        if ( errorCount > 0 )
         {
-            for (int i = 0; i < errorCount; i++)
+            // Add spacing between comments and errorList
+            Console.WriteLine( "\n\n" );
+
+            for ( int i = 0; i < errorCount; i++ )
             {
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) - value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
@@ -129,8 +129,8 @@ public class QuaternionTests
 
         Console.WriteLine( "Testing multiplication..." );
 
-        // Do 500 tests
-        for (int i = 0; i < 500; i++)
+        // Do 5000 tests
+        for ( int i = 0; i < 5000; i++ )
         {
             // Predefine the values, as to not randomize the values every call in the expected value
             value1_x = rand.Next( randMin, randMax );
@@ -159,19 +159,19 @@ public class QuaternionTests
 
             Console.WriteLine( $"(Test #{i + 1}) value1 ({value1}) * value2 ({value2}) = {result} (expected: {expected})" );
 
-            if (result != expected) // We have an error!
+            if ( result != expected ) // We have an error!
             {
                 errorCount++;
                 errorList.Add( (value1, value2, result, expected) );
             }
         }
 
-        // Add spacing between comments and errorList
-        Console.WriteLine( "\n\n" );
-
-        if (errorCount != 0)
+        if ( errorCount > 0 )
         {
-            for (int i = 0; i < errorCount; i++)
+            // Add spacing between comments and errorList
+            Console.WriteLine( "\n\n" );
+
+            for ( int i = 0; i < errorCount; i++ )
             {
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) * value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
@@ -188,8 +188,8 @@ public class QuaternionTests
 
         Console.WriteLine( "Testing multiplication against floats..." );
 
-        // Do 500 tests
-        for (int i = 0; i < 500; i++)
+        // Do 5000 tests
+        for ( int i = 0; i < 5000; i++ )
         {
             // Predefine the values, as to not randomize the values every call in the expected value
             value1_x = rand.Next( randMin, randMax );
@@ -217,19 +217,19 @@ public class QuaternionTests
 
             Console.WriteLine( $"(Test #{i + 1}) value1 ({value1}) * value2 ({value2}) = {result} (expected: {expected})" );
 
-            if (result != expected) // We have an error!
+            if ( result != expected ) // We have an error!
             {
                 errorCount++;
                 errorList.Add( (value1, value2, result, expected) );
             }
         }
 
-        // Add spacing between comments and errorList
-        Console.WriteLine( "\n\n" );
-
-        if (errorCount != 0)
+        if ( errorCount > 0 )
         {
-            for (int i = 0; i < errorCount; i++)
+            // Add spacing between comments and errorList
+            Console.WriteLine( "\n\n" );
+
+            for ( int i = 0; i < errorCount; i++ )
             {
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) * value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
@@ -246,8 +246,8 @@ public class QuaternionTests
 
         Console.WriteLine( "Testing division..." );
 
-        // Do 500 tests
-        for (int i = 0; i < 500; i++)
+        // Do 5000 tests
+        for ( int i = 0; i < 5000; i++ )
         {
             // Predefine the values, as to not randomize the values every call in the expected value
             value1_x = rand.Next( randMin, randMax );
@@ -276,19 +276,19 @@ public class QuaternionTests
 
             Console.WriteLine( $"(Test #{i + 1}) value1 ({value1}) / value2 ({value2}) = {result} (expected: {expected})" );
 
-            if (result != expected) // We have an error!
+            if ( result != expected ) // We have an error!
             {
                 errorCount++;
                 errorList.Add( (value1, value2, result, expected) );
             }
         }
 
-        // Add spacing between comments and errorList
-        Console.WriteLine( "\n\n" );
-
-        if (errorCount != 0)
+        if ( errorCount > 0 )
         {
-            for (int i = 0; i < errorCount; i++)
+            // Add spacing between comments and errorList
+            Console.WriteLine( "\n\n" );
+
+            for ( int i = 0; i < errorCount; i++ )
             {
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) / value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
@@ -305,8 +305,8 @@ public class QuaternionTests
 
         Console.WriteLine( "Testing division against floats..." );
 
-        // Do 500 tests
-        for (int i = 0; i < 500; i++)
+        // Do 5000 tests
+        for ( int i = 0; i < 5000; i++ )
         {
             // Predefine the values, as to not randomize the values every call in the expected value
             value1_x = rand.Next( randMin, randMax );
@@ -334,21 +334,103 @@ public class QuaternionTests
 
             Console.WriteLine( $"(Test #{i + 1}) value1 ({value1}) / value2 ({value2}) = {result} (expected: {expected})" );
 
-            if (result != expected) // We have an error!
+            if ( result != expected ) // We have an error!
             {
                 errorCount++;
                 errorList.Add( (value1, value2, result, expected) );
             }
         }
 
-        // Add spacing between comments and errorList
-        Console.WriteLine( "\n\n" );
-
-        if (errorCount != 0)
+        if ( errorCount > 0 )
         {
-            for (int i = 0; i < errorCount; i++)
+            // Add spacing between comments and errorList
+            Console.WriteLine( "\n\n" );
+
+            for ( int i = 0; i < errorCount; i++ )
             {
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) / value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
+            }
+
+            throw new Exception( $"errorCount > 0 (errorCount: {errorCount})! This means we have at least *an* error." );
+        }
+    }
+
+    [TestMethod( "Less Than (<)" )]
+    public void TestLessThan()
+    {
+        int errorCount = 0;
+        List<(Quaternion value1, Quaternion value2, bool result, bool expected)> errorList = new();
+
+        Console.WriteLine( "Testing less than (<)..." );
+
+        // Do 5000 tests
+        for ( int i = 0; i < 5000; i++ )
+        {
+            Quaternion value1 = new Quaternion( value1_x = rand.Next( randMin, randMax ), value1_y = rand.Next( randMin, randMax ), value1_z = rand.Next( randMin, randMax ), value1_w = rand.Next( randMin, randMax ) );
+            Quaternion value2 = new Quaternion( value2_x = rand.Next( randMin, randMax ), value2_y = rand.Next( randMin, randMax ), value2_z = rand.Next( randMin, randMax ), value2_w = rand.Next( randMin, randMax ) );
+
+            bool expected = (float)Math.Sqrt( value1_x * value1_x + value1_y * value1_y + value1_z * value1_z + value1_w * value1_w ) - (float)Math.Sqrt( value2_x * value2_x + value2_y * value2_y + value2_z * value2_z + value2_w * value2_w ) < 0;
+
+            bool result = value1 < value2;
+
+            Console.WriteLine( $"(Test #{i + 1}) value1 ({value1}) < value2 ({value2}) ? {result} (expected: {expected})" );
+
+            if ( result != expected )
+            {
+                errorCount++;
+                errorList.Add( (value1, value2, result, expected) );
+            }
+        }
+
+        if ( errorCount > 0 )
+        {
+            // Add spacing between comments and errorList
+            Console.WriteLine( "\n\n" );
+
+            for ( int i = 0; i < errorCount; i++ )
+            {
+                Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) < value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
+            }
+
+            throw new Exception( $"errorCount > 0 (errorCount: {errorCount})! This means we have at least *an* error." );
+        }
+    }
+
+    [TestMethod( "Greater than (>)" )]
+    public void TestGreaterThan()
+    {
+        int errorCount = 0;
+        List<(Quaternion value1, Quaternion value2, bool result, bool expected)> errorList = new();
+
+        Console.WriteLine( "Testing greater than (>)..." );
+
+        // Do 5000 tests
+        for ( int i = 0; i < 5000; i++ )
+        {
+            Quaternion value1 = new Quaternion( value1_x = rand.Next( randMin, randMax ), value1_y = rand.Next( randMin, randMax ), value1_z = rand.Next( randMin, randMax ), value1_w = rand.Next( randMin, randMax ) );
+            Quaternion value2 = new Quaternion( value2_x = rand.Next( randMin, randMax ), value2_y = rand.Next( randMin, randMax ), value2_z = rand.Next( randMin, randMax ), value2_w = rand.Next( randMin, randMax ) );
+
+            bool expected = (float)Math.Sqrt( value1_x * value1_x + value1_y * value1_y + value1_z * value1_z + value1_w * value1_w) - (float)Math.Sqrt( value2_x * value2_x + value2_y * value2_y + value2_z * value2_z + value2_w * value2_w ) > 0;
+
+            bool result = value1 > value2;
+
+            Console.WriteLine( $"(Test #{i + 1}) value1 ({value1}) > value2 ({value2}) ? {result} (expected: {expected})" );
+
+            if ( result != expected )
+            {
+                errorCount++;
+                errorList.Add( (value1, value2, result, expected) );
+            }
+        }
+
+        if ( errorCount > 0 )
+        {
+            // Add spacing between comments and errorList
+            Console.WriteLine( "\n\n" );
+
+            for ( int i = 0; i < errorCount; i++ )
+            {
+                Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) > value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
 
             throw new Exception( $"errorCount > 0 (errorCount: {errorCount})! This means we have at least *an* error." );
