@@ -40,8 +40,8 @@ public struct Vector3
         this.z = z;
     }
 
-    public readonly Vector3 One => new Vector3( 1, 1, 1 );
-    public readonly Vector3 Zero => new Vector3( 0, 0, 0 );
+    public static Vector3 One => new Vector3( 1, 1, 1 );
+    public static Vector3 Zero => new Vector3( 0, 0, 0 );
 
     public static float DistanceBetween( Vector3 source, Vector3 dest )
     {
@@ -51,6 +51,11 @@ public struct Vector3
     public float DistanceTo( Vector3 other )
     {
         return ( this - other ).Magnitude();
+    }
+
+    public Vector3 Cross( Vector3 other )
+    {
+        return new Vector3( y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x );
     }
 
     public float Magnitude()

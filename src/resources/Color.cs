@@ -2,24 +2,26 @@
 
 public struct Color
 {
-    public Vector3 rgb;
-    public float alpha;
+    public byte r, g, b, a;
 
     public Color()
     {
-        rgb = new Vector3( 255, 255, 255 );
-        alpha = 255;
+        r = g = b = a = 255;
     }
 
-    public Color( Vector3 rgb, float alpha = 255 )
+    public Color( Vector3 rgb, byte a = 255 )
     {
-        this.rgb = rgb;
-        this.alpha = alpha;
+        r = (byte)rgb.x;
+        g = (byte)rgb.y;
+        b = (byte)rgb.z;
+        this.a = a;
     }
 
-    public Color( float r, float g, float b, float alpha = 255 )
+    public Color( byte r, byte g, byte b, byte a = 255 )
     {
-        rgb = new Vector3( r, g, b );
-        this.alpha = alpha;
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.a = a;
     }
 }

@@ -71,7 +71,7 @@ public struct Brush
         desiredEntity.SetBBox(bbox);
         desiredEntity.SetPosition(bbox.GetCenter());
 
-        DoomNET.file.RemoveBrush(this);
-        DoomNET.file.AddEntity(desiredEntity);
+        DoomNET.currentFile.RemoveBrush(this);
+        DoomNET.currentFile.AddEntity(desiredEntity);
     }
 }

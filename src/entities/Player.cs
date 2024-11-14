@@ -7,7 +7,6 @@ public class Player : Entity
 {
     public override EntityType type => EntityType.Player; // This entity is of type Player
     public override float health => 100.0f;
-    public override bool visible => false;
 
     public Camera camera;
 
@@ -59,7 +58,7 @@ public class Player : Entity
     /// </summary>
     private void HandleInput()
     {
-        byte inputKey;
-        Vector2 mousePos;
+        //byte inputKey;
+        //Vector2 mousePos;
     }
 }

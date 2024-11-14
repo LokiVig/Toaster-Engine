@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS0659
+﻿#pragma warning disable CS0660
 #pragma warning disable CS0661
 
 using System;
@@ -31,8 +31,8 @@ public struct Vector2
         this.y = y;
     }
 
-    public readonly Vector2 One => new Vector2( 1, 1 );
-    public readonly Vector2 Zero => new Vector2( 0, 0 );
+    public static Vector2 One => new Vector2( 1, 1 );
+    public static Vector2 Zero => new Vector2( 0, 0 );
 
     public static float DistanceBetween( Vector2 source, Vector2 dest )
     {
@@ -74,186 +74,172 @@ public struct Vector2
     }
 
     #region OPERATORS
-    public static Vector2 operator +( Vector2 in1 ) => in1;
-    public static Vector2 operator -( Vector2 in1 ) => new Vector2( -in1.x, -in1.y );
+    public static Vector2 operator +( Vector2 lhs ) => lhs;
+    public static Vector2 operator -( Vector2 lhs ) => new Vector2( -lhs.x, -lhs.y );
 
-    public static bool operator ==( Vector2 in1, Vector2 in2 )
+    public static bool operator ==( Vector2 lhs, Vector2 rhs )
     {
-        return in1.x == in2.x && in1.y == in2.y;
+        return lhs.x == rhs.x && lhs.y == rhs.y;
     }
 
-    public static bool operator ==( Vector2 in1, float in2 )
+    public static bool operator ==( Vector2 lhs, float rhs )
     {
-        return in1.x == in2 && in1.y == in2;
+        return lhs.x == rhs && lhs.y == rhs;
     }
 
-    public static bool operator ==( float in1, Vector2 in2 )
+    public static bool operator ==( float lhs, Vector2 rhs )
     {
-        return in1 == in2.x && in1 == in2.y;
+        return lhs == rhs.x && lhs == rhs.y;
     }
 
-    public override bool Equals( object obj )
+    public static bool operator !=( Vector2 lhs, Vector2 rhs )
     {
-        if (obj.GetType() == typeof( Vector2 ))
-        {
-            return this == (Vector2)obj;
-        }
-        else if (obj.GetType() == typeof( float ))
-        {
-            return this == (float)obj;
-        }
-
-        return false;
+        return !( lhs == rhs );
     }
 
-    public static bool operator !=( Vector2 in1, Vector2 in2 )
+    public static bool operator !=( Vector2 lhs, float rhs )
     {
-        return !( in1 == in2 );
+        return !( lhs == rhs );
     }
 
-    public static bool operator !=( Vector2 in1, float in2 )
+    public static bool operator !=( float lhs, Vector2 rhs )
     {
-        return !( in1 == in2 );
+        return !( lhs == rhs );
     }
 
-    public static bool operator !=( float in1, Vector2 in2 )
+    public static bool operator <( Vector2 lhs, Vector2 rhs )
     {
-        return !( in1 == in2 );
+        return lhs.x < rhs.x && lhs.y < rhs.y;
     }
 
-    public static bool operator <( Vector2 in1, Vector2 in2 )
+    public static bool operator <( Vector2 lhs, float rhs )
     {
-        return in1.x < in2.x && in1.y < in2.y;
+        return lhs.x < rhs && lhs.y < rhs;
     }
 
-    public static bool operator <( Vector2 in1, float in2 )
+    public static bool operator <( float lhs, Vector2 rhs )
     {
-        return in1.x < in2 && in1.y < in2;
+        return lhs < rhs.x && lhs < rhs.y;
     }
 
-    public static bool operator <( float in1, Vector2 in2 )
+    public static bool operator >( Vector2 lhs, Vector2 rhs )
     {
-        return in1 < in2.x && in1 < in2.y;
+        return lhs.x > rhs.x && lhs.y > rhs.y;
     }
 
-    public static bool operator >( Vector2 in1, Vector2 in2 )
+    public static bool operator >( Vector2 lhs, float rhs )
     {
-        return in1.x > in2.x && in1.y > in2.y;
+        return lhs.x > rhs && lhs.y > rhs;
     }
 
-    public static bool operator >( Vector2 in1, float in2 )
+    public static bool operator >( float lhs, Vector2 rhs )
     {
-        return in1.x > in2 && in1.y > in2;
+        return lhs > rhs.x && lhs > rhs.y;
     }
 
-    public static bool operator >( float in1, Vector2 in2 )
+    public static bool operator <=( Vector2 lhs, Vector2 rhs )
     {
-        return in1 > in2.x && in1 > in2.y;
+        return !( lhs > rhs );
     }
 
-    public static bool operator <=( Vector2 in1, Vector2 in2 )
+    public static bool operator <=( Vector2 lhs, float rhs )
     {
-        return !( in1 > in2 );
+        return !( lhs > rhs );
     }
 
-    public static bool operator <=( Vector2 in1, float in2 )
+    public static bool operator <=( float lhs, Vector2 rhs )
     {
-        return !( in1 > in2 );
+        return !( lhs > rhs );
     }
 
-    public static bool operator <=( float in1, Vector2 in2 )
+    public static bool operator >=( Vector2 lhs, Vector2 rhs )
     {
-        return !( in1 > in2 );
+        return !( lhs < rhs );
     }
 
-    public static bool operator >=( Vector2 in1, Vector2 in2 )
+    public static bool operator >=( Vector2 lhs, float rhs )
     {
-        return !( in1 < in2 );
+        return !( lhs < rhs );
     }
 
-    public static bool operator >=( Vector2 in1, float in2 )
+    public static bool operator >=( float lhs, Vector2 rhs )
     {
-        return !( in1 < in2 );
+        return !( lhs < rhs );
     }
 
-    public static bool operator >=( float in1, Vector2 in2 )
+    public static Vector2 operator +( Vector2 lhs, Vector2 rhs )
     {
-        return !( in1 < in2 );
+        return new Vector2( lhs.x + rhs.x, lhs.y + rhs.y );
     }
 
-    public static Vector2 operator +( Vector2 in1, Vector2 in2 )
+    public static Vector2 operator +( Vector2 lhs, float rhs )
     {
-        return new Vector2( in1.x + in2.x, in1.y + in2.y );
+        return new Vector2( lhs.x + rhs, lhs.y + rhs );
     }
 
-    public static Vector2 operator +( Vector2 in1, float in2 )
+    public static Vector2 operator +( float lhs, Vector2 rhs )
     {
-        return new Vector2( in1.x + in2, in1.y + in2 );
+        return new Vector2( lhs + rhs.x, lhs + rhs.y );
     }
 
-    public static Vector2 operator +( float in1, Vector2 in2 )
+    public static Vector2 operator -( Vector2 lhs, Vector2 rhs )
     {
-        return new Vector2( in1 + in2.x, in1 + in2.y );
+        return new Vector2( lhs.x - rhs.x, lhs.y - rhs.y );
     }
 
-    public static Vector2 operator -( Vector2 in1, Vector2 in2 )
+    public static Vector2 operator -( Vector2 lhs, float rhs )
     {
-        return new Vector2( in1.x - in2.x, in1.y - in2.y );
+        return new Vector2( lhs.x - rhs, lhs.y - rhs );
     }
 
-    public static Vector2 operator -( Vector2 in1, float in2 )
+    public static Vector2 operator -( float lhs, Vector2 rhs )
     {
-        return new Vector2( in1.x - in2, in1.y - in2 );
+        return new Vector2( lhs - rhs.x, lhs - rhs.y );
     }
 
-    public static Vector2 operator -( float in1, Vector2 in2 )
+    public static Vector2 operator *( Vector2 lhs, Vector2 rhs )
     {
-        return new Vector2( in1 - in2.x, in1 - in2.y );
+        return new Vector2( lhs.x * rhs.x, lhs.y * rhs.y );
     }
 
-    public static Vector2 operator *( Vector2 in1, Vector2 in2 )
+    public static Vector2 operator *( Vector2 lhs, float rhs )
     {
-        return new Vector2( in1.x * in2.x, in1.y * in2.y );
+        return new Vector2( lhs.x * rhs, lhs.y * rhs );
     }
 
-    public static Vector2 operator *( Vector2 in1, float in2 )
+    public static Vector2 operator *( float lhs, Vector2 rhs )
     {
-        return new Vector2( in1.x * in2, in1.y * in2 );
+        return new Vector2( lhs * rhs.x, lhs * rhs.y );
     }
 
-    public static Vector2 operator *( float in1, Vector2 in2 )
+    public static Vector2 operator /( Vector2 lhs, Vector2 rhs )
     {
-        return new Vector2( in1 * in2.x, in1 * in2.y );
-    }
-
-    public static Vector2 operator /( Vector2 in1, Vector2 in2 )
-    {
-        if (in1 == 0 || in2 == 0)
+        if (lhs == 0 || rhs == 0)
         {
             throw new DivideByZeroException();
         }
 
-        return new Vector2( in1.x / in2.x, in1.y / in2.y );
+        return new Vector2( lhs.x / rhs.x, lhs.y / rhs.y );
     }
 
-    public static Vector2 operator /( Vector2 in1, float in2 )
+    public static Vector2 operator /( Vector2 lhs, float rhs )
     {
-        if (in1 == 0 || in2 == 0)
+        if (lhs == 0 || rhs == 0)
         {
             throw new DivideByZeroException();
         }
 
-        return new Vector2( in1.x / in2, in1.y / in2 );
+        return new Vector2( lhs.x / rhs, lhs.y / rhs );
     }
 
-    public static Vector2 operator /( float in1, Vector2 in2 )
+    public static Vector2 operator /( float lhs, Vector2 rhs )
     {
-        if (in1 == 0 || in2 == 0)
+        if (lhs == 0 || rhs == 0)
         {
             throw new DivideByZeroException();
         }
 
-        return new Vector2( in1 / in2.x, in1 / in2.y );
+        return new Vector2( lhs / rhs.x, lhs / rhs.y );
     }
 
     public float this[ int i ]

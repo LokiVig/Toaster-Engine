@@ -30,7 +30,7 @@ public struct Vector4
         this.w = w;
     }
 
-    public Vector4( Vector3 vector3, float w )
+    public Vector4( Vector3 vector3, float w = 0 )
     {
         x = vector3.x;
         y = vector3.y;
@@ -38,8 +38,8 @@ public struct Vector4
         this.w = w;
     }
 
-    public readonly Vector4 One => new Vector4( 1, 1, 1, 1 );
-    public readonly Vector4 Zero => new Vector4( 0, 0, 0, 0 );
+    public static Vector4 One => new Vector4( 1, 1, 1, 1 );
+    public static Vector4 Zero => new Vector4( 0, 0, 0, 0 );
 
     public static float DistanceBetween( Vector4 source, Vector4 dest )
     {
@@ -73,6 +73,21 @@ public struct Vector4
     public static Vector4 Normalize( Vector4 vector )
     {
         return vector.Normalized();
+    }
+
+    public void Homogenize()
+    {
+        if (w != 0)
+        {
+            x /= w;
+            y /= w;
+            z /= w;
+        }
+    }
+
+    public Vector4 Cross( Vector4 other )
+    {
+        return new Vector4( y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x, w );
     }
 
     public readonly override string ToString()

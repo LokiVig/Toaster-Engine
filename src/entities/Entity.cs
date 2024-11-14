@@ -17,8 +17,6 @@ public class Entity
 
     public virtual EntityType type { get; set; } // This entity's type, e.g. brush entity or other
     public virtual float health { get; set; } // The amount of health this entity has
-    public virtual bool visible { get; set; } = true; // Is this entity visible? This is used by the raytracer to determine whether we should
-                                                      // render this entity or not
 
     private Vector3 velocity; // This entity's current velocity
     private bool alive; // Is this entity alive?
@@ -168,7 +166,7 @@ public class Entity
     /// <param name="targetID">The ID of the entity we wish to target, 0 should always be the <see cref="Player"/></param>
     public void SetTarget( string targetID )
     {
-        target = DoomNET.file.FindEntity( targetID );
+        target = DoomNET.currentFile.FindEntity( targetID );
     }
 
     /// <summary>

@@ -30,7 +30,6 @@ public class TriggerBrush : Entity
     private bool hasTriggered; // Determines whether or not this trigger has already been triggered
 
     public override EntityType type => EntityType.TriggerBrush; // This entity is of type TriggerBrush
-    public override bool visible => false; // This entity is invisible to the raytracer
 
     protected override void OnSpawn()
     {
@@ -50,7 +49,7 @@ public class TriggerBrush : Entity
     protected override void Update()
     {
         // Check if any entity is intersecting with us
-        foreach ( Entity entity in DoomNET.file?.entities )
+        foreach ( Entity entity in DoomNET.currentFile?.entities )
         {
             if ( bbox.IntersectingWith( entity.GetPosition() ) )
             {

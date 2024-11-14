@@ -128,14 +128,14 @@ public class Renderer
             return;
         }
 
-        rasterizer.DrawTriangle( new Triangle( new Vertex( 65, 65, 45 ), new Vertex( 45, 65, 45 ), new Vertex( 45, 65, 65 ) ) );
 
+        
         // DEBUG: Show the deltatime
         DisplayText( $"Deltatime: {DoomNET.deltaTime:0.###}", 0, 200, 25 );
 
         // DEBUG: Display the player's position & velocity
-        DisplayText( $"Player pos: {DoomNET.file.entities[ 0 ].position}", 0, 300, 25, y: 720 - 25 );
-        DisplayText( $"Player vel: {DoomNET.file.entities[ 0 ].GetVelocity()}", 0, 300, 25, y: 720 - 50 );
+        DisplayText( $"Player pos: {DoomNET.currentScene.GetPlayer().position}", 0, 300, 25, y: 720 - 25 );
+        DisplayText( $"Player vel: {DoomNET.currentScene.GetPlayer().GetVelocity()}", 0, 300, 25, y: 720 - 50 );
 
         // Switches out the currently presented render surface with the one we just did work on
         SDL.SDL_RenderPresent( renderer );

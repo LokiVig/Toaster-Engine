@@ -19,7 +19,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Entities ))
         {
             // Check every entity
-            foreach (Entity entity in DoomNET.file?.GetEntities())
+            foreach (Entity entity in DoomNET.currentFile?.GetEntities())
             {
                 // Are we intersecting with this entity's bounding box?
                 if (entity.GetBBox().IntersectingWith( rayEnd ))
@@ -45,7 +45,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Brushes ))
         {
             // Check every brush
-            foreach (Brush brush in DoomNET.file?.GetBrushes())
+            foreach (Brush brush in DoomNET.currentFile?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
                 if (brush.GetBBox().IntersectingWith( rayEnd ))
@@ -96,7 +96,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Entities ))
         {
             // Check every entity
-            foreach (Entity entity in DoomNET.file?.GetEntities())
+            foreach (Entity entity in DoomNET.currentFile?.GetEntities())
             {
                 // Are we intersecting with this entity's bounding box?
                 if (entity.GetBBox().IntersectingWith( rayEnd ))
@@ -132,7 +132,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Brushes ))
         {
             // Check every brush
-            foreach (Brush brush in DoomNET.file?.GetBrushes())
+            foreach (Brush brush in DoomNET.currentFile?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
                 if (brush.GetBBox().IntersectingWith( rayEnd ))
@@ -193,7 +193,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Entities ))
         {
             // Check every entity
-            foreach (Entity entity in DoomNET.file?.GetEntities())
+            foreach (Entity entity in DoomNET.currentFile?.GetEntities())
             {
                 // Are we intersecting with this entity's bounding box?
                 if (entity.GetBBox().IntersectingWith( rayEnd ))
@@ -232,7 +232,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Brushes ))
         {
             // Check every brush
-            foreach (Brush brush in DoomNET.file?.GetBrushes())
+            foreach (Brush brush in DoomNET.currentFile?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
                 if (brush.GetBBox().IntersectingWith( rayEnd ))
@@ -296,7 +296,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Entities ))
         {
             // Check every entity
-            foreach (Entity entity in DoomNET.file?.GetEntities())
+            foreach (Entity entity in DoomNET.currentFile?.GetEntities())
             {
                 // Are we intersecting with this entity's bounding box?
                 if (entity.GetBBox().IntersectingWith( rayEnd ))
@@ -332,7 +332,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Brushes ))
         {
             // Check every brush
-            foreach (Brush brush in DoomNET.file?.GetBrushes())
+            foreach (Brush brush in DoomNET.currentFile?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
                 if (brush.GetBBox().IntersectingWith( rayEnd ))
@@ -393,7 +393,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Entities ))
         {
             // Check every entity
-            foreach (Entity entity in DoomNET.file?.GetEntities())
+            foreach (Entity entity in DoomNET.currentFile?.GetEntities())
             {
                 // Are we intersecting with this entity's bounding box?
                 if (entity.GetBBox().IntersectingWith( rayEnd ))
@@ -432,7 +432,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Brushes ))
         {
             // Check every brush
-            foreach (Brush brush in DoomNET.file?.GetBrushes())
+            foreach (Brush brush in DoomNET.currentFile?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
                 if (brush.GetBBox().IntersectingWith( rayEnd ))
@@ -495,7 +495,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Entities ))
         {
             // Check every entity
-            foreach (Entity entity in DoomNET.file?.GetEntities())
+            foreach (Entity entity in DoomNET.currentFile?.GetEntities())
             {
                 // Are we intersecting with this entity's bounding box?
                 if (entity.GetBBox().IntersectingWith( rayEnd ))
@@ -506,8 +506,8 @@ public class Ray
 
                     // Log to the console that we've succeeded
                     Console.WriteLine( $"Trace succeeded.\n" +
-                                $"\tStart: {entStart}\n" +
-                                $"\tDirection: {entDir}\n" +
+                                $"\tStart: {entStart} (\"{entStart.GetID()}\")\n" +
+                                $"\tDirection: {entDir} (\"{entDir.GetID()}\")\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
                                 $"\tIgnore object: N/A\n" );
@@ -521,7 +521,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Brushes ))
         {
             // Check every brush
-            foreach (Brush brush in DoomNET.file?.GetBrushes())
+            foreach (Brush brush in DoomNET.currentFile?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
                 if (brush.GetBBox().IntersectingWith( rayEnd ))
@@ -532,8 +532,8 @@ public class Ray
 
                     // Log to the console that we've succeeded
                     Console.WriteLine( $"Trace succeeded.\n" +
-                                $"\tStart: {entStart}\n" +
-                                $"\tDirection: {entDir}\n" +
+                                $"\tStart: {entStart} (\"{entStart.GetID()}\")\n" +
+                                $"\tDirection: {entDir} (\"{entDir.GetID()}\")\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
                                 $"\tIgnore object: N/A\n" );
@@ -549,8 +549,8 @@ public class Ray
 
         // Also log to console
         Console.WriteLine( $"Trace failed.\n" +
-                                $"\tStart: {entStart}\n" +
-                                $"\tDirection: {entDir}\n" +
+                                $"\tStart: {entStart} (\"{entStart.GetID()}\")\n" +
+                                $"\tDirection: {entDir} (\"{entDir.GetID()}\")\n" +
                                 $"\tHit object: N/A\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
                                 $"\tIgnore object: N/A\n" );
@@ -572,7 +572,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Entities ))
         {
             // Check every entity
-            foreach (Entity entity in DoomNET.file?.GetEntities())
+            foreach (Entity entity in DoomNET.currentFile?.GetEntities())
             {
                 // Are we intersecting with this entity's bounding box?
                 if (entity.GetBBox().IntersectingWith( rayEnd ))
@@ -592,11 +592,11 @@ public class Ray
 
                     // Log to the console that we've succeeded
                     Console.WriteLine( $"Trace succeeded.\n" +
-                                $"\tStart: {entStart}\n" +
-                                $"\tDirection: {entDir}\n" +
+                                $"\tStart: {entStart} (\"{entStart.GetID()}\")\n" +
+                                $"\tDirection: {entDir} (\"{entDir.GetID()}\")\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore object: N/A\n" );
+                                $"\tIgnore object: {( ignoreObject != null ? ignoreObject : "N/A" )}\n" );
 
                     return true;
                 }
@@ -607,7 +607,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Brushes ))
         {
             // Check every brush
-            foreach (Brush brush in DoomNET.file?.GetBrushes())
+            foreach (Brush brush in DoomNET.currentFile?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
                 if (brush.GetBBox().IntersectingWith( rayEnd ))
@@ -618,11 +618,11 @@ public class Ray
 
                     // Log to the console that we've succeeded
                     Console.WriteLine( $"Trace succeeded.\n" +
-                                $"\tStart: {entStart}\n" +
-                                $"\tDirection: {entDir}\n" +
+                                $"\tStart: {entStart} (\"{entStart.GetID()}\")\n" +
+                                $"\tDirection: {entDir} (\"{entDir.GetID()}\")\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore object: N/A\n" );
+                                $"\tIgnore object: {( ignoreObject != null ? ignoreObject : "N/A" )}\n" );
 
                     return true;
                 }
@@ -635,11 +635,11 @@ public class Ray
 
         // Also log to console
         Console.WriteLine( $"Trace failed.\n" +
-                                $"\tStart: {entStart}\n" +
-                                $"\tDirection: {entDir}\n" +
+                                $"\tStart: {entStart} (\"{entStart.GetID()}\")\n" +
+                                $"\tDirection: {entDir} (\"{entDir.GetID()}\")\n" +
                                 $"\tHit object: N/A\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore object: N/A\n" );
+                                $"\tIgnore object: {( ignoreObject != null ? ignoreObject : "N/A" )}\n" );
 
         // We didn't hit anything, so it's false
         return false;

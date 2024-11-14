@@ -94,6 +94,27 @@ public class WTFFile
     }
 
     /// <summary>
+    /// Finds an entity according to their ID
+    /// </summary>
+    /// <param name="id">A specific ID of an entity</param>
+    /// <returns>The desired entity appropriate to the argument ID</returns>
+    public Entity FindEntity( string id )
+    {
+        // Get the id of every entity
+        for (int i = 0; i < entities.Count; i++)
+        {
+            // If entities[i]'s ID fits with the input ID, return that entity
+            if (entities[ i ].GetID() == id)
+            {
+                return entities[ i ];
+            }
+        }
+
+        // We didn't find an entity with that ID! Return null
+        return null;
+    }
+
+    /// <summary>
     /// Returns this file's list of entities
     /// </summary>
     public List<Entity> GetEntities()
@@ -151,27 +172,6 @@ public class WTFFile
             brushes[ i ].SetID( $"brush {i}" );
         }
     }
-
-    /// <summary>
-    /// Finds an entity according to their ID
-    /// </summary>
-    /// <param name="id">A specific ID of an entity</param>
-    /// <returns>The desired entity appropriate to the argument ID</returns>
-    public Entity FindEntity( string id )
-    {
-        // Get the id of every entity
-        for (int i = 0; i < entities.Count; i++)
-        {
-            // If entities[i]'s ID fits with the input ID, return that entity
-            if (entities[ i ].GetID() == id)
-            {
-                return entities[ i ];
-            }
-        }
-
-        // We didn't find an entity with that ID! Return null
-        return null;
-    }
     
      /// <summary>
      /// Find a WTF file by a specific path
@@ -213,9 +213,9 @@ public class WTFFile
         WTFFile file;
 
         // If we already have a file open, set the path to the current file
-        if ( DoomNET.file != null && !string.IsNullOrEmpty( DoomNET.file.directory ) )
+        if ( DoomNET.currentFile != null && !string.IsNullOrEmpty( DoomNET.currentFile.directory ) )
         {
-            file = DoomNET.file;
+            file = DoomNET.currentFile;
             path = file.directory;
         }
         else if ( inFile != null ) // If the input file wasn't null, set it accordingly

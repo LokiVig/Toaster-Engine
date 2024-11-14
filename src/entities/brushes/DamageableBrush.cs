@@ -10,6 +10,6 @@ public class DamageableBrush : Entity
     {
         base.OnSpawn();
 
-        health = DoomNET.file?.FindEntity( GetID() ) == null ? 0.0f : DoomNET.file.FindEntity( GetID() ).GetHealth();
+        health = DoomNET.currentFile?.FindEntity( GetID() ) == null ? 0.0f : DoomNET.currentFile.FindEntity( GetID() ).GetHealth();
     }
 }
