@@ -146,7 +146,7 @@ public class Renderer
     /// <summary>
     /// Draw text onto the SDL rendered window.
     /// </summary>
-    public void DisplayText( string text, int fontIndex, int width, int height, int pt = 17, int x = 0, int y = 0 )
+    public void DisplayText( string text, int fontIndex, int width, int height, int x = 0, int y = 0 )
     {
         IntPtr font = fonts[ fontIndex ];
 

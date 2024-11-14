@@ -26,19 +26,22 @@ public struct Vector3
         x = y = z = xyz;
     }
 
-    public Vector3( float x, float y )
-    {
-        this.x = x;
-        this.y = y;
-        this.z = 0;
-    }
-
     public Vector3( float x, float y, float z )
     {
         this.x = x;
         this.y = y;
         this.z = z;
     }
+
+    public Vector3( Vector2 vector2, float z )
+    {
+        x = vector2.x;
+        y = vector2.y;
+        this.z = z;
+    }
+
+    public readonly Vector3 One => new Vector3( 1, 1, 1 );
+    public readonly Vector3 Zero => new Vector3( 0, 0, 0 );
 
     public static float DistanceBetween( Vector3 source, Vector3 dest )
     {

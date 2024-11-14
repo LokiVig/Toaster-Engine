@@ -31,6 +31,9 @@ public struct Vector2
         this.y = y;
     }
 
+    public readonly Vector2 One => new Vector2( 1, 1 );
+    public readonly Vector2 Zero => new Vector2( 0, 0 );
+
     public static float DistanceBetween( Vector2 source, Vector2 dest )
     {
         return ( source - dest ).Magnitude();
@@ -67,7 +70,7 @@ public struct Vector2
 
     public readonly override string ToString()
     {
-        return $"<{x:0.###}, {y:0.###}>";
+        return $"<{x:0.##}, {y:0.##}>";
     }
 
     #region OPERATORS
