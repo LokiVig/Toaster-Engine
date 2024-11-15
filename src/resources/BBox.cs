@@ -29,6 +29,12 @@ public class BBox
     /// <returns><see langword="true"/> if intersecting with <see href="other"/>, <see langword="false"/> if not</returns>
     public bool IntersectingWith( BBox other )
     {
+        // We shouldn't be trying to intersect with ourselves!
+        if (other == this)
+        {
+            return false;
+        }
+
         return mins <= other.maxs && maxs >= other.mins;
     }
 
@@ -39,7 +45,9 @@ public class BBox
     /// <returns><see langword="true"/> if the point is intersecting with the BBox, <see langword="false"/> if not</returns>
     public bool IntersectingWith( Vector3 point )
     {
-        return point >= mins && point <= maxs;
+        return point.x >= mins.x && point.x <= maxs.x &&
+               point.y >= mins.y && point.y <= maxs.y &&
+               point.z >= mins.z && point.z <= maxs.z;
     }
 
     public Vector3 GetCenter()
@@ -49,6 +57,6 @@ public class BBox
 
     public override string ToString()
     {
-        return $"({mins.ToString()}, {maxs.ToString()})";
+        return $"{{{mins.ToString()}, {maxs.ToString()}}}";
     }
 }

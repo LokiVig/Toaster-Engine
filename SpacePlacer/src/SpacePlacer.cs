@@ -2,13 +2,13 @@
 using System.Threading;
 using System.Diagnostics;
 
-using DoomNET.WTF;
+using DoomNET.Resources;
 
 namespace DoomNET.SpacePlacer;
 
 public class SpacePlacer
 {
-    private WTFFile file;
+    private WTF file;
     private float deltaTime;
     private bool active;
 
@@ -23,7 +23,7 @@ public class SpacePlacer
         active = true;
 
         // !! DEBUG !! \\
-        SaveMap(new WTFFile("maps/test.wtf"));
+        SaveMap(new WTF("maps/test.wtf"));
 
         // Start the Update function
         Update();
@@ -57,16 +57,16 @@ public class SpacePlacer
 
     private void LoadMap(string directory)
     {
-        file = WTFFile.LoadFile(directory);
+        file = WTF.LoadFile(directory);
     }
 
     private void SaveMap()
     {
-        WTFFile.SaveFile(file?.directory, file);
+        WTF.SaveFile(file?.directory, file);
     }
 
-    private void SaveMap(WTFFile file)
+    private void SaveMap(WTF file)
     {
-        WTFFile.SaveFile(file.directory, file);
+        WTF.SaveFile(file.directory, file);
     }
 }

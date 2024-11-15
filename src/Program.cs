@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Text.Json;
+using System.Text.Encodings.Web;
+using DoomNET.Entities;
 
 namespace DoomNET;
 
@@ -8,7 +10,8 @@ public class Program
     public static JsonSerializerOptions serializerOptions = new()
     {
         WriteIndented = true,
-        AllowTrailingCommas = true
+        AllowTrailingCommas = true,
+        Converters = { new EntityConverter() }
     };
 
     [STAThread]

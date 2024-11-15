@@ -158,7 +158,7 @@ public class Renderer
         }
 
         SDL.SDL_Color black = new SDL.SDL_Color();
-        black.r = black.g = black.b = 255; black.a = 255;
+        black.r = black.g = black.b = 0; black.a = 255;
 
         IntPtr surfaceMessage = SDL_ttf.TTF_RenderText_Solid( font, text, black );
 

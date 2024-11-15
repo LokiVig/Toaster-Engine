@@ -22,8 +22,8 @@ public class QuaternionTests
     // values
 
     // Minimum and maximum values for rand.Next(int, int) to use
-    int randMin = -250000;
-    int randMax = 250000;
+    private const int RAND_MIN = -250000;
+    private const int RAND_MAX = 250000;
 
     [TestMethod( "Addition" )]
     public void TestAddition()
@@ -39,10 +39,10 @@ public class QuaternionTests
             // Get a random expected addition
             Quaternion expected = new Quaternion
             (
-                ( value1_x = rand.Next( randMin, randMax ) ) + ( value2_x = rand.Next( randMin, randMax ) ),
-                ( value1_y = rand.Next( randMin, randMax ) ) + ( value2_y = rand.Next( randMin, randMax ) ),
-                ( value1_z = rand.Next( randMin, randMax ) ) + ( value2_z = rand.Next( randMin, randMax ) ),
-                ( value1_w = rand.Next( randMin, randMax ) ) + ( value2_w = rand.Next( randMin, randMax ) )
+                ( value1_x = rand.Next( RAND_MIN, RAND_MAX ) ) + ( value2_x = rand.Next( RAND_MIN, RAND_MAX ) ),
+                ( value1_y = rand.Next( RAND_MIN, RAND_MAX ) ) + ( value2_y = rand.Next( RAND_MIN, RAND_MAX ) ),
+                ( value1_z = rand.Next( RAND_MIN, RAND_MAX ) ) + ( value2_z = rand.Next( RAND_MIN, RAND_MAX ) ),
+                ( value1_w = rand.Next( RAND_MIN, RAND_MAX ) ) + ( value2_w = rand.Next( RAND_MIN, RAND_MAX ) )
             );
 
             // Assign the values and calculate the result accordingly
@@ -87,10 +87,10 @@ public class QuaternionTests
             // Get a random expected addition
             Quaternion expected = new Quaternion
             (
-                ( value1_x = rand.Next( randMin, randMax ) ) - ( value2_x = rand.Next( randMin, randMax ) ),
-                ( value1_y = rand.Next( randMin, randMax ) ) - ( value2_y = rand.Next( randMin, randMax ) ),
-                ( value1_z = rand.Next( randMin, randMax ) ) - ( value2_z = rand.Next( randMin, randMax ) ),
-                ( value1_w = rand.Next( randMin, randMax ) ) - ( value2_w = rand.Next( randMin, randMax ) )
+                ( value1_x = rand.Next( RAND_MIN, RAND_MAX ) ) - ( value2_x = rand.Next( RAND_MIN, RAND_MAX ) ),
+                ( value1_y = rand.Next( RAND_MIN, RAND_MAX ) ) - ( value2_y = rand.Next( RAND_MIN, RAND_MAX ) ),
+                ( value1_z = rand.Next( RAND_MIN, RAND_MAX ) ) - ( value2_z = rand.Next( RAND_MIN, RAND_MAX ) ),
+                ( value1_w = rand.Next( RAND_MIN, RAND_MAX ) ) - ( value2_w = rand.Next( RAND_MIN, RAND_MAX ) )
             );
 
             // Assign the values and calculate the result accordingly
@@ -133,15 +133,15 @@ public class QuaternionTests
         for ( int i = 0; i < 5000; i++ )
         {
             // Predefine the values, as to not randomize the values every call in the expected value
-            value1_x = rand.Next( randMin, randMax );
-            value1_y = rand.Next( randMin, randMax );
-            value1_z = rand.Next( randMin, randMax );
-            value1_w = rand.Next( randMin, randMax );
+            value1_x = rand.Next( RAND_MIN, RAND_MAX );
+            value1_y = rand.Next( RAND_MIN, RAND_MAX );
+            value1_z = rand.Next( RAND_MIN, RAND_MAX );
+            value1_w = rand.Next( RAND_MIN, RAND_MAX );
 
-            value2_x = rand.Next( randMin, randMax );
-            value2_y = rand.Next( randMin, randMax );
-            value2_z = rand.Next( randMin, randMax );
-            value2_w = rand.Next( randMin, randMax );
+            value2_x = rand.Next( RAND_MIN, RAND_MAX );
+            value2_y = rand.Next( RAND_MIN, RAND_MAX );
+            value2_z = rand.Next( RAND_MIN, RAND_MAX );
+            value2_w = rand.Next( RAND_MIN, RAND_MAX );
 
             // Get a random expected multiplication
             Quaternion expected = new Quaternion
@@ -192,14 +192,14 @@ public class QuaternionTests
         for ( int i = 0; i < 5000; i++ )
         {
             // Predefine the values, as to not randomize the values every call in the expected value
-            value1_x = rand.Next( randMin, randMax );
-            value1_y = rand.Next( randMin, randMax );
-            value1_z = rand.Next( randMin, randMax );
-            value1_w = rand.Next( randMin, randMax );
+            value1_x = rand.Next( RAND_MIN, RAND_MAX );
+            value1_y = rand.Next( RAND_MIN, RAND_MAX );
+            value1_z = rand.Next( RAND_MIN, RAND_MAX );
+            value1_w = rand.Next( RAND_MIN, RAND_MAX );
 
             // Since this is just supposed to test against a float, let's only define the x variable,
             // to save on memory (if that even happens)
-            value2_x = rand.Next( randMin, randMax );
+            value2_x = rand.Next( RAND_MIN, RAND_MAX );
 
             // Get a random expected multiplication
             Quaternion expected = new Quaternion
@@ -250,15 +250,15 @@ public class QuaternionTests
         for ( int i = 0; i < 5000; i++ )
         {
             // Predefine the values, as to not randomize the values every call in the expected value
-            value1_x = rand.Next( randMin, randMax );
-            value1_y = rand.Next( randMin, randMax );
-            value1_z = rand.Next( randMin, randMax );
-            value1_w = rand.Next( randMin, randMax );
+            value1_x = rand.Next( RAND_MIN, RAND_MAX );
+            value1_y = rand.Next( RAND_MIN, RAND_MAX );
+            value1_z = rand.Next( RAND_MIN, RAND_MAX );
+            value1_w = rand.Next( RAND_MIN, RAND_MAX );
 
-            value2_x = rand.Next( randMin, randMax );
-            value2_y = rand.Next( randMin, randMax );
-            value2_z = rand.Next( randMin, randMax );
-            value2_w = rand.Next( randMin, randMax );
+            value2_x = rand.Next( RAND_MIN, RAND_MAX );
+            value2_y = rand.Next( RAND_MIN, RAND_MAX );
+            value2_z = rand.Next( RAND_MIN, RAND_MAX );
+            value2_w = rand.Next( RAND_MIN, RAND_MAX );
 
             // Get a random expected multiplication
             Quaternion expected = new Quaternion
@@ -309,14 +309,14 @@ public class QuaternionTests
         for ( int i = 0; i < 5000; i++ )
         {
             // Predefine the values, as to not randomize the values every call in the expected value
-            value1_x = rand.Next( randMin, randMax );
-            value1_y = rand.Next( randMin, randMax );
-            value1_z = rand.Next( randMin, randMax );
-            value1_w = rand.Next( randMin, randMax );
+            value1_x = rand.Next( RAND_MIN, RAND_MAX );
+            value1_y = rand.Next( RAND_MIN, RAND_MAX );
+            value1_z = rand.Next( RAND_MIN, RAND_MAX );
+            value1_w = rand.Next( RAND_MIN, RAND_MAX );
 
             // Since this is just supposed to test against a float, let's only define the x variable,
             // to save on memory (if that even happens)
-            value2_x = rand.Next( randMin, randMax );
+            value2_x = rand.Next( RAND_MIN, RAND_MAX );
 
             // Get a random expected multiplication
             Quaternion expected = new Quaternion
@@ -366,8 +366,8 @@ public class QuaternionTests
         // Do 5000 tests
         for ( int i = 0; i < 5000; i++ )
         {
-            Quaternion value1 = new Quaternion( value1_x = rand.Next( randMin, randMax ), value1_y = rand.Next( randMin, randMax ), value1_z = rand.Next( randMin, randMax ), value1_w = rand.Next( randMin, randMax ) );
-            Quaternion value2 = new Quaternion( value2_x = rand.Next( randMin, randMax ), value2_y = rand.Next( randMin, randMax ), value2_z = rand.Next( randMin, randMax ), value2_w = rand.Next( randMin, randMax ) );
+            Quaternion value1 = new Quaternion( value1_x = rand.Next( RAND_MIN, RAND_MAX ), value1_y = rand.Next( RAND_MIN, RAND_MAX ), value1_z = rand.Next( RAND_MIN, RAND_MAX ), value1_w = rand.Next( RAND_MIN, RAND_MAX ) );
+            Quaternion value2 = new Quaternion( value2_x = rand.Next( RAND_MIN, RAND_MAX ), value2_y = rand.Next( RAND_MIN, RAND_MAX ), value2_z = rand.Next( RAND_MIN, RAND_MAX ), value2_w = rand.Next( RAND_MIN, RAND_MAX ) );
 
             bool expected = (float)Math.Sqrt( value1_x * value1_x + value1_y * value1_y + value1_z * value1_z + value1_w * value1_w ) - (float)Math.Sqrt( value2_x * value2_x + value2_y * value2_y + value2_z * value2_z + value2_w * value2_w ) < 0;
 
@@ -407,8 +407,8 @@ public class QuaternionTests
         // Do 5000 tests
         for ( int i = 0; i < 5000; i++ )
         {
-            Quaternion value1 = new Quaternion( value1_x = rand.Next( randMin, randMax ), value1_y = rand.Next( randMin, randMax ), value1_z = rand.Next( randMin, randMax ), value1_w = rand.Next( randMin, randMax ) );
-            Quaternion value2 = new Quaternion( value2_x = rand.Next( randMin, randMax ), value2_y = rand.Next( randMin, randMax ), value2_z = rand.Next( randMin, randMax ), value2_w = rand.Next( randMin, randMax ) );
+            Quaternion value1 = new Quaternion( value1_x = rand.Next( RAND_MIN, RAND_MAX ), value1_y = rand.Next( RAND_MIN, RAND_MAX ), value1_z = rand.Next( RAND_MIN, RAND_MAX ), value1_w = rand.Next( RAND_MIN, RAND_MAX ) );
+            Quaternion value2 = new Quaternion( value2_x = rand.Next( RAND_MIN, RAND_MAX ), value2_y = rand.Next( RAND_MIN, RAND_MAX ), value2_z = rand.Next( RAND_MIN, RAND_MAX ), value2_w = rand.Next( RAND_MIN, RAND_MAX ) );
 
             bool expected = (float)Math.Sqrt( value1_x * value1_x + value1_y * value1_y + value1_z * value1_z + value1_w * value1_w) - (float)Math.Sqrt( value2_x * value2_x + value2_y * value2_y + value2_z * value2_z + value2_w * value2_w ) > 0;
 

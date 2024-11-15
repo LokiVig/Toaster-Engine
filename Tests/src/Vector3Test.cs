@@ -20,8 +20,8 @@ public class Vector3Test
     // values
 
     // Minimum and maximum values for rand.Next(int, int) to use
-    private int randMin = -250000;
-    private int randMax = 250000;
+    private const int RAND_MIN = -250000;
+    private const int RAND_MAX = 250000;
 
     [TestMethod( "Addition" )]
     public void TestAddition()
@@ -36,9 +36,9 @@ public class Vector3Test
         {
             Vector3 expected = new Vector3
                 (
-                    ( value1_x = rand.Next( randMin, randMax ) ) + ( value2_x = rand.Next( randMin, randMax ) ),
-                    ( value1_y = rand.Next( randMin, randMax ) ) + ( value2_y = rand.Next( randMin, randMax ) ),
-                    ( value1_z = rand.Next( randMin, randMax ) ) + ( value2_z = rand.Next( randMin, randMax ) )
+                    ( value1_x = rand.Next( RAND_MIN, RAND_MAX ) ) + ( value2_x = rand.Next( RAND_MIN, RAND_MAX ) ),
+                    ( value1_y = rand.Next( RAND_MIN, RAND_MAX ) ) + ( value2_y = rand.Next( RAND_MIN, RAND_MAX ) ),
+                    ( value1_z = rand.Next( RAND_MIN, RAND_MAX ) ) + ( value2_z = rand.Next( RAND_MIN, RAND_MAX ) )
                 );
 
             Vector3 value1 = new Vector3( value1_x, value1_y, value1_z );
@@ -81,9 +81,9 @@ public class Vector3Test
         {
             Vector3 expected = new Vector3
                 (
-                    ( value1_x = rand.Next( randMin, randMax ) ) - ( value2_x = rand.Next( randMin, randMax ) ),
-                    ( value1_y = rand.Next( randMin, randMax ) ) - ( value2_y = rand.Next( randMin, randMax ) ),
-                    ( value1_z = rand.Next( randMin, randMax ) ) - ( value2_z = rand.Next( randMin, randMax ) )
+                    ( value1_x = rand.Next( RAND_MIN, RAND_MAX ) ) - ( value2_x = rand.Next( RAND_MIN, RAND_MAX ) ),
+                    ( value1_y = rand.Next( RAND_MIN, RAND_MAX ) ) - ( value2_y = rand.Next( RAND_MIN, RAND_MAX ) ),
+                    ( value1_z = rand.Next( RAND_MIN, RAND_MAX ) ) - ( value2_z = rand.Next( RAND_MIN, RAND_MAX ) )
                 );
 
             Vector3 value1 = new Vector3( value1_x, value1_y, value1_z );
@@ -126,9 +126,9 @@ public class Vector3Test
         {
             Vector3 expected = new Vector3
                 (
-                    ( value1_x = rand.Next( randMin, randMax ) ) * ( value2_x = rand.Next( randMin, randMax ) ),
-                    ( value1_y = rand.Next( randMin, randMax ) ) * ( value2_y = rand.Next( randMin, randMax ) ),
-                    ( value1_z = rand.Next( randMin, randMax ) ) * ( value2_z = rand.Next( randMin, randMax ) )
+                    ( value1_x = rand.Next( RAND_MIN, RAND_MAX ) ) * ( value2_x = rand.Next( RAND_MIN, RAND_MAX ) ),
+                    ( value1_y = rand.Next( RAND_MIN, RAND_MAX ) ) * ( value2_y = rand.Next( RAND_MIN, RAND_MAX ) ),
+                    ( value1_z = rand.Next( RAND_MIN, RAND_MAX ) ) * ( value2_z = rand.Next( RAND_MIN, RAND_MAX ) )
                 );
 
             Vector3 value1 = new Vector3( value1_x, value1_y, value1_z );
@@ -171,9 +171,9 @@ public class Vector3Test
         {
             Vector3 expected = new Vector3
                 (
-                    ( value1_x = rand.Next( randMin, randMax ) ) * ( value2_x = rand.Next( randMin, randMax ) ),
-                    ( value1_y = rand.Next( randMin, randMax ) ) * ( value2_y = rand.Next( randMin, randMax ) ),
-                    ( value1_z = rand.Next( randMin, randMax ) ) * ( value2_z = rand.Next( randMin, randMax ) )
+                    ( value1_x = rand.Next( RAND_MIN, RAND_MAX ) ) * ( value2_x = rand.Next( RAND_MIN, RAND_MAX ) ),
+                    ( value1_y = rand.Next( RAND_MIN, RAND_MAX ) ) * ( value2_y = rand.Next( RAND_MIN, RAND_MAX ) ),
+                    ( value1_z = rand.Next( RAND_MIN, RAND_MAX ) ) * ( value2_z = rand.Next( RAND_MIN, RAND_MAX ) )
                 );
 
             Vector3 value1 = new Vector3( value1_x, value1_y, value1_z );
@@ -216,9 +216,9 @@ public class Vector3Test
         {
             Vector3 expected = new Vector3
                 (
-                    ( value1_x = rand.Next( randMin, randMax ) ) / ( value2_x = rand.Next( randMin, randMax ) ),
-                    ( value1_y = rand.Next( randMin, randMax ) ) / ( value2_y = rand.Next( randMin, randMax ) ),
-                    ( value1_z = rand.Next( randMin, randMax ) ) / ( value2_z = rand.Next( randMin, randMax ) )
+                    ( value1_x = rand.Next( RAND_MIN, RAND_MAX ) ) / ( value2_x = rand.Next( RAND_MIN, RAND_MAX ) ),
+                    ( value1_y = rand.Next( RAND_MIN, RAND_MAX ) ) / ( value2_y = rand.Next( RAND_MIN, RAND_MAX ) ),
+                    ( value1_z = rand.Next( RAND_MIN, RAND_MAX ) ) / ( value2_z = rand.Next( RAND_MIN, RAND_MAX ) )
                 );
 
             Vector3 value1 = new Vector3( value1_x, value1_y, value1_z );
@@ -259,13 +259,13 @@ public class Vector3Test
         // Do 5000 tests
         for ( int i = 0; i < 5000; i++ )
         {
-            value2_x = rand.Next( randMin, randMax );
+            value2_x = rand.Next( RAND_MIN, RAND_MAX );
 
             Vector3 expected = new Vector3
                 (
-                    ( value1_x = rand.Next( randMin, randMax ) ) / value2_x,
-                    ( value1_y = rand.Next( randMin, randMax ) ) / value2_x,
-                    ( value1_z = rand.Next( randMin, randMax ) ) / value2_x
+                    ( value1_x = rand.Next( RAND_MIN, RAND_MAX ) ) / value2_x,
+                    ( value1_y = rand.Next( RAND_MIN, RAND_MAX ) ) / value2_x,
+                    ( value1_z = rand.Next( RAND_MIN, RAND_MAX ) ) / value2_x
                 );
 
             Vector3 value1 = new Vector3( value1_x, value1_y, value1_z );
@@ -306,8 +306,8 @@ public class Vector3Test
         // Do 5000 tests
         for ( int i = 0; i < 5000; i++ )
         {
-            Vector3 value1 = new Vector3( value1_x = rand.Next( randMin, randMax ), value1_y = rand.Next( randMin, randMax ), value1_z = rand.Next( randMin, randMax ) );
-            Vector3 value2 = new Vector3( value2_x = rand.Next( randMin, randMax ), value2_y = rand.Next( randMin, randMax ), value2_z = rand.Next( randMin, randMax ) );
+            Vector3 value1 = new Vector3( value1_x = rand.Next( RAND_MIN, RAND_MAX ), value1_y = rand.Next( RAND_MIN, RAND_MAX ), value1_z = rand.Next( RAND_MIN, RAND_MAX ) );
+            Vector3 value2 = new Vector3( value2_x = rand.Next( RAND_MIN, RAND_MAX ), value2_y = rand.Next( RAND_MIN, RAND_MAX ), value2_z = rand.Next( RAND_MIN, RAND_MAX ) );
 
             bool expected = (float)Math.Sqrt( value1_x * value1_x + value1_y * value1_y + value1_z * value1_z ) - (float)Math.Sqrt( value2_x * value2_x + value2_y * value2_y + value2_z * value2_z ) < 0;
 
@@ -347,8 +347,8 @@ public class Vector3Test
         // Do 5000 tests
         for ( int i = 0; i < 5000; i++ )
         {
-            Vector3 value1 = new Vector3( value1_x = rand.Next( randMin, randMax ), value1_y = rand.Next( randMin, randMax ), value1_z = rand.Next( randMin, randMax ) );
-            Vector3 value2 = new Vector3( value2_x = rand.Next( randMin, randMax ), value2_y = rand.Next( randMin, randMax ), value2_z = rand.Next( randMin, randMax ) );
+            Vector3 value1 = new Vector3( value1_x = rand.Next( RAND_MIN, RAND_MAX ), value1_y = rand.Next( RAND_MIN, RAND_MAX ), value1_z = rand.Next( RAND_MIN, RAND_MAX ) );
+            Vector3 value2 = new Vector3( value2_x = rand.Next( RAND_MIN, RAND_MAX ), value2_y = rand.Next( RAND_MIN, RAND_MAX ), value2_z = rand.Next( RAND_MIN, RAND_MAX ) );
 
             bool expected = (float)Math.Sqrt(value1_x * value1_x + value1_y * value1_y + value1_z * value1_z) - (float)Math.Sqrt(value2_x * value2_x + value2_y * value2_y + value2_z * value2_z) > 0;
 

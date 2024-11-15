@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-using DoomNET.WTF;
+
 using DoomNET.Entities;
 using DoomNET.Resources;
 using DoomNET.Rendering;
@@ -11,7 +11,7 @@ namespace DoomNET;
 public class DoomNET
 {
     public static event Action OnUpdate;
-    public static WTFFile currentFile;
+    public static WTF currentFile;
     public static Scene currentScene;
 
     public static bool active;
@@ -42,7 +42,7 @@ public class DoomNET
         trigger.triggerBy = TriggerBy.Players;
         trigger.triggerOn = TriggerOn.Trigger;
         trigger.targetEvent = EntityEvent.TakeDamage;
-        trigger.targetEntity = npc;
+        trigger.targetEntity = "entity 1";
         trigger.fValue = 100.0f;
 
         Player player = new Player( new Vector3( 50.0f, 50.0f, 50.0f ), new BBox( new Vector3( 32.0f, 32.0f, 64.0f ), new Vector3( -32.0f, -32.0f, 0.0f ) ) );
@@ -52,7 +52,7 @@ public class DoomNET
         currentFile.AddEntity( npc );
         currentFile.AddEntity( trigger );
 
-        WTFFile.SaveFile( "maps/test.wtf", currentFile );
+        WTF.SaveFile( "maps/test.wtf", currentFile );
 
         // Load everything necessary from the current file
         currentScene = Scene.LoadFromWTFFile( currentFile );
@@ -61,7 +61,7 @@ public class DoomNET
         //TestNPC npc = currentScene.FindEntity<TestNPC>("entity 1");
         //TriggerBrush trigger = currentScene.FindEntity<TriggerBrush>( "entity 2" );
 
-        //Ray.Trace( player, npc, out object hitObject, RayIgnore.None, trigger );
+        Ray.Trace( player.camera.position, npc, out object hitObject, RayIgnore.None, trigger );
 
         // Initialize an SDL window
         renderer = new Renderer();

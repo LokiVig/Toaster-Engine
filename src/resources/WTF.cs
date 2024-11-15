@@ -1,26 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using System.Collections.Generic;
 
 using DoomNET.Entities;
-using DoomNET.Resources;
 
-namespace DoomNET.WTF;
+namespace DoomNET.Resources;
 
 /// <summary>
-/// WTF file, acronym for Where's The Files, describes all of the entities and brushes of a map
+/// A WTF, acronym for World Tracking File, describes all of the entities and brushes of a map
 /// </summary>
-public class WTFFile
+public class WTF
 {
     public List<Entity> entities { get; set; } = new(); // List of entities in this WTF file
     public List<Brush> brushes { get; set; } = new(); // All of the brushes in this WTF file
 
     public string directory { get; set; } // The directory of which this WTF file is saved at
 
-    public WTFFile() { }
+    public WTF() { }
 
-    public WTFFile( string directory )
+    public WTF( string directory )
     {
         this.directory = directory;
     }
@@ -200,7 +199,7 @@ public class WTFFile
      /// <param name="directory">The specified path to the WTF file</param>
      /// <param name="outFile">An output file, for external uses</param>
      /// <exception cref="FileNotFoundException"></exception>
-    public static void LoadFile( string directory, out WTFFile outFile )
+    public static void LoadFile( string directory, out WTF outFile )
     {
         // Couldn't find file from the input path! Throw an exception
         if ( !File.Exists( directory ) )
@@ -209,7 +208,7 @@ public class WTFFile
         }
 
         // Deserialize the file through JSON
-        outFile = JsonSerializer.Deserialize<WTFFile>( File.OpenRead( directory ), Program.serializerOptions );
+        outFile = JsonSerializer.Deserialize<WTF>( File.OpenRead( directory ), Program.serializerOptions );
     }
 
     /// <summary>
@@ -217,9 +216,9 @@ public class WTFFile
     /// </summary>
     /// <param name="directory">The specified path to the WTF file</param>
     /// <returns>The desired file as a variable</returns>
-    public static WTFFile LoadFile( string directory )
+    public static WTF LoadFile( string directory )
     {
-        LoadFile( directory, out WTFFile file );
+        LoadFile( directory, out WTF file );
         return file;
     }
 
@@ -227,10 +226,10 @@ public class WTFFile
     /// Save a WTF file to a specified path
     /// </summary>
     /// <param name="path">The path of the WTF file, already specified if WTFLoader.file and/or its filepath isn't null</param>
-    public static void SaveFile( string path, WTFFile inFile )
+    public static void SaveFile( string path, WTF inFile )
     {
         // A local variable for storing the file
-        WTFFile file;
+        WTF file;
 
         // Ensure that the "maps/" directory actually exists
         if (!Directory.Exists( "maps/" ))

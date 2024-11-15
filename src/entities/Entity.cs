@@ -1,6 +1,6 @@
 ﻿using System;
 
-using DoomNET.WTF;
+
 using DoomNET.Resources;
 
 namespace DoomNET.Entities;

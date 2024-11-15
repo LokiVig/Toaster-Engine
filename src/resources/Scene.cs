@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using DoomNET.Entities;
-using DoomNET.WTF;
+
 
 namespace DoomNET.Resources;
 
@@ -24,7 +24,7 @@ public class Scene
     /// <summary>
     /// Load variables from the argument WTF file
     /// </summary>
-    public static Scene LoadFromWTFFile( WTFFile file )
+    public static Scene LoadFromWTFFile( WTF file )
     {
         return new Scene( file.GetEntities(), file.GetBrushes() );
     }
@@ -102,6 +102,22 @@ public class Scene
             if (entities[ i ].GetID() == id && entities[ i ] is T entity)
             {
                 return entity;
+            }
+        }
+
+        // We didn't find an entity with that ID! Return null
+        return null;
+    }
+
+    public Entity FindEntity( string id )
+    {
+        // Get the id of every entity
+        for (int i = 0; i < entities.Count; i++)
+        {
+            // If entities[i]'s ID fits with the input ID, return that entity
+            if (entities[ i ].GetID() == id)
+            {
+                return entities[i];
             }
         }
 
