@@ -29,30 +29,30 @@ public class DoomNET
     public void Initialize()
     {
         // DEBUG! Load a test map
-        currentFile = WTFFile.LoadFile("maps/test.wtf");
+        //currentFile = WTFFile.LoadFile("maps/test.wtf");
 
-        //currentFile = new();
+        currentFile = new();
 
-        //TestNPC npc = new TestNPC( new Vector3( 50, 55, 50 ), new BBox( new Vector3( 16.0f, 16.0f, 64.0f ), new Vector3( -16.0f, -16.0f, 0.0f ) ) );
-        //npc.SetVelocity( new Vector3( 0f, 0f, 0f ) );
+        TestNPC npc = new TestNPC( new Vector3( 50, 55, 50 ), new BBox( new Vector3( 16.0f, 16.0f, 64.0f ), new Vector3( -16.0f, -16.0f, 0.0f ) ) );
+        npc.SetVelocity( new Vector3( 0f, 0f, 0f ) );
 
-        //TriggerBrush trigger = new TriggerBrush();
-        //trigger.SetBBox( new BBox( new Vector3( -15.0f, -15.0f, -15.0f ), new Vector3( 15.0f, 15.0f, 15.0f ) ) );
-        //trigger.triggerType = TriggerType.Once;
-        //trigger.triggerBy = TriggerBy.Players;
-        //trigger.triggerOn = TriggerOn.Trigger;
-        //trigger.targetEvent = EntityEvent.TakeDamage;
-        //trigger.targetEntity = npc;
-        //trigger.fValue = 100.0f;
+        TriggerBrush trigger = new TriggerBrush();
+        trigger.SetBBox( new BBox( new Vector3( -15.0f, -15.0f, -15.0f ), new Vector3( 15.0f, 15.0f, 15.0f ) ) );
+        trigger.triggerType = TriggerType.Once;
+        trigger.triggerBy = TriggerBy.Players;
+        trigger.triggerOn = TriggerOn.Trigger;
+        trigger.targetEvent = EntityEvent.TakeDamage;
+        trigger.targetEntity = npc;
+        trigger.fValue = 100.0f;
 
-        //Player player = new Player( new Vector3( 50.0f, 50.0f, 50.0f ), new BBox( new Vector3( 32.0f, 32.0f, 64.0f ), new Vector3( -32.0f, -32.0f, 0.0f ) ) );
-        //player.SetVelocity( new Vector3( 1.5f, 0.25f, 0f ) );
+        Player player = new Player( new Vector3( 50.0f, 50.0f, 50.0f ), new BBox( new Vector3( 32.0f, 32.0f, 64.0f ), new Vector3( -32.0f, -32.0f, 0.0f ) ) );
+        player.SetVelocity( new Vector3( 1.5f, 0.25f, 0f ) );
 
-        //currentFile.AddEntity( player );
-        //currentFile.AddEntity( npc );
-        //currentFile.AddEntity( trigger );
+        currentFile.AddEntity( player );
+        currentFile.AddEntity( npc );
+        currentFile.AddEntity( trigger );
 
-        //WTFFile.SaveFile( "maps/test.wtf", currentFile );
+        WTFFile.SaveFile( "maps/test.wtf", currentFile );
 
         // Load everything necessary from the current file
         currentScene = Scene.LoadFromWTFFile( currentFile );

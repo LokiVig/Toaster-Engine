@@ -29,7 +29,7 @@ public class WTFFile
     /// Add an entity to the entities list
     /// </summary>
     /// <param name="entity">Input entity</param>
-    public void AddEntity( Entity entity )
+    public void AddEntity<T>( T entity ) where T : Entity
     {
         entities.Add( entity );
     }
@@ -94,13 +94,34 @@ public class WTFFile
     }
 
     /// <summary>
+    /// Finds an entity according to their ID and argument type
+    /// </summary>
+    /// <param name="id">A specific ID of an entity</param>
+    /// <returns>The desired entity appropriate to the argument ID and type</returns>
+    public T FindEntity<T>( string id ) where T : Entity
+    {
+        // Get the id of every entity
+        for (int i = 0; i < entities.Count; i++)
+        {
+            // If entities[i]'s ID fits with the input ID, and is of the type we requested, return that entity
+            if (entities[ i ].GetID() == id && entities[i] is T entity)
+            {
+                return entity;
+            }
+        }
+
+        // We didn't find an entity with that ID! Return null
+        return null;
+    }
+
+    /// <summary>
     /// Finds an entity according to their ID
     /// </summary>
     /// <param name="id">A specific ID of an entity</param>
     /// <returns>The desired entity appropriate to the argument ID</returns>
     public Entity FindEntity( string id )
     {
-        // Get the id of every entity
+        // Get the ID of every entity
         for (int i = 0; i < entities.Count; i++)
         {
             // If entities[i]'s ID fits with the input ID, return that entity
@@ -198,8 +219,7 @@ public class WTFFile
     /// <returns>The desired file as a variable</returns>
     public static WTFFile LoadFile( string directory )
     {
-        WTFFile file;
-        LoadFile( directory, out file );
+        LoadFile( directory, out WTFFile file );
         return file;
     }
 
@@ -211,6 +231,12 @@ public class WTFFile
     {
         // A local variable for storing the file
         WTFFile file;
+
+        // Ensure that the "maps/" directory actually exists
+        if (!Directory.Exists( "maps/" ))
+        {
+            Directory.CreateDirectory( "maps/ ");
+        }
 
         // If we already have a file open, set the path to the current file
         if ( DoomNET.currentFile != null && !string.IsNullOrEmpty( DoomNET.currentFile.directory ) )
@@ -224,7 +250,7 @@ public class WTFFile
         }
         else // We couldn't find a file to save, error!
         {
-            throw new NullReferenceException( "Error saving file, SaveFile().inFile == null & DoomNET.file == null!" );
+            throw new NullReferenceException( "Error saving file, SaveFile().inFile == null & DoomNET.currentFile == null!" );
         }
 
         // Call the file's OnSave function

@@ -53,14 +53,14 @@ public struct Vertex
         color.a = a;
     }
 
-    public Vertex NormalTransform( Matrix4x4 transform )
+    public Vertex NormalTransform( Vector4 transform )
     {
         normal = ( transform * normal );
         normal.Normalized();
         return this;
     }
 
-    public Vertex VertexTransform( Matrix4x4 transform )
+    public Vertex VertexTransform( Vector4 transform )
     {
         Vector4 vec4 = transform * new Vector4( position );
         vec4.Homogenize();
@@ -70,7 +70,7 @@ public struct Vertex
         return this;
     }
 
-    public Vertex FirstTransform( Matrix4x4 transform, Matrix4x4 normalTransform )
+    public Vertex FirstTransform( Vector4 transform, Vector4 normalTransform )
     {
         Vector4 vec4 = transform * new Vector4( position );
         Vertex temp = new Vertex( new Vector3( vec4.x, vec4.y, vec4.z ) );
