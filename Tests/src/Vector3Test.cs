@@ -350,7 +350,7 @@ public class Vector3Test
             Vector3 value1 = new Vector3( value1_x = rand.Next( RAND_MIN, RAND_MAX ), value1_y = rand.Next( RAND_MIN, RAND_MAX ), value1_z = rand.Next( RAND_MIN, RAND_MAX ) );
             Vector3 value2 = new Vector3( value2_x = rand.Next( RAND_MIN, RAND_MAX ), value2_y = rand.Next( RAND_MIN, RAND_MAX ), value2_z = rand.Next( RAND_MIN, RAND_MAX ) );
 
-            bool expected = (float)Math.Sqrt(value1_x * value1_x + value1_y * value1_y + value1_z * value1_z) - (float)Math.Sqrt(value2_x * value2_x + value2_y * value2_y + value2_z * value2_z) > 0;
+            bool expected = (float)Math.Sqrt( value1_x * value1_x + value1_y * value1_y + value1_z * value1_z ) - (float)Math.Sqrt( value2_x * value2_x + value2_y * value2_y + value2_z * value2_z ) > 0;
 
             bool result = value1 > value2;
 

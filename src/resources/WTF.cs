@@ -194,9 +194,9 @@ public class WTF
     }
     
      /// <summary>
-     /// Find a WTF file by a specific path
+     /// Find a WTF by a specific path
      /// </summary>
-     /// <param name="directory">The specified path to the WTF file</param>
+     /// <param name="directory">The specified path to the WTF</param>
      /// <param name="outFile">An output file, for external uses</param>
      /// <exception cref="FileNotFoundException"></exception>
     public static void LoadFile( string directory, out WTF outFile )
@@ -212,9 +212,9 @@ public class WTF
     }
 
     /// <summary>
-    /// Find a WTF file by a specific path
+    /// Find a WTF by a specific path
     /// </summary>
-    /// <param name="directory">The specified path to the WTF file</param>
+    /// <param name="directory">The specified path to the WTF</param>
     /// <returns>The desired file as a variable</returns>
     public static WTF LoadFile( string directory )
     {
@@ -223,9 +223,9 @@ public class WTF
     }
 
     /// <summary>
-    /// Save a WTF file to a specified path
+    /// Save a WTF to a specified path
     /// </summary>
-    /// <param name="path">The path of the WTF file, already specified if WTFLoader.file and/or its filepath isn't null</param>
+    /// <param name="path">The path of the WTF</param>
     public static void SaveFile( string path, WTF inFile )
     {
         // A local variable for storing the file

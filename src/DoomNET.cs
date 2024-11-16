@@ -1,15 +1,19 @@
 ﻿using System;
+using System.Drawing;
 using System.Diagnostics;
-
 
 using DoomNET.Entities;
 using DoomNET.Resources;
-using DoomNET.Rendering;
+
+using Vortice.Direct3D11;
+using Vortice.Framework;
 
 namespace DoomNET;
 
-public class DoomNET
+public class DoomNET : D3D11Application
 {
+    public override Vortice.Mathematics.SizeI DefaultSize => new Vortice.Mathematics.SizeI( windowWidth, windowHeight );
+
     public static event Action OnUpdate;
     public static WTF currentFile;
     public static Scene currentScene;
@@ -21,8 +25,6 @@ public class DoomNET
     public static int windowWidth = 1280;
     public static int windowHeight = 720;
 
-    private Renderer renderer;
-
     /// <summary>
     /// Initialize the game
     /// </summary>
@@ -33,7 +35,7 @@ public class DoomNET
 
         currentFile = new();
 
-        TestNPC npc = new TestNPC( new Vector3( 50, 55, 50 ), new BBox( new Vector3( 16.0f, 16.0f, 64.0f ), new Vector3( -16.0f, -16.0f, 0.0f ) ) );
+        TestNPC npc = new TestNPC( new Vector3( 0, 5, 0 ), new BBox( new Vector3( 16.0f, 16.0f, 64.0f ), new Vector3( -16.0f, -16.0f, 0.0f ) ) );
         npc.SetVelocity( new Vector3( 0f, 0f, 0f ) );
 
         TriggerBrush trigger = new TriggerBrush();
@@ -45,7 +47,7 @@ public class DoomNET
         trigger.targetEntity = "entity 1";
         trigger.fValue = 100.0f;
 
-        Player player = new Player( new Vector3( 50.0f, 50.0f, 50.0f ), new BBox( new Vector3( 32.0f, 32.0f, 64.0f ), new Vector3( -32.0f, -32.0f, 0.0f ) ) );
+        Player player = new Player( new Vector3( 0, 0, 0 ), new BBox( new Vector3( 32.0f, 32.0f, 64.0f ), new Vector3( -32.0f, -32.0f, 0.0f ) ) );
         player.SetVelocity( new Vector3( 1.5f, 0.25f, 0f ) );
 
         currentFile.AddEntity( player );
@@ -61,42 +63,25 @@ public class DoomNET
         //TestNPC npc = currentScene.FindEntity<TestNPC>("entity 1");
         //TriggerBrush trigger = currentScene.FindEntity<TriggerBrush>( "entity 2" );
 
-        Ray.Trace( player.camera.position, npc, out object hitObject, RayIgnore.None, trigger );
+        Ray.Trace( player, npc, out object hitObject, RayIgnore.None, trigger );
 
-        // Initialize an SDL window
-        renderer = new Renderer();
-
-        // Now we can run the game every frame
-        Update();
-
-        // Clean up everything SDL-wise
-        renderer.CleanUp();
+        // We can now start running this application!
+        Run();
     }
 
-    /// <summary>
-    /// Things to do every frame, game-wise<br/>
-    /// This includes calling every other update function that updates every frame
-    /// </summary>
-    private void Update()
+    protected override void OnRender()
     {
-        // Start the loop
-        active = true;
-
         // Stopwatch to calculate delta time with
         Stopwatch watch = Stopwatch.StartNew();
 
-        while (active)
-        {
-            // Calculate deltaTime
-            deltaTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
-            watch.Restart();
+        // Calculate deltaTime
+        deltaTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
+        watch.Restart();
 
-            // Call the OnUpdate event, so everything else that should update also updates with us
-            OnUpdate?.Invoke();
+        // Call the OnUpdate event, so everything else that should update also updates with us
+        OnUpdate?.Invoke();
 
-            // Poll SDL events and render everything necessary on the window
-            renderer.PollEvents();
-            renderer.Render();
-        }
+        DeviceContext.ClearRenderTargetView( ColorTextureView, Vortice.Mathematics.Colors.CornflowerBlue );
+        DeviceContext.ClearDepthStencilView( DepthStencilView, DepthStencilClearFlags.Depth, 1.0f, 0 );
     }
 }

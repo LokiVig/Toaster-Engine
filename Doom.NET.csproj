@@ -11,12 +11,26 @@
   <ItemGroup>
     <Compile Remove="SpacePlacer\**" />
     <Compile Remove="Tests\**" />
+    <Compile Remove="Vortice.Framework\**" />
     <EmbeddedResource Remove="SpacePlacer\**" />
     <EmbeddedResource Remove="Tests\**" />
+    <EmbeddedResource Remove="Vortice.Framework\**" />
     <None Remove="SpacePlacer\**" />
     <None Remove="Tests\**" />
+    <None Remove="Vortice.Framework\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Sayers.SDL2.Core" Version="1.0.11" />
+    <PackageReference Include="Vortice.D3DCompiler" Version="3.6.2" />
+    <PackageReference Include="Vortice.Direct3D11" Version="3.6.2" />
+    <PackageReference Include="Vortice.DirectX" Version="3.6.2" />
+    <PackageReference Include="Vortice.Dxc" Version="3.6.2" />
+    <PackageReference Include="Vortice.Dxc.Native" Version="1.0.2" />
+    <PackageReference Include="Vortice.DXGI" Version="3.6.2" />
+    <PackageReference Include="Vortice.Mathematics" Version="1.9.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Vortice.Framework">
+      <HintPath>build\Debug\net8.0\Vortice.Framework.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

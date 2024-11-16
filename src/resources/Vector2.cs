@@ -3,8 +3,6 @@
 
 using System;
 
-using DoomNET.Rendering;
-
 namespace DoomNET.Resources;
 
 /// <summary>

@@ -49,7 +49,7 @@ public class TriggerBrush : Entity
         // Check if any entity is intersecting with us
         foreach ( Entity entity in DoomNET.currentFile?.entities )
         {
-            if ( bbox.IntersectingWith( entity.GetPosition() ) )
+            if ( bbox.IntersectingWith( entity.GetBBox() ) )
             {
                 // If they are, we bbox.OnIntersect triggers!
                 OnTrigger();

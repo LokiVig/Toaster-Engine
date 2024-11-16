@@ -3,7 +3,7 @@
 
 using System;
 
-using DoomNET.Rendering;
+using DoomNET.src.resources;
 
 namespace DoomNET.Resources;
 
