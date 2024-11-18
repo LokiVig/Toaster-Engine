@@ -52,31 +52,4 @@ public struct Vertex
         color.b = b;
         color.a = a;
     }
-
-    public Vertex NormalTransform( Vector4 transform )
-    {
-        normal = ( transform * normal );
-        normal.Normalized();
-        return this;
-    }
-
-    public Vertex VertexTransform( Vector4 transform )
-    {
-        Vector4 vec4 = transform * new Vector4( position );
-        vec4.Homogenize();
-        position.x = vec4.x;
-        position.y = vec4.y;
-        position.z = vec4.z;
-        return this;
-    }
-
-    public Vertex FirstTransform( Vector4 transform, Vector4 normalTransform )
-    {
-        Vector4 vec4 = transform * new Vector4( position );
-        Vertex temp = new Vertex( new Vector3( vec4.x, vec4.y, vec4.z ) );
-
-        temp.normal = normalTransform * normal;
-        temp.normal.Normalized();
-        return temp;
-    }
 }
