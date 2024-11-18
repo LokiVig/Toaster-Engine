@@ -21,11 +21,11 @@ public class TriggerBrush : Entity
 
     public TriggerOn triggerOn { get; set; } // When should this trigger, trigger?
     public TriggerType triggerType { get; set; } // Which type of trigger is this?
-    public TriggerBy triggerBy { get; set; } // What should this trigger trigger from?
+    public TriggerBy triggerBy { get; set; } // What should this trigger, trigger from?
     public int triggerCount { get; set; } // The max amount of times this trigger should be triggered
 
     private int triggeredCount; // The amount of times this trigger has been triggered
-    private bool hasTriggered; // Determines whether or not this trigger has already been triggered
+    private bool hasTriggered; // Determines whether this trigger has already been triggered
 
     public override EntityType type => EntityType.TriggerBrush; // This entity is of type TriggerBrush
 

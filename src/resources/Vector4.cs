@@ -14,7 +14,7 @@ public struct Vector4
 
     public Vector4()
     {
-        x = y = z = w = 0;
+        this = zero;
     }
 
     public Vector4( float xyzw )
@@ -38,8 +38,8 @@ public struct Vector4
         this.w = w;
     }
 
-    public static Vector4 One => new Vector4( 1, 1, 1, 1 );
-    public static Vector4 Zero => new Vector4( 0, 0, 0, 0 );
+    public static Vector4 one => new Vector4( 1, 1, 1, 1 );
+    public static Vector4 zero => new Vector4( 0, 0, 0, 0 );
 
     public static float DistanceBetween( Vector4 source, Vector4 dest )
     {

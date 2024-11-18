@@ -36,8 +36,8 @@ public class RayTest
         int errorCount = 0;
         List<(Vector3 origin, Vector3 direction, bool result1, object result2, bool expected1, object epxected2)> errorList = new();
 
-        Vector3 origin = Vector3.Zero;
-        Vector3 direction = Vector3.Zero;
+        Vector3 origin = Vector3.zero;
+        Vector3 direction = Vector3.zero;
 
         bool result1 = false;
         object? result2 = null;

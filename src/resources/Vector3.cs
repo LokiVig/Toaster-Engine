@@ -18,7 +18,7 @@ public struct Vector3
 
     public Vector3()
     {
-        x = y = z = 0.0f;
+        this = zero;
     }
 
     public Vector3( float xyz )
@@ -40,8 +40,8 @@ public struct Vector3
         this.z = z;
     }
 
-    public static Vector3 One => new Vector3( 1, 1, 1 );
-    public static Vector3 Zero => new Vector3( 0, 0, 0 );
+    public static Vector3 one => new Vector3( 1, 1, 1 );
+    public static Vector3 zero => new Vector3( 0, 0, 0 );
 
     public static float DistanceBetween( Vector3 source, Vector3 dest )
     {
