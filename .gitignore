@@ -1,7 +1,12 @@
+# Basic VS22 files
 *.vsidx
 obj/*
 build/*
 .vs/*
 
+# Rider files
+.idea/*
+
+# Built files for other projects
 SpacePlacer/obj/*
 Tests/obj/*

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Text.Json;
-using System.Text.Encodings.Web;
 using DoomNET.Entities;
 
 namespace DoomNET;
 
 public class Program
 {
-    public static JsonSerializerOptions serializerOptions = new()
+    public static readonly JsonSerializerOptions serializerOptions = new()
     {
         WriteIndented = true,
         AllowTrailingCommas = true,

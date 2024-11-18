@@ -61,8 +61,8 @@ public class DoomNET : D3D11Application
         //TestNPC npc = currentScene.FindEntity<TestNPC>("entity 1");
         //TriggerBrush trigger = currentScene.FindEntity<TriggerBrush>( "entity 2" );
 
-        Ray.Trace( player, npc, out object hitObject, RayIgnore.None, trigger );
-
+        Ray.Trace( player, npc, out object hitObject, RayIgnore.None, [trigger] );
+        
         Run();
     }
 
