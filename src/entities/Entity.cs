@@ -25,15 +25,15 @@ public class Entity
 
     public Entity()
     {
-        position = Vector3.zero;
-        bbox = BBox.zero;
+        position = Vector3.Zero;
+        bbox = BBox.Zero;
         Spawn();
     }
 
     public Entity( Vector3 position )
     {
         this.position = position;
-        bbox = BBox.zero;
+        bbox = BBox.Zero;
         Spawn();
     }
 
@@ -50,7 +50,7 @@ public class Entity
     public void Spawn()
     {
         // Null the velocity
-        velocity = Vector3.zero;
+        velocity = Vector3.Zero;
 
         // This entity is now alive
         alive = true;
@@ -84,7 +84,7 @@ public class Entity
         // If the velocity's magnitude <= 0.5, it's effectively zero, so zero it out for the sake of ease
         if (velocity.Magnitude() <= 0.5f)
         {
-            velocity = Vector3.zero;
+            velocity = Vector3.Zero;
         }
     }
 

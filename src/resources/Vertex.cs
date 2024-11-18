@@ -14,27 +14,27 @@ public struct Vertex
     public Vertex( Vector3 position )
     {
         this.position = position;
-        normal = Vector4.zero;
+        normal = Vector4.Zero;
     }
 
     public Vertex( Vector3 position, Vector2 texCoords )
     {
         this.position = position;
         this.texCoords = texCoords;
-        normal = Vector4.zero;
+        normal = Vector4.Zero;
     }
 
     public Vertex( float x, float y, float z )
     {
         position = new Vector3( x, y, z );
-        normal = Vector4.zero;
+        normal = Vector4.Zero;
     }
 
     public Vertex( float x, float y, float z, Vector2 texCoords )
     {
         position = new Vector3( x, y, z );
         this.texCoords = texCoords;
-        normal = Vector4.zero;
+        normal = Vector4.Zero;
     }
 
     public void SetColor( Color newColor )

@@ -132,7 +132,7 @@ public class Ray
 
                                     foreach (object obj in ignoreObjects)
                                     {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\"" : obj )} ";
+                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
                                     }
 
                                     return objects;
@@ -184,7 +184,7 @@ public class Ray
 
                                     foreach (object obj in ignoreObjects)
                                     {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\"" : obj )} ";
+                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
                                     }
 
                                     return objects;
@@ -214,7 +214,7 @@ public class Ray
 
                                     foreach (object obj in ignoreObjects)
                                     {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\"" : obj )} ";
+                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
                                     }
 
                                     return objects;
@@ -274,7 +274,7 @@ public class Ray
 
                                     foreach (object obj in ignoreObjects)
                                     {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\"" : obj )} ";
+                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
                                     }
 
                                     return objects;
@@ -325,7 +325,7 @@ public class Ray
 
                                     foreach (object obj in ignoreObjects)
                                     {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\"" : obj )} ";
+                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
                                     }
 
                                     return objects;
@@ -355,7 +355,7 @@ public class Ray
 
                                     foreach (object obj in ignoreObjects)
                                     {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\"" : obj )} ";
+                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
                                     }
 
                                     return objects;
@@ -492,7 +492,7 @@ public class Ray
 
                                     foreach (object obj in ignoreObjects)
                                     {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\"" : obj )} ";
+                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
                                     }
 
                                     return objects;
@@ -543,7 +543,7 @@ public class Ray
 
                                     foreach (object obj in ignoreObjects)
                                     {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\"" : obj )} ";
+                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
                                     }
 
                                     return objects;
@@ -573,7 +573,7 @@ public class Ray
 
                                     foreach (object obj in ignoreObjects)
                                     {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\"" : obj )} ";
+                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
                                     }
 
                                     return objects;
@@ -633,7 +633,7 @@ public class Ray
 
                                     foreach (object obj in ignoreObjects)
                                     {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\"" : obj )} ";
+                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
                                     }
 
                                     return objects;
@@ -684,7 +684,7 @@ public class Ray
 
                                     foreach (object obj in ignoreObjects)
                                     {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\"" : obj )} ";
+                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
                                     }
 
                                     return objects;
@@ -702,24 +702,24 @@ public class Ray
 
         // Also log to console
         Console.WriteLine( $"Trace failed.\n" +
-                                $"\tStart: {entStart} (\"{entStart.GetID()}\")\n" +
-                                $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
-                                $"\tHit object: N/A\n" +
-                                $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore objects: {( ignoreObjects == null ?
-                                "N/A" :
-                                () =>
-                                {
-                                    string objects = string.Empty;
+                           $"\tStart: {entStart} (\"{entStart.GetID()}\")\n" +
+                           $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
+                           $"\tHit object: N/A\n" +
+                           $"\tRayIgnore: {rayIgnore}\n" +
+                           $"\tIgnore objects: {( ignoreObjects == null ?
+                                   "N/A" :
+                                   () =>
+                                   {
+                                       string objects = string.Empty;
 
-                                    foreach (object obj in ignoreObjects)
-                                    {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\"" : obj )} ";
-                                    }
+                                       foreach (object obj in ignoreObjects)
+                                       {
+                                           objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
+                                       }
 
-                                    return objects;
-                                }
-                                )}\n" );
+                                       return objects;
+                                   }
+                               )}\n" );
 
         // We didn't hit anything, so it's false
         return false;
@@ -851,7 +851,7 @@ public class Ray
 
                                     foreach (object obj in ignoreObjects)
                                     {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\"" : obj )} ";
+                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
                                     }
 
                                     return objects;
@@ -902,7 +902,7 @@ public class Ray
 
                                     foreach (object obj in ignoreObjects)
                                     {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\"" : obj )} ";
+                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
                                     }
 
                                     return objects;
@@ -932,7 +932,7 @@ public class Ray
 
                                     foreach (object obj in ignoreObjects)
                                     {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\"" : obj )} ";
+                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
                                     }
 
                                     return objects;
@@ -992,7 +992,7 @@ public class Ray
 
                                     foreach (object obj in ignoreObjects)
                                     {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\"" : obj )} ";
+                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
                                     }
 
                                     return objects;
@@ -1043,7 +1043,7 @@ public class Ray
 
                                     foreach (object obj in ignoreObjects)
                                     {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\"" : obj )} ";
+                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
                                     }
 
                                     return objects;
@@ -1061,24 +1061,24 @@ public class Ray
 
         // Also log to console
         Console.WriteLine( $"Trace failed.\n" +
-                                $"\tStart: {rayStart}\n" +
-                                $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
-                                $"\tHit object: N/A\n" +
-                                $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore objects: {( ignoreObjects == null ?
-                                "N/A" :
-                                () =>
-                                {
-                                    string objects = string.Empty;
+                           $"\tStart: {rayStart}\n" +
+                           $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
+                           $"\tHit object: N/A\n" +
+                           $"\tRayIgnore: {rayIgnore}\n" +
+                           $"\tIgnore objects: {( ignoreObjects == null ?
+                                   "N/A" :
+                                   () =>
+                                   {
+                                       string objects = string.Empty;
 
-                                    foreach (object obj in ignoreObjects)
-                                    {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\"" : obj )} ";
-                                    }
+                                       foreach (object obj in ignoreObjects)
+                                       {
+                                           objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
+                                       }
 
-                                    return objects;
-                                }
-                                )}\n" );
+                                       return objects;
+                                   }
+                               )}\n" );
 
         // We didn't hit anything, so it's false
         return false;

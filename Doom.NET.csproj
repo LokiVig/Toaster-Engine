@@ -32,6 +32,6 @@
     </Reference>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)src\resources\place_in_build\*&quot; &quot;$(SolutionDir)build\bin\net8.0\&quot;" />
+    <Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)src\resources\place_in_build\*&quot; &quot;$(OutDir)&quot;" />
   </Target>
 </Project>

@@ -10,8 +10,8 @@ public class BBox
     public Vector3 maxs { get; set; } // The max extents of this BBox
     public Vector3 mins { get; set; } // The min extents of this BBox
 
-    public static BBox one = new BBox(Vector3.one, -Vector3.one);
-    public static BBox zero = new BBox(Vector3.zero, Vector3.zero);
+    public static readonly BBox One = new BBox(Vector3.One, -Vector3.One);
+    public static readonly BBox Zero = new BBox(Vector3.Zero, Vector3.Zero);
     
     public BBox()
     {

@@ -15,7 +15,7 @@ public struct Vector2
 
     public Vector2()
     {
-        this = zero;
+        this = Zero;
     }
 
     public Vector2( float xy )
@@ -29,8 +29,8 @@ public struct Vector2
         this.y = y;
     }
 
-    public static Vector2 one => new Vector2( 1, 1 );
-    public static Vector2 zero => new Vector2( 0, 0 );
+    public static readonly Vector2 One = new Vector2( 1, 1 );
+    public static readonly Vector2 Zero = new Vector2( 0, 0 );
 
     public static float DistanceBetween( Vector2 source, Vector2 dest )
     {
@@ -107,32 +107,32 @@ public struct Vector2
 
     public static bool operator <( Vector2 lhs, Vector2 rhs )
     {
-        return lhs.x < rhs.x && lhs.y < rhs.y;
+        return lhs.Magnitude() - rhs.Magnitude() < 0;
     }
 
     public static bool operator <( Vector2 lhs, float rhs )
     {
-        return lhs.x < rhs && lhs.y < rhs;
+        return lhs.Magnitude() - rhs < 0;
     }
 
     public static bool operator <( float lhs, Vector2 rhs )
     {
-        return lhs < rhs.x && lhs < rhs.y;
+        return lhs - rhs.Magnitude() < 0;
     }
 
     public static bool operator >( Vector2 lhs, Vector2 rhs )
     {
-        return lhs.x > rhs.x && lhs.y > rhs.y;
+        return lhs.Magnitude() - rhs.Magnitude() > 0;
     }
 
     public static bool operator >( Vector2 lhs, float rhs )
     {
-        return lhs.x > rhs && lhs.y > rhs;
+        return lhs.Magnitude() - rhs > 0;
     }
 
     public static bool operator >( float lhs, Vector2 rhs )
     {
-        return lhs > rhs.x && lhs > rhs.y;
+        return lhs - rhs.Magnitude() < 0;
     }
 
     public static bool operator <=( Vector2 lhs, Vector2 rhs )
