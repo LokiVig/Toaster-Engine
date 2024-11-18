@@ -1,12 +1,13 @@
-﻿using System;
-using System.Drawing;
-using System.Diagnostics;
+﻿#pragma warning disable CA1416
 
-using DoomNET.Entities;
-using DoomNET.Resources;
+using System;
+using System.Diagnostics;
 
 using Vortice.Direct3D11;
 using Vortice.Framework;
+
+using DoomNET.Entities;
+using DoomNET.Resources;
 
 namespace DoomNET;
 
@@ -17,11 +18,8 @@ public class DoomNET : D3D11Application
     public static event Action OnUpdate;
     public static WTF currentFile;
     public static Scene currentScene;
-
     public static bool active;
-
     public static float deltaTime;
-
     public static int windowWidth = 1280;
     public static int windowHeight = 720;
 
@@ -65,7 +63,6 @@ public class DoomNET : D3D11Application
 
         Ray.Trace( player, npc, out object hitObject, RayIgnore.None, trigger );
 
-        // We can now start running this application!
         Run();
     }
 
@@ -83,5 +80,10 @@ public class DoomNET : D3D11Application
 
         DeviceContext.ClearRenderTargetView( ColorTextureView, Vortice.Mathematics.Colors.CornflowerBlue );
         DeviceContext.ClearDepthStencilView( DepthStencilView, DepthStencilClearFlags.Depth, 1.0f, 0 );
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
     }
 }

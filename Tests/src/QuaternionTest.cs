@@ -69,7 +69,7 @@ public class QuaternionTests
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) + value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
 
-            throw new Exception( $"errorCount > 0 (errorCount: {errorCount})! This means we have at least *an* error." );
+            throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
         }
     }
 
@@ -117,7 +117,7 @@ public class QuaternionTests
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) - value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
 
-            throw new Exception( $"errorCount > 0 (errorCount: {errorCount})! This means we have at least *an* error." );
+            throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
         }
     }
 
@@ -176,7 +176,7 @@ public class QuaternionTests
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) * value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
 
-            throw new Exception( $"errorCount > 0 (errorCount: {errorCount})! This means we have at least *an* error." );
+            throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
         }
     }
 
@@ -234,7 +234,7 @@ public class QuaternionTests
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) * value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
 
-            throw new Exception( $"errorCount > 0 (errorCount: {errorCount})! This means we have at least *an* error." );
+            throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
         }
     }
 
@@ -293,7 +293,7 @@ public class QuaternionTests
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) / value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
 
-            throw new Exception( $"errorCount > 0 (errorCount: {errorCount})! This means we have at least *an* error." );
+            throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
         }
     }
 
@@ -351,7 +351,7 @@ public class QuaternionTests
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) / value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
 
-            throw new Exception( $"errorCount > 0 (errorCount: {errorCount})! This means we have at least *an* error." );
+            throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
         }
     }
 
@@ -392,7 +392,7 @@ public class QuaternionTests
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) < value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
 
-            throw new Exception( $"errorCount > 0 (errorCount: {errorCount})! This means we have at least *an* error." );
+            throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
         }
     }
 
@@ -433,7 +433,7 @@ public class QuaternionTests
                 Console.WriteLine( $"(Error #{i + 1}) value1 ({errorList[ i ].value1}) > value2 ({errorList[ i ].value2}) != expected ({errorList[ i ].expected}) (result was {errorList[ i ].result})" );
             }
 
-            throw new Exception( $"errorCount > 0 (errorCount: {errorCount})! This means we have at least *an* error." );
+            throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
         }
     }
 }

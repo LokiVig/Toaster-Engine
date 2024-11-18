@@ -21,12 +21,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Vortice.D3DCompiler" Version="3.6.2" />
+    <PackageReference Include="Vortice.Direct2D1" Version="3.6.2" />
     <PackageReference Include="Vortice.Direct3D11" Version="3.6.2" />
-    <PackageReference Include="Vortice.DirectX" Version="3.6.2" />
     <PackageReference Include="Vortice.Dxc" Version="3.6.2" />
     <PackageReference Include="Vortice.Dxc.Native" Version="1.0.2" />
-    <PackageReference Include="Vortice.DXGI" Version="3.6.2" />
-    <PackageReference Include="Vortice.Mathematics" Version="1.9.3" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Vortice.Framework">
