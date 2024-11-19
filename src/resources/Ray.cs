@@ -22,7 +22,7 @@ public class Ray
             foreach (Entity entity in DoomNET.currentScene?.GetEntities())
             {
                 // Are we intersecting with this entity's bounding box?
-                if (entity.GetBBox().IntersectingWith( rayEnd ))
+                if (entity.GetBBox().RayIntersects( rayStart, rayEnd, 5000 ))
                 {
                     // We've hit this entity!
                     // The hitObject is now this entity, and we're returning true
@@ -48,7 +48,7 @@ public class Ray
             foreach (Brush brush in DoomNET.currentScene?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
-                if (brush.GetBBox().IntersectingWith( rayEnd ))
+                if (brush.GetBBox().RayIntersects( rayStart, rayEnd, 5000 ))
                 {
                     // We've hit this brush!
                     // The hitObject is now this brush, and we're returning true
@@ -99,7 +99,7 @@ public class Ray
             foreach (Entity entity in DoomNET.currentScene?.GetEntities())
             {
                 // Are we intersecting with this entity's bounding box?
-                if (entity.GetBBox().IntersectingWith( rayEnd ))
+                if (entity.GetBBox().RayIntersects( rayStart, rayEnd, 5000 ))
                 {
                     // We've hit this entity!
                     // The hitObject is now this entity, and we're returning true
@@ -151,7 +151,7 @@ public class Ray
             foreach (Brush brush in DoomNET.currentScene?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
-                if (brush.GetBBox().IntersectingWith( rayEnd ))
+                if (brush.GetBBox().RayIntersects( rayStart, rayEnd, 5000 ))
                 {
                     // We've hit this brush!
                     // The hitObject is now this brush, and we're returning true
@@ -241,7 +241,7 @@ public class Ray
             foreach (Entity entity in DoomNET.currentScene?.GetEntities())
             {
                 // Are we intersecting with this entity's bounding box?
-                if (entity.GetBBox().IntersectingWith( rayEnd ))
+                if (entity.GetBBox().RayIntersects( rayStart, rayEnd, rayLength ))
                 {
                     // We've hit this entity!
                     // The hitObject is now this entity, and we're returning true
@@ -293,7 +293,7 @@ public class Ray
             foreach (Brush brush in DoomNET.currentScene?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
-                if (brush.GetBBox().IntersectingWith( rayEnd ))
+                if (brush.GetBBox().RayIntersects( rayStart, rayEnd, rayLength ))
                 {
                     // We've hit this brush!
                     // The hitObject is now this brush, and we're returning true
@@ -382,7 +382,7 @@ public class Ray
             foreach (Entity entity in DoomNET.currentScene?.GetEntities())
             {
                 // Are we intersecting with this entity's bounding box?
-                if (entity.GetBBox().IntersectingWith( rayEnd ))
+                if (entity.GetBBox().RayIntersects( entStart.GetPosition(), rayEnd, 5000 ))
                 {
                     // We've hit this entity!
                     // The hitObject is now this entity, and we're returning true
@@ -408,7 +408,7 @@ public class Ray
             foreach (Brush brush in DoomNET.currentScene?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
-                if (brush.GetBBox().IntersectingWith( rayEnd ))
+                if (brush.GetBBox().RayIntersects( entStart.GetPosition(), rayEnd, 5000 ))
                 {
                     // We've hit this brush!
                     // The hitObject is now this brush, and we're returning true
@@ -444,7 +444,7 @@ public class Ray
     }
 
     /// <summary>
-    /// Trace a ray from a specified starting position (<see cref="Vector3"/>) to a direction (<see cref="Vector3"/>), 
+    /// Trace a ray from a specified starting position (<see cref="Entity"/>) to a direction (<see cref="Entity"/>), 
     /// with <see cref="RayIgnore"/> flags, specific <see langword="object"/>(s) to ignore, and lengths (<see langword="float"/>) 
     /// </summary>
     /// <returns><see langword="true"/> and the <see langword="object"/> we hit, <see langword="false"/> and <see langword="null"/> if nothing was hit.</returns>
@@ -459,7 +459,7 @@ public class Ray
             foreach (Entity entity in DoomNET.currentScene?.GetEntities())
             {
                 // Are we intersecting with this entity's bounding box?
-                if (entity.GetBBox().IntersectingWith( rayEnd ))
+                if (entity.GetBBox().RayIntersects( entStart.GetPosition(), rayEnd, 5000 ))
                 {
                     // We've hit this entity!
                     // The hitObject is now this entity, and we're returning true
@@ -511,7 +511,7 @@ public class Ray
             foreach (Brush brush in DoomNET.currentScene?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
-                if (brush.GetBBox().IntersectingWith( rayEnd ))
+                if (brush.GetBBox().RayIntersects( entStart.GetPosition(), rayEnd, 5000 ))
                 {
                     // We've hit this brush!
                     // The hitObject is now this brush, and we're returning true
@@ -585,7 +585,7 @@ public class Ray
     }
 
     /// <summary>
-    /// Trace a ray from a specified starting position (<see cref="Vector3"/>) to a direction (<see cref="Vector3"/>), 
+    /// Trace a ray from a specified starting position (<see cref="Entity"/>) to a direction (<see cref="Entity"/>), 
     /// with <see cref="RayIgnore"/> flags, specific <see langword="object"/>(s) to ignore, and lengths (<see langword="float"/>) 
     /// </summary>
     /// <returns><see langword="true"/> and the <see langword="object"/> we hit, <see langword="false"/> and <see langword="null"/> if nothing was hit.</returns>
@@ -600,7 +600,7 @@ public class Ray
             foreach (Entity entity in DoomNET.currentScene?.GetEntities())
             {
                 // Are we intersecting with this entity's bounding box?
-                if (entity.GetBBox().IntersectingWith( rayEnd ))
+                if (entity.GetBBox().RayIntersects( entStart.GetPosition(), rayEnd, rayLength ))
                 {
                     // We've hit this entity!
                     // The hitObject is now this entity, and we're returning true
@@ -652,7 +652,7 @@ public class Ray
             foreach (Brush brush in DoomNET.currentScene?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
-                if (brush.GetBBox().IntersectingWith( rayEnd ))
+                if (brush.GetBBox().RayIntersects( entStart.GetPosition(), rayEnd, rayLength ))
                 {
                     // We've hit this brush!
                     // The hitObject is now this brush, and we're returning true
@@ -741,7 +741,7 @@ public class Ray
             foreach (Entity entity in DoomNET.currentScene?.GetEntities())
             {
                 // Are we intersecting with this entity's bounding box?
-                if (entity.GetBBox().IntersectingWith( rayEnd ))
+                if (entity.GetBBox().RayIntersects( rayStart, rayEnd, 5000 ))
                 {
                     // We've hit this entity!
                     // The hitObject is now this entity, and we're returning true
@@ -767,7 +767,7 @@ public class Ray
             foreach (Brush brush in DoomNET.currentScene?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
-                if (brush.GetBBox().IntersectingWith( rayEnd ))
+                if (brush.GetBBox().RayIntersects( rayStart, rayEnd, 5000 ))
                 {
                     // We've hit this brush!
                     // The hitObject is now this brush, and we're returning true
@@ -818,7 +818,7 @@ public class Ray
             foreach (Entity entity in DoomNET.currentScene?.GetEntities())
             {
                 // Are we intersecting with this entity's bounding box?
-                if (entity.GetBBox().IntersectingWith( rayEnd ))
+                if (entity.GetBBox().RayIntersects( rayStart, rayEnd, 5000 ))
                 {
                     // We've hit this entity!
                     // The hitObject is now this entity, and we're returning true
@@ -870,7 +870,7 @@ public class Ray
             foreach (Brush brush in DoomNET.currentScene?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
-                if (brush.GetBBox().IntersectingWith( rayEnd ))
+                if (brush.GetBBox().RayIntersects( rayStart, rayEnd, 5000 ))
                 {
                     // We've hit this brush!
                     // The hitObject is now this brush, and we're returning true
@@ -959,7 +959,7 @@ public class Ray
             foreach (Entity entity in DoomNET.currentScene?.GetEntities())
             {
                 // Are we intersecting with this entity's bounding box?
-                if (entity.GetBBox().IntersectingWith( rayEnd ))
+                if (entity.GetBBox().RayIntersects( rayStart, rayEnd, rayLength ))
                 {
                     // We've hit this entity!
                     // The hitObject is now this entity, and we're returning true
@@ -1011,7 +1011,7 @@ public class Ray
             foreach (Brush brush in DoomNET.currentScene?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
-                if (brush.GetBBox().IntersectingWith( rayEnd ))
+                if (brush.GetBBox().RayIntersects( rayStart, rayEnd, 5000 ))
                 {
                     // We've hit this brush!
                     // The hitObject is now this brush, and we're returning true
