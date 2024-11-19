@@ -20,18 +20,11 @@
     <None Remove="Vortice.Framework\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Vortice.D3DCompiler" Version="3.6.2" />
-    <PackageReference Include="Vortice.Direct2D1" Version="3.6.2" />
-    <PackageReference Include="Vortice.Direct3D11" Version="3.6.2" />
-    <PackageReference Include="Vortice.Dxc" Version="3.6.2" />
-    <PackageReference Include="Vortice.Dxc.Native" Version="1.0.2" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="Vortice.Framework">
       <HintPath>build\Debug\net8.0\Vortice.Framework.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)src\resources\place_in_build\*&quot; &quot;$(OutDir)&quot;" />
-  </Target>
+  <ItemGroup>
+    <PackageReference Include="OpenTK" Version="5.0.0-pre.13" />
+  </ItemGroup>
 </Project>

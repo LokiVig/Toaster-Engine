@@ -3,18 +3,13 @@
 using System;
 using System.Diagnostics;
 
-using Vortice.Direct3D11;
-using Vortice.Framework;
-
 using DoomNET.Entities;
 using DoomNET.Resources;
 
 namespace DoomNET;
 
-public class DoomNET : D3D11Application
+public class DoomNET
 {
-    public override Vortice.Mathematics.SizeI DefaultSize => new Vortice.Mathematics.SizeI( windowWidth, windowHeight );
-
     public static event Action OnUpdate;
     public static WTF currentFile;
     public static Scene currentScene;
@@ -63,27 +58,26 @@ public class DoomNET : D3D11Application
 
         Ray.Trace( player, npc, out object hitObject, RayIgnore.None, [trigger] );
         
-        Run();
+        // Call the update function, so the game will run once every frame!
+        Update();
     }
 
-    protected override void OnRender()
+    private void Update()
     {
+        // We're now active! We should therefore activate the update loop
+        active = true;
+        
         // Stopwatch to calculate delta time with
         Stopwatch watch = Stopwatch.StartNew();
+        
+        while (active)
+        {
+            // Calculate deltaTime
+            deltaTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
+            watch.Restart();
 
-        // Calculate deltaTime
-        deltaTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
-        watch.Restart();
-
-        // Call the OnUpdate event, so everything else that should update also updates with us
-        OnUpdate?.Invoke();
-
-        DeviceContext.ClearRenderTargetView( ColorTextureView, Vortice.Mathematics.Colors.CornflowerBlue );
-        DeviceContext.ClearDepthStencilView( DepthStencilView, DepthStencilClearFlags.Depth, 1.0f, 0 );
-    }
-
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
+            // Call the OnUpdate event, so everything else that should update also updates with us
+            OnUpdate?.Invoke();
+        }
     }
 }
