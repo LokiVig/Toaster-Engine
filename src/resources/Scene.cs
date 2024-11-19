@@ -2,7 +2,6 @@
 
 using DoomNET.Entities;
 
-
 namespace DoomNET.Resources;
 
 /// <summary>
