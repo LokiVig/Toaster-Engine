@@ -1,15 +1,15 @@
 ﻿using DoomNET.Resources;
-using DoomNET.src.resources;
+using DoomNET.Rendering;
 
 namespace DoomNET.Entities;
 
 public class Player : Entity
 {
     public override EntityType type => EntityType.Player; // This entity is of type Player
-    public override float health => 100.0f;
+    
+    protected float _health = 100.0f;
 
-    public Camera camera;
-
+    private Camera camera;
     private float armor = 0.0f; // Remove a certain amount of damage taken if armor isn't 0, and decrease the armor value when taking damage
 
     public Player() : base() { }
@@ -31,9 +31,6 @@ public class Player : Entity
 
         // Handle movements
         HandleMovement();
-
-        // Take user inputs to make this player move
-        HandleInput();
     }
 
     public override void TakeDamage( float damage, Entity source = null )
@@ -42,23 +39,14 @@ public class Player : Entity
         if (armor > 0.0f)
         {
             armor -= damage;
-            health -= damage / 2;
+            _health -= damage / 2;
         }
         else if (armor <= 0.0f) // Take regular amount of damage if no armor
         {
-            health -= damage;
+            _health -= damage;
         }
 
         // We have taken damage, OnDamage call!
         OnDamage();
-    }
-
-    /// <summary>
-    /// Method to handle player inputs, for moving and looking around
-    /// </summary>
-    private void HandleInput()
-    {
-        //byte inputKey;
-        //Vector2 mousePos;
     }
 }

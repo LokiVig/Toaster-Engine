@@ -10,13 +10,15 @@ namespace DoomNET.Entities;
 /// </summary>
 public class Entity
 {
-    public Vector3 position { get; set; } // This entity's current position
-    public BBox bbox { get; set; } // This entity's bounding box
-    public Quaternion rotation { get; set; } // This entity's current rotation
-    public string id { get; set; } // This entity's identifier
+    public Vector3 position; // This entity's current position
+    public BBox bbox; // This entity's bounding box
+    public Quaternion rotation; // This entity's current rotation
+    public string id; // This entity's identity
+    public float health => _health;
 
     public virtual EntityType type { get; set; } // This entity's type, e.g. brush entity or other
-    public virtual float health { get; set; } // The amount of health this entity has
+    
+    protected float _health; // The amount of health this entity has
 
     private Vector3 velocity; // This entity's current velocity
     private bool alive; // Is this entity alive?
@@ -76,7 +78,7 @@ public class Entity
     protected void HandleMovement()
     {
         // Position is affected by velocity
-        position += velocity * DoomNET.deltaTime * DoomNET.deltaTime;
+        position += velocity * DoomNET.deltaTime;
 
         // Velocity decreases with time (effectively drag)
         velocity *= ( 1 - 0.1f * DoomNET.deltaTime );
@@ -93,7 +95,7 @@ public class Entity
     /// </summary>
     public float GetHealth()
     {
-        return health;
+        return _health;
     }
 
     /// <summary>
@@ -218,6 +220,7 @@ public class Entity
     /// Subtract this entity's health by the parameter and trigger related events
     /// </summary>
     /// <param name="damage">The amount of damage this entity should take</param>
+    /// <param name="source">The source entity of the damage</param>
     public virtual void TakeDamage( float damage, Entity source = null )
     {
         // We've been damaged by someone or something!
@@ -235,7 +238,7 @@ public class Entity
         lastAttacker = source;
 
         // Lower this entity's health by the set amount of damage
-        health -= damage;
+        _health -= damage;
 
         // This entity has taken damage! Call the relevant event
         OnDamage();

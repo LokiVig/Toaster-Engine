@@ -26,5 +26,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="OpenTK" Version="5.0.0-pre.13" />
+    <PackageReference Include="StbImageSharp" Version="2.30.15" />
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)src\rendering\shaders\*&quot; &quot;$(OutDir)\resources\shaders\&quot;" />
+  </Target>
 </Project>

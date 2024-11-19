@@ -7,7 +7,7 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <BaseOutputPath>$(SolutionDir)build\</BaseOutputPath>
+    <BaseOutputPath>$(SolutionDir)build\tests\</BaseOutputPath>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
   </PropertyGroup>
 
@@ -24,6 +24,14 @@
 
   <ItemGroup>
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="src\BBoxTest.cs" />
+    <Compile Include="src\QuaternionTest.cs" />
+    <Compile Include="src\Vector2Test.cs" />
+    <Compile Include="src\Vector3Test.cs" />
+    <Compile Include="src\Vector4Test.cs" />
   </ItemGroup>
 
 </Project>

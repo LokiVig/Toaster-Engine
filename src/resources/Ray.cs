@@ -231,7 +231,7 @@ public class Ray
     /// </summary>
     /// <returns><see langword="true"/> and the <see langword="object"/> we hit, <see langword="false"/> and <see langword="null"/> if nothing was hit.</returns>
     public static bool Trace( Vector3 rayStart, Vector3 rayDirection, out object hitObject, RayIgnore rayIgnore = RayIgnore.None, object[] ignoreObjects = null, float rayLength = 5000 )
-    {
+    {   
         Vector3 rayEnd = ( rayStart + rayDirection.Normalized() ) * rayLength;
 
         // If we're not ignoring entities

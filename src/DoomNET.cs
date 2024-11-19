@@ -5,6 +5,7 @@ using System.Diagnostics;
 
 using DoomNET.Entities;
 using DoomNET.Resources;
+using DoomNET.Rendering;
 
 namespace DoomNET;
 
@@ -13,11 +14,12 @@ public class DoomNET
     public static event Action OnUpdate;
     public static WTF currentFile;
     public static Scene currentScene;
-    public static bool active;
     public static float deltaTime;
     public static int windowWidth = 1280;
     public static int windowHeight = 720;
 
+    private Renderer renderer;
+    
     /// <summary>
     /// Initialize the game
     /// </summary>
@@ -58,26 +60,23 @@ public class DoomNET
 
         Ray.Trace( player, npc, out object hitObject, RayIgnore.None, [trigger] );
         
-        // Call the update function, so the game will run once every frame!
-        Update();
+        renderer = new Renderer(windowWidth, windowHeight, "Doom.NET"); // Initialize a new window to render upon
+        renderer.OnRender += Update; // Subscribe the update method, so everytime something is rendered, we update the game
+        renderer.Run(); // Run the renderer
     }
+    
+    private Stopwatch watch = Stopwatch.StartNew();
 
+    /// <summary>
+    /// Update game functions.
+    /// </summary>
     private void Update()
     {
-        // We're now active! We should therefore activate the update loop
-        active = true;
-        
-        // Stopwatch to calculate delta time with
-        Stopwatch watch = Stopwatch.StartNew();
-        
-        while (active)
-        {
-            // Calculate deltaTime
-            deltaTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
-            watch.Restart();
+        // Calculate deltaTime
+        deltaTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
+        watch.Restart();
 
-            // Call the OnUpdate event, so everything else that should update also updates with us
-            OnUpdate?.Invoke();
-        }
+        // Call the OnUpdate event, so everything else that should update also updates with us
+        OnUpdate?.Invoke();
     }
 }

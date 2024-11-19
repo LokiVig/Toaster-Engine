@@ -3,8 +3,6 @@
 
 using System;
 
-using DoomNET.src.resources;
-
 namespace DoomNET.Resources;
 
 /// <summary>
@@ -80,22 +78,6 @@ public struct Vector3
     public static Vector3 Normalize( Vector3 vector )
     {
         return vector.Normalized();
-    }
-
-    public static Vector3 ScreenToWorldDirection( int x, int y, Camera camera )
-    {
-        // Convert screen coordinates to world coordinates
-        float aspectRatio = (float)DoomNET.windowWidth / DoomNET.windowHeight;
-        float fovScale = (float)Math.Tan( camera.fieldOfView * 0.5 * Math.PI / 180 );
-
-        float px = ( 2 * ( ( x + 0.5f ) / DoomNET.windowWidth ) - 1 ) * aspectRatio * fovScale;
-        float py = ( 1 - 2 * ( ( y + 0.5f ) / DoomNET.windowHeight ) ) * fovScale;
-
-        // Get the screen direction vector
-        Vector3 screenDirection = new Vector3( px, py, -1 ).Normalized();
-
-        // Transform by the camera's orientation
-        return camera.TransformDirection( screenDirection );
     }
 
     public readonly override string ToString()

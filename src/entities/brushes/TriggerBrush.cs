@@ -119,7 +119,7 @@ public class TriggerBrush : Entity
 
         if ( bValue != -1 ) // Bool value event
         {
-            DoomNET.currentScene.FindEntity( targetEntity ).OnEvent( targetEvent, bValue == 1 ? true : false, this );
+            DoomNET.currentScene.FindEntity( targetEntity ).OnEvent( targetEvent, bValue == 1, this );
         }
 
         if ( vValue != 0 ) // Vector3 value event
