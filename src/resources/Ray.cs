@@ -43,7 +43,7 @@ public class Ray
                                 $"\tDirection: {rayDirection}\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore object: N/A\n" );
+                                $"\tIgnore objects: N/A\n" );
 
                     return true;
                 }
@@ -69,7 +69,7 @@ public class Ray
                                 $"\tDirection: {rayDirection}\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore object: N/A\n" );
+                                $"\tIgnore objects: N/A\n" );
 
                     return true;
                 }
@@ -86,7 +86,7 @@ public class Ray
                                 $"\tDirection: {rayDirection}\n" +
                                 $"\tHit object: N/A\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore object: N/A\n" );
+                                $"\tIgnore objects: N/A\n" );
 
         // We didn't hit anything, so it's false
         return false;
@@ -141,20 +141,7 @@ public class Ray
                                 $"\tDirection: {rayDirection}\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore objects: {( ignoreObjects == null ?
-                                "N/A" :
-                                () =>
-                                {
-                                    string objects = string.Empty;
-
-                                    foreach (object obj in ignoreObjects)
-                                    {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
-                                    }
-
-                                    return objects;
-                                }
-                                )}\n" );
+                                $"\tIgnore objects: {( ignoreObjects == null ? "N/A" : ignoreObjects)}\n" );
 
                     return true;
                 }
@@ -193,20 +180,7 @@ public class Ray
                                 $"\tDirection: {rayDirection}\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore objects: {( ignoreObjects == null ?
-                                "N/A" :
-                                () =>
-                                {
-                                    string objects = string.Empty;
-
-                                    foreach (object obj in ignoreObjects)
-                                    {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
-                                    }
-
-                                    return objects;
-                                }
-                                )}\n" );
+                                $"\tIgnore objects: {( ignoreObjects == null ? "N/A" : ignoreObjects)}\n" );
 
                     return true;
                 }
@@ -223,20 +197,7 @@ public class Ray
                                 $"\tDirection: {rayDirection}\n" +
                                 $"\tHit object: N/A\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore objects: {( ignoreObjects == null ?
-                                "N/A" :
-                                () =>
-                                {
-                                    string objects = string.Empty;
-
-                                    foreach (object obj in ignoreObjects)
-                                    {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
-                                    }
-
-                                    return objects;
-                                }
-                                )}\n" );
+                                $"\tIgnore objects: {( ignoreObjects == null ? "N/A" : ignoreObjects)}\n" );
 
         // We didn't hit anything, so it's false
         return false;
@@ -291,20 +252,7 @@ public class Ray
                                 $"\tDirection: {rayDirection}\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore objects: {( ignoreObjects == null ?
-                                "N/A" :
-                                () =>
-                                {
-                                    string objects = string.Empty;
-
-                                    foreach (object obj in ignoreObjects)
-                                    {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
-                                    }
-
-                                    return objects;
-                                }
-                                )}\n" );
+                                $"\tIgnore objects: {( ignoreObjects == null ? "N/A" : ignoreObjects)}\n" );
 
                     return true;
                 }
@@ -342,20 +290,7 @@ public class Ray
                                 $"\tDirection: {rayDirection}\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore objects: {( ignoreObjects == null ?
-                                "N/A" :
-                                () =>
-                                {
-                                    string objects = string.Empty;
-
-                                    foreach (object obj in ignoreObjects)
-                                    {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
-                                    }
-
-                                    return objects;
-                                }
-                                )}\n" );
+                                $"\tIgnore objects: {( ignoreObjects == null ? "N/A" : ignoreObjects)}\n" );
 
                     return true;
                 }
@@ -368,24 +303,11 @@ public class Ray
 
         // Also log to console
         Console.WriteLine( $"Trace failed.\n" +
-                                $"\tStart: {rayStart}\n" +
-                                $"\tDirection: {rayDirection}\n" +
-                                $"\tHit object: N/A\n" +
-                                $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore objects: {( ignoreObjects == null ?
-                                "N/A" :
-                                () =>
-                                {
-                                    string objects = string.Empty;
-
-                                    foreach (object obj in ignoreObjects)
-                                    {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
-                                    }
-
-                                    return objects;
-                                }
-                                )}\n" );
+                           $"\tStart: {rayStart}\n" +
+                           $"\tDirection: {rayDirection}\n" +
+                           $"\tHit object: N/A\n" +
+                           $"\tRayIgnore: {rayIgnore}\n" +
+                           $"\tIgnore objects: {( ignoreObjects == null ? "N/A" : ignoreObjects)}\n" );
 
         // We didn't hit anything, so it's false
         return false;
@@ -423,11 +345,11 @@ public class Ray
 
                     // Log to the console that we've succeeded
                     Console.WriteLine( $"Trace succeeded.\n" +
-                                $"\tStart: {entStart} (\"{entStart.GetID()}\")\n" +
-                                $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
+                                $"\tStart: {entStart}\n" +
+                                $"\tDirection: {entDirection}\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore object: N/A\n" );
+                                $"\tIgnore objects: N/A\n" );
 
                     return true;
                 }
@@ -449,11 +371,11 @@ public class Ray
 
                     // Log to the console that we've succeeded
                     Console.WriteLine( $"Trace succeeded.\n" +
-                                $"\tStart: {entStart} (\"{entStart.GetID()}\")\n" +
-                                $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
+                                $"\tStart: {entStart}\n" +
+                                $"\tDirection: {entDirection}\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore object: N/A\n" );
+                                $"\tIgnore objects: N/A\n" );
 
                     return true;
                 }
@@ -466,11 +388,11 @@ public class Ray
 
         // Also log to console
         Console.WriteLine( $"Trace failed.\n" +
-                                $"\tStart: {entStart} (\"{entStart.GetID()}\")\n" +
-                                $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
+                                $"\tStart: {entStart}\n" +
+                                $"\tDirection: {entDirection}\n" +
                                 $"\tHit object: N/A\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore object: N/A\n" );
+                                $"\tIgnore objects: N/A\n" );
 
         // We didn't hit anything, so it's false
         return false;
@@ -521,24 +443,11 @@ public class Ray
 
                     // Log to the console that we've succeeded
                     Console.WriteLine( $"Trace succeeded.\n" +
-                                $"\tStart: {entStart} (\"{entStart.GetID()}\")\n" +
-                                $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
+                                $"\tStart: {entStart}\n" +
+                                $"\tDirection: {entDirection}\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore objects: {( ignoreObjects == null ?
-                                "N/A" :
-                                () =>
-                                {
-                                    string objects = string.Empty;
-
-                                    foreach (object obj in ignoreObjects)
-                                    {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
-                                    }
-
-                                    return objects;
-                                }
-                                )}\n" );
+                                $"\tIgnore objects: {( ignoreObjects == null ? "N/A" : ignoreObjects)}\n" );
 
                     return true;
                 }
@@ -572,24 +481,11 @@ public class Ray
 
                     // Log to the console that we've succeeded
                     Console.WriteLine( $"Trace succeeded.\n" +
-                                $"\tStart: {entStart} (\"{entStart.GetID()}\")\n" +
-                                $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
+                                $"\tStart: {entStart}\n" +
+                                $"\tDirection: {entDirection}\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore objects: {( ignoreObjects == null ?
-                                "N/A" :
-                                () =>
-                                {
-                                    string objects = string.Empty;
-
-                                    foreach (object obj in ignoreObjects)
-                                    {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
-                                    }
-
-                                    return objects;
-                                }
-                                )}\n" );
+                                $"\tIgnore objects: {( ignoreObjects == null ? "N/A" : ignoreObjects)}\n" );
 
                     return true;
                 }
@@ -602,24 +498,11 @@ public class Ray
 
         // Also log to console
         Console.WriteLine( $"Trace failed.\n" +
-                                $"\tStart: {entStart} (\"{entStart.GetID()}\")\n" +
-                                $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
-                                $"\tHit object: N/A\n" +
-                                $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore objects: {( ignoreObjects == null ?
-                                "N/A" :
-                                () =>
-                                {
-                                    string objects = string.Empty;
-
-                                    foreach (object obj in ignoreObjects)
-                                    {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
-                                    }
-
-                                    return objects;
-                                }
-                                )}\n" );
+                           $"\tStart: {entStart}\n" +
+                           $"\tDirection: {entDirection}\n" +
+                           $"\tHit object: N/A\n" +
+                           $"\tRayIgnore: {rayIgnore}\n" +
+                           $"\tIgnore objects: {( ignoreObjects == null ? "N/A" : ignoreObjects)}\n" );
 
         // We didn't hit anything, so it's false
         return false;
@@ -670,24 +553,11 @@ public class Ray
 
                     // Log to the console that we've succeeded
                     Console.WriteLine( $"Trace succeeded.\n" +
-                                $"\tStart: {entStart} (\"{entStart.GetID()}\")\n" +
-                                $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
+                                $"\tStart: {entStart} \n" +
+                                $"\tDirection: {entDirection}\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore objects: {( ignoreObjects == null ?
-                                "N/A" :
-                                () =>
-                                {
-                                    string objects = string.Empty;
-
-                                    foreach (object obj in ignoreObjects)
-                                    {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
-                                    }
-
-                                    return objects;
-                                }
-                                )}\n" );
+                                $"\tIgnore objects: {( ignoreObjects == null ? "N/A" : ignoreObjects)}\n" );
 
                     return true;
                 }
@@ -721,24 +591,11 @@ public class Ray
 
                     // Log to the console that we've succeeded
                     Console.WriteLine( $"Trace succeeded.\n" +
-                                $"\tStart: {entStart} (\"{entStart.GetID()}\")\n" +
-                                $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
+                                $"\tStart: {entStart} \n" +
+                                $"\tDirection: {entDirection}\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore objects: {( ignoreObjects == null ?
-                                "N/A" :
-                                () =>
-                                {
-                                    string objects = string.Empty;
-
-                                    foreach (object obj in ignoreObjects)
-                                    {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
-                                    }
-
-                                    return objects;
-                                }
-                                )}\n" );
+                                $"\tIgnore objects: {( ignoreObjects == null ? "N/A" : ignoreObjects)}\n" );
 
                     return true;
                 }
@@ -751,24 +608,11 @@ public class Ray
 
         // Also log to console
         Console.WriteLine( $"Trace failed.\n" +
-                           $"\tStart: {entStart} (\"{entStart.GetID()}\")\n" +
-                           $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
+                           $"\tStart: {entStart}\n" +
+                           $"\tDirection: {entDirection}\n" +
                            $"\tHit object: N/A\n" +
                            $"\tRayIgnore: {rayIgnore}\n" +
-                           $"\tIgnore objects: {( ignoreObjects == null ?
-                                   "N/A" :
-                                   () =>
-                                   {
-                                       string objects = string.Empty;
-
-                                       foreach (object obj in ignoreObjects)
-                                       {
-                                           objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
-                                       }
-
-                                       return objects;
-                                   }
-                               )}\n" );
+                           $"\tIgnore objects: {( ignoreObjects == null ? "N/A" : ignoreObjects)}\n" );
 
         // We didn't hit anything, so it's false
         return false;
@@ -807,10 +651,10 @@ public class Ray
                     // Log to the console that we've succeeded
                     Console.WriteLine( $"Trace succeeded.\n" +
                                 $"\tStart: {rayStart}\n" +
-                                $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
+                                $"\tDirection: {entDirection}\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore object: N/A\n" );
+                                $"\tIgnore objects: N/A\n" );
 
                     return true;
                 }
@@ -833,10 +677,10 @@ public class Ray
                     // Log to the console that we've succeeded
                     Console.WriteLine( $"Trace succeeded.\n" +
                                 $"\tStart: {rayStart}\")\n" +
-                                $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
+                                $"\tDirection: {entDirection}\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore object: N/A\n" );
+                                $"\tIgnore objects: N/A\n" );
 
                     return true;
                 }
@@ -850,10 +694,10 @@ public class Ray
         // Also log to console
         Console.WriteLine( $"Trace failed.\n" +
                                 $"\tStart: {rayStart}\n" +
-                                $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
+                                $"\tDirection: {entDirection}\n" +
                                 $"\tHit object: N/A\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore object: N/A\n" );
+                                $"\tIgnore objects: N/A\n" );
 
         // We didn't hit anything, so it's false
         return false;
@@ -905,23 +749,10 @@ public class Ray
                     // Log to the console that we've succeeded
                     Console.WriteLine( $"Trace succeeded.\n" +
                                 $"\tStart: {rayStart}\n" +
-                                $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
+                                $"\tDirection: {entDirection}\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore objects: {( ignoreObjects == null ?
-                                "N/A" :
-                                () =>
-                                {
-                                    string objects = string.Empty;
-
-                                    foreach (object obj in ignoreObjects)
-                                    {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
-                                    }
-
-                                    return objects;
-                                }
-                                )}\n" );
+                                $"\tIgnore objects: {( ignoreObjects == null ? "N/A" : ignoreObjects)}\n" );
 
                     return true;
                 }
@@ -956,23 +787,10 @@ public class Ray
                     // Log to the console that we've succeeded
                     Console.WriteLine( $"Trace succeeded.\n" +
                                 $"\tStart: {rayStart}\n" +
-                                $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
+                                $"\tDirection: {entDirection}\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore objects: {( ignoreObjects == null ?
-                                "N/A" :
-                                () =>
-                                {
-                                    string objects = string.Empty;
-
-                                    foreach (object obj in ignoreObjects)
-                                    {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
-                                    }
-
-                                    return objects;
-                                }
-                                )}\n" );
+                                $"\tIgnore objects: {( ignoreObjects == null ? "N/A" : ignoreObjects)}\n" );
 
                     return true;
                 }
@@ -985,24 +803,11 @@ public class Ray
 
         // Also log to console
         Console.WriteLine( $"Trace failed.\n" +
-                                $"\tStart: {rayStart}\n" +
-                                $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
-                                $"\tHit object: N/A\n" +
-                                $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore objects: {( ignoreObjects == null ?
-                                "N/A" :
-                                () =>
-                                {
-                                    string objects = string.Empty;
-
-                                    foreach (object obj in ignoreObjects)
-                                    {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
-                                    }
-
-                                    return objects;
-                                }
-                                )}\n" );
+                           $"\tStart: {rayStart}\n" +
+                           $"\tDirection: {entDirection}\n" +
+                           $"\tHit object: N/A\n" +
+                           $"\tRayIgnore: {rayIgnore}\n" +
+                           $"\tIgnore objects: {( ignoreObjects == null ? "N/A" : ignoreObjects)}\n" );
 
         // We didn't hit anything, so it's false
         return false;
@@ -1054,23 +859,10 @@ public class Ray
                     // Log to the console that we've succeeded
                     Console.WriteLine( $"Trace succeeded.\n" +
                                 $"\tStart: {rayStart}\n" +
-                                $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
+                                $"\tDirection: {entDirection}\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore objects: {( ignoreObjects == null ?
-                                "N/A" :
-                                () =>
-                                {
-                                    string objects = string.Empty;
-
-                                    foreach (object obj in ignoreObjects)
-                                    {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
-                                    }
-
-                                    return objects;
-                                }
-                                )}\n" );
+                                $"\tIgnore objects: {( ignoreObjects == null ? "N/A" : ignoreObjects)}\n" );
 
                     return true;
                 }
@@ -1105,23 +897,10 @@ public class Ray
                     // Log to the console that we've succeeded
                     Console.WriteLine( $"Trace succeeded.\n" +
                                 $"\tStart: {rayStart}\n" +
-                                $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
+                                $"\tDirection: {entDirection}\n" +
                                 $"\tHit object: {hitObject}\n" +
                                 $"\tRayIgnore: {rayIgnore}\n" +
-                                $"\tIgnore objects: {( ignoreObjects == null ?
-                                "N/A" :
-                                () =>
-                                {
-                                    string objects = string.Empty;
-
-                                    foreach (object obj in ignoreObjects)
-                                    {
-                                        objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
-                                    }
-
-                                    return objects;
-                                }
-                                )}\n" );
+                                $"\tIgnore objects: {( ignoreObjects == null ? "N/A" : ignoreObjects)}\n" );
 
                     return true;
                 }
@@ -1135,23 +914,10 @@ public class Ray
         // Also log to console
         Console.WriteLine( $"Trace failed.\n" +
                            $"\tStart: {rayStart}\n" +
-                           $"\tDirection: {entDirection} (\"{entDirection.GetID()}\")\n" +
+                           $"\tDirection: {entDirection}\n" +
                            $"\tHit object: N/A\n" +
                            $"\tRayIgnore: {rayIgnore}\n" +
-                           $"\tIgnore objects: {( ignoreObjects == null ?
-                                   "N/A" :
-                                   () =>
-                                   {
-                                       string objects = string.Empty;
-
-                                       foreach (object obj in ignoreObjects)
-                                       {
-                                           objects += $"{( obj is Entity ent ? $"{obj} (\"{ent.GetID()}\")" : obj )} ";
-                                       }
-
-                                       return objects;
-                                   }
-                               )}\n" );
+                           $"\tIgnore objects: {( ignoreObjects == null ? "N/A" : ignoreObjects)}\n" );
 
         // We didn't hit anything, so it's false
         return false;

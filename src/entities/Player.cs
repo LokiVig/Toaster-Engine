@@ -7,9 +7,10 @@ public class Player : Entity
 {
     public override EntityType type => EntityType.Player; // This entity is of type Player
     
-    protected float _health = 100.0f;
+    public Camera camera;
 
-    private Camera camera;
+    protected float _health = 100.0f;
+    
     private float armor = 0.0f; // Remove a certain amount of damage taken if armor isn't 0, and decrease the armor value when taking damage
 
     public Player() : base()
@@ -26,7 +27,7 @@ public class Player : Entity
     {
         base.OnSpawn();
 
-        camera = new Camera( bbox.maxs - 12 /* (64 - 12 => 52) */, rotation );
+        camera = new Camera( bbox.maxs - 12 /* (64 - 12 => 52) */, (float)DoomNET.windowWidth / DoomNET.windowHeight );
     }
 
     protected override void Update()

@@ -1,6 +1,4 @@
-﻿#pragma warning disable CA1416
-
-using System;
+﻿using System;
 using System.Diagnostics;
 
 using DoomNET.Entities;
@@ -9,6 +7,11 @@ using DoomNET.Rendering;
 
 namespace DoomNET;
 
+/// <summary>
+/// The game itself.<br/>
+/// This class handles initializing and running everything game-wise, meaning it holds the Update function,
+/// important variables such as deltaTime, the current file, and the current scene.
+/// </summary>
 public class DoomNET
 {
     public static event Action OnUpdate;
@@ -17,7 +20,7 @@ public class DoomNET
     public static float deltaTime;
     public static int windowWidth = 1280;
     public static int windowHeight = 720;
-
+    
     private Renderer renderer;
     
     /// <summary>
@@ -53,6 +56,10 @@ public class DoomNET
 
         Player player = playerSpawner.SpawnEntity<Player>();
         TestNPC npc = npcSpawner.SpawnEntity<TestNPC>();
+        
+        // Create the ID for the NPC and player
+        player.CreateID();
+        npc.CreateID();
         
         Ray.Trace( player, npc, out object hitObject, RayIgnore.None, [trigger] );
         

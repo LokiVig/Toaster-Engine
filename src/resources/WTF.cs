@@ -8,12 +8,12 @@ using DoomNET.Entities;
 namespace DoomNET.Resources;
 
 /// <summary>
-/// A WTF, acronym for World Tracking File, describes all of the entities and brushes of a map
+/// A WTF, acronym for World Tracking File, describes all the entities and brushes of a map
 /// </summary>
 public class WTF
 {
     public List<Entity> entities { get; set; } = new(); // List of entities in this WTF file
-    public List<Brush> brushes { get; set; } = new(); // All of the brushes in this WTF file
+    public List<Brush> brushes { get; set; } = new(); // All the brushes in this WTF file
 
     public string directory { get; set; } // The directory of which this WTF file is saved at
 

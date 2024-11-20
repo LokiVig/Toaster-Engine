@@ -238,7 +238,7 @@ public class Entity
         List<Entity> entities = DoomNET.currentScene?.GetEntities();
         
         // For every entity...
-        for (int i = 0; i < entities.Count; i++)
+        for (int i = 0; i < entities?.Count; i++)
         {
             // If the entity we're currently checking is us
             if (entities[i] == this)
@@ -274,7 +274,11 @@ public class Entity
                 break;
 
             case EntityEvent.Delete: // Delete this entity
-                // Delete this entity, somehow
+                // Remove this entity from the current scene
+                DoomNET.currentScene?.RemoveEntity(this);
+                
+                // Also kill this entity, for good measure
+                OnDeath();
                 break;
 
             default: // Most likely happens when an invalid event was attempted on this entity
@@ -341,12 +345,32 @@ public class Entity
         }
     }
 
+    /// <summary>
+    /// Call an event that takes a <see cref="Quaternion"/> for a value.
+    /// </summary>
+    /// <param name="eEvent">Desired event to do to this entity.</param>
+    /// <param name="qValue">Value as <see cref="Quaternion"/>.</param>
     public void OnEvent( EntityEvent eEvent, Quaternion qValue, Entity source = null )
     {
         switch (eEvent)
         {
             case EntityEvent.SetRotation:
                 SetRotation( qValue );
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Call an event that takes a <see cref="Entity"/> for a value.
+    /// </summary>
+    /// <param name="eEvent">Desired event to do to this entity.</param>
+    /// <param name="eValue">Value as <see cref="Entity"/>.</param>
+    public void OnEvent(EntityEvent eEvent, Entity eValue, Entity source = null)
+    {
+        switch (eEvent)
+        {
+            case EntityEvent.SpawnEntity:
+                (this as EntitySpawner)?.SpawnEntity(eValue);
                 break;
         }
     }
@@ -414,5 +438,10 @@ public class Entity
     {
         // Also trigger OnDeath, but replace their sprite with a gory version
         OnDeath();
+    }
+
+    public override string ToString()
+    {
+        return $"{GetType()} (\"{GetID()}\")";
     }
 }

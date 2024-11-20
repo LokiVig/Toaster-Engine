@@ -60,8 +60,8 @@ public class BBoxTest
             Vector3 maxs2 = new Vector3( maxs2_x, maxs2_y, maxs2_z );
             Vector3 mins2 = new Vector3( mins2_x, mins2_y, mins2_z );
 
-            BBox value1 = new BBox( maxs1, mins1 );
-            BBox value2 = new BBox( maxs2, mins2 );
+            BBox value1 = new BBox( mins1, maxs1 );
+            BBox value2 = new BBox( mins2, maxs2 );
 
             bool expected = ( mins1 <= maxs2 && maxs1 >= mins2 );
 
@@ -110,7 +110,7 @@ public class BBoxTest
             Vector3 maxs1 = new Vector3( maxs1_x, maxs1_y, maxs1_z );
             Vector3 mins1 = new Vector3( mins1_x, mins1_y, mins1_z );
 
-            BBox value1 = new BBox( maxs1, mins1 );
+            BBox value1 = new BBox( mins1, maxs1 );
             Vector3 value2 = new Vector3( maxs2_x, maxs2_y, maxs2_z );
 
             bool expected = value2.x >= mins1.x && value2.x <= maxs1.x &&

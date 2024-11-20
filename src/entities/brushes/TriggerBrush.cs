@@ -103,7 +103,7 @@ public class TriggerBrush : Entity
                                     $"\t\tbValue: {( bValue > -1 ? ( bValue == 0 ? "False" : "True" ) : "" )}\n" +
                                     $"\t\tvValue: {vValue}\n" +
                                     $"\t\tqValue: {qValue}\n" +
-                                    $"\t\teValue: {(eValue == null ? "N/A" : $"{eValue} (\"{eValue.GetID()}\")")}\n" +
+                                    $"\t\teValue: {(eValue == null ? "N/A" : eValue)}\n" +
                                     $"\t\tbbValue: {bbValue}\n" +
                                 $"\tTrigger type: {triggerType}\n" +
                                 $"\tTrigger by: {triggerBy}\n" +
@@ -132,6 +132,11 @@ public class TriggerBrush : Entity
         if ( qValue != 0 ) // Quaternion value event
         {
             DoomNET.currentScene.FindEntity( targetEntity ).OnEvent( targetEvent, qValue, this );
+        }
+
+        if (eValue != null) // Entity value event
+        {
+            DoomNET.currentScene.FindEntity(targetEntity).OnEvent(targetEvent, eValue, this);
         }
 
         if ( bbValue != null ) // BBox value event

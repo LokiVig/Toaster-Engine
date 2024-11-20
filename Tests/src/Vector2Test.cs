@@ -254,7 +254,12 @@ public class Vector2Test
         // Do 5000 tests
         for ( int i = 0; i < 5000; i++ )
         {
-            value2_x = rand.Next( RAND_MIN, RAND_MAX );
+            // We can't divide by zero, so retry!
+            if ((value2_x = rand.Next(RAND_MIN, RAND_MAX)) == 0)
+            {
+                i--;
+                continue;
+            }
 
             Vector2 expected = new Vector2
                 (

@@ -259,9 +259,16 @@ public class Vector3Test
         // Do 5000 tests
         for ( int i = 0; i < 5000; i++ )
         {
+            // We can't divide by zero, so retry!
+            if ((value2_x = rand.Next(RAND_MIN, RAND_MAX)) == 0)
+            {
+                i--;
+                continue;
+            }
+            
             Vector3 expected = new Vector3
                 (
-                    ( value1_x = rand.Next( RAND_MIN, RAND_MAX ) ) / (value2_x = rand.Next(RAND_MIN, RAND_MAX)),
+                    ( value1_x = rand.Next( RAND_MIN, RAND_MAX ) ) / value2_x,
                     ( value1_y = rand.Next( RAND_MIN, RAND_MAX ) ) / value2_x,
                     ( value1_z = rand.Next( RAND_MIN, RAND_MAX ) ) / value2_x
                 );

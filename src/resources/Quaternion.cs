@@ -67,6 +67,28 @@ public struct Quaternion
 
         return new Quaternion( axis.x * sin, axis.y * sin, axis.z * sin, (float)Math.Cos( halfAngle ) );
     }
+    
+    // This is the only place I could think to place these methods... lol
+    
+    /// <summary>
+    /// Calculate degrees from radians.
+    /// </summary>
+    /// <param name="radians">The radian we want to turn into degrees.</param>
+    /// <returns>Input as degrees.</returns>
+    public static float RadiansToDegrees(float radians)
+    {
+        return radians * 180 / (float)Math.PI;
+    }
+
+    /// <summary>
+    /// Calculate radians from degrees.
+    /// </summary>
+    /// <param name="degrees">The degree we want to turn into radians.</param>
+    /// <returns>Input as radians.</returns>
+    public static float DegreesToRadians(float degrees)
+    {
+        return degrees * (float)Math.PI / 180;
+    }
 
     public readonly override string ToString()
     {
