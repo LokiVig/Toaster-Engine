@@ -44,6 +44,7 @@ public class DoomNET
         trigger.targetEvent = EntityEvent.TakeDamage;
         trigger.targetEntity = "entity 4";
         trigger.fValue = 100.0f;
+        trigger.Spawn();
         
         currentFile.AddEntity( playerSpawner );
         currentFile.AddEntity( npcSpawner );
