@@ -1,6 +1,5 @@
 ﻿using System;
-
-
+using System.Collections.Generic;
 using DoomNET.Resources;
 
 namespace DoomNET.Entities;
@@ -11,8 +10,8 @@ namespace DoomNET.Entities;
 public class Entity
 {
     public Vector3 position; // This entity's current position
-    public BBox bbox; // This entity's bounding box
     public Quaternion rotation; // This entity's current rotation
+    public BBox bbox; // This entity's bounding box
     public string id; // This entity's identity
     public float health => _health;
 
@@ -25,25 +24,11 @@ public class Entity
     private Entity target; // The entity this entity's targeting
     private Entity lastAttacker; // The last entity to attack this entity
 
-    public Entity()
-    {
-        position = Vector3.Zero;
-        bbox = BBox.Zero;
-        Spawn();
-    }
+    public Entity() { }
 
     public Entity( Vector3 position )
     {
         this.position = position;
-        bbox = BBox.Zero;
-        Spawn();
-    }
-
-    public Entity( Vector3 position, BBox bbox )
-    {
-        this.position = position;
-        this.bbox = bbox;
-        Spawn();
     }
 
     /// <summary>
@@ -242,6 +227,34 @@ public class Entity
 
         // This entity has taken damage! Call the relevant event
         OnDamage();
+    }
+
+    /// <summary>
+    /// Generate an ID for this entity.
+    /// </summary>
+    public void CreateID()
+    {
+        // Easier to use variable for the list of entities in the current scene
+        List<Entity> entities = DoomNET.currentScene?.GetEntities();
+        
+        // For every entity...
+        for (int i = 0; i < entities.Count; i++)
+        {
+            // If the entity we're currently checking is us
+            if (entities[i] == this)
+            {
+                // If we are a player
+                if (this is Player)
+                {
+                    // We're lucky! We have that designation on us now
+                    SetID("player");
+                    return; // We don't want to overwrite that special ID
+                }
+                
+                // We're just some regular joe, set our entity ID appropriately
+                SetID($"entity {i}");
+            }
+        }
     }
 
     #region ONEVENTS

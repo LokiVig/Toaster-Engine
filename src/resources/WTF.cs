@@ -174,17 +174,10 @@ public class WTF
     /// </summary>
     public void OnSave()
     {
-        // For every entity, set their ID to i, 0 should always be the player
+        // For every entity, set their ID appropriately
         for (int i = 0; i < entities.Count; i++)
         {
-            if (entities[ i ] is Player)
-            {
-                entities[ i ].SetID( "player" );
-            }
-            else
-            {
-                entities[ i ].SetID( $"entity {i}" );
-            }
+            entities[ i ].SetID( $"entity {i}" );
         }
 
         for (int i = 0; i < brushes.Count; i++)

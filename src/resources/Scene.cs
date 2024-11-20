@@ -88,6 +88,16 @@ public class Scene
     }
 
     /// <summary>
+    /// Add an entity to the scene.
+    /// </summary>
+    /// <param name="ent">A specific entity to add to this scene.</param>
+    /// <typeparam name="T">Anything that is an entity should be added to the scene.</typeparam>
+    public void AddEntity<T>(T ent) where T : Entity
+    {
+        entities.Add(ent);
+    }
+
+    /// <summary>
     /// Finds an entity according to their ID
     /// </summary>
     /// <param name="id">A specific ID of an entity</param>

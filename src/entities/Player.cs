@@ -12,11 +12,15 @@ public class Player : Entity
     private Camera camera;
     private float armor = 0.0f; // Remove a certain amount of damage taken if armor isn't 0, and decrease the armor value when taking damage
 
-    public Player() : base() { }
+    public Player() : base()
+    {
+        SetBBox(new BBox(new Vector3(-32, -32, 0), new Vector3(32, 32, 64)));
+    }
 
-    public Player( Vector3 position ) : base( position ) { }
-
-    public Player( Vector3 position, BBox bbox ) : base( position, bbox ) { }
+    public Player(Vector3 position) : base(position)
+    {
+        SetBBox(new BBox(new Vector3(-32, -32, 0), new Vector3(32, 32, 64)));
+    }
 
     protected override void OnSpawn()
     {

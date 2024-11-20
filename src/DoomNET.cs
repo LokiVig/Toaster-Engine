@@ -30,8 +30,8 @@ public class DoomNET
 
         currentFile = new();
 
-        TestNPC npc = new TestNPC( new Vector3( 0, 5, 0 ), new BBox( new Vector3( 16.0f, 16.0f, 64.0f ), new Vector3( -16.0f, -16.0f, 0.0f ) ) );
-        npc.SetVelocity( new Vector3( 0f, 0f, 0f ) );
+        EntitySpawner playerSpawner = new EntitySpawner(new Player());
+        EntitySpawner npcSpawner = new EntitySpawner(new TestNPC());
 
         TriggerBrush trigger = new TriggerBrush();
         trigger.SetBBox( new BBox( new Vector3( -15.0f, -15.0f, -15.0f ), new Vector3( 15.0f, 15.0f, 15.0f ) ) );
@@ -39,25 +39,21 @@ public class DoomNET
         trigger.triggerBy = TriggerBy.Players;
         trigger.triggerOn = TriggerOn.Trigger;
         trigger.targetEvent = EntityEvent.TakeDamage;
-        trigger.targetEntity = "entity 1";
+        trigger.targetEntity = "entity 4";
         trigger.fValue = 100.0f;
-
-        Player player = new Player( new Vector3( 0, 0, 0 ), new BBox( new Vector3( 32.0f, 32.0f, 64.0f ), new Vector3( -32.0f, -32.0f, 0.0f ) ) );
-        player.SetVelocity( new Vector3( 1.5f, 0.25f, 0f ) );
-
-        currentFile.AddEntity( player );
-        currentFile.AddEntity( npc );
+        
+        currentFile.AddEntity( playerSpawner );
+        currentFile.AddEntity( npcSpawner );
         currentFile.AddEntity( trigger );
 
         WTF.SaveFile( "maps/test.wtf", currentFile );
 
         // Load everything necessary from the current file
-        currentScene = Scene.LoadFromWTFFile( currentFile );
+        currentScene = Scene.LoadFromWTFFile(currentFile);
 
-        //Player player = currentScene.FindEntity<Player>("player");
-        //TestNPC npc = currentScene.FindEntity<TestNPC>("entity 1");
-        //TriggerBrush trigger = currentScene.FindEntity<TriggerBrush>( "entity 2" );
-
+        Player player = playerSpawner.SpawnEntity<Player>();
+        TestNPC npc = npcSpawner.SpawnEntity<TestNPC>();
+        
         Ray.Trace( player, npc, out object hitObject, RayIgnore.None, [trigger] );
         
         renderer = new Renderer(windowWidth, windowHeight, "Doom.NET"); // Initialize a new window to render upon
@@ -76,6 +72,23 @@ public class DoomNET
         deltaTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
         watch.Restart();
 
+        // Check every entity in the current scene
+        foreach (Entity ent in currentScene?.GetEntities())
+        {
+            // If this entity doesn't have an ID...
+            if (string.IsNullOrEmpty(ent.GetID()))
+            {
+                // Create an ID for the entity!
+                ent.CreateID();
+            }
+            
+            // DEBUG: Log every entity, their position, velocity, BBox, and ID
+            // Console.WriteLine($"Entity {ent} (\"{ent.GetID()}\")\n" +
+            //                     $"\tPosition: {ent.GetPosition()}\n" +
+            //                     $"\tVelocity: {ent.GetVelocity()}\n" +
+            //                     $"\tBBox: {ent.GetBBox()}\n");
+        }
+        
         // Call the OnUpdate event, so everything else that should update also updates with us
         OnUpdate?.Invoke();
     }

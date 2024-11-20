@@ -18,9 +18,18 @@ public class Ray
         // If we're not ignoring entities
         if (!rayIgnore.HasFlag( RayIgnore.Entities ))
         {
+            
             // Check every entity
             foreach (Entity entity in DoomNET.currentScene?.GetEntities())
             {
+                // Automatically ignored entities
+                
+                // Ignore entity spawners - we should never have to trace to an entity spawner!
+                if (entity is EntitySpawner)
+                {
+                    continue;
+                }
+                
                 // Are we intersecting with this entity's bounding box?
                 if (entity.GetBBox().RayIntersects( rayStart, rayEnd, 5000 ))
                 {
@@ -98,6 +107,14 @@ public class Ray
             // Check every entity
             foreach (Entity entity in DoomNET.currentScene?.GetEntities())
             {
+                // Automatically ignored entities
+                
+                // Ignore entity spawners - we should never have to trace to an entity spawner!
+                if (entity is EntitySpawner)
+                {
+                    continue;
+                }
+                
                 // Are we intersecting with this entity's bounding box?
                 if (entity.GetBBox().RayIntersects( rayStart, rayEnd, 5000 ))
                 {
@@ -240,6 +257,14 @@ public class Ray
             // Check every entity
             foreach (Entity entity in DoomNET.currentScene?.GetEntities())
             {
+                // Automatically ignored entities
+                
+                // Ignore entity spawners - we should never have to trace to an entity spawner!
+                if (entity is EntitySpawner)
+                {
+                    continue;
+                }
+                
                 // Are we intersecting with this entity's bounding box?
                 if (entity.GetBBox().RayIntersects( rayStart, rayEnd, rayLength ))
                 {
@@ -381,6 +406,14 @@ public class Ray
             // Check every entity
             foreach (Entity entity in DoomNET.currentScene?.GetEntities())
             {
+                // Automatically ignored entities
+                
+                // Ignore entity spawners - we should never have to trace to an entity spawner!
+                if (entity is EntitySpawner)
+                {
+                    continue;
+                }
+                
                 // Are we intersecting with this entity's bounding box?
                 if (entity.GetBBox().RayIntersects( entStart.GetPosition(), rayEnd, 5000 ))
                 {
@@ -458,6 +491,14 @@ public class Ray
             // Check every entity
             foreach (Entity entity in DoomNET.currentScene?.GetEntities())
             {
+                // Automatically ignored entities
+                
+                // Ignore entity spawners - we should never have to trace to an entity spawner!
+                if (entity is EntitySpawner)
+                {
+                    continue;
+                }
+                
                 // Are we intersecting with this entity's bounding box?
                 if (entity.GetBBox().RayIntersects( entStart.GetPosition(), rayEnd, 5000 ))
                 {
@@ -599,6 +640,14 @@ public class Ray
             // Check every entity
             foreach (Entity entity in DoomNET.currentScene?.GetEntities())
             {
+                // Automatically ignored entities
+                
+                // Ignore entity spawners - we should never have to trace to an entity spawner!
+                if (entity is EntitySpawner)
+                {
+                    continue;
+                }
+                
                 // Are we intersecting with this entity's bounding box?
                 if (entity.GetBBox().RayIntersects( entStart.GetPosition(), rayEnd, rayLength ))
                 {
@@ -740,6 +789,14 @@ public class Ray
             // Check every entity
             foreach (Entity entity in DoomNET.currentScene?.GetEntities())
             {
+                // Automatically ignored entities
+                
+                // Ignore entity spawners - we should never have to trace to an entity spawner!
+                if (entity is EntitySpawner)
+                {
+                    continue;
+                }
+                
                 // Are we intersecting with this entity's bounding box?
                 if (entity.GetBBox().RayIntersects( rayStart, rayEnd, 5000 ))
                 {
@@ -817,6 +874,14 @@ public class Ray
             // Check every entity
             foreach (Entity entity in DoomNET.currentScene?.GetEntities())
             {
+                // Automatically ignored entities
+                
+                // Ignore entity spawners - we should never have to trace to an entity spawner!
+                if (entity is EntitySpawner)
+                {
+                    continue;
+                }
+                
                 // Are we intersecting with this entity's bounding box?
                 if (entity.GetBBox().RayIntersects( rayStart, rayEnd, 5000 ))
                 {
@@ -958,6 +1023,14 @@ public class Ray
             // Check every entity
             foreach (Entity entity in DoomNET.currentScene?.GetEntities())
             {
+                // Automatically ignored entities
+                
+                // Ignore entity spawners - we should never have to trace to an entity spawner!
+                if (entity is EntitySpawner)
+                {
+                    continue;
+                }
+                
                 // Are we intersecting with this entity's bounding box?
                 if (entity.GetBBox().RayIntersects( rayStart, rayEnd, rayLength ))
                 {

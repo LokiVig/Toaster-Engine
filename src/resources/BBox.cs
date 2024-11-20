@@ -19,10 +19,10 @@ public class BBox
         mins = new();
     }
 
-    public BBox( Vector3 maxs, Vector3 mins )
+    public BBox( Vector3 mins, Vector3 maxs )
     {
-        this.maxs = maxs;
         this.mins = mins;
+        this.maxs = maxs;
     }
 
     /// <summary>

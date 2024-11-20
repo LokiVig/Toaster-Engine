@@ -14,6 +14,7 @@ public class TriggerBrush : Entity
     public int bValue { get; set; } = -1; // Event bool value (-1 = none, 0 = false, 1 = true)
     public Vector3 vValue { get; set; } // Event Vector3 value
     public Quaternion qValue { get; set; } // Event Quaternion value
+    public Entity eValue { get; set; } // Event Entity value
     public BBox bbValue { get; set; } // Event BBox value
 
     public string targetEntity { get; set; } // The entity we wish to target
@@ -102,6 +103,7 @@ public class TriggerBrush : Entity
                                     $"\t\tbValue: {( bValue > -1 ? ( bValue == 0 ? "False" : "True" ) : "" )}\n" +
                                     $"\t\tvValue: {vValue}\n" +
                                     $"\t\tqValue: {qValue}\n" +
+                                    $"\t\teValue: {(eValue == null ? "N/A" : $"{eValue} (\"{eValue.GetID()}\")")}\n" +
                                     $"\t\tbbValue: {bbValue}\n" +
                                 $"\tTrigger type: {triggerType}\n" +
                                 $"\tTrigger by: {triggerBy}\n" +
