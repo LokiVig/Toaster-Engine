@@ -14,7 +14,6 @@ public class WTF
 {
     public List<Entity> entities { get; set; } = new(); // List of entities in this WTF file
     public List<Brush> brushes { get; set; } = new(); // All the brushes in this WTF file
-
     public string directory { get; set; } // The directory of which this WTF file is saved at
 
     public WTF() { }

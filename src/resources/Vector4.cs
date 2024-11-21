@@ -85,9 +85,15 @@ public struct Vector4
         }
     }
 
-    public Vector4 Cross( Vector4 other )
+    public static Vector4 Cross(Vector4 a, Vector4 b )
     {
-        return new Vector4( y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x, w );
+        return new Vector4
+        ( 
+            a.y * b.z - a.z * b.y, // Calculate X component
+            a.z * b.x - a.x * b.z, // Calculate Y component
+            a.x * b.y - a.y * b.x, // Calculate Z component
+            a.w                    // This is just a.w
+        );
     }
 
     public readonly override string ToString()

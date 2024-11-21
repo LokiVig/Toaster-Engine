@@ -1,4 +1,5 @@
 ﻿using System;
+
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
@@ -8,6 +9,8 @@ using DoomNET.Entities;
 using DoomNET.Resources;
 
 using MouseState = OpenTK.Windowing.GraphicsLibraryFramework.MouseState;
+using Matrix4 = OpenTK.Mathematics.Matrix4;
+using MathHelper = OpenTK.Mathematics.MathHelper;
 
 namespace DoomNET.Rendering;
 
@@ -51,6 +54,9 @@ public class Renderer : GameWindow
         
         GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         
+        // Enable depth testing
+        GL.Enable(EnableCap.DepthTest);
+        
         // Initialize the VAO
         vertexArrayObject = GL.GenVertexArray();
         GL.BindVertexArray(vertexArrayObject);
@@ -79,10 +85,13 @@ public class Renderer : GameWindow
         GL.EnableVertexAttribArray((uint)texCoordLocation);
         GL.VertexAttribPointer((uint)texCoordLocation, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
         
+        texture = Texture.LoadFromFile("resources/textures/dev/missing_texture.png");
+        texture.Use(TextureUnit.Texture0);
+        
         // Enable variable 0 in the shader
         GL.EnableVertexAttribArray(0);
-
-        texture = Texture.LoadFromFile("resources/textures/dev/missing_texture.png");
+        
+        shader.SetInt("texture0", 0);
     }
 
     protected override void OnFramebufferResize(FramebufferResizeEventArgs e)
@@ -103,14 +112,26 @@ public class Renderer : GameWindow
         // This should really only be DoomNET.Update()
         OnRender?.Invoke();
         
+        Matrix4 transform = Matrix4.Identity;
+
+        transform = transform * Matrix4.CreateRotationZ(Quaternion.DegreesToRadians(20f));
+        transform = transform * Matrix4.CreateScale(1.1f);
+        transform = transform * Matrix4.CreateTranslation(0.1f, 0.1f, 0.0f);
+        
         // Bind the VAO
         GL.BindVertexArray(vertexArrayObject);
         
-        // Bind the texture
+        // Use the texture
         texture.Use(TextureUnit.Texture0);
         
-        // Bind the shader
+        // Use the shader
         shader.Use();
+        
+        Matrix4 model = Matrix4.Identity /* * Matrix4.CreateRotationX(Quaternion.DegreesToRadians(90f))*/;
+        
+        shader.SetMatrix4("model", model);
+        shader.SetMatrix4("view", DoomNET.currentScene.GetPlayer().camera.GetViewMatrix());
+        shader.SetMatrix4("projection", DoomNET.currentScene.GetPlayer().camera.GetProjectionMatrix());
         
         // DEBUG: Draw the debug triangles
         GL.DrawElements(PrimitiveType.Triangles, indices.Length, DrawElementsType.UnsignedInt, 0);
@@ -164,9 +185,7 @@ public class Renderer : GameWindow
         {
             player.SetVelocity(new Vector3(player.GetVelocity().x, player.GetVelocity().y, -15));
         }
-        
-        Console.WriteLine($"Player velocity: {player.GetVelocity()}\nPlayer position: {player.position}");
-        
+
         MouseState mouse = MouseState;
 
         if (firstMove)
@@ -180,8 +199,8 @@ public class Renderer : GameWindow
             float deltaY = mouse.Y - lastPos.y;
             lastPos = new Vector2(mouse.X, mouse.Y);
 
-            camera.pitch += deltaX * 0.05f;
-            camera.yaw -= deltaY * 0.05f;
+            camera.Pitch += deltaX * 0.05f;
+            camera.Yaw -= deltaY * 0.05f;
         }
     }
 

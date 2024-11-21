@@ -5,7 +5,7 @@ using DoomNET.Resources;
 namespace DoomNET.Entities;
 
 /// <summary>
-/// A brush defining stuff to do when e.g. an entity or the player interacts with a brush
+/// A brush defining stuff to do when e.g. an entity or player enters it.
 /// </summary>
 public class TriggerBrush : Entity
 {

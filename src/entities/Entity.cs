@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using DoomNET.Resources;
 
 namespace DoomNET.Entities;
@@ -153,7 +154,7 @@ public class Entity
     /// <param name="targetID">The ID of the entity we wish to target, 0 should always be the <see cref="Player"/></param>
     public void SetTarget( string targetID )
     {
-        target = DoomNET.currentFile.FindEntity( targetID );
+        target = DoomNET.currentScene?.FindEntity( targetID );
     }
 
     /// <summary>
@@ -429,6 +430,9 @@ public class Entity
         // Log to the console that this entity has died!
         Console.WriteLine( $"Entity {this} (\"{GetID()}\") has died.\n" +
                           $"\tLast attacker: {lastAttacker}" );
+        
+        // Remove the entity from the current scene... Maybe...
+        DoomNET.currentScene?.RemoveEntity(this);
     }
 
     /// <summary>

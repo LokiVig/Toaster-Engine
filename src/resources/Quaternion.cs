@@ -12,14 +12,17 @@ public struct Quaternion
     public float z { get; set; }
     public float w { get; set; }
 
-    public Quaternion()
-    {
-        x = y = z = w = 0;
-    }
-
     public Quaternion( float xyzw )
     {
         x = y = z = w = xyzw;
+    }
+
+    public Quaternion(Vector3 xyz, float w)
+    {
+        x = xyz.x;
+        y = xyz.y;
+        z = xyz.z;
+        this.w = w;
     }
 
     public Quaternion( float x, float y, float z, float w )

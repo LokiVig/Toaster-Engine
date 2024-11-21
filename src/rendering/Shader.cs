@@ -1,8 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using DoomNET.Resources;
+
 using OpenTK.Graphics.OpenGL;
+
+using DoomNET.Resources;
+
+using Matrix4 = OpenTK.Mathematics.Matrix4;
 
 namespace DoomNET.Rendering;
 
@@ -14,7 +18,6 @@ public class Shader
     public int handle;
     
     private Dictionary<string, int> uniformLocations;
-    
     private bool disposedValue = false;
 
     /// <summary>
@@ -79,7 +82,7 @@ public class Shader
         for (int i = 0; i < numberOfUniforms; i++)
         {
             // Get the name of this uniform...
-            string key = GL.GetActiveUniform(handle, (uint)i, numberOfUniforms, out _, out _, out _);
+            string key = GL.GetActiveUniform(handle, (uint)i, int.MaxValue, out _, out _, out _);
             
             // Get the location...
             int location = GL.GetUniformLocation(handle, key);
@@ -144,6 +147,22 @@ public class Shader
     {
         GL.UseProgram(handle);
         GL.Uniform1f(uniformLocations[name], data);
+    }
+
+    /// <summary>
+    /// Set a uniform Matrix4 on this shader
+    /// </summary>
+    /// <param name="name">The name of the uniform</param>
+    /// <param name="data">The data to set</param>
+    /// <remarks>
+    ///   <para>
+    ///   The matrix is transposed before being sent to the shader.
+    ///   </para>
+    /// </remarks>
+    public void SetMatrix4(string name, Matrix4 data)
+    {
+        GL.UseProgram(handle);
+        GL.UniformMatrix4f(uniformLocations[name], uniformLocations.Count, true, ref data);
     }
     
     /// <summary>

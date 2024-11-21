@@ -7,17 +7,11 @@ namespace DoomNET.Resources;
 /// </summary>
 public class BBox
 {
-    public Vector3 maxs { get; set; } // The max extents of this BBox
     public Vector3 mins { get; set; } // The min extents of this BBox
+    public Vector3 maxs { get; set; } // The max extents of this BBox
 
     public static readonly BBox One = new BBox(Vector3.One, -Vector3.One);
     public static readonly BBox Zero = new BBox(Vector3.Zero, Vector3.Zero);
-    
-    public BBox()
-    {
-        maxs = new();
-        mins = new();
-    }
 
     public BBox( Vector3 mins, Vector3 maxs )
     {

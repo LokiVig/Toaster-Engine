@@ -9,11 +9,9 @@ namespace DoomNET.Resources;
 /// </summary>
 public class Scene
 {
-    private List<Entity> entities = new();
-    private List<Brush> brushes = new();
-
-    public Scene() { }
-
+    private List<Entity> entities;
+    private List<Brush> brushes;
+    
     public Scene( List<Entity> entities, List<Brush> brushes )
     {
         this.entities = entities;

@@ -7,11 +7,9 @@ namespace DoomNET.Resources;
 /// </summary>
 public struct Brush
 {
-    public BBox bbox { get; set; } = new(); // The extents of this brush, bbox.mins.z being the very bottom, bbox.maxs.z being the top
+    public BBox bbox { get; set; } = BBox.Zero; // The extents of this brush, bbox.mins.z being the very bottom, bbox.maxs.z being the top
     public string id { get; set; } // The id of this brush, can be set by the mapper
-
-    public Brush() { }
-
+    
     /// <summary>
     /// Create a brush with specified mins and maxs, and add it to the current WTF file
     /// </summary>
@@ -66,7 +64,7 @@ public struct Brush
     /// <summary>
     /// Turn this brush into an entity
     /// </summary>
-    public void TurnIntoEntity(Entity desiredEntity)
+    public void TurnIntoEntity<T>(T desiredEntity) where T : Entity
     {
         desiredEntity.SetBBox(bbox);
         desiredEntity.SetPosition(bbox.GetCenter());

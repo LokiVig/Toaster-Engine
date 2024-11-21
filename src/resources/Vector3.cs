@@ -55,11 +55,6 @@ public struct Vector3
         return ( this - other ).Magnitude();
     }
 
-    public Vector3 Cross( Vector3 other )
-    {
-        return new Vector3( y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x );
-    }
-
     public float Magnitude()
     {
         return (float)Math.Sqrt( x * x + y * y + z * z );
@@ -94,6 +89,11 @@ public struct Vector3
         );
     }
 
+    public static float Dot(Vector3 a, Vector3 b)
+    {
+        return a.x * b.x + a.y + b.y + a.z * b.z;
+    }
+    
     public readonly override string ToString()
     {
         return $"<{x:0.##}, {y:0.##}, {z:0.##}>";
@@ -312,6 +312,11 @@ public struct Vector3
                     throw new IndexOutOfRangeException();
             }
         }
+    }
+    
+    public static explicit operator OpenTK.Mathematics.Vector3(Vector3 lhs)
+    {
+        return new OpenTK.Mathematics.Vector3(lhs.x, lhs.y, lhs.z);
     }
     #endregion // OPERATORS
 }
