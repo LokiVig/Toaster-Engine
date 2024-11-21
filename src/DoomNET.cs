@@ -34,7 +34,7 @@ public class DoomNET
         currentFile = new();
 
         EntitySpawner playerSpawner = new EntitySpawner(new Player());
-        EntitySpawner npcSpawner = new EntitySpawner(new TestNPC());
+        EntitySpawner npcSpawner = new EntitySpawner(new Vector3(0, 5, 0), new TestNPC());
 
         TriggerBrush trigger = new TriggerBrush();
         trigger.SetBBox( new BBox( new Vector3( -15.0f, -15.0f, -15.0f ), new Vector3( 15.0f, 15.0f, 15.0f ) ) );

@@ -65,12 +65,6 @@ public class Shader
         // Then link them together
         GL.LinkProgram(handle);
         
-        // Clean-up, detach and delete the shaders from memory
-        GL.DetachShader(handle, vShader);
-        GL.DetachShader(handle, fShader);
-        GL.DeleteShader(vShader); 
-        GL.DeleteShader(fShader);
-        
         // Cache all the shader uniforms
         // Get the number of active uniforms in the shader
         GL.GetProgrami(handle, ProgramProperty.ActiveUniforms, out int numberOfUniforms);
@@ -82,14 +76,23 @@ public class Shader
         for (int i = 0; i < numberOfUniforms; i++)
         {
             // Get the name of this uniform...
-            string key = GL.GetActiveUniform(handle, (uint)i, int.MaxValue, out _, out _, out _);
+            string key = GL.GetActiveUniform(handle, (uint)vShader, vShaderSource.Length, out _, out _, out _);
             
             // Get the location...
             int location = GL.GetUniformLocation(handle, key);
             
             // And then add it to the dictionary
-            uniformLocations.Add(key, location);
+            if (!uniformLocations.ContainsKey(key))
+            {
+                uniformLocations.Add(key, location);
+            }
         }
+        
+        // Clean-up, detach and delete the shaders from memory
+        GL.DetachShader(handle, vShader);
+        GL.DetachShader(handle, fShader);
+        GL.DeleteShader(vShader); 
+        GL.DeleteShader(fShader);
     }
 
     private static void CompileShader(int shader)

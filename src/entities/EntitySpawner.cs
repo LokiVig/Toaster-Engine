@@ -8,12 +8,23 @@ public class EntitySpawner : Entity
 {
     private Entity desiredEntity;
 
-    public EntitySpawner()
+    public EntitySpawner() : base()
     {
         SetBBox(new BBox(new Vector3(-8, -8, -8), new Vector3(8, 8, 8)));
     }
 
+    public EntitySpawner(Vector3 position) : base(position)
+    {
+        SetBBox(new BBox(new Vector3(-8, -8, -8), new Vector3(8, 8, 8)));
+    }
+    
     public EntitySpawner(Entity desiredEntity)
+    {
+        this.desiredEntity = desiredEntity;
+        SetBBox(new BBox(new Vector3(-8, -8, -8), new Vector3(8, 8, 8)));
+    }
+
+    public EntitySpawner(Vector3 position, Entity desiredEntity) : base(position)
     {
         this.desiredEntity = desiredEntity;
         SetBBox(new BBox(new Vector3(-8, -8, -8), new Vector3(8, 8, 8)));
@@ -44,6 +55,8 @@ public class EntitySpawner : Entity
 
         // The entity should spawn!
         ent.Spawn();
+        // Set the entity's position to our position
+        ent.SetPosition(position);
 
         // Add the newly spawned entity to the current scene
         DoomNET.currentScene?.AddEntity(ent);

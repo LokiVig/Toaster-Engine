@@ -421,6 +421,12 @@ public class Ray
                     continue;
                 }
                 
+                // Ignore the source (entStart) - this way we don't "self-collide"
+                if (entity == entStart)
+                {
+                    continue;
+                }
+                
                 // Are we intersecting with this entity's bounding box?
                 if (entity.GetBBox().RayIntersects( entStart.GetPosition(), rayEnd, 5000 ))
                 {
@@ -436,8 +442,14 @@ public class Ray
                             if (hitObject == ignoreObjects[ i ])
                             {
                                 hitObject = null;
-                                continue;
+                                break;
                             }
+                        }
+
+                        // If the object we hit actually turned out null, we want to try the next object
+                        if (hitObject == null)
+                        {
+                            continue;
                         }
                     }
 
