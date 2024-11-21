@@ -51,7 +51,7 @@ public class Scene
     }
 
     /// <summary>
-    /// Returns this file's list of entities
+    /// Returns this scenes list of entities
     /// </summary>
     public List<Entity> GetEntities()
     {
@@ -59,7 +59,7 @@ public class Scene
     }
 
     /// <summary>
-    /// Gets the player entity from the map's list of entities
+    /// Gets the player entity from the scenes list of entities
     /// </summary>
     public Player GetPlayer()
     {
@@ -78,7 +78,7 @@ public class Scene
     }
 
     /// <summary>
-    /// Returns this file's list of brushes
+    /// Returns this scenes list of brushes
     /// </summary>
     public List<Brush> GetBrushes()
     {
@@ -116,6 +116,7 @@ public class Scene
         return null;
     }
 
+    /// <inheritdoc cref="FindEntity{T}"/>
     public Entity FindEntity( string id )
     {
         // Get the id of every entity

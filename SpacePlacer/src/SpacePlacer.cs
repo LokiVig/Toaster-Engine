@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Threading;
 using System.Diagnostics;
-
+using System.Threading;
 using DoomNET.Resources;
 
 namespace DoomNET.SpacePlacer;

@@ -1,5 +1,5 @@
-﻿using DoomNET.Resources;
-using DoomNET.Rendering;
+﻿using DoomNET.Rendering;
+using DoomNET.Resources;
 
 namespace DoomNET.Entities;
 

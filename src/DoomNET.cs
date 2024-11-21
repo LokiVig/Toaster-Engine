@@ -2,8 +2,8 @@
 using System.Diagnostics;
 
 using DoomNET.Entities;
-using DoomNET.Resources;
 using DoomNET.Rendering;
+using DoomNET.Resources;
 
 namespace DoomNET;
 
@@ -31,7 +31,7 @@ public class DoomNET
         // DEBUG! Load a test map
         //currentFile = WTFFile.LoadFile("maps/test.wtf");
 
-        currentFile = new();
+        currentFile = new WTF();
 
         EntitySpawner playerSpawner = new EntitySpawner(new Player());
         EntitySpawner npcSpawner = new EntitySpawner(new Vector3(0, 5, 0), new TestNPC());

@@ -47,6 +47,8 @@ public class Camera
     private Vector3 up = Vector3.UnitZ;
     private Vector3 position;
     private Vector3 positionOffset;
+    private Vector3 target = Vector3.Zero;
+    private Vector3 direction;
     private Entity parent;
     private float pitch;
     private float yaw = -(float)Math.PI / 2;
@@ -56,6 +58,8 @@ public class Camera
         this.positionOffset = positionOffset;
         this.aspectRatio = aspectRatio;
         this.parent = parent;
+
+        direction = Vector3.Normalize(position - target);
 
         DoomNET.OnUpdate += UpdatePosition;
     }
