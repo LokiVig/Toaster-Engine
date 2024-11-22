@@ -86,6 +86,17 @@ public class Shader
         GL.UseProgram(handle);
     }
 
+    public int GetAttribLocation(string attribName)
+    {
+        return GL.GetAttribLocation(handle, attribName);        
+    }
+
+    public void SetInt(string name, int value)
+    {
+        int location = GL.GetUniformLocation(handle, name);
+        GL.Uniform1i(location, value);
+    }
+
     protected virtual void Dispose(bool disposing)
     {
         if (!disposed)
