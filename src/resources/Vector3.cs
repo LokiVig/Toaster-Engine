@@ -1,5 +1,5 @@
-﻿#pragma warning disable CS0660
-#pragma warning disable CS0661
+﻿#pragma warning disable CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
+#pragma warning disable CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
 
 using System;
 
@@ -312,11 +312,6 @@ public struct Vector3
                     throw new IndexOutOfRangeException();
             }
         }
-    }
-    
-    public static explicit operator OpenTK.Mathematics.Vector3(Vector3 lhs)
-    {
-        return new OpenTK.Mathematics.Vector3(lhs.x, lhs.y, lhs.z);
     }
     #endregion // OPERATORS
 }

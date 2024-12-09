@@ -216,9 +216,9 @@ public class Entity
     {
         // We've been damaged by someone or something!
         // How queer! We must log this to the console immediately!!
-        Console.WriteLine( $"Entity \"{GetID()}\" took damage.\n" +
+        Console.WriteLine( $"Entity {this} took damage.\n" +
                           $"\tDamage: {damage}\n" +
-                          $"\tSource: {( source != null ? source + $" (\"{source.GetID()}\")" : "N/A" )}\n" +
+                          $"\tSource: {( source != null ? source : "N/A" )}\n" +
                           $"\tNew health: {health - damage}\n" );
 
         //
@@ -433,7 +433,7 @@ public class Entity
         Game.OnUpdate -= Update;
 
         // Log to the console that this entity has died!
-        Console.WriteLine( $"Entity {this} (\"{GetID()}\") has died.\n" +
+        Console.WriteLine( $"Entity {this} has died.\n" +
                           $"\tLast attacker: {lastAttacker}" );
         
         // Remove the entity from the current scene... Maybe...

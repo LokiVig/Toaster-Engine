@@ -42,7 +42,7 @@ public class Game
         TriggerBrush trigger = new TriggerBrush(new Vector3(0, 0, 15.0f));
         trigger.SetBBox( new BBox( new Vector3( -15.0f ), new Vector3( 15.0f ) ) );
         trigger.triggerType = TriggerType.Once;
-        trigger.triggerBy = TriggerBy.Players;
+        trigger.triggerBy = TriggerBy.Player;
         trigger.triggerOn = TriggerOn.Trigger;
         trigger.targetEvent = EntityEvent.TakeDamage;
         trigger.targetEntity = "entity 4";

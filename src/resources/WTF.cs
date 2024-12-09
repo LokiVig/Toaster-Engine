@@ -226,7 +226,7 @@ public class WTF
         // Ensure that the "maps/" directory actually exists
         if (!Directory.Exists( "maps/" ))
         {
-            Directory.CreateDirectory( "maps/ ");
+            Directory.CreateDirectory( "maps/");
         }
 
         // If we already have a file open, set the path to the current file
@@ -241,7 +241,7 @@ public class WTF
         }
         else // We couldn't find a file to save, error!
         {
-            throw new NullReferenceException( "Error saving file, SaveFile().inFile == null & DoomNET.currentFile == null!" );
+            throw new NullReferenceException( "Error saving file, SaveFile().inFile == null && DoomNET.currentFile == null!" );
         }
 
         // Call the file's OnSave function

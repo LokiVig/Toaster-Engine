@@ -32,6 +32,6 @@
     <Folder Include="src\rendering\textures\dev\" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)src\rendering\shaders\*&quot; &quot;$(OutDir)\resources\shaders\&quot;&#xA;xcopy /E /S /Y &quot;$(SolutionDir)src\rendering\textures\*&quot; &quot;$(OutDir)\resources\textures&quot;" />
+    <Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)src\rendering\shaders\*&quot; &quot;$(OutDir)resources\shaders\&quot;&#xA;xcopy /E /S /Y &quot;$(SolutionDir)src\rendering\textures\*&quot; &quot;$(OutDir)resources\textures&quot;" />
   </Target>
 </Project>

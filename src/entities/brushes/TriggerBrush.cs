@@ -56,8 +56,14 @@ public class TriggerBrush : Entity
         {
             if ( bbox.IntersectingWith( entity.GetBBox() ) )
             {
-                // If they are, we bbox.OnIntersect triggers!
-                OnTrigger(entity);
+                // If we do intersect, but the trigger fails for some reason...
+                if (!OnTrigger(entity))
+                {
+                    // Try with the next entity!
+                    continue;
+                }
+                
+                // Otherwise, we've surely successfully been triggered, break out of the loop
                 break;
             }
         }
@@ -66,21 +72,21 @@ public class TriggerBrush : Entity
     /// <summary>
     /// Things to do when this trigger has triggered
     /// </summary>
-    public void OnTrigger(Entity triggerEntity)
+    public bool OnTrigger(Entity triggerEntity)
     {
         switch ( triggerType )
         {
             case TriggerType.Once: // Only trigger once
                 if ( hasTriggered )
                 {
-                    return;
+                    return false;
                 }
                 break;
 
             case TriggerType.Count: // Trigger only a certain amount of times
                 if ( triggeredCount >= triggerCount )
                 {
-                    return;
+                    return false;
                 }
                 break;
 
@@ -95,14 +101,14 @@ public class TriggerBrush : Entity
             default: // If there has been nothing set, anything should still trigger this
                 break;
             
-            case TriggerBy.Players: // Only players should be able to trigger this
+            case TriggerBy.Player: // Only players should be able to trigger this
                 if (triggerEntity.type == EntityType.Player)
                 {
                     break;
                 }
                 else
                 {
-                    return;
+                    return false;
                 }
             
             case TriggerBy.NPCs: // Only NPCs should be able to trigger this
@@ -112,12 +118,12 @@ public class TriggerBrush : Entity
                 }
                 else
                 {
-                    return;
+                    return false;
                 }
         }
 
-        Console.WriteLine( $"TriggerBrush \"{GetID()}\" has been triggered.\n" +
-                                $"\tTarget: {Game.currentScene.FindEntity( targetEntity )} (\"{Game.currentScene.FindEntity( targetEntity ).GetID()}\")\n" +
+        Console.WriteLine( $"TriggerBrush {this} has been triggered.\n" +
+                                $"\tTarget: {Game.currentScene.FindEntity( targetEntity )}\n" +
                                 $"\tEvent: {targetEvent}\n" +
                                 $"\tValues:\n" +
                                     $"\t\tiValue: {iValue}\n" +
@@ -167,11 +173,14 @@ public class TriggerBrush : Entity
         }
 
         // Regular event, not taking any special inputs
-        Game.currentScene.FindEntity( targetEntity ).OnEvent( targetEvent, this );
+        Game.currentScene.FindEntity( targetEntity )?.OnEvent( targetEvent, this );
 
         // We've triggered this trigger, set the bool to true and increase the count
         triggeredCount++;
         hasTriggered = true;
+
+        // Return true, we've successfully been triggered!
+        return true;
     }
 }
 
@@ -185,7 +194,7 @@ public enum TriggerOn
 public enum TriggerBy
 {
     All, // Trigger by all things
-    Players, // Trigger only by players
+    Player, // Trigger only by the player
     NPCs, // Trigger only by NPCs
 }
 
