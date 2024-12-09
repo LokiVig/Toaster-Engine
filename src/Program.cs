@@ -17,7 +17,7 @@ public class Program
     [STAThread]
     public static void Main()
     {
-        DoomNET game = new DoomNET();
+        Game game = new Game();
         game.Initialize();
     }
 }

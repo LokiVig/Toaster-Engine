@@ -27,7 +27,7 @@ public class Player : Entity
     {
         base.OnSpawn();
 
-        camera = new Camera( new Vector3(0, 0, bbox.maxs.z - 12) /* (64 - 12 => 52) */, (float)DoomNET.windowWidth / DoomNET.windowHeight, this );
+        camera = new Camera( new Vector3(0, 0, bbox.maxs.z - 12) /* (64 - 12 => 52) */, (float)Game.windowWidth / Game.windowHeight, this );
     }
 
     protected override void Update()

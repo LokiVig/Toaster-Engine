@@ -30,6 +30,10 @@ public class TriggerBrush : Entity
 
     public override EntityType type => EntityType.TriggerBrush; // This entity is of type TriggerBrush
 
+    public TriggerBrush() : base() {}
+    
+    public TriggerBrush(Vector3 position) : base(position) {}
+    
     protected override void OnSpawn()
     {
         base.OnSpawn();
@@ -48,12 +52,12 @@ public class TriggerBrush : Entity
     protected override void Update()
     {
         // Check if any entity is intersecting with us
-        foreach ( Entity entity in DoomNET.currentFile?.entities )
+        foreach ( Entity entity in Game.currentFile?.entities )
         {
             if ( bbox.IntersectingWith( entity.GetBBox() ) )
             {
                 // If they are, we bbox.OnIntersect triggers!
-                OnTrigger();
+                OnTrigger(entity);
                 break;
             }
         }
@@ -62,7 +66,7 @@ public class TriggerBrush : Entity
     /// <summary>
     /// Things to do when this trigger has triggered
     /// </summary>
-    public void OnTrigger()
+    public void OnTrigger(Entity triggerEntity)
     {
         switch ( triggerType )
         {
@@ -87,20 +91,38 @@ public class TriggerBrush : Entity
 
         switch ( triggerBy )
         {
-            // Find a way to change which thing can trigger this trigger!
-            case TriggerBy.All:
-            case TriggerBy.Players:
-            case TriggerBy.NPCs:
+            case TriggerBy.All: // Any entity should be able to trigger this trigger
+            default: // If there has been nothing set, anything should still trigger this
                 break;
+            
+            case TriggerBy.Players: // Only players should be able to trigger this
+                if (triggerEntity.type == EntityType.Player)
+                {
+                    break;
+                }
+                else
+                {
+                    return;
+                }
+            
+            case TriggerBy.NPCs: // Only NPCs should be able to trigger this
+                if (triggerEntity.type == EntityType.NPC)
+                {
+                    break;
+                }
+                else
+                {
+                    return;
+                }
         }
 
         Console.WriteLine( $"TriggerBrush \"{GetID()}\" has been triggered.\n" +
-                                $"\tTarget: {DoomNET.currentScene.FindEntity( targetEntity )} (\"{DoomNET.currentScene.FindEntity( targetEntity ).GetID()}\")\n" +
+                                $"\tTarget: {Game.currentScene.FindEntity( targetEntity )} (\"{Game.currentScene.FindEntity( targetEntity ).GetID()}\")\n" +
                                 $"\tEvent: {targetEvent}\n" +
                                 $"\tValues:\n" +
                                     $"\t\tiValue: {iValue}\n" +
                                     $"\t\tfValue: {fValue}\n" +
-                                    $"\t\tbValue: {( bValue > -1 ? ( bValue == 0 ? "False" : "True" ) : "" )}\n" +
+                                    $"\t\tbValue: {( bValue > -1 ? bValue == 0 ? "False" : "True" : "" )}\n" +
                                     $"\t\tvValue: {vValue}\n" +
                                     $"\t\tqValue: {qValue}\n" +
                                     $"\t\teValue: {(eValue == null ? "N/A" : eValue)}\n" +
@@ -111,41 +133,41 @@ public class TriggerBrush : Entity
 
         if ( iValue != 0 ) // Int value event
         {
-            DoomNET.currentScene.FindEntity(targetEntity).OnEvent( targetEvent, iValue, this );
+            Game.currentScene.FindEntity(targetEntity).OnEvent( targetEvent, iValue, this );
         }
 
         if ( fValue != 0 ) // Float value event
         {
-            DoomNET.currentScene.FindEntity( targetEntity ).OnEvent( targetEvent, fValue, this );
+            Game.currentScene.FindEntity( targetEntity ).OnEvent( targetEvent, fValue, this );
         }
 
         if ( bValue != -1 ) // Bool value event
         {
-            DoomNET.currentScene.FindEntity( targetEntity ).OnEvent( targetEvent, bValue == 1, this );
+            Game.currentScene.FindEntity( targetEntity ).OnEvent( targetEvent, bValue == 1, this );
         }
 
         if ( vValue != 0 ) // Vector3 value event
         {
-            DoomNET.currentScene.FindEntity( targetEntity ).OnEvent( targetEvent, vValue, this );
+            Game.currentScene.FindEntity( targetEntity ).OnEvent( targetEvent, vValue, this );
         }
 
         if ( qValue != 0 ) // Quaternion value event
         {
-            DoomNET.currentScene.FindEntity( targetEntity ).OnEvent( targetEvent, qValue, this );
+            Game.currentScene.FindEntity( targetEntity ).OnEvent( targetEvent, qValue, this );
         }
 
         if (eValue != null) // Entity value event
         {
-            DoomNET.currentScene.FindEntity(targetEntity).OnEvent(targetEvent, eValue, this);
+            Game.currentScene.FindEntity(targetEntity).OnEvent(targetEvent, eValue, this);
         }
 
         if ( bbValue != null ) // BBox value event
         {
-            DoomNET.currentScene.FindEntity( targetEntity ).OnEvent( targetEvent, bbValue, this );
+            Game.currentScene.FindEntity( targetEntity ).OnEvent( targetEvent, bbValue, this );
         }
 
         // Regular event, not taking any special inputs
-        DoomNET.currentScene.FindEntity( targetEntity ).OnEvent( targetEvent, this );
+        Game.currentScene.FindEntity( targetEntity ).OnEvent( targetEvent, this );
 
         // We've triggered this trigger, set the bool to true and increase the count
         triggeredCount++;

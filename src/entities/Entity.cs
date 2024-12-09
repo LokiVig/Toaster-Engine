@@ -44,7 +44,7 @@ public class Entity
         alive = true;
 
         // Subscribe to the OnUpdate event
-        DoomNET.OnUpdate += Update;
+        Game.OnUpdate += Update;
 
         // Call the OnSpawn event
         OnSpawn();
@@ -64,10 +64,10 @@ public class Entity
     protected void HandleMovement()
     {
         // Position is affected by velocity
-        position += velocity * DoomNET.deltaTime;
+        position += velocity * Game.deltaTime;
 
         // Velocity decreases with time (effectively drag)
-        velocity *= ( 1 - 0.1f * DoomNET.deltaTime );
+        velocity *= ( 1 - 0.1f * Game.deltaTime );
 
         // If the velocity's magnitude <= 0.5, it's effectively zero, so zero it out for the sake of ease
         if (velocity.Magnitude() <= 0.5f)
@@ -108,6 +108,11 @@ public class Entity
         return velocity;
     }
 
+    public Quaternion GetRotation()
+    {
+        return rotation;
+    }
+    
     /// <summary>
     /// Gets this entity's bounding box
     /// </summary>
@@ -154,7 +159,7 @@ public class Entity
     /// <param name="targetID">The ID of the entity we wish to target, 0 should always be the <see cref="Player"/></param>
     public void SetTarget( string targetID )
     {
-        target = DoomNET.currentScene?.FindEntity( targetID );
+        target = Game.currentScene?.FindEntity( targetID );
     }
 
     /// <summary>
@@ -236,7 +241,7 @@ public class Entity
     public void CreateID()
     {
         // Easier to use variable for the list of entities in the current scene
-        List<Entity> entities = DoomNET.currentScene?.GetEntities();
+        List<Entity> entities = Game.currentScene?.GetEntities();
         
         // For every entity...
         for (int i = 0; i < entities?.Count; i++)
@@ -276,7 +281,7 @@ public class Entity
 
             case EntityEvent.Delete: // Delete this entity
                 // Remove this entity from the current scene
-                DoomNET.currentScene?.RemoveEntity(this);
+                Game.currentScene?.RemoveEntity(this);
                 
                 // Also kill this entity, for good measure
                 OnDeath();
@@ -425,14 +430,14 @@ public class Entity
         alive = false;
 
         // Remove this entity from the update list
-        DoomNET.OnUpdate -= Update;
+        Game.OnUpdate -= Update;
 
         // Log to the console that this entity has died!
         Console.WriteLine( $"Entity {this} (\"{GetID()}\") has died.\n" +
                           $"\tLast attacker: {lastAttacker}" );
         
         // Remove the entity from the current scene... Maybe...
-        DoomNET.currentScene?.RemoveEntity(this);
+        Game.currentScene?.RemoveEntity(this);
     }
 
     /// <summary>
@@ -446,6 +451,6 @@ public class Entity
 
     public override string ToString()
     {
-        return $"{GetType()} (\"{GetID()}\")";
+        return $"{GetType()} (\"{(string.IsNullOrEmpty(GetID()) ? "N/A" : GetID())}\")";
     }
 }

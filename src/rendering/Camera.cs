@@ -9,7 +9,7 @@ namespace DoomNET.Rendering;
 
 /// <summary>
 /// Defines the position and rotation of the player's camera.<br/>
-/// This will be used for rendering everything that has to do with <see cref="DoomNET.currentScene"/>.
+/// This will be used for rendering everything that has to do with <see cref="Game.currentScene"/>.
 /// </summary>
 public class Camera
 {
@@ -61,7 +61,7 @@ public class Camera
 
         direction = Vector3.Normalize(position - target);
 
-        DoomNET.OnUpdate += UpdatePosition;
+        Game.OnUpdate += UpdatePosition;
     }
 
     /// <summary>

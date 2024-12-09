@@ -230,9 +230,9 @@ public class WTF
         }
 
         // If we already have a file open, set the path to the current file
-        if ( DoomNET.currentFile != null && !string.IsNullOrEmpty( DoomNET.currentFile.directory ) )
+        if ( Game.currentFile != null && !string.IsNullOrEmpty( Game.currentFile.directory ) )
         {
-            file = DoomNET.currentFile;
+            file = Game.currentFile;
             path = file.directory;
         }
         else if ( inFile != null ) // If the input file wasn't null, set it accordingly

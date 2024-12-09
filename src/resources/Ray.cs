@@ -20,7 +20,7 @@ public class Ray
         {
             
             // Check every entity
-            foreach (Entity entity in DoomNET.currentScene?.GetEntities())
+            foreach (Entity entity in Game.currentScene?.GetEntities())
             {
                 // Automatically ignored entities
                 
@@ -54,7 +54,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Brushes ))
         {
             // Check every brush
-            foreach (Brush brush in DoomNET.currentScene?.GetBrushes())
+            foreach (Brush brush in Game.currentScene?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
                 if (brush.GetBBox().RayIntersects( rayStart, rayEnd, 5000 ))
@@ -105,7 +105,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Entities ))
         {
             // Check every entity
-            foreach (Entity entity in DoomNET.currentScene?.GetEntities())
+            foreach (Entity entity in Game.currentScene?.GetEntities())
             {
                 // Automatically ignored entities
                 
@@ -152,7 +152,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Brushes ))
         {
             // Check every brush
-            foreach (Brush brush in DoomNET.currentScene?.GetBrushes())
+            foreach (Brush brush in Game.currentScene?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
                 if (brush.GetBBox().RayIntersects( rayStart, rayEnd, 5000 ))
@@ -216,7 +216,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Entities ))
         {
             // Check every entity
-            foreach (Entity entity in DoomNET.currentScene?.GetEntities())
+            foreach (Entity entity in Game.currentScene?.GetEntities())
             {
                 // Automatically ignored entities
                 
@@ -263,7 +263,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Brushes ))
         {
             // Check every brush
-            foreach (Brush brush in DoomNET.currentScene?.GetBrushes())
+            foreach (Brush brush in Game.currentScene?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
                 if (brush.GetBBox().RayIntersects( rayStart, rayEnd, rayLength ))
@@ -326,7 +326,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Entities ))
         {
             // Check every entity
-            foreach (Entity entity in DoomNET.currentScene?.GetEntities())
+            foreach (Entity entity in Game.currentScene?.GetEntities())
             {
                 // Automatically ignored entities
                 
@@ -360,7 +360,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Brushes ))
         {
             // Check every brush
-            foreach (Brush brush in DoomNET.currentScene?.GetBrushes())
+            foreach (Brush brush in Game.currentScene?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
                 if (brush.GetBBox().RayIntersects( entStart.GetPosition(), rayEnd, 5000 ))
@@ -411,7 +411,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Entities ))
         {
             // Check every entity
-            foreach (Entity entity in DoomNET.currentScene?.GetEntities())
+            foreach (Entity entity in Game.currentScene?.GetEntities())
             {
                 // Automatically ignored entities
                 
@@ -470,7 +470,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Brushes ))
         {
             // Check every brush
-            foreach (Brush brush in DoomNET.currentScene?.GetBrushes())
+            foreach (Brush brush in Game.currentScene?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
                 if (brush.GetBBox().RayIntersects( entStart.GetPosition(), rayEnd, 5000 ))
@@ -533,7 +533,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Entities ))
         {
             // Check every entity
-            foreach (Entity entity in DoomNET.currentScene?.GetEntities())
+            foreach (Entity entity in Game.currentScene?.GetEntities())
             {
                 // Automatically ignored entities
                 
@@ -580,7 +580,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Brushes ))
         {
             // Check every brush
-            foreach (Brush brush in DoomNET.currentScene?.GetBrushes())
+            foreach (Brush brush in Game.currentScene?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
                 if (brush.GetBBox().RayIntersects( entStart.GetPosition(), rayEnd, rayLength ))
@@ -643,7 +643,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Entities ))
         {
             // Check every entity
-            foreach (Entity entity in DoomNET.currentScene?.GetEntities())
+            foreach (Entity entity in Game.currentScene?.GetEntities())
             {
                 // Automatically ignored entities
                 
@@ -677,7 +677,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Brushes ))
         {
             // Check every brush
-            foreach (Brush brush in DoomNET.currentScene?.GetBrushes())
+            foreach (Brush brush in Game.currentScene?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
                 if (brush.GetBBox().RayIntersects( rayStart, rayEnd, 5000 ))
@@ -728,7 +728,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Entities ))
         {
             // Check every entity
-            foreach (Entity entity in DoomNET.currentScene?.GetEntities())
+            foreach (Entity entity in Game.currentScene?.GetEntities())
             {
                 // Automatically ignored entities
                 
@@ -775,7 +775,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Brushes ))
         {
             // Check every brush
-            foreach (Brush brush in DoomNET.currentScene?.GetBrushes())
+            foreach (Brush brush in Game.currentScene?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
                 if (brush.GetBBox().RayIntersects( rayStart, rayEnd, 5000 ))
@@ -838,7 +838,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Entities ))
         {
             // Check every entity
-            foreach (Entity entity in DoomNET.currentScene?.GetEntities())
+            foreach (Entity entity in Game.currentScene?.GetEntities())
             {
                 // Automatically ignored entities
                 
@@ -885,7 +885,7 @@ public class Ray
         if (!rayIgnore.HasFlag( RayIgnore.Brushes ))
         {
             // Check every brush
-            foreach (Brush brush in DoomNET.currentScene?.GetBrushes())
+            foreach (Brush brush in Game.currentScene?.GetBrushes())
             {
                 // Are we intersecting with this brush's bounding box?
                 if (brush.GetBBox().RayIntersects( rayStart, rayEnd, 5000 ))
