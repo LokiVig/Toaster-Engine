@@ -1,12 +1,10 @@
-﻿#pragma warning disable CS0660
-#pragma warning disable CS0661
+﻿// ReSharper disable CompareOfFloatsByEqualityOperator
 
 using System;
-// ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace DoomNET.Resources;
 
-public struct Quaternion
+public struct Quaternion : IEquatable<Quaternion>
 {
     public float x { get; set; }
     public float y { get; set; }
@@ -322,4 +320,19 @@ public struct Quaternion
         }
     }
     #endregion // OPERATORS
+
+    public bool Equals(Quaternion other)
+    {
+        return x.Equals(other.x) && y.Equals(other.y) && z.Equals(other.z) && w.Equals(other.w);
+    }
+
+    public override bool Equals(object obj)
+    {
+        return obj is Quaternion other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(x, y, z, w);
+    }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-
 using DoomNET.Resources;
 
 namespace DoomNET.Entities;
@@ -9,13 +8,13 @@ namespace DoomNET.Entities;
 /// </summary>
 public class TriggerBrush : Entity
 {
-	public int iValue { get; set; } // Event int value
-	public float fValue { get; set; } // Event float value
-	public int bValue { get; set; } = -1; // Event bool value (-1 = none, 0 = false, 1 = true)
-	public Vector3 vValue { get; set; } // Event Vector3 value
-	public Quaternion qValue { get; set; } // Event Quaternion value
-	public Entity eValue { get; set; } // Event Entity value
-	public BBox bbValue { get; set; } // Event BBox value
+	public int iValue { get; set; } = 0; // Event int value
+	public float fValue { get; set; } = 0.0f; // Event float value
+	public int bValue { get; set; } = -1; // Event bool value (<=-1 -> none, =0 -> false, >=1 -> true)
+	public Vector3 vValue { get; set; } = Vector3.Zero; // Event Vector3 value
+	public Quaternion qValue { get; set; } = Quaternion.Identity; // Event Quaternion value
+	public Entity eValue { get; set; } = null; // Event Entity value
+	public BBox bbValue { get; set; } = BBox.Zero; // Event BBox value
 
 	public string targetEntity { get; set; } // The entity we wish to target
 	public EntityEvent targetEvent { get; set; } // The desired event
@@ -31,13 +30,9 @@ public class TriggerBrush : Entity
 
 	public override EntityType type => EntityType.TriggerBrush; // This entity is of type TriggerBrush
 
-	public TriggerBrush()
-	{
-	}
+	public TriggerBrush() {}
 
-	public TriggerBrush(Vector3 position) : base(position)
-	{
-	}
+	public TriggerBrush(Vector3 position) : base(position) {}
 
 	protected override void OnSpawn()
 	{
@@ -46,12 +41,6 @@ public class TriggerBrush : Entity
 		// Reset standard values
 		triggerCount = 0;
 		hasTriggered = false;
-
-		// switch ( triggerOn )
-		// {
-		//     default: // !!! IMPLEMENT DIFFERENT TriggerOn EVENTS !!!
-		//         break;
-		// }
 	}
 
 	protected override void Update()
@@ -80,6 +69,33 @@ public class TriggerBrush : Entity
 	/// <param name="triggerEntity">The entity that triggered this trigger.</param>
 	public bool OnTrigger(Entity triggerEntity)
 	{
+		switch (triggerOn)
+		{
+			case TriggerOn.Enter: // Trigger only when first entered
+				// If the previous trigger entity is not the new one, or the previous one was just null, someone has just entered the trigger
+				if (previousTriggerEntity != triggerEntity || previousTriggerEntity == null)
+				{
+					break;
+				}
+
+				// Otherwise, stop trying to be triggered
+				return false;
+
+			case TriggerOn.Exit: // Trigger only when an entity has just exited
+				// When the currently triggering entity is null, but the previous one isn't, someone has just left the trigger
+				if (triggerEntity == null && previousTriggerEntity != null)
+				{
+					break;
+				}
+
+				// Otherwise, stop trying to be triggered
+				return false;
+			
+			case TriggerOn.Trigger: // Trigger no matter what happens
+			default:
+				break;	
+		}
+
 		switch (triggerType)
 		{
 			case TriggerType.Once: // Only trigger once
@@ -87,6 +103,7 @@ public class TriggerBrush : Entity
 				{
 					return false;
 				}
+
 				break;
 
 			case TriggerType.Count: // Trigger only a certain amount of times
@@ -94,6 +111,7 @@ public class TriggerBrush : Entity
 				{
 					return false;
 				}
+
 				break;
 
 			case TriggerType.Multiple: // Always trigger, there is no stopping it.
@@ -105,6 +123,7 @@ public class TriggerBrush : Entity
 				{
 					return false;
 				}
+
 				break;
 		}
 
@@ -115,7 +134,7 @@ public class TriggerBrush : Entity
 				break;
 
 			case TriggerBy.Player: // Only players should be able to trigger this
-				if (triggerEntity.type == EntityType.Player)
+				if (triggerEntity?.type == EntityType.Player)
 				{
 					break;
 				}
@@ -125,7 +144,7 @@ public class TriggerBrush : Entity
 				}
 
 			case TriggerBy.NPCs: // Only NPCs should be able to trigger this
-				if (triggerEntity.type == EntityType.NPC)
+				if (triggerEntity?.type == EntityType.NPC)
 				{
 					break;
 				}
@@ -135,58 +154,61 @@ public class TriggerBrush : Entity
 				}
 		}
 
-		Console.WriteLine($"TriggerBrush {this} has been triggered.\n" +
-			                  $"\tTarget: {Game.currentScene.FindEntity(targetEntity)}\n" +
-			                  $"\tEvent: {targetEvent}\n" +
-			                  $"\tValues:\n" +
-				                  $"\t\tiValue: {iValue}\n" +
-				                  $"\t\tfValue: {fValue}\n" +
-				                  $"\t\tbValue: {(bValue > -1 ? bValue == 0 ? "False" : "True" : "N/A")}\n" +
-				                  $"\t\tvValue: {vValue}\n" +
-				                  $"\t\tqValue: {qValue}\n" +
-				                  $"\t\teValue: {(eValue == null ? "N/A" : eValue)}\n" +
-				                  $"\t\tbbValue: {(bbValue == null ? BBox.Zero : bbValue)}\n" +
-			                  $"\tTrigger type: {triggerType}\n" +
-			                  $"\tTrigger by: {triggerBy}\n" +
-			                  $"\tTrigger on: {triggerOn}\n");
+		// Get the entity we're supposed to affect
+		Entity foundTarget = Game.currentScene.FindEntity(targetEntity);
 
+		Console.WriteLine($"TriggerBrush {this} has been triggered.\n" +
+		                  $"\tTarget: {foundTarget}\n" +
+		                  $"\tEvent: {targetEvent}\n" +
+		                  $"\tValues:\n" +
+		                  $"\t\tiValue: {iValue}\n" +
+		                  $"\t\tfValue: {fValue}\n" +
+		                  $"\t\tbValue: {(bValue > -1 ? bValue == 0 ? "False" : "True" : "N/A")}\n" +
+		                  $"\t\tvValue: {vValue}\n" +
+		                  $"\t\tqValue: {qValue}\n" +
+		                  $"\t\teValue: {(eValue == null ? "N/A" : eValue)}\n" +
+		                  $"\t\tbbValue: {(bbValue)}\n" +
+		                  $"\tTrigger type: {triggerType}\n" +
+		                  $"\tTrigger by: {triggerBy}\n" +
+		                  $"\tTrigger on: {triggerOn}\n");
+		
 		if (iValue != 0) // Int value event
 		{
-			Game.currentScene.FindEntity(targetEntity).OnEvent(targetEvent, iValue, this);
+			foundTarget.OnEvent(targetEvent, iValue, this);
 		}
 
-		if (fValue != 0) // Float value event
+		if (fValue != 0.0f) // Float value event
 		{
-			Game.currentScene.FindEntity(targetEntity).OnEvent(targetEvent, fValue, this);
+			foundTarget.OnEvent(targetEvent, fValue, this);
 		}
 
 		if (bValue != -1) // Bool value event
 		{
-			Game.currentScene.FindEntity(targetEntity).OnEvent(targetEvent, bValue == 1, this);
+			foundTarget.OnEvent(targetEvent, bValue == 1, this);
 		}
 
-		if (vValue != 0) // Vector3 value event
+		if (vValue != Vector3.Zero) // Vector3 value event
 		{
-			Game.currentScene.FindEntity(targetEntity).OnEvent(targetEvent, vValue, this);
+			foundTarget.OnEvent(targetEvent, vValue, this);
 		}
 
-		if (qValue != 0) // Quaternion value event
+		if (qValue != Quaternion.Identity) // Quaternion value event
 		{
-			Game.currentScene.FindEntity(targetEntity).OnEvent(targetEvent, qValue, this);
+			foundTarget.OnEvent(targetEvent, qValue, this);
 		}
 
 		if (eValue != null) // Entity value event
 		{
-			Game.currentScene.FindEntity(targetEntity).OnEvent(targetEvent, eValue, this);
+			foundTarget.OnEvent(targetEvent, eValue, this);
 		}
 
-		if (bbValue != null) // BBox value event
+		if (bbValue != BBox.Zero) // BBox value event
 		{
-			Game.currentScene.FindEntity(targetEntity).OnEvent(targetEvent, bbValue, this);
+			foundTarget.OnEvent(targetEvent, bbValue, this);
 		}
 
 		// Regular event, not taking any special inputs
-		Game.currentScene.FindEntity(targetEntity).OnEvent(targetEvent, this);
+		foundTarget.OnEvent(targetEvent, this);
 
 		// We've triggered this trigger successfully!
 		triggeredCount++; // Triggered count goes up

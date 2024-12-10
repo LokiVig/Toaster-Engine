@@ -32,13 +32,13 @@ public class Game
     public void Initialize()
     {
         // DEBUG! Load a test map
-        //currentFile = WTFFile.LoadFile("maps/test.wtf");
+        // currentFile = WTF.LoadFile("maps/test.wtf");
 
         currentFile = new WTF();
-
+        
         EntitySpawner<Player> playerSpawner = new EntitySpawner<Player>();
         EntitySpawner<TestNPC> npcSpawner = new EntitySpawner<TestNPC>(new Vector3(0, 5, 0));
-
+        
         TriggerBrush trigger = new TriggerBrush();
         trigger.SetBBox( new BBox( new Vector3( -15.0f ), new Vector3( 15.0f ) ) );
         trigger.triggerType = TriggerType.Multiple;
@@ -48,16 +48,24 @@ public class Game
         trigger.targetEntity = "entity 4";
         trigger.fValue = 100.0f;
         trigger.Spawn();
+
+        Brush floor = new Brush();
+        floor.SetBBox(new BBox(new Vector3(-15), new Vector3(15)));
         
         currentFile.AddEntity( playerSpawner );
         currentFile.AddEntity( npcSpawner );
         currentFile.AddEntity( trigger );
-
+        currentFile.AddBrush(floor);
+        
         WTF.SaveFile( "maps/test.wtf", currentFile );
 
         // Load everything necessary from the current file
         currentScene = Scene.LoadFromWTFFile(currentFile);
 
+        // EntitySpawner<Player> playerSpawner = currentScene.FindEntity<EntitySpawner<Player>>("entity 0");
+        // EntitySpawner<TestNPC> npcSpawner = currentScene.FindEntity<EntitySpawner<TestNPC>>("entity 1");
+        // TriggerBrush trigger = currentScene.FindEntity<TriggerBrush>("entity 2");
+        
         Player player = playerSpawner.SpawnEntity();
         TestNPC npc = npcSpawner.SpawnEntity();
         

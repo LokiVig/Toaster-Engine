@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using DoomNET.Resources;
 
 namespace DoomNET.Entities;
@@ -7,7 +8,7 @@ namespace DoomNET.Entities;
 /// <summary>
 /// An entity.<br/>
 /// Something that can, for example, be seen, interacted with, killed, or other, should be defined as an entity.<br/>
-/// For example:
+/// E.g.:
 /// <list type="bullet">
 ///     <item>Triggers</item>
 ///     <item>Player</item>
@@ -20,8 +21,8 @@ public class Entity
 	public Vector3 position; // This entity's current position
 	public Quaternion rotation; // This entity's current rotation
 	public BBox bbox; // This entity's bounding box
-	public string id; // This entity's identity
 	
+	public string id { get; set; } // This entity's identifier
 	public virtual EntityType type { get; private set; } = EntityType.None; // This entity's type, e.g. player / NPC
 	public virtual float health { get; set; } // This entity's health
 
@@ -32,8 +33,7 @@ public class Entity
 
 	public Entity()
 	{
-		// Check for errors
-		ErrorCheck();
+		ErrorCheck(); // Check for errors
 	}
 
 	public Entity(Vector3 position)
@@ -78,6 +78,11 @@ public class Entity
 	/// </summary>
 	protected virtual void Update()
 	{
+		// Can't have bounding boxes where the maxs have a less value than mins, or vice versa
+		if (bbox.mins >= bbox.maxs || bbox.maxs <= bbox.mins)
+		{
+			throw new Exception($"Entity {this}'s bounding boxes are mismatched!");
+		}
 	}
 
 	/// <summary>
@@ -286,7 +291,6 @@ public class Entity
 	}
 
 	#region ONEVENTS
-
 	/// <summary>
 	/// Call parameterless event
 	/// </summary>
@@ -313,22 +317,6 @@ public class Entity
 
 			default: // Most likely happens when an invalid event was attempted on this entity
 				return;
-		}
-	}
-
-	/// <summary>
-	/// Call an event that takes entity type parameters.
-	/// </summary>
-	/// <param name="eEvent">Desired event to do to this entity.</param>
-	/// <param name="source">The entity that caused this event.</param>
-	/// <typeparam name="T">The type of entity.</typeparam>
-	public void OnEvent<T>(EntityEvent eEvent, Entity source = null) where T : Entity, new()
-	{
-		switch (eEvent)
-		{
-			case EntityEvent.SpawnEntity:
-				(this as EntitySpawner<T>)?.SpawnEntity();
-				break;
 		}
 	}
 
@@ -449,6 +437,7 @@ public class Entity
 	/// </summary>
 	protected virtual void OnSpawn()
 	{
+		
 	}
 
 	/// <summary>

@@ -6,10 +6,10 @@ namespace DoomNET.Resources;
 /// <summary>
 /// A brush, a collection of 6 solid faces, stretching from one point to another, defined with a bounding box
 /// </summary>
-public struct Brush : IEquatable<Brush>
+public struct Brush
 {
-    public BBox bbox { get; set; } = BBox.One; // The extents of this brush
     public string id { get; set; } // The id of this brush, can be set by the mapper
+    public BBox bbox { get; set; } = BBox.One; // The extents of this brush
     
     /// <summary>
     /// Create a brush with specified mins and maxs
@@ -72,20 +72,5 @@ public struct Brush : IEquatable<Brush>
 
         Game.currentFile.RemoveBrush(this);
         Game.currentFile.AddEntity(desiredEntity);
-    }
-
-    public bool Equals(Brush other)
-    {
-        return Equals(bbox, other.bbox) && id == other.id;
-    }
-
-    public override bool Equals(object obj)
-    {
-        return obj is Brush other && Equals(other);
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(bbox, id);
     }
 }

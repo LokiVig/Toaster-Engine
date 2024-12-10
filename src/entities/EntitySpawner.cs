@@ -4,10 +4,8 @@ using DoomNET.Resources;
 
 namespace DoomNET.Entities;
 
-public class EntitySpawner<T> : Entity where T : Entity, new()
+public class EntitySpawner<T> : ToolEntity where T : Entity, new()
 {
-    public override EntityType type => EntityType.Tool;
-    
     public EntitySpawner()
     {
         SetBBox(new BBox(new Vector3(-8, -8, -8), new Vector3(8, 8, 8)));
@@ -45,10 +43,10 @@ public class EntitySpawner<T> : Entity where T : Entity, new()
         ent.CreateID();
 
         Console.WriteLine($"Spawned entity {ent}.\n" +
-                            $"\tSource: {this}\n" +
-                            $"\tPosition: {ent.GetPosition()}\n" +
-                            $"\tRotation: {ent.GetRotation()}\n" +
-                            $"\tBBox: {ent.GetBBox()}\n");
+                                $"\tSource: {this}\n" +
+                                $"\tPosition: {ent.GetPosition()}\n" +
+                                $"\tRotation: {ent.GetRotation()}\n" +
+                                $"\tBBox: {ent.GetBBox()}\n");
 
         // And return the entity we just spawned
         return ent;
@@ -100,9 +98,10 @@ public class EntitySpawner : Entity
         ent.CreateID();
 
         Console.WriteLine($"Spawned entity {ent}.\n" +
-                          $"\tPosition: {ent.GetPosition()}\n" +
-                          $"\tRotation: {ent.GetRotation()}\n" +
-                          $"\tBBox: {ent.GetBBox()}\n");
+                              $"\tSource: {this}\n" +
+                              $"\tPosition: {ent.GetPosition()}\n" +
+                              $"\tRotation: {ent.GetRotation()}\n" +
+                              $"\tBBox: {ent.GetBBox()}\n");
 
         // And return the entity we just spawned
         return ent;

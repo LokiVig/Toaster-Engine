@@ -9,13 +9,12 @@ namespace DoomNET.Rendering;
 
 public class Renderer : GameWindow
 {
-#nullable enable
-	public event Action? OnRender;
-#nullable disable
+	public event Action OnRender;
 
 	private int vertexBufferObject;
 	private int vertexArrayObject;
 	private int elementBufferObject;
+	
 	private Shader shader;
 	private Texture texture;
 
