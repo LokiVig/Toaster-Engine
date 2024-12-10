@@ -1,11 +1,10 @@
-﻿#pragma warning disable CS0660
-#pragma warning disable CS0661
+﻿// ReSharper disable CompareOfFloatsByEqualityOperator
 
 using System;
 
 namespace DoomNET.Resources;
 
-public struct Vector4
+public struct Vector4 : IEquatable<Vector4>
 {
     public float x { get; set; }
     public float y { get; set; }
@@ -323,4 +322,19 @@ public struct Vector4
         }
     }
     #endregion // OPERATORS
+
+    public bool Equals(Vector4 other)
+    {
+        return x.Equals(other.x) && y.Equals(other.y) && z.Equals(other.z) && w.Equals(other.w);
+    }
+
+    public override bool Equals(object obj)
+    {
+        return obj is Vector4 other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(x, y, z, w);
+    }
 }

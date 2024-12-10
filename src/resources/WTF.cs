@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text.Json;
 using System.Collections.Generic;
-
+using System.Linq;
 using DoomNET.Entities;
 
 namespace DoomNET.Resources;
@@ -58,7 +58,7 @@ public class WTF
     /// <param name="id">The ID of the brush we're to remove from this file</param>
     public void RemoveBrush( string id )
     {
-        foreach (Brush brush in brushes)
+        foreach (Brush brush in brushes.ToList())
         {
             if (brush.GetID() == id)
             {
@@ -82,7 +82,7 @@ public class WTF
     /// <param name="id">Desired entity to remove</param>
     public void RemoveEntity( string id )
     {
-        foreach (Entity entity in entities)
+        foreach (Entity entity in entities.ToList())
         {
             if (entity.GetID() == id)
             {
@@ -218,6 +218,7 @@ public class WTF
     /// Save a WTF to a specified path
     /// </summary>
     /// <param name="path">The path of the WTF</param>
+    /// <param name="inFile">The desired file to save</param>
     public static void SaveFile( string path, WTF inFile )
     {
         // A local variable for storing the file

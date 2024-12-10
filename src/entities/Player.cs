@@ -6,14 +6,13 @@ namespace DoomNET.Entities;
 public class Player : Entity
 {
     public override EntityType type => EntityType.Player; // This entity is of type Player
+    public override float health { get; set; } = 100.0f;
     
     public Camera camera;
-
-    protected float _health = 100.0f;
     
     private float armor = 0.0f; // Remove a certain amount of damage taken if armor isn't 0, and decrease the armor value when taking damage
 
-    public Player() : base()
+    public Player()
     {
         SetBBox(new BBox(new Vector3(-32, -32, 0), new Vector3(32, 32, 64)));
     }
@@ -44,11 +43,11 @@ public class Player : Entity
         if (armor > 0.0f)
         {
             armor -= damage;
-            _health -= damage / 2;
+            health -= damage / 2;
         }
         else if (armor <= 0.0f) // Take regular amount of damage if no armor
         {
-            _health -= damage;
+            health -= damage;
         }
 
         // We have taken damage, OnDamage call!

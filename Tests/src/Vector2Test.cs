@@ -10,13 +10,11 @@ public class Vector2Test
     // Value 1's
     private float value1_x; // X
     private float value1_y; // Y
-    private float value1_z; // Z
     // values
 
     // Value 2's
     private float value2_x; // X
     private float value2_y; // Y
-    private float value2_z; // Z
     // values
 
     // Minimum and maximum values for rand.Next(int, int) to use
@@ -308,7 +306,7 @@ public class Vector2Test
             Vector2 value1 = new Vector2( value1_x = rand.Next( RAND_MIN, RAND_MAX ), value1_y = rand.Next( RAND_MIN, RAND_MAX ) );
             Vector2 value2 = new Vector2( value2_x = rand.Next( RAND_MIN, RAND_MAX ), value2_y = rand.Next( RAND_MIN, RAND_MAX ) );
 
-            bool expected = (float)Math.Sqrt( value1_x * value1_x + value1_y * value1_y + value1_z * value1_z ) - (float)Math.Sqrt( value2_x * value2_x + value2_y * value2_y + value2_z * value2_z ) < 0;
+            bool expected = (float)Math.Sqrt( value1_x * value1_x + value1_y * value1_y ) - (float)Math.Sqrt( value2_x * value2_x + value2_y * value2_y ) < 0;
 
             bool result = value1 < value2;
 
@@ -349,7 +347,7 @@ public class Vector2Test
             Vector2 value1 = new Vector2( value1_x = rand.Next( RAND_MIN, RAND_MAX ), value1_y = rand.Next( RAND_MIN, RAND_MAX ) );
             Vector2 value2 = new Vector2( value2_x = rand.Next( RAND_MIN, RAND_MAX ), value2_y = rand.Next( RAND_MIN, RAND_MAX ) );
 
-            bool expected = (float)Math.Sqrt( value1_x * value1_x + value1_y * value1_y + value1_z * value1_z ) - (float)Math.Sqrt( value2_x * value2_x + value2_y * value2_y + value2_z * value2_z ) > 0;
+            bool expected = (float)Math.Sqrt( value1_x * value1_x + value1_y * value1_y ) - (float)Math.Sqrt( value2_x * value2_x + value2_y * value2_y ) > 0;
 
             bool result = value1 > value2;
 

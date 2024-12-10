@@ -1,5 +1,4 @@
-﻿#pragma warning disable CS0660
-#pragma warning disable CS0661
+﻿// ReSharper disable CompareOfFloatsByEqualityOperator
 
 using System;
 
@@ -8,7 +7,7 @@ namespace DoomNET.Resources;
 /// <summary>
 /// Struct defining a point in 2 dimensions
 /// </summary>
-public struct Vector2
+public struct Vector2 : IEquatable<Vector2>
 {
     public float x { get; set; }
     public float y { get; set; }
@@ -274,4 +273,19 @@ public struct Vector2
         }
     }
     #endregion // OPERATORS
+
+    public bool Equals(Vector2 other)
+    {
+        return x.Equals(other.x) && y.Equals(other.y);
+    }
+
+    public override bool Equals(object obj)
+    {
+        return obj is Vector2 other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(x, y);
+    }
 }

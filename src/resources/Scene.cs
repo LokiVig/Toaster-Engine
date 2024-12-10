@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System.Linq;
 using DoomNET.Entities;
 
 namespace DoomNET.Resources;
@@ -41,7 +41,7 @@ public class Scene
     /// <param name="id">Desired entity to remove</param>
     public void RemoveEntity( string id )
     {
-        foreach (Entity entity in entities)
+        foreach (Entity entity in entities.ToList())
         {
             if (entity.GetID() == id)
             {

@@ -2,6 +2,7 @@
 #pragma warning disable CS0661
 
 using System;
+// ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace DoomNET.Resources;
 

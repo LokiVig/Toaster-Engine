@@ -1,10 +1,7 @@
-﻿using DoomNET.Resources;
-
-namespace DoomNET.Entities;
+﻿namespace DoomNET.Entities;
 
 public class DamageableBrush : Entity
 {
     public override EntityType type => EntityType.DamageableBrush; // This entity is of type DamageableBrush
-
-    protected float _health = 100.0f;
+    public override float health { get; set; } = 100.0f;
 }

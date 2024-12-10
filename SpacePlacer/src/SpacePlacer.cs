@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+
 using DoomNET.Resources;
 
 namespace DoomNET.SpacePlacer;
@@ -42,15 +43,6 @@ public class SpacePlacer
 
             // Call all the necessary update functions
             OnUpdate?.Invoke();
-
-            // Handle FPS locking - to 60 max
-            float elapsedTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
-            float timeToWait = (1.0f / 60.0f) - elapsedTime;
-
-            if (timeToWait > 0)
-            {
-                Thread.Sleep((int)(timeToWait * 1000));
-            }
         }
     }
 
@@ -64,8 +56,8 @@ public class SpacePlacer
         WTF.SaveFile(file?.directory, file);
     }
 
-    private void SaveMap(WTF file)
+    private void SaveMap(WTF inFile)
     {
-        WTF.SaveFile(file.directory, file);
+        WTF.SaveFile(inFile.directory, inFile);
     }
 }

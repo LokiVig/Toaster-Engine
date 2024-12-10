@@ -6,7 +6,9 @@ namespace DoomNET.Entities;
 
 public class EntitySpawner<T> : Entity where T : Entity, new()
 {
-    public EntitySpawner() : base()
+    public override EntityType type => EntityType.Tool;
+    
+    public EntitySpawner()
     {
         SetBBox(new BBox(new Vector3(-8, -8, -8), new Vector3(8, 8, 8)));
     }
@@ -19,7 +21,6 @@ public class EntitySpawner<T> : Entity where T : Entity, new()
     /// <summary>
     /// Spawn an entity, based on the given argument.
     /// </summary>
-    /// <param name="ent">The entity we wish to spawn.</param>
     /// <returns>The recently spawned entity.</returns>
     public T SpawnEntity()
     {
@@ -40,7 +41,11 @@ public class EntitySpawner<T> : Entity where T : Entity, new()
         // Add the newly spawned entity to the current scene
         Game.currentScene?.AddEntity(ent);
 
+        // Generate the entity's ID
+        ent.CreateID();
+
         Console.WriteLine($"Spawned entity {ent}.\n" +
+                            $"\tSource: {this}\n" +
                             $"\tPosition: {ent.GetPosition()}\n" +
                             $"\tRotation: {ent.GetRotation()}\n" +
                             $"\tBBox: {ent.GetBBox()}\n");
@@ -48,11 +53,18 @@ public class EntitySpawner<T> : Entity where T : Entity, new()
         // And return the entity we just spawned
         return ent;
     }
+
+    public override string ToString()
+    {
+        return $"EntitySpawner<{typeof(T)}> (\"{GetID()}\")";
+    }
 }
 
 public class EntitySpawner : Entity
 {
-    public EntitySpawner() : base()
+    public override EntityType type => EntityType.Tool;
+    
+    public EntitySpawner()
     {
         SetBBox(new BBox(new Vector3(-8, -8, -8), new Vector3(8, 8, 8)));
     }
@@ -83,6 +95,9 @@ public class EntitySpawner : Entity
 
         // Add the newly spawned entity to the current scene
         Game.currentScene?.AddEntity(ent);
+
+        // Generate the entity's ID
+        ent.CreateID();
 
         Console.WriteLine($"Spawned entity {ent}.\n" +
                           $"\tPosition: {ent.GetPosition()}\n" +

@@ -39,9 +39,9 @@ public class Game
         EntitySpawner<Player> playerSpawner = new EntitySpawner<Player>();
         EntitySpawner<TestNPC> npcSpawner = new EntitySpawner<TestNPC>(new Vector3(0, 5, 0));
 
-        TriggerBrush trigger = new TriggerBrush(new Vector3(0, 0, 15.0f));
+        TriggerBrush trigger = new TriggerBrush();
         trigger.SetBBox( new BBox( new Vector3( -15.0f ), new Vector3( 15.0f ) ) );
-        trigger.triggerType = TriggerType.Once;
+        trigger.triggerType = TriggerType.Multiple;
         trigger.triggerBy = TriggerBy.Player;
         trigger.triggerOn = TriggerOn.Trigger;
         trigger.targetEvent = EntityEvent.TakeDamage;
@@ -61,11 +61,9 @@ public class Game
         Player player = playerSpawner.SpawnEntity();
         TestNPC npc = npcSpawner.SpawnEntity();
         
-        // Create the ID for the NPC and player
-        player.CreateID();
-        npc.CreateID();
+        Ray.Trace( player, new Vector3(0, 500, 250), out object hitObject, RayIgnore.None, [playerSpawner, npcSpawner, trigger] );
         
-        Ray.Trace( player, npc, out object hitObject, RayIgnore.None, [trigger, playerSpawner, npcSpawner] );
+        (hitObject as Entity)?.TakeDamage(5, player);
         
         renderer = new Renderer(windowWidth, windowHeight, "Doom.NET"); // Initialize a new window to render upon
         renderer.OnRender += Update; // Subscribe the update method, so everytime something is rendered, we update the game
@@ -75,7 +73,7 @@ public class Game
     private Stopwatch watch = Stopwatch.StartNew();
 
     /// <summary>
-    /// Update game functions.
+    /// Defines things to do every frame the game is run.
     /// </summary>
     private void Update()
     {
@@ -87,21 +85,21 @@ public class Game
         if (currentScene != null)
         {
             // Check every entity in the current scene
-            foreach (Entity ent in currentScene.GetEntities())
-            {
-                // If this entity doesn't have an ID...
-                if (string.IsNullOrEmpty(ent.GetID()))
-                {
-                    // Create an ID for the entity!
-                    ent.CreateID();
-                }
+            // foreach (Entity ent in currentScene.GetEntities())
+            // {
+                // // If this entity doesn't have an ID...
+                // if (string.IsNullOrEmpty(ent.GetID()))
+                // {
+                //     // Create an ID for the entity!
+                //     ent.CreateID();
+                // }
 
                 // DEBUG: Log every entity, their position, velocity, BBox, and ID
                 // Console.WriteLine($"Entity {ent} (\"{ent.GetID()}\")\n" +
                 //                     $"\tPosition: {ent.GetPosition()}\n" +
                 //                     $"\tVelocity: {ent.GetVelocity()}\n" +
                 //                     $"\tBBox: {ent.GetBBox()}\n");
-            }
+            // }
         }
 
         // Call the OnUpdate event, so everything else that should update also updates with us

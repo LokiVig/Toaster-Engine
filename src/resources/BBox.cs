@@ -7,10 +7,10 @@ namespace DoomNET.Resources;
 /// </summary>
 public class BBox
 {
-    public Vector3 mins { get; set; } // The min extents of this BBox
-    public Vector3 maxs { get; set; } // The max extents of this BBox
+    public Vector3 mins { get; set; } // The minimum extents of this BBox
+    public Vector3 maxs { get; set; } // The maximum extents of this BBox
 
-    public static readonly BBox One = new BBox(Vector3.One, -Vector3.One);
+    public static readonly BBox One = new BBox(-Vector3.One, Vector3.One);
     public static readonly BBox Zero = new BBox(Vector3.Zero, Vector3.Zero);
 
     public BBox( Vector3 mins, Vector3 maxs )
@@ -23,10 +23,10 @@ public class BBox
     /// Is this BBox intersecting with another BBox?
     /// </summary>
     /// <param name="other">The other BBox to check for intersections with</param>
-    /// <returns><see langword="true"/> if intersecting with <see href="other"/>, <see langword="false"/> if not</returns>
+    /// <returns><see langword="true"/> if intersecting with <paramref name="other"/>, <see langword="false"/> if not</returns>
     public bool IntersectingWith( BBox other )
     {
-        // We shouldn't be trying to intersect with ourselves!
+        // We shouldn't be trying to intersect with ourself!
         if (other == this)
         {
             return false;
@@ -74,7 +74,7 @@ public class BBox
 
             if (Math.Abs(direction) < epsilon)
             {
-                // Ray is parallel to the slab (no intersection if origin is outside the slab)
+                // Ray is parallel to the object (no intersection if origin is outside the object)
                 if (origin < min || origin > max)
                 {
                     return false;
@@ -116,6 +116,6 @@ public class BBox
 
     public override string ToString()
     {
-        return $"{{{mins.ToString()}, {maxs.ToString()}}}";
+        return $"{{{mins}, {maxs}}}";
     }
 }
