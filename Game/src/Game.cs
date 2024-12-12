@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-
+using System.Runtime.InteropServices;
 using DoomNET.Entities;
 using DoomNET.Rendering;
 using DoomNET.Resources;
@@ -14,6 +14,40 @@ namespace DoomNET;
 /// </summary>
 public class Game
 {
+    [StructLayout(LayoutKind.Sequential)]
+    private struct MSG
+    {
+        public IntPtr hwnd;
+        public uint message;
+        public IntPtr wParam;
+        public IntPtr lParam;
+        public uint time;
+        public int pt_x;
+        public int pt_y;
+    }
+    
+    [DllImport("Doom.NET.Renderer.dll", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr CreateRenderer();
+
+    [DllImport("Doom.NET.Renderer.dll", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void StartRenderer(IntPtr renderer, IntPtr hInstance, int nCmdShow);
+
+    [DllImport("Doom.NET.Renderer.dll", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void RenderFrame(IntPtr renderer);
+    
+    [DllImport("Doom.NET.Renderer.dll", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void DestroyRenderer(IntPtr renderer);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool PeekMessage(out MSG msg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax,
+        uint wRemoveMsg);
+    
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool TranslateMessage(ref MSG msg);
+    
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern IntPtr DispatchMessage(ref MSG msg);
+    
     public static event Action OnUpdate; // Whenever we should update things, this event gets called
     
     public static WTF currentFile; // The currently loaded WTF file / map
@@ -25,6 +59,8 @@ public class Game
     
     public const int windowWidth = 1280; // The base width of the rendered window
     public const int windowHeight = 720; // The base height of the rendered window
+
+    private IntPtr renderer;
     
     /// <summary>
     /// Initialize the game
@@ -71,6 +107,22 @@ public class Game
         Ray.Trace( player, new Vector3(0, 500, 250), out object hitObject, RayIgnore.None, [playerSpawner, npcSpawner, trigger] );
         
         (hitObject as Entity)?.TakeDamage(5, player);
+        
+        // Initialize the renderer
+        renderer = CreateRenderer();
+
+        // If it isn't null
+        if (renderer != IntPtr.Zero)
+        {
+            // Start it proper!
+            StartRenderer(renderer, IntPtr.Zero, 1);
+        }
+
+        // Call the update function to start the game loop
+        Update();
+        
+        // Destroy the renderer after we're finished
+        DestroyRenderer( renderer );
     }
     
     private Stopwatch watch = Stopwatch.StartNew();
@@ -80,18 +132,36 @@ public class Game
     /// </summary>
     private void Update()
     {
-        // Calculate deltaTime
-        deltaTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
-        watch.Restart();
-
-        // Things to do when there is a loaded scene
-        if (currentScene != null)
+        while (renderer != IntPtr.Zero)
         {
-            
-        }
+            // Process Windows messages to handle input, window events, etc.
+            if (PeekMessage(out MSG msg, IntPtr.Zero, 0, 0, 0x0001)) // WM_QUIT message
+            {
+                if (msg.message == 0x0012) // WM_QUIT
+                {
+                    break; // Exit the loop if the quit message is received
+                }
 
-        // Call the OnUpdate event, so everything else that should update also updates with us
-        OnUpdate?.Invoke();
+                TranslateMessage(ref msg);
+                DispatchMessage(ref msg);
+            }
+            
+            // Calculate deltaTime
+            deltaTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
+            watch.Restart();
+            
+            // Things to do when there is a loaded scene
+            if (currentScene != null)
+            {
+
+            }
+
+            // Call the OnUpdate event, so everything else that should update also updates with us
+            OnUpdate?.Invoke();
+            
+            // Call the rendering function
+            RenderFrame(renderer);
+        }
     }
 }
 

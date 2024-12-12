@@ -7,6 +7,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RootNamespace>DoomNET</RootNamespace>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <AssemblyName>Doom.NET</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>$(SolutionDir)build\$(Configuration)</OutputPath>
@@ -14,29 +15,6 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>$(SolutionDir)build\$(Configuration)</OutputPath>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="SpacePlacer\**" />
-    <Compile Remove="Tests\**" />
-    <Compile Remove="Vortice.Framework\**" />
-    <EmbeddedResource Remove="SpacePlacer\**" />
-    <EmbeddedResource Remove="Tests\**" />
-    <EmbeddedResource Remove="Vortice.Framework\**" />
-    <None Remove="SpacePlacer\**" />
-    <None Remove="Tests\**" />
-    <None Remove="Vortice.Framework\**" />
-    <Compile Remove="Renderer\**" />
-    <EmbeddedResource Remove="Renderer\**" />
-    <None Remove="Renderer\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Vortice.Framework">
-      <HintPath>build\Debug\net8.0\Vortice.Framework.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="OpenTK" Version="5.0.0-pre.13" />
-    <PackageReference Include="StbImageSharp" Version="2.30.15" />
-  </ItemGroup>
   <ItemGroup>
     <Folder Include="src\rendering\textures\dev\" />
   </ItemGroup>
