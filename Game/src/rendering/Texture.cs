@@ -9,6 +9,8 @@ namespace DoomNET.Rendering;
 
 public class Texture
 {
+    public const string MISSINGTEXTURE = "./textures/dev/missing_texture.png";
+    
     private int handle;
 
     public Texture(int handle)

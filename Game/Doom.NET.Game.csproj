@@ -7,7 +7,12 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RootNamespace>DoomNET</RootNamespace>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>$(SolutionDir)build\$(Configuration)</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>$(SolutionDir)build\$(Configuration)</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="SpacePlacer\**" />
@@ -19,6 +24,9 @@
     <None Remove="SpacePlacer\**" />
     <None Remove="Tests\**" />
     <None Remove="Vortice.Framework\**" />
+    <Compile Remove="Renderer\**" />
+    <EmbeddedResource Remove="Renderer\**" />
+    <None Remove="Renderer\**" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Vortice.Framework">
@@ -33,6 +41,7 @@
     <Folder Include="src\rendering\textures\dev\" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)src\rendering\shaders\*&quot; &quot;$(OutDir)resources\shaders\&quot;&#xA;xcopy /E /S /Y &quot;$(SolutionDir)src\rendering\textures\*&quot; &quot;$(OutDir)resources\textures\&quot;" />
+    <Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)Game\src\rendering\shaders\*&quot; &quot;$(OutDir)resources\shaders\&quot;" />
+    <Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)Game\src\rendering\textures\*&quot; &quot;$(OutDir)resources\textures\&quot;" />
   </Target>
 </Project>

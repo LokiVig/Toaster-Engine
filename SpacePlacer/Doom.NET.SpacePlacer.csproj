@@ -11,5 +11,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Doom.NET.csproj" />
+    <ProjectReference Include="..\Game\Doom.NET.Game.csproj" />
   </ItemGroup>
 </Project>

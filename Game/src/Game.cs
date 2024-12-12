@@ -14,17 +14,17 @@ namespace DoomNET;
 /// </summary>
 public class Game
 {
-    public static event Action OnUpdate;
+    public static event Action OnUpdate; // Whenever we should update things, this event gets called
     
-    public static WTF currentFile;
-    public static Scene currentScene;
+    public static WTF currentFile; // The currently loaded WTF file / map
+    public static Scene currentScene; // The currently running scene, initialized from the current file
+
+    public static GameState currentState; // The state the game currently is in
     
-    public static float deltaTime;
+    public static float deltaTime; // Helps stopping you from using FPS-dependant calculations
     
-    public static int windowWidth = 1280;
-    public static int windowHeight = 720;
-    
-    private Renderer renderer;
+    public const int windowWidth = 1280; // The base width of the rendered window
+    public const int windowHeight = 720; // The base height of the rendered window
     
     /// <summary>
     /// Initialize the game
@@ -49,8 +49,7 @@ public class Game
         trigger.fValue = 100.0f;
         trigger.Spawn();
 
-        Brush floor = new Brush();
-        floor.SetBBox(new BBox(new Vector3(-15), new Vector3(15)));
+        Brush floor = new Brush(new BBox(new Vector3(-15), new Vector3(15)));
         
         currentFile.AddEntity( playerSpawner );
         currentFile.AddEntity( npcSpawner );
@@ -72,10 +71,6 @@ public class Game
         Ray.Trace( player, new Vector3(0, 500, 250), out object hitObject, RayIgnore.None, [playerSpawner, npcSpawner, trigger] );
         
         (hitObject as Entity)?.TakeDamage(5, player);
-        
-        renderer = new Renderer(windowWidth, windowHeight, "Doom.NET"); // Initialize a new window to render upon
-        renderer.OnRender += Update; // Subscribe the update method, so everytime something is rendered, we update the game
-        renderer.Run(); // Run the renderer
     }
     
     private Stopwatch watch = Stopwatch.StartNew();
@@ -92,25 +87,20 @@ public class Game
         // Things to do when there is a loaded scene
         if (currentScene != null)
         {
-            // Check every entity in the current scene
-            // foreach (Entity ent in currentScene.GetEntities())
-            // {
-                // // If this entity doesn't have an ID...
-                // if (string.IsNullOrEmpty(ent.GetID()))
-                // {
-                //     // Create an ID for the entity!
-                //     ent.CreateID();
-                // }
-
-                // DEBUG: Log every entity, their position, velocity, BBox, and ID
-                // Console.WriteLine($"Entity {ent} (\"{ent.GetID()}\")\n" +
-                //                     $"\tPosition: {ent.GetPosition()}\n" +
-                //                     $"\tVelocity: {ent.GetVelocity()}\n" +
-                //                     $"\tBBox: {ent.GetBBox()}\n");
-            // }
+            
         }
 
         // Call the OnUpdate event, so everything else that should update also updates with us
         OnUpdate?.Invoke();
     }
+}
+
+/// <summary>
+/// This enum defines the different states the game can be in.
+/// </summary>
+public enum GameState
+{
+    Menu = 1, // Used when accessing any sort of menu
+    Active = 2, // Rendering, updating, doing everything it should
+    Paused = 4, // Paused for any reason, possibly maskable with menu?
 }

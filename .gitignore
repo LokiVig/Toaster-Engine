@@ -8,6 +8,7 @@ build/*
 .idea/*
 *.user
 
-# Built files for other projects
+# Built files for the projects
+Game/obj/*
 SpacePlacer/obj/*
 Tests/obj/*
