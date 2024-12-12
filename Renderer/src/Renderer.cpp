@@ -3,6 +3,8 @@
 
 HRESULT Renderer::InitWindow(HINSTANCE hInstance, int nCmdShow)
 {
+    std::cout << "Renderer::InitWindow(): Initializing window...\n";
+    
     // Register class
     WNDCLASSEX wcex;
     wcex.cbSize = sizeof(WNDCLASSEX);
@@ -20,6 +22,7 @@ HRESULT Renderer::InitWindow(HINSTANCE hInstance, int nCmdShow)
 
     if (!RegisterClassEx(&wcex))
     {
+        std::cout << "Renderer::InitWindow(): Error registering window class!\n";
         return E_FAIL;
     }
 
@@ -33,11 +36,13 @@ HRESULT Renderer::InitWindow(HINSTANCE hInstance, int nCmdShow)
 
     if (!m_hWnd)
     {
+        std::cout << "Renderer::InitWindow(): Error creating window handle!\n";
         return E_FAIL;
     }
 
     ShowWindow(m_hWnd, nCmdShow);
 
+    std::cout << "Renderer::InitWindow(): Successfully initialized a window!\n\n";
     return S_OK;
 }
 
@@ -94,6 +99,8 @@ HRESULT Renderer::InitDevice()
     };
     UINT numFeatureLevels = ARRAYSIZE(featureLevels);
 
+    std::cout << "Renderer::InitDevice(): Initializing devices...\n";
+    
     for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
     {
         m_driverType = driverTypes[driverTypeIndex];
@@ -110,12 +117,14 @@ HRESULT Renderer::InitDevice()
 
         if (SUCCEEDED(hr))
         {
+            std::cout << "Renderer::InitDevice(): Successfully created devices needed for every driver type!\n";
             break;
         }
     }
 
     if (FAILED(hr))
     {
+        std::cout << "Renderer::InitDevice(): Failed to create devices!\n\n";
         return hr;
     }
 
@@ -142,8 +151,11 @@ HRESULT Renderer::InitDevice()
 
     if (FAILED(hr))
     {
+        std::cout << "Renderer::InitDevice(): Failed to create factory!\n\n";
         return hr;
     }
+
+    std::cout << "Renderer::InitDevice(): Successfully created factory!\n";
 
     // Create swap chain
     IDXGIFactory2* dxgiFactory2 = nullptr;
@@ -203,29 +215,38 @@ HRESULT Renderer::InitDevice()
 
     if (FAILED(hr))
     {
+        std::cout << "Renderer::InitDevice(): Failed to create swap chain!\n\n";
         return hr;
     }
 
+    std::cout << "Renderer::InitDevice(): Successfully created swap chain!\n";
+    
     // Create a render target view
     ID3D11Texture2D* pBackBuffer = nullptr;
     hr = m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer));
 
     if (FAILED(hr))
     {
+        std::cout << "Renderer::InitDevice(): Failed to create back buffer!\n\n";
         return hr;
     }
+
+    std::cout << "Renderer::InitDevice(): Successfully created back buffer!\n";
 
     hr = m_pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &m_pRenderTargetView);
     pBackBuffer->Release();
 
     if (FAILED(hr))
     {
+        std::cout << "Renderer::InitDevice(): Failed to create render target!\n\n";
         return hr;
     }
 
+    std::cout << "Renderer::InitDevice(): Successfully created render target!\n";
+
     m_pImmediateContext->OMSetRenderTargets(1, &m_pRenderTargetView, nullptr);
 
-    // Setup the viewport
+    // Set up the viewport
     D3D11_VIEWPORT vp;
     vp.Width = width;
     vp.Height = height;
@@ -235,6 +256,10 @@ HRESULT Renderer::InitDevice()
     vp.TopLeftY = 0;
     m_pImmediateContext->RSSetViewports(1, &vp);
 
+    std::cout << "Renderer::InitDevice(): Successfully created viewport!\n";
+
+    std::cout << "Renderer::InitDevice(): Successfully initialized all devices!\n\n";
+    
     return S_OK;
 }
 
