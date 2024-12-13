@@ -276,9 +276,14 @@ HRESULT Renderer::InitDevice()
     return S_OK;
 }
 
-void Renderer::Render()
+void Renderer::Render(Scene* scene)
 {
-    // Just clear the backbuffer
+    if (scene)
+    {
+        // Set our scene correctly
+        m_pScene = scene;
+    }
+
     m_pImmediateContext->ClearRenderTargetView(m_pRenderTargetView, DirectX::Colors::MidnightBlue);
     m_pSwapChain->Present(0, 0);
 }

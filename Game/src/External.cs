@@ -20,13 +20,13 @@ public class External
     }
 
     [DllImport("Doom.NET.Renderer.dll", CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr CreateRenderer(Scene scene);
+    public static extern IntPtr CreateRenderer();
 
     [DllImport("Doom.NET.Renderer.dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern void StartRenderer(IntPtr renderer, IntPtr hInstance, int nCmdShow);
 
     [DllImport("Doom.NET.Renderer.dll", CallingConvention = CallingConvention.Cdecl)]
-    public static extern void RenderFrame(IntPtr renderer);
+    public static extern void RenderFrame(IntPtr renderer, Scene scene);
 
     [DllImport("Doom.NET.Renderer.dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern void DestroyRenderer(IntPtr renderer);

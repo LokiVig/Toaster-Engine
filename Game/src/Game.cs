@@ -85,7 +85,7 @@ public class Game
 		(hitObject as Entity)?.TakeDamage(5, player);
 
 		// Initialize the renderer
-		renderer = External.CreateRenderer(currentScene);
+		renderer = External.CreateRenderer();
 
 		// If it isn't null
 		if (renderer != IntPtr.Zero)
@@ -170,7 +170,7 @@ public class Game
 			OnUpdate?.Invoke();
 
 			// Call the rendering function
-			External.RenderFrame(renderer);
+			External.RenderFrame(renderer, currentScene);
 		}
 	}
 }

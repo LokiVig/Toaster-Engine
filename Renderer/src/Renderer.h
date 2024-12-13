@@ -117,12 +117,6 @@ public:
 class Renderer
 {
 public:
-    Renderer(Scene scene)
-        : m_pScene(&scene)
-    {
-    }
-
-public:
     INT WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine,
                        _In_ int nCmdShow)
     {
@@ -131,29 +125,29 @@ public:
 
         if (FAILED(InitWindow(hInstance, nCmdShow)))
         {
-            return 0;
+            return -1;
         }
 
         if (FAILED(InitDevice()))
         {
             CleanupDevice();
-            return 0;
+            return -1;
         }
 
         // Main message loop
         MSG msg = {0};
 
-        while (WM_QUIT != msg.message)
+        while (msg.message != WM_QUIT)
         {
             if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
             {
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
             }
-            else
-            {
-                Render();
-            }
+            // else
+            // {
+            //     Render(m_pScene);
+            // }
         }
 
         CleanupDevice();
@@ -167,7 +161,7 @@ public:
                                   ID3DBlob** ppBlobOut);
     void CleanupDevice();
     static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-    void Render();
+    void Render(Scene* scene);
 
 private:
     HINSTANCE m_hInstance = nullptr;

@@ -107,8 +107,6 @@ public class Entity
 		{
 			velocity = Vector3.Zero;
 		}
-		
-		Console.WriteLine($"Entity {this} is at {position} with {velocity} velocity");
 	}
 
 	/// <summary>
