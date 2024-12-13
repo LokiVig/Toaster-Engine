@@ -31,6 +31,9 @@ public class Entity
 	private Entity target; // The entity this entity's targeting
 	private Entity lastAttacker; // The last entity to attack this entity
 
+	private const float MAX_VELOCITY = 225;
+	private const float MIN_VELOCITY = -225;
+
 	public Entity()
 	{
 		ErrorCheck(); // Check for errors
@@ -90,17 +93,22 @@ public class Entity
 	/// </summary>
 	protected void HandleMovement()
 	{
+		// Clamp velocity between the min and max values
+		velocity = Vector3.Clamp(velocity, MIN_VELOCITY, MAX_VELOCITY);
+		
 		// Position is affected by velocity
 		position += velocity * Game.deltaTime;
 
 		// Velocity decreases with time (effectively drag)
-		velocity *= (1 - 0.1f * Game.deltaTime);
+		velocity *= (1 - 0.75f * Game.deltaTime);
 
-		// If the velocity's magnitude <= 0.5, it's effectively zero, so zero it out for the sake of ease
-		if (velocity.Magnitude() <= 0.5f)
+		// If the velocity's magnitude <= 0.01, it's effectively zero, so zero it out for the sake of ease
+		if (velocity.Magnitude() <= 0.01f)
 		{
 			velocity = Vector3.Zero;
 		}
+		
+		Console.WriteLine($"Entity {this} is at {position} with {velocity} velocity");
 	}
 
 	/// <summary>
@@ -232,6 +240,16 @@ public class Entity
 	public void LookAtEntity(Entity entity = null)
 	{
 		// Do math
+	}
+
+	/// <summary>
+	/// Adds the argument <see cref="Vector3"/> value to the velocity.
+ 	/// </summary>
+	/// <param name="force">The amount of force to add to this entity's velocity.</param>
+	/// <param name="multiplier">Multiplies the input vector by this value.</param>
+	public void AddForce(Vector3 force, float multiplier = 5)
+	{
+		velocity += force * multiplier;
 	}
 
 	/// <summary>

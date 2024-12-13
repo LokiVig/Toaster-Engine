@@ -76,7 +76,7 @@ public struct Vector3 : IEquatable<Vector3>
 		}
 		else
 		{
-			return new Vector3();
+			return Zero;
 		}
 	}
 
@@ -98,6 +98,11 @@ public struct Vector3 : IEquatable<Vector3>
 	public static float Dot(Vector3 a, Vector3 b)
 	{
 		return a.x * b.x + a.y + b.y + a.z * b.z;
+	}
+
+	public static Vector3 Clamp(Vector3 vec, float min, float max)
+	{
+		return new Vector3(Math.Clamp(vec.x, min, max), Math.Clamp(vec.y, min, max), Math.Clamp(vec.z, min, max));
 	}
 
 	public readonly override string ToString()

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
+using DoomNET.Resources;
+
 namespace DoomNET;
 
 public class External
@@ -18,7 +20,7 @@ public class External
     }
 
     [DllImport("Doom.NET.Renderer.dll", CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr CreateRenderer();
+    public static extern IntPtr CreateRenderer(Scene scene);
 
     [DllImport("Doom.NET.Renderer.dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern void StartRenderer(IntPtr renderer, IntPtr hInstance, int nCmdShow);

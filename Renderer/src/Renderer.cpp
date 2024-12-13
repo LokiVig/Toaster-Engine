@@ -1,10 +1,11 @@
 ﻿#include "Renderer.h"
+#include <d3dcompiler.h>
 #include <DirectXColors.h>
 
 HRESULT Renderer::InitWindow(HINSTANCE hInstance, int nCmdShow)
 {
     std::cout << "Renderer::InitWindow(): Initializing window...\n";
-    
+
     // Register class
     WNDCLASSEX wcex;
     wcex.cbSize = sizeof(WNDCLASSEX);
@@ -16,13 +17,13 @@ HRESULT Renderer::InitWindow(HINSTANCE hInstance, int nCmdShow)
     wcex.hIcon = LoadIcon(hInstance, (LPCTSTR)IDI_APPLICATION);
     wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-    wcex.lpszMenuName = nullptr;
+    wcex.lpszMenuName = L"Whag";
     wcex.lpszClassName = L"DoomNETWindowClass";
     wcex.hIconSm = LoadIcon(wcex.hInstance, IDI_APPLICATION);
 
     if (!RegisterClassEx(&wcex))
     {
-        std::cout << "Renderer::InitWindow(): Error registering window class!\n";
+        MessageBox(nullptr, L"Encountered an error registering the window class!", L"Error", MB_OK);
         return E_FAIL;
     }
 
@@ -36,7 +37,7 @@ HRESULT Renderer::InitWindow(HINSTANCE hInstance, int nCmdShow)
 
     if (!m_hWnd)
     {
-        std::cout << "Renderer::InitWindow(): Error creating window handle!\n";
+        MessageBox(nullptr, L"Encountered an error creating the window handle!", L"Error", MB_OK);
         return E_FAIL;
     }
 
@@ -100,7 +101,7 @@ HRESULT Renderer::InitDevice()
     UINT numFeatureLevels = ARRAYSIZE(featureLevels);
 
     std::cout << "Renderer::InitDevice(): Initializing devices...\n";
-    
+
     for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
     {
         m_driverType = driverTypes[driverTypeIndex];
@@ -124,7 +125,7 @@ HRESULT Renderer::InitDevice()
 
     if (FAILED(hr))
     {
-        std::cout << "Renderer::InitDevice(): Failed to create devices!\n\n";
+        MessageBox(nullptr, L"Encountered an error creating the necessary devices!", L"Error", MB_OK);
         return hr;
     }
 
@@ -151,7 +152,7 @@ HRESULT Renderer::InitDevice()
 
     if (FAILED(hr))
     {
-        std::cout << "Renderer::InitDevice(): Failed to create factory!\n\n";
+        MessageBox(nullptr, L"Encountered an error creating factory!", L"Error", MB_OK);
         return hr;
     }
 
@@ -206,7 +207,7 @@ HRESULT Renderer::InitDevice()
         sd.SampleDesc.Quality = 0;
         sd.Windowed = TRUE;
 
-        hr = dxgiFactory->CreateSwapChain( m_pDevice, &sd, &m_pSwapChain );
+        hr = dxgiFactory->CreateSwapChain(m_pDevice, &sd, &m_pSwapChain);
     }
 
     dxgiFactory->MakeWindowAssociation(m_hWnd, DXGI_MWA_NO_ALT_ENTER);
@@ -215,19 +216,19 @@ HRESULT Renderer::InitDevice()
 
     if (FAILED(hr))
     {
-        std::cout << "Renderer::InitDevice(): Failed to create swap chain!\n\n";
+        MessageBox(nullptr, L"Encountered an error creating the swap chain!", L"Error", MB_OK);
         return hr;
     }
 
     std::cout << "Renderer::InitDevice(): Successfully created swap chain!\n";
-    
+
     // Create a render target view
     ID3D11Texture2D* pBackBuffer = nullptr;
     hr = m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer));
 
     if (FAILED(hr))
     {
-        std::cout << "Renderer::InitDevice(): Failed to create back buffer!\n\n";
+        MessageBox(nullptr, L"Encountered an error creating the back buffer!", L"Error", MB_OK);
         return hr;
     }
 
@@ -238,7 +239,7 @@ HRESULT Renderer::InitDevice()
 
     if (FAILED(hr))
     {
-        std::cout << "Renderer::InitDevice(): Failed to create render target!\n\n";
+        MessageBox(nullptr, L"Encountered an error creating the render target!", L"Error", MB_OK);
         return hr;
     }
 
@@ -248,8 +249,8 @@ HRESULT Renderer::InitDevice()
 
     // Set up the viewport
     D3D11_VIEWPORT vp;
-    vp.Width = width;
-    vp.Height = height;
+    vp.Width = (FLOAT)width;
+    vp.Height = (FLOAT)height;
     vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0;
@@ -258,8 +259,20 @@ HRESULT Renderer::InitDevice()
 
     std::cout << "Renderer::InitDevice(): Successfully created viewport!\n";
 
+    // Compile the vertex shader
+    ID3DBlob* pVSBlob = nullptr;
+    hr = CompileShaderFromFile(L"base.fxh", "VS", "vs_4_0", &pVSBlob);
+
+    if (FAILED(hr))
+    {
+        MessageBox(nullptr,
+                   L"The FX file cannot be compiled. Please run the game from the directory that contains the FX file.",
+                   L"Error", MB_OK);
+        return hr;
+    }
+
     std::cout << "Renderer::InitDevice(): Successfully initialized all devices!\n\n";
-    
+
     return S_OK;
 }
 
@@ -313,3 +326,43 @@ void Renderer::CleanupDevice()
     }
 }
 
+HRESULT Renderer::CompileShaderFromFile(const WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,
+                                        ID3DBlob** ppBlobOut)
+{
+    HRESULT hr = S_OK;
+
+    DWORD dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+
+#ifdef _DEBUG
+    // Set the D3DCOMPILE_DEBUG flag to embed debug information in the shaders.
+    // Setting this flag improves the shader debugging experience, but still allows 
+    // the shaders to be optimized and to run exactly the way they will run in 
+    // the release configuration of this program
+    dwShaderFlags |= D3DCOMPILE_DEBUG;
+
+    // Disable optimizations to further improve shader debugging
+    dwShaderFlags |= D3DCOMPILE_SKIP_OPTIMIZATION;
+#endif // _DEBUG
+
+    ID3DBlob* pErrorBlob = nullptr;
+    hr = D3DCompileFromFile(szFileName, nullptr, nullptr, szEntryPoint, szShaderModel, dwShaderFlags, 0, ppBlobOut,
+                            &pErrorBlob);
+
+    if (FAILED(hr))
+    {
+        if (pErrorBlob)
+        {
+            OutputDebugStringA(reinterpret_cast<const char*>(pErrorBlob->GetBufferPointer()));
+            pErrorBlob->Release();
+        }
+
+        return hr;
+    }
+
+    if (pErrorBlob)
+    {
+        pErrorBlob->Release();
+    }
+
+    return S_OK;
+}

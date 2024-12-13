@@ -4,9 +4,6 @@ obj/*
 build/*
 .vs/*
 
-# NuGet files
-packages/*
-
 # Rider files
 .idea/*
 *.user

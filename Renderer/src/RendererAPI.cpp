@@ -2,9 +2,9 @@
 
 #define DLL_EXPORT __declspec(dllexport)
 
-extern "C" DLL_EXPORT Renderer* CreateRenderer()
+extern "C" DLL_EXPORT Renderer* CreateRenderer(Scene scene)
 {
-    return new Renderer();
+    return new Renderer(scene);
 }
 
 extern "C" DLL_EXPORT void StartRenderer(Renderer* renderer, HINSTANCE hInstance, int nCmdShow)

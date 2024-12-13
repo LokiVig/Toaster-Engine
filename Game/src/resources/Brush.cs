@@ -1,7 +1,6 @@
 ﻿using System;
 
 using DoomNET.Entities;
-using DoomNET.Rendering;
 
 namespace DoomNET.Resources;
 
@@ -13,18 +12,6 @@ public struct Brush
     public string id { get; set; } // The id of this brush, can be set by the mapper
     public BBox bbox { get; set; } = BBox.One; // The extents of this brush
     public Vertex[] vertices { get; set; } // The vertices of this brush
-    
-    // public Material[] textures { get; set; } =  // Per-face texture array - should ONLY be 6
-    // {
-    //     // !!Arbitrary placing!!
-    //     // TODO: Implement an actually proper system that makes sense
-    //     new Material(Texture.MISSINGTEXTURE), // Top    (^) // Rolling leftward from the top,
-    //     new Material(Texture.MISSINGTEXTURE), // Left   (<) // to the left,
-    //     new Material(Texture.MISSINGTEXTURE), // Bottom (v) // to the bottom,
-    //     new Material(Texture.MISSINGTEXTURE), // Right  (>) // to the right,
-    //     new Material(Texture.MISSINGTEXTURE), // Front  (F) // to the front,
-    //     new Material(Texture.MISSINGTEXTURE), // Back   (B) // to the back
-    // }; 
     
     /// <summary>
     /// Create a brush with specified mins and maxs

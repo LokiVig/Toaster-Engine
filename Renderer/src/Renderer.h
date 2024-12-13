@@ -1,133 +1,127 @@
 ﻿#pragma once
 #pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "D3DCompiler.lib")
 
+#include <vector>
 #include <windows.h>
 #include <d3d11.h>
 #include <d3d11_1.h>
+#include <DirectXMath.h>
 #include <iostream>
 
-struct Vector2
-{
-public:
-    Vector2()
-    {
-        m_x = m_y = 1;
-    }
-
-    Vector2(float xy)
-    {
-        m_x = m_y = xy;
-    }
-
-    Vector2(float x, float y)
-    {
-        m_x = x;
-        m_y = y;
-    }
-
-public:
-    float m_x, m_y;
-};
-
-struct Vector3
-{
-public:
-    Vector3()
-    {
-        m_x = m_y = m_z = 1;
-    }
-    
-    Vector3(float xyz)
-    {
-        m_x = m_y = m_z = xyz;
-    }
-
-    Vector3(float x, float y, float z)
-    {
-        m_x = x;
-        m_y = y;
-        m_z = z;
-    }
-
-public:
-    float m_x, m_y, m_z;
-};
-
-struct Quaternion
-{
-public:
-    Quaternion(float xyzw)
-    {
-        m_x = m_y = m_z = m_w = xyzw;
-    }
-
-    Quaternion(float x, float y, float z, float w)
-    {
-        m_x = x;
-        m_y = y;
-        m_z = z;
-        m_w = w;
-    }
-
-public:
-    float m_x, m_y, m_z, m_w;
-};
+using namespace DirectX;
+using namespace std;
 
 struct BBox
 {
 public:
-    BBox(Vector3 mins, Vector3 maxs)
+    BBox() = default;
+
+    BBox(XMFLOAT3 mins, XMFLOAT3 maxs)
         : m_mins(mins), m_maxs(maxs)
     {
     }
 
 public:
-    Vector3 m_mins, m_maxs;
+    XMFLOAT3 m_mins = XMFLOAT3(-1, -1, -1), m_maxs = XMFLOAT3(1, 1, 1);
 };
 
 struct Vertex
 {
 public:
-    Vector3 m_pos;
+    Vertex() = default;
+
+    Vertex(XMFLOAT3 pos, XMFLOAT2 tex)
+        : m_pos(pos), m_tex(tex)
+    {
+    }
+
+public:
+    XMFLOAT3 m_pos;
+    XMFLOAT2 m_tex;
 };
 
 class Entity
 {
 public:
-    Entity(Vector3 pos, Quaternion rot)
+    Entity() = default;
+
+    Entity(XMFLOAT3 pos)
+        : m_pos(pos)
+    {
+    }
+
+    Entity(XMFLOAT3 pos, XMFLOAT4 rot)
         : m_pos(pos), m_rot(rot)
     {
     }
 
+    Entity(XMFLOAT3 pos, XMFLOAT4 rot, string id)
+        : m_pos(pos), m_rot(rot), m_id(id)
+    {
+    }
+
 public:
-    Vector3 m_pos;
-    Quaternion m_rot;
+    XMFLOAT3 m_pos;
+    XMFLOAT4 m_rot;
+    string m_id;
 };
 
 class Brush
 {
 public:
+    Brush() = default;
+
     Brush(BBox bbox)
         : m_bbox(bbox)
     {
         InitializeVertices();
     }
 
-public:
-    BBox m_bbox;
-    Vertex m_vertices[8] = {};
-
 private:
     void InitializeVertices()
     {
-        {
-            Vector3(m_bbox.m_maxs.m_x, m_bbox.m_maxs.m_y, m_bbox.m_maxs.m_z), Vector2()
-        }
+        float minsX = m_bbox.m_mins.x;
+        float minsY = m_bbox.m_mins.y;
+        float minsZ = m_bbox.m_mins.z;
+
+        float maxsX = m_bbox.m_maxs.x;
+        float maxsY = m_bbox.m_maxs.y;
+        float maxsZ = m_bbox.m_maxs.z;
+
+        m_vertices[0] = Vertex(XMFLOAT3(maxsX, maxsY, maxsZ), XMFLOAT2(1.0f, 1.0f));
+        m_vertices[1] = Vertex(XMFLOAT3(minsX, maxsY, maxsZ), XMFLOAT2(1.0f, 1.0f));
+        m_vertices[2] = Vertex(XMFLOAT3(maxsX, maxsY, minsZ), XMFLOAT2(1.0f, 1.0f));
+        m_vertices[3] = Vertex(XMFLOAT3(minsX, maxsY, minsZ), XMFLOAT2(1.0f, 1.0f));
+        m_vertices[4] = Vertex(XMFLOAT3(maxsX, minsY, maxsZ), XMFLOAT2(1.0f, 1.0f));
+        m_vertices[5] = Vertex(XMFLOAT3(minsX, minsY, maxsZ), XMFLOAT2(1.0f, 1.0f));
+        m_vertices[6] = Vertex(XMFLOAT3(maxsX, minsY, minsZ), XMFLOAT2(1.0f, 1.0f));
+        m_vertices[7] = Vertex(XMFLOAT3(minsX, minsY, minsZ), XMFLOAT2(1.0f, 1.0f));
     }
+
+public:
+    BBox m_bbox;
+    Vertex m_vertices[8] = {};
+};
+
+class Scene
+{
+public:
+    Scene() = default;
+
+public:
+    vector<Entity> m_entities;
+    vector<Brush> m_brushes;
 };
 
 class Renderer
 {
+public:
+    Renderer(Scene scene)
+        : m_pScene(&scene)
+    {
+    }
+
 public:
     INT WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine,
                        _In_ int nCmdShow)
@@ -169,6 +163,8 @@ public:
 
     HRESULT InitWindow(HINSTANCE hInstance, int nCmdShow);
     HRESULT InitDevice();
+    HRESULT CompileShaderFromFile(const WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,
+                                  ID3DBlob** ppBlobOut);
     void CleanupDevice();
     static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
     void Render();
@@ -185,4 +181,5 @@ private:
     IDXGISwapChain* m_pSwapChain = nullptr;
     IDXGISwapChain1* m_pSwapChain1 = nullptr;
     ID3D11RenderTargetView* m_pRenderTargetView = nullptr;
+    Scene* m_pScene = nullptr;
 };
