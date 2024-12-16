@@ -79,10 +79,10 @@ public class EntitySpawner : Entity
     /// <returns>The recently spawned entity.</returns>
     public Entity SpawnEntity(Entity ent)
     {   
-        // Make sure the desired entity is not another spawner!
-        if (ent is EntitySpawner)
+        // Make sure the desired entity is not a tool entity!
+        if (ent is ToolEntity)
         {
-            Console.WriteLine("Can't spawn another spawner!\n");
+            Console.WriteLine("Can't spawn a tool entity!\n");
             return null;
         }
 

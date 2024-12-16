@@ -6,7 +6,7 @@ namespace DoomNET.Entities;
 /// <summary>
 /// A brush defining stuff to do when e.g. an entity or player enters it.
 /// </summary>
-public class TriggerBrush : Entity
+public class TriggerBrush : BrushEntity
 {
 	public int iValue { get; set; } = 0; // Event int value
 	public float fValue { get; set; } = 0.0f; // Event float value

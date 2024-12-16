@@ -2,9 +2,20 @@
 #include <d3dcompiler.h>
 #include <DirectXColors.h>
 
+// Needed for shader compilation...
+// Source:
+// * https://stackoverflow.com/questions/875249/how-to-get-current-directory
+wstring ExePath()
+{
+    TCHAR buffer[MAX_PATH] = {0};
+    GetModuleFileName(NULL, buffer, MAX_PATH);
+    wstring::size_type pos = wstring(buffer).find_last_of(L"\\/");
+    return wstring(buffer).substr(0, pos);
+}
+
 HRESULT Renderer::InitWindow(HINSTANCE hInstance, int nCmdShow)
 {
-    std::cout << "Renderer::InitWindow(): Initializing window...\n";
+    cout << "Renderer::InitWindow(); INFO: Initializing window...\n";
 
     // Register class
     WNDCLASSEX wcex;
@@ -17,7 +28,7 @@ HRESULT Renderer::InitWindow(HINSTANCE hInstance, int nCmdShow)
     wcex.hIcon = LoadIcon(hInstance, (LPCTSTR)IDI_APPLICATION);
     wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-    wcex.lpszMenuName = L"Whag";
+    wcex.lpszMenuName = nullptr;
     wcex.lpszClassName = L"DoomNETWindowClass";
     wcex.hIconSm = LoadIcon(wcex.hInstance, IDI_APPLICATION);
 
@@ -43,7 +54,7 @@ HRESULT Renderer::InitWindow(HINSTANCE hInstance, int nCmdShow)
 
     ShowWindow(m_hWnd, nCmdShow);
 
-    std::cout << "Renderer::InitWindow(): Successfully initialized a window!\n\n";
+    cout << "Renderer::InitWindow(); INFO: Successfully initialized a window!\n\n";
     return S_OK;
 }
 
@@ -100,7 +111,7 @@ HRESULT Renderer::InitDevice()
     };
     UINT numFeatureLevels = ARRAYSIZE(featureLevels);
 
-    std::cout << "Renderer::InitDevice(): Initializing devices...\n";
+    cout << "Renderer::InitDevice(); INFO: Initializing devices...\n";
 
     for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
     {
@@ -118,7 +129,7 @@ HRESULT Renderer::InitDevice()
 
         if (SUCCEEDED(hr))
         {
-            std::cout << "Renderer::InitDevice(): Successfully created devices needed for every driver type!\n";
+            cout << "Renderer::InitDevice(); INFO: Successfully created devices needed for every driver type!\n";
             break;
         }
     }
@@ -156,7 +167,7 @@ HRESULT Renderer::InitDevice()
         return hr;
     }
 
-    std::cout << "Renderer::InitDevice(): Successfully created factory!\n";
+    cout << "Renderer::InitDevice(); INFO: Successfully created factory!\n";
 
     // Create swap chain
     IDXGIFactory2* dxgiFactory2 = nullptr;
@@ -220,7 +231,7 @@ HRESULT Renderer::InitDevice()
         return hr;
     }
 
-    std::cout << "Renderer::InitDevice(): Successfully created swap chain!\n";
+    cout << "Renderer::InitDevice(); INFO: Successfully created swap chain!\n";
 
     // Create a render target view
     ID3D11Texture2D* pBackBuffer = nullptr;
@@ -232,7 +243,7 @@ HRESULT Renderer::InitDevice()
         return hr;
     }
 
-    std::cout << "Renderer::InitDevice(): Successfully created back buffer!\n";
+    cout << "Renderer::InitDevice(); INFO: Successfully created back buffer!\n";
 
     hr = m_pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &m_pRenderTargetView);
     pBackBuffer->Release();
@@ -243,7 +254,7 @@ HRESULT Renderer::InitDevice()
         return hr;
     }
 
-    std::cout << "Renderer::InitDevice(): Successfully created render target!\n";
+    cout << "Renderer::InitDevice(); INFO: Successfully created render target!\n";
 
     m_pImmediateContext->OMSetRenderTargets(1, &m_pRenderTargetView, nullptr);
 
@@ -257,11 +268,12 @@ HRESULT Renderer::InitDevice()
     vp.TopLeftY = 0;
     m_pImmediateContext->RSSetViewports(1, &vp);
 
-    std::cout << "Renderer::InitDevice(): Successfully created viewport!\n";
+    cout << "Renderer::InitDevice(); INFO: Successfully created viewport!\n";
 
     // Compile the vertex shader
     ID3DBlob* pVSBlob = nullptr;
-    hr = CompileShaderFromFile(L"base.fxh", "VS", "vs_4_0", &pVSBlob);
+    wstring shaderPath = ExePath() + L"\\resources\\shaders\\base.fxh";
+    hr = CompileShaderFromFile(shaderPath.c_str(), "VS", "vs_4_0", &pVSBlob);
 
     if (FAILED(hr))
     {
@@ -271,7 +283,7 @@ HRESULT Renderer::InitDevice()
         return hr;
     }
 
-    std::cout << "Renderer::InitDevice(): Successfully initialized all devices!\n\n";
+    cout << "Renderer::InitDevice(); INFO: Successfully initialized all devices!\n\n";
 
     return S_OK;
 }
@@ -357,7 +369,9 @@ HRESULT Renderer::CompileShaderFromFile(const WCHAR* szFileName, LPCSTR szEntryP
     {
         if (pErrorBlob)
         {
-            OutputDebugStringA(reinterpret_cast<const char*>(pErrorBlob->GetBufferPointer()));
+            cerr << "\nRenderer::CompileShaderFromFile(); ERROR: Shader compile error: "
+                << reinterpret_cast<const char*>(pErrorBlob->GetBufferPointer())
+                << "\n";
             pErrorBlob->Release();
         }
 

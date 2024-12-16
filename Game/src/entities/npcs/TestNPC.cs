@@ -2,10 +2,8 @@
 
 namespace DoomNET.Entities;
 
-public class TestNPC : Entity
+public class TestNPC : NPCEntity
 {
-    public override EntityType type => EntityType.NPC; // This entity is of type NPC
-    
     public override float health { get; set; } = 100.0f;
     
     public TestNPC()

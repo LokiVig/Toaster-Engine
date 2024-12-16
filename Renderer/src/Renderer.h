@@ -125,13 +125,13 @@ public:
 
         if (FAILED(InitWindow(hInstance, nCmdShow)))
         {
-            return -1;
+            throw exception("Renderer initialization failed: InitWindow failed!");
         }
 
         if (FAILED(InitDevice()))
         {
             CleanupDevice();
-            return -1;
+            throw exception("Renderer initialization failed: InitDevice failed!");
         }
 
         // Main message loop
