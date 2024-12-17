@@ -20,7 +20,7 @@ public class Game
 	public static WTF currentFile; // The currently loaded WTF file / map
 	public static Scene currentScene; // The currently running scene, initialized from the current file
 
-	public static GameState currentState; // The state the game currently is in
+	public static GameState currentState = GameState.Active; // The state the game currently is in
 
 	public static float deltaTime; // Helps stopping you from using FPS-dependant calculations
 
@@ -85,20 +85,13 @@ public class Game
 		(hitObject as Entity)?.TakeDamage(5, player);
 
 		// Initialize the renderer
-		renderer = External.CreateRenderer();
-
-		// If it isn't null
-		if (renderer != IntPtr.Zero)
-		{
-			// Start it proper!
-			External.StartRenderer(renderer, IntPtr.Zero, 1);
-		}
+		renderer = External.CreateRenderer(currentScene);
 
 		// Call the update function to start the game loop
 		Update();
 
 		// Destroy the renderer after we're finished
-		External.DestroyRenderer(renderer);
+		External.ShutdownRenderer(renderer);
 	}
 
 	private Stopwatch watch = Stopwatch.StartNew();
@@ -115,7 +108,7 @@ public class Game
 			{
 				if (msg.message == 0x0012) // WM_QUIT
 				{
-					break; // Exit the loop if the quit message is received, this lets us leave this function, and therefore close
+					break; // Exit the loop if the quit message is received, this lets us leave this method, and therefore close
 				}
 
 				if (msg.message == 0x0100) // WM_KEYDOWN
@@ -166,11 +159,14 @@ public class Game
 			{
 			}
 
-			// Call the OnUpdate event, so everything else that should update also updates with us
-			OnUpdate?.Invoke();
+			if ((currentState & GameState.Active) != 0)
+			{
+				// Call the OnUpdate event, so everything else that should update also updates with us
+				OnUpdate?.Invoke();
+			}
 
 			// Call the rendering function
-			External.RenderFrame(renderer, currentScene);
+			External.RenderFrame(renderer);
 		}
 	}
 }
@@ -178,6 +174,7 @@ public class Game
 /// <summary>
 /// This enum defines the different states the game can be in.
 /// </summary>
+[Flags]
 public enum GameState
 {
 	Menu = 1, // Used when accessing any sort of menu

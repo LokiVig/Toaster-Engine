@@ -2,32 +2,24 @@
 
 #define DLL_EXPORT __declspec(dllexport)
 
-extern "C" DLL_EXPORT Renderer* CreateRenderer()
+extern "C" DLL_EXPORT Renderer* CreateRenderer(Scene* pScene)
 {
-    return new Renderer();
+    return new Renderer(pScene);
 }
 
-extern "C" DLL_EXPORT void StartRenderer(Renderer* renderer, HINSTANCE hInstance, int nCmdShow)
+extern "C" DLL_EXPORT void RenderFrame(Renderer* renderer)
 {
     if (renderer)
     {
-        renderer->WinMain(hInstance, nullptr, nullptr, nCmdShow);
+        renderer->Render();
     }
 }
 
-extern "C" DLL_EXPORT void RenderFrame(Renderer* renderer, Scene* scene)
+extern "C" DLL_EXPORT void ShutdownRenderer(Renderer* renderer)
 {
     if (renderer)
     {
-        renderer->Render(scene);
-    }
-}
-
-extern "C" DLL_EXPORT void DestroyRenderer(Renderer* renderer)
-{
-    if (renderer)
-    {
-        renderer->CleanupDevice();
+        renderer->Shutdown();
         delete renderer;
     }
 }

@@ -4,7 +4,6 @@
 // This is used to, a lot more easily, take user input
 // Source:
 // * https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
-
 public enum VK : byte
 {
 	LBUTTON = 0x01, // Left mouse button
