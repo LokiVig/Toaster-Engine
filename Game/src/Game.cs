@@ -103,33 +103,6 @@ public class Game
 	{
 		while (renderer != IntPtr.Zero)
 		{
-			// Process Windows messages to handle input, window events, etc.
-			if (External.PeekMessage(out External.MSG msg, IntPtr.Zero, 0, 0, 0x0001))
-			{
-				if (msg.message == 0x0012) // WM_QUIT
-				{
-					break; // Exit the loop if the quit message is received, this lets us leave this method, and therefore close
-				}
-
-				if (msg.message == 0x0100) // WM_KEYDOWN
-				{
-					if (keyStates.ContainsKey((byte)msg.wParam))
-					{
-						keyStates[(byte)msg.wParam] = true;
-					}
-				}
-				else if (msg.message == 0x0101) // WM_KEYUP
-				{
-					if (keyStates.ContainsKey((byte)msg.wParam))
-					{
-						keyStates[(byte)msg.wParam] = false;
-					}
-				}
-
-				External.TranslateMessage(ref msg);
-				External.DispatchMessage(ref msg);
-			}
-
 			#region USERINPUT
 			
 			// The total sum of the inputs taken
@@ -137,13 +110,13 @@ public class Game
 
 			// If escape was just pressed, we should close the game
 			// TODO: Make this open a menu of sorts!
-			if (keyStates[(byte)VK.ESCAPE]) break;
+			// if (keyStates[(byte)VK.ESCAPE]) break;
 
 			// Handle inputs that should make the user move
-			if (keyStates[(byte)VK.W]) input += Vector3.Forward;
-			if (keyStates[(byte)VK.A]) input += Vector3.Left;
-			if (keyStates[(byte)VK.S]) input += Vector3.Backward;
-			if (keyStates[(byte)VK.D]) input += Vector3.Right;
+			// if (keyStates[(byte)VK.W]) input += Vector3.Forward;
+			// if (keyStates[(byte)VK.A]) input += Vector3.Left;
+			// if (keyStates[(byte)VK.S]) input += Vector3.Backward;
+			// if (keyStates[(byte)VK.D]) input += Vector3.Right;
 
 			// Set the velocity of the player
 			mainPlayer.AddForce(input.Normalized());

@@ -1,50 +1,22 @@
 ﻿#pragma once
 
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
+
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
+#include <glm/mat4x4.hpp>
+
+#include <iostream>
 #include <vector>
 
 using namespace std;
+using namespace glm;
 
-struct Vector2
-{
-public:
-    Vector2(float x, float y)
-        : x(x), y(y)
-    {
-    }
-    
-public:
-    float x;
-    float y;
-};
-
-struct Vector3
-{
-public:
-    Vector3(float x, float y, float z)
-        : x(x), y(y), z(z)
-    {
-    }
-    
-public:
-    float x;
-    float y;
-    float z;
-};
-
-struct Quaternion
-{
-public:
-    Quaternion(float x, float y, float z, float w)
-        : x(x), y(y), z(z), w(w)
-    {
-    }
-
-public:
-    float x;
-    float y;
-    float z;
-    float w;
-};
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
 
 struct BBox
 {
@@ -52,8 +24,8 @@ public:
     BBox() = default;
 
 public:
-    Vector3 maxs;
-    Vector3 mins;
+    vec3 maxs;
+    vec3 mins;
 };
 
 struct Vertex
@@ -61,14 +33,14 @@ struct Vertex
 public:
     Vertex() = default;
 
-    Vertex(Vector3 pos, Vector2 uv)
+    Vertex(vec3 pos, vec2 uv)
         : pos(pos), uv(uv)
     {
     }
 
 public:
-    Vector3 pos;
-    Vector2 uv;
+    vec3 pos;
+    vec2 uv;
 };
 
 struct Brush
@@ -79,14 +51,14 @@ public:
 public:
     void GenerateVertices()
     {
-        vertices[0] = Vertex(Vector3(bbox.maxs.x, bbox.maxs.y, bbox.maxs.z), Vector2(1, 1));
-        vertices[1] = Vertex(Vector3(bbox.mins.x, bbox.maxs.y, bbox.maxs.z), Vector2(1, 1));
-        vertices[2] = Vertex(Vector3(bbox.maxs.x, bbox.maxs.y, bbox.mins.z), Vector2(1, 1));
-        vertices[3] = Vertex(Vector3(bbox.mins.x, bbox.maxs.y, bbox.mins.z), Vector2(1, 1));
-        vertices[4] = Vertex(Vector3(bbox.maxs.x, bbox.mins.y, bbox.maxs.z), Vector2(1, 1));
-        vertices[5] = Vertex(Vector3(bbox.mins.x, bbox.mins.y, bbox.maxs.z), Vector2(1, 1));
-        vertices[6] = Vertex(Vector3(bbox.maxs.x, bbox.mins.y, bbox.mins.z), Vector2(1, 1));
-        vertices[7] = Vertex(Vector3(bbox.mins.x, bbox.mins.y, bbox.mins.z), Vector2(1, 1));
+        vertices[0] = Vertex(vec3(bbox.maxs.x, bbox.maxs.y, bbox.maxs.z), vec2(1, 1));
+        vertices[1] = Vertex(vec3(bbox.mins.x, bbox.maxs.y, bbox.maxs.z), vec2(1, 1));
+        vertices[2] = Vertex(vec3(bbox.maxs.x, bbox.maxs.y, bbox.mins.z), vec2(1, 1));
+        vertices[3] = Vertex(vec3(bbox.mins.x, bbox.maxs.y, bbox.mins.z), vec2(1, 1));
+        vertices[4] = Vertex(vec3(bbox.maxs.x, bbox.mins.y, bbox.maxs.z), vec2(1, 1));
+        vertices[5] = Vertex(vec3(bbox.mins.x, bbox.mins.y, bbox.maxs.z), vec2(1, 1));
+        vertices[6] = Vertex(vec3(bbox.maxs.x, bbox.mins.y, bbox.mins.z), vec2(1, 1));
+        vertices[7] = Vertex(vec3(bbox.mins.x, bbox.mins.y, bbox.mins.z), vec2(1, 1));
     }
 
 public:
@@ -100,8 +72,8 @@ public:
     Entity() = default;
 
 public:
-    Vector3 pos;
-    Quaternion rot;
+    vec3 pos;
+    vec4 rot;
 };
 
 class Scene
@@ -126,9 +98,40 @@ public:
 
 public:
     void Initialize();
+    void InitializeVulkan();
     void Render();
     void Shutdown();
 
 private:
+    void CreateInstance();
+    void SetupDebugMessenger();
+    bool CheckValidationLayerSupport();
+    vector<const char*> GetRequiredExtensions();
+    VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
+                                          const VkAllocationCallbacks* pAllocator,
+                                          VkDebugUtilsMessengerEXT* pDebugMessenger);
+    void PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
+    static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+                                                        VkDebugUtilsMessageTypeFlagsEXT messageType,
+                                                        const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+                                                        void* pUserData);
+    void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger,
+                                       const VkAllocationCallbacks* pAllocator);
+
+private:
+    const vector<const char*> validationLayers =
+    {
+        "VK_LAYER_KHRONOS_validation"
+    };
+
+#ifdef NDEBUG
+    const bool enableValidationLayers = false;
+#else
+    const bool enableValidationLayers = true;
+#endif // NDEBUG
+
     Scene* m_pScene;
+    GLFWwindow* m_pWindow;
+    VkInstance m_instance;
+    VkDebugUtilsMessengerEXT m_debugMessenger;
 };

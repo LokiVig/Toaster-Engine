@@ -2,17 +2,17 @@
 
 public struct Vertex
 {
-	public Vector3 position;
-	public Vector2 textureCoordinate;
+	public Vector3 position { get; set; }
+	public Vector2 uvCoordinate { get; set; }
 
-	public Vertex(Vector3 position, Vector2 textureCoordinate)
+	public Vertex(Vector3 position, Vector2 uvCoordinate)
 	{
 		this.position = position;
-		this.textureCoordinate = textureCoordinate;
+		this.uvCoordinate = uvCoordinate;
 	}
 
 	public override string ToString()
 	{
-		return $"({position} - {textureCoordinate})";
+		return $"({position} - {uvCoordinate})";
 	}
 }

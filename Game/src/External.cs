@@ -7,26 +7,14 @@ namespace DoomNET;
 
 public class External
 {
-    private const string RENDERER_DLL = "Doom.NET.Renderer.dll";
-    
     //
-    // Global
+    // Local
     //
     
-    [StructLayout(LayoutKind.Sequential)]
-    public struct MSG
-    {
-        public IntPtr hwnd;
-        public uint message;
-        public IntPtr wParam;
-        public IntPtr lParam;
-        public uint time;
-        public int pt_x;
-        public int pt_y;
-    }
+    private const string RENDERER_DLL = "DoomNET.Renderer.dll";
     
     //
-    // Doom.NET.Renderer.dll
+    // DoomNET.Renderer.dll
     //
 
     [DllImport(RENDERER_DLL, CallingConvention = CallingConvention.Cdecl)]
@@ -37,18 +25,4 @@ public class External
 
     [DllImport(RENDERER_DLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void ShutdownRenderer(IntPtr renderer);
-    
-    //
-    // user32.dll
-    //
-
-    [DllImport("user32.dll", SetLastError = true)]
-    public static extern bool PeekMessage(out MSG msg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax,
-        uint wRemoveMsg);
-
-    [DllImport("user32.dll", SetLastError = true)]
-    public static extern bool TranslateMessage(ref MSG msg);
-
-    [DllImport("user32.dll", SetLastError = true)]
-    public static extern IntPtr DispatchMessage(ref MSG msg);
 }
