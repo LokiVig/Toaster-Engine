@@ -78,12 +78,14 @@
     <OutDir>$(SolutionDir)build\$(Configuration)\net8.0\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)\net8.0\intermediate\</IntDir>
     <TargetName>DoomNET.Renderer</TargetName>
+    <IncludePath>E:\Downloads\glm-1.0.1-light;E:\Downloads\glfw-3.4.bin.WIN32\include;E:\Downloads\glew-2.2.0\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)build\$(Configuration)\net8.0\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)\net8.0\intermediate\</IntDir>
     <TargetName>DoomNET.Renderer</TargetName>
+    <IncludePath>E:\Downloads\glm-1.0.1-light;E:\Downloads\glfw-3.4.bin.WIN32\include;E:\Downloads\glew-2.2.0\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -187,13 +189,9 @@
     <ClCompile Include="src\RendererAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="lib\x64\glfw3.lib" />
-    <Content Include="lib\x64\vulkan-1.lib" />
-    <Content Include="lib\x86\glfw3.lib" />
-    <Content Include="lib\x86\vulkan-1.lib" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="include\" />
+    <Folder Include="lib\x64\" />
+    <Folder Include="lib\x86\" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

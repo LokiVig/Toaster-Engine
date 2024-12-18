@@ -1,16 +1,14 @@
 ﻿#pragma once
 
-#define GLFW_INCLUDE_VULKAN
+#include <stdio.h>
+#include <stdlib.h>
+#include <vector>
+
+#include <GL/glew.h>
+
 #include <GLFW/glfw3.h>
 
-#define GLM_FORCE_DEPTH_ZERO_TO_ONE
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
-#include <glm/mat4x4.hpp>
-
-#include <iostream>
-#include <vector>
+#include <glm/glm.hpp>
 
 using namespace std;
 using namespace glm;
