@@ -101,4 +101,5 @@ public:
 
 private:
     Scene* m_pScene;
+    GLFWwindow* m_pWindow;
 };

@@ -18,6 +18,7 @@ void Renderer::Initialize()
 
     GLFWwindow* window;
     window = glfwCreateWindow(1280, 720, "Doom.NET", NULL, NULL);
+    m_pWindow = window;
 
     if (!window)
     {
@@ -33,11 +34,21 @@ void Renderer::Initialize()
         (void)fprintf(stderr, "Failed to initialize GLEW.\n");
         return;
     }
+
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 }
 
 void Renderer::Render()
 {
+    if (glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS || glfwWindowShouldClose(m_pWindow))
+    {
+        return;
+    }
     
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glfwSwapBuffers(m_pWindow);
+    glfwPollEvents();
 }
 
 void Renderer::Shutdown()
