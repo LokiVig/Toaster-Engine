@@ -98,40 +98,9 @@ public:
 
 public:
     void Initialize();
-    void InitializeVulkan();
     void Render();
     void Shutdown();
 
 private:
-    void CreateInstance();
-    void SetupDebugMessenger();
-    bool CheckValidationLayerSupport();
-    vector<const char*> GetRequiredExtensions();
-    VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
-                                          const VkAllocationCallbacks* pAllocator,
-                                          VkDebugUtilsMessengerEXT* pDebugMessenger);
-    void PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
-    static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-                                                        VkDebugUtilsMessageTypeFlagsEXT messageType,
-                                                        const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
-                                                        void* pUserData);
-    void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger,
-                                       const VkAllocationCallbacks* pAllocator);
-
-private:
-    const vector<const char*> validationLayers =
-    {
-        "VK_LAYER_KHRONOS_validation"
-    };
-
-#ifdef NDEBUG
-    const bool enableValidationLayers = false;
-#else
-    const bool enableValidationLayers = true;
-#endif // NDEBUG
-
     Scene* m_pScene;
-    GLFWwindow* m_pWindow;
-    VkInstance m_instance;
-    VkDebugUtilsMessengerEXT m_debugMessenger;
 };
