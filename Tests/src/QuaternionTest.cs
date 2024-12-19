@@ -445,10 +445,8 @@ public class QuaternionTests
 				value2_w = rand.Next(RAND_MIN, RAND_MAX));
 
 			bool expected =
-				(float)Math.Sqrt(value1_x * value1_x + value1_y * value1_y + value1_z * value1_z +
-				                 value1_w * value1_w) -
-				(float)Math.Sqrt(value2_x * value2_x + value2_y * value2_y + value2_z * value2_z +
-				                 value2_w * value2_w) > 0;
+				(float)Math.Sqrt(value1_x * value1_x + value1_y * value1_y + value1_z * value1_z + value1_w * value1_w) -
+				(float)Math.Sqrt(value2_x * value2_x + value2_y * value2_y + value2_z * value2_z + value2_w * value2_w) > 0;
 
 			bool result = value1 > value2;
 
