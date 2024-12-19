@@ -7,7 +7,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <RootNamespace>DoomNET</RootNamespace>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <AssemblyName>DoomNET.Game</AssemblyName>
+    <AssemblyName>$(ProjectName)</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>$(SolutionDir)build\$(Configuration)</OutputPath>

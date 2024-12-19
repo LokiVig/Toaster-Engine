@@ -28,11 +28,13 @@ public class TriggerBrush : BrushEntity
 	private bool hasTriggered; // Determines whether this trigger has already been triggered
 	private Entity previousTriggerEntity; // The entity who last interacted with this trigger
 
-	public override EntityType type => EntityType.TriggerBrush; // This entity is of type TriggerBrush
+	public TriggerBrush()
+	{
+	}
 
-	public TriggerBrush() {}
-
-	public TriggerBrush(Vector3 position) : base(position) {}
+	public TriggerBrush(Vector3 position) : base(position)
+	{
+	}
 
 	protected override void OnSpawn()
 	{
@@ -90,10 +92,10 @@ public class TriggerBrush : BrushEntity
 
 				// Otherwise, stop trying to be triggered
 				return false;
-			
+
 			case TriggerOn.Trigger: // Trigger no matter what happens
 			default:
-				break;	
+				break;
 		}
 
 		switch (triggerType)
@@ -171,7 +173,7 @@ public class TriggerBrush : BrushEntity
 		                  $"\tTrigger type: {triggerType}\n" +
 		                  $"\tTrigger by: {triggerBy}\n" +
 		                  $"\tTrigger on: {triggerOn}\n");
-		
+
 		if (iValue != 0) // Int value event
 		{
 			foundTarget.OnEvent(targetEvent, iValue, this);

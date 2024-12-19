@@ -3,7 +3,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>DoomNET.SpacePlacer</RootNamespace>
-    <AssemblyName>DoomNET.SpacePlacer</AssemblyName>
+    <AssemblyName>$(ProjectName)</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <BaseOutputPath>$(SolutionDir)build\</BaseOutputPath>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>

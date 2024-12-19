@@ -90,7 +90,6 @@ public:
     Renderer(Scene* pScene)
         : m_pScene(pScene)
     {
-        // Call the initialize function, to let us start our renderer
         Initialize();
     }
 

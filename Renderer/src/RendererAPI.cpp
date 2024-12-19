@@ -20,6 +20,5 @@ extern "C" DLL_EXPORT void ShutdownRenderer(Renderer* renderer)
     if (renderer)
     {
         renderer->Shutdown();
-        delete renderer;
     }
 }

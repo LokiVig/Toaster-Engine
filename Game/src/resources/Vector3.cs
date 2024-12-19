@@ -91,7 +91,7 @@ public struct Vector3 : IEquatable<Vector3>
 		(
 			a.y * b.z - a.z * b.y, // Calculate X component
 			a.z * b.x - a.x * b.z, // Calculate Y component
-			a.x * b.y - a.y * b.x  // Calculate Z component
+			a.x * b.y - a.y * b.x // Calculate Z component
 		);
 	}
 

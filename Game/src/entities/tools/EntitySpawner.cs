@@ -1,109 +1,108 @@
 ﻿using System;
-
 using DoomNET.Resources;
 
 namespace DoomNET.Entities;
 
 public class EntitySpawner<T> : ToolEntity where T : Entity, new()
 {
-    public EntitySpawner()
-    {
-        SetBBox(new BBox(new Vector3(-8, -8, -8), new Vector3(8, 8, 8)));
-    }
+	public EntitySpawner()
+	{
+		SetBBox(new BBox(new Vector3(-8, -8, -8), new Vector3(8, 8, 8)));
+	}
 
-    public EntitySpawner(Vector3 position) : base(position)
-    {
-        SetBBox(new BBox(new Vector3(-8, -8, -8), new Vector3(8, 8, 8)));
-    }
+	public EntitySpawner(Vector3 position) : base(position)
+	{
+		SetBBox(new BBox(new Vector3(-8, -8, -8), new Vector3(8, 8, 8)));
+	}
 
-    /// <summary>
-    /// Spawn an entity, based on the given argument.
-    /// </summary>
-    /// <returns>The recently spawned entity.</returns>
-    public T SpawnEntity()
-    {
-        T ent = new T();   
-        
-        // Make sure the desired entity is not another spawner!
-        if (ent is EntitySpawner<T>)
-        {
-            Console.WriteLine("Can't spawn another spawner!\n");
-            return null;
-        }
+	/// <summary>
+	/// Spawn an entity, based on the given argument.
+	/// </summary>
+	/// <returns>The recently spawned entity.</returns>
+	public T SpawnEntity()
+	{
+		T ent = new T();
 
-        // The entity should spawn!
-        ent.Spawn();
-        // Set the entity's position to our position
-        ent.SetPosition(position);
+		// Make sure the desired entity is not another spawner!
+		if (ent is EntitySpawner<T>)
+		{
+			Console.WriteLine("Can't spawn another spawner!\n");
+			return null;
+		}
 
-        // Add the newly spawned entity to the current scene
-        Game.currentScene?.AddEntity(ent);
+		// The entity should spawn!
+		ent.Spawn();
+		// Set the entity's position to our position
+		ent.SetPosition(position);
 
-        // Generate the entity's ID
-        ent.CreateID();
+		// Add the newly spawned entity to the current scene
+		Game.currentScene?.AddEntity(ent);
 
-        Console.WriteLine($"Spawned entity {ent}.\n" +
-                                $"\tSource: {this}\n" +
-                                $"\tPosition: {ent.GetPosition()}\n" +
-                                $"\tRotation: {ent.GetRotation()}\n" +
-                                $"\tBBox: {ent.GetBBox()}\n");
+		// Generate the entity's ID
+		ent.CreateID();
 
-        // And return the entity we just spawned
-        return ent;
-    }
+		Console.WriteLine($"Spawned entity {ent}.\n" +
+		                  $"\tSource: {this}\n" +
+		                  $"\tPosition: {ent.GetPosition()}\n" +
+		                  $"\tRotation: {ent.GetRotation()}\n" +
+		                  $"\tBBox: {ent.GetBBox()}\n");
 
-    public override string ToString()
-    {
-        return $"EntitySpawner<{typeof(T)}> (\"{GetID()}\")";
-    }
+		// And return the entity we just spawned
+		return ent;
+	}
+
+	public override string ToString()
+	{
+		return $"EntitySpawner<{typeof(T)}> (\"{GetID()}\")";
+	}
 }
 
 public class EntitySpawner : Entity
 {
-    public override EntityType type => EntityType.Tool;
-    
-    public EntitySpawner()
-    {
-        SetBBox(new BBox(new Vector3(-8, -8, -8), new Vector3(8, 8, 8)));
-    }
+	public override EntityType type => EntityType.Tool;
 
-    public EntitySpawner(Vector3 position) : base(position)
-    {
-        SetBBox(new BBox(new Vector3(-8, -8, -8), new Vector3(8, 8, 8)));
-    }
-    
-    /// <summary>
-    /// Spawn an entity, based on the given argument.
-    /// </summary>
-    /// <param name="ent">The entity we wish to spawn.</param>
-    /// <returns>The recently spawned entity.</returns>
-    public Entity SpawnEntity(Entity ent)
-    {   
-        // Make sure the desired entity is not a tool entity!
-        if (ent is ToolEntity)
-        {
-            Console.WriteLine("Can't spawn a tool entity!\n");
-            return null;
-        }
+	public EntitySpawner()
+	{
+		SetBBox(new BBox(new Vector3(-8, -8, -8), new Vector3(8, 8, 8)));
+	}
 
-        // The entity should spawn!
-        ent.Spawn();
-        // Set the entity's position to our position
-        ent.SetPosition(position);
+	public EntitySpawner(Vector3 position) : base(position)
+	{
+		SetBBox(new BBox(new Vector3(-8, -8, -8), new Vector3(8, 8, 8)));
+	}
 
-        // Add the newly spawned entity to the current scene
-        Game.currentScene?.AddEntity(ent);
+	/// <summary>
+	/// Spawn an entity, based on the given argument.
+	/// </summary>
+	/// <param name="ent">The entity we wish to spawn.</param>
+	/// <returns>The recently spawned entity.</returns>
+	public Entity SpawnEntity(Entity ent)
+	{
+		// Make sure the desired entity is not a tool entity!
+		if (ent is ToolEntity)
+		{
+			Console.WriteLine("Can't spawn a tool entity!\n");
+			return null;
+		}
 
-        // Generate the entity's ID
-        ent.CreateID();
+		// The entity should spawn!
+		ent.Spawn();
+		// Set the entity's position to our position
+		ent.SetPosition(position);
 
-        Console.WriteLine($"Spawned entity {ent}.\n" +
-                              $"\tSource: {this}\n" +
-                              $"\tPosition: {ent.GetPosition()}\n" +
-                              $"\tRotation: {ent.GetRotation()}\n" +
-                              $"\tBBox: {ent.GetBBox()}\n");
+		// Add the newly spawned entity to the current scene
+		Game.currentScene?.AddEntity(ent);
 
-        // And return the entity we just spawned
-        return ent;
-    }
+		// Generate the entity's ID
+		ent.CreateID();
+
+		Console.WriteLine($"Spawned entity {ent}.\n" +
+		                  $"\tSource: {this}\n" +
+		                  $"\tPosition: {ent.GetPosition()}\n" +
+		                  $"\tRotation: {ent.GetRotation()}\n" +
+		                  $"\tBBox: {ent.GetBBox()}\n");
+
+		// And return the entity we just spawned
+		return ent;
+	}
 }

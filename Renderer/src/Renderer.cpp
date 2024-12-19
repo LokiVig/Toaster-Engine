@@ -4,7 +4,7 @@ void Renderer::Initialize()
 {
     glewExperimental = true;
 
-    if (!glfwInit())
+    if (glfwInit() == 0)
     {
         (void)fprintf(stderr, "Failed to initialize GLFW\n");
         return;
@@ -16,7 +16,7 @@ void Renderer::Initialize()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window;
+    GLFWwindow* window; 
     window = glfwCreateWindow(1280, 720, "Doom.NET", NULL, NULL);
     m_pWindow = window;
 
@@ -47,6 +47,16 @@ void Renderer::Render()
     
     glClear(GL_COLOR_BUFFER_BIT);
 
+    for (Brush brush : m_pScene->m_brushes)
+    {
+        // Draw brushes
+    }
+
+    for (Entity entity : m_pScene->m_entities)
+    {
+        // Draw entities
+    }
+    
     glfwSwapBuffers(m_pWindow);
     glfwPollEvents();
 }

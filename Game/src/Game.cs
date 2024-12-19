@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using DoomNET.Entities;
 using DoomNET.Resources;
 using Vector3 = DoomNET.Resources.Vector3;
@@ -27,14 +28,14 @@ public class Game
 	private IntPtr renderer;
 	private Player mainPlayer;
 
-	private Dictionary<byte, bool> keyStates = new Dictionary<byte, bool>
-	{
-		{ (byte)VK.ESCAPE, false },
-		{ (byte)VK.W, false },
-		{ (byte)VK.A, false },
-		{ (byte)VK.S, false },
-		{ (byte)VK.D, false }
-	};
+	// private Dictionary<byte, bool> keyStates = new Dictionary<byte, bool>
+	// {
+	// 	{ (byte)VK.ESCAPE, false },
+	// 	{ (byte)VK.W, false },
+	// 	{ (byte)VK.A, false },
+	// 	{ (byte)VK.S, false },
+	// 	{ (byte)VK.D, false }
+	// };
 
 	/// <summary>
 	/// Initialize the game

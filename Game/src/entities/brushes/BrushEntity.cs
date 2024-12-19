@@ -4,6 +4,13 @@ namespace DoomNET.Entities;
 
 public class BrushEntity : Entity
 {
-    public BrushEntity() {}
-    public BrushEntity(Vector3 position) : base(position) {}
+	public override EntityType type => EntityType.Brush;
+
+	public BrushEntity()
+	{
+	}
+
+	public BrushEntity(Vector3 position) : base(position)
+	{
+	}
 }

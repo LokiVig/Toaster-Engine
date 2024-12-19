@@ -77,27 +77,24 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)build\$(Configuration)\net8.0\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)\net8.0\intermediate\</IntDir>
-    <TargetName>DoomNET.Renderer</TargetName>
-    <IncludePath>$(ProjectDir)\include\</IncludePath>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)build\$(Configuration)\net8.0\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)\net8.0\intermediate\</IntDir>
-    <TargetName>DoomNET.Renderer</TargetName>
-    <IncludePath>$(ProjectDir)\include\</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)build\$(Configuration)\net8.0\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)\net8.0\intermediate\</IntDir>
-    <TargetName>DoomNET.Renderer</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)build\$(Configuration)\net8.0\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)\net8.0\intermediate\</IntDir>
-    <TargetName>DoomNET.Renderer</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -108,14 +105,14 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;CPPDYNAMICLIBRARYTEMPLATE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;E:\Downloads\glm-1.0.1-light\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Loke.Vigstrand\Downloads\glfw-3.4.bin.WIN64\include;C:\Users\Loke.Vigstrand\Downloads\glew-2.1.0-win32\glew-2.1.0\include;C:\Users\Loke.Vigstrand\Downloads\glm-1.0.1-light</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)lib\</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Loke.Vigstrand\Downloads\glew-2.1.0-win32\glew-2.1.0\lib\Release\Win32;C:\Users\Loke.Vigstrand\Downloads\glfw-3.4.bin.WIN32\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -135,14 +132,14 @@
       <PreprocessorDefinitions>_DEBUG;CPPDYNAMICLIBRARYTEMPLATE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;E:\Downloads\glm-1.0.1-light\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Loke.Vigstrand\Downloads\glfw-3.4.bin.WIN64\include;C:\Users\Loke.Vigstrand\Downloads\glew-2.1.0-win32\glew-2.1.0\include;C:\Users\Loke.Vigstrand\Downloads\glm-1.0.1-light</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)lib\</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Loke.Vigstrand\Downloads\glew-2.1.0-win32\glew-2.1.0\lib\Release\x64;C:\Users\Loke.Vigstrand\Downloads\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -164,7 +161,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;CPPDYNAMICLIBRARYTEMPLATE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;E:\Downloads\glm-1.0.1-light\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Loke.Vigstrand\Downloads\glfw-3.4.bin.WIN64\include;C:\Users\Loke.Vigstrand\Downloads\glew-2.1.0-win32\glew-2.1.0\include;C:\Users\Loke.Vigstrand\Downloads\glm-1.0.1-light</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -172,8 +169,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib\x86\</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Loke.Vigstrand\Downloads\glew-2.1.0-win32\glew-2.1.0\lib\Release\Win32;C:\Users\Loke.Vigstrand\Downloads\glfw-3.4.bin.WIN32\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command>
@@ -191,7 +188,7 @@
       <PreprocessorDefinitions>NDEBUG;CPPDYNAMICLIBRARYTEMPLATE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;E:\Downloads\glm-1.0.1-light\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Loke.Vigstrand\Downloads\glfw-3.4.bin.WIN64\include;C:\Users\Loke.Vigstrand\Downloads\glew-2.1.0-win32\glew-2.1.0\include;C:\Users\Loke.Vigstrand\Downloads\glm-1.0.1-light</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -199,8 +196,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib\x64\</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Loke.Vigstrand\Downloads\glew-2.1.0-win32\glew-2.1.0\lib\Release\x64;C:\Users\Loke.Vigstrand\Downloads\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command>
@@ -208,12 +205,6 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\GLFW\glfw3.h" />
-    <ClInclude Include="include\GLFW\glfw3native.h" />
-    <ClInclude Include="include\GL\eglew.h" />
-    <ClInclude Include="include\GL\glew.h" />
-    <ClInclude Include="include\GL\glxew.h" />
-    <ClInclude Include="include\GL\wglew.h" />
     <ClInclude Include="src\Renderer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -221,8 +212,8 @@
     <ClCompile Include="src\RendererAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="lib\glew32.lib" />
-    <Content Include="lib\glfw3.lib" />
+    <Folder Include="include\" />
+    <Folder Include="lib\" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

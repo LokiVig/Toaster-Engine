@@ -9,6 +9,8 @@
     <IsTestProject>true</IsTestProject>
     <BaseOutputPath>$(SolutionDir)build\tests\</BaseOutputPath>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+    <AssemblyName>$(ProjectName)</AssemblyName>
+    <RootNamespace>DoomNET.Tests</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
