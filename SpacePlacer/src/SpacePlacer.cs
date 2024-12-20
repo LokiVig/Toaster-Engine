@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.Threading;
 
-using DoomNET.Resources;
+using Toast.Engine.Resources;
 
-namespace DoomNET.SpacePlacer;
+namespace Toast.SpacePlacer;
 
 public class SpacePlacer
 {

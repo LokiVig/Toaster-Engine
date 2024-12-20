@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <BaseOutputPath>$(SolutionDir)build\</BaseOutputPath>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <RootNamespace>DoomNET</RootNamespace>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <AssemblyName>$(ProjectName)</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>$(SolutionDir)build\$(Configuration)</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>$(SolutionDir)build\$(Configuration)</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="src\rendering\textures\dev\" />
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)Engine\src\rendering\shaders\*&quot; &quot;$(OutDir)resources\shaders\&quot;" />
+    <Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)Engine\src\rendering\textures\*&quot; &quot;$(OutDir)resources\textures\&quot;" />
+  </Target>
+</Project>

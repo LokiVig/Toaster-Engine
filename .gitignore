@@ -9,6 +9,7 @@ build/*
 *.user
 
 # Built files for the projects
-Game/obj/*
 SpacePlacer/obj/*
+Engine/obj/*
 Tests/obj/*
+Game/obj/*

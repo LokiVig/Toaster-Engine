@@ -1,4 +1,4 @@
-﻿namespace DoomNET.SpacePlacer;
+﻿namespace Toast.SpacePlacer;
 
 public class Program
 {

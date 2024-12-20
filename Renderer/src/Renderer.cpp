@@ -17,7 +17,7 @@ void Renderer::Initialize()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window; 
-    window = glfwCreateWindow(1280, 720, "Doom.NET", NULL, NULL);
+    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Doom.NET", NULL, NULL);
     m_pWindow = window;
 
     if (!window)
