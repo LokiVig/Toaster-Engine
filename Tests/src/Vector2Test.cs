@@ -42,8 +42,7 @@ public class Vector2Test
 			Vector2 value2 = new Vector2(value2_x, value2_y);
 			Vector2 result = value1 + value2;
 
-			Console.WriteLine(
-				$"(Test #{i + 1}) value1 ({value1}) + value2 ({value2}) = {result} (expected: {expected})");
+			Console.WriteLine($"(Test #{i + 1}) value1 ({value1}) + value2 ({value2}) = {result} (expected: {expected})");
 
 			if (result != expected)
 			{
@@ -59,8 +58,7 @@ public class Vector2Test
 
 			for (int i = 0; i < errorCount; i++)
 			{
-				Console.WriteLine(
-					$"(Error #{i + 1}) value1 ({errorList[i].value1}) + value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) + value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
@@ -88,8 +86,7 @@ public class Vector2Test
 			Vector2 value2 = new Vector2(value2_x, value2_y);
 			Vector2 result = value1 - value2;
 
-			Console.WriteLine(
-				$"(Test #{i + 1}) value1 ({value1}) - value2 ({value2}) = {result} (expected: {expected})");
+			Console.WriteLine($"(Test #{i + 1}) value1 ({value1}) - value2 ({value2}) = {result} (expected: {expected})");
 
 			if (result != expected)
 			{
@@ -105,8 +102,7 @@ public class Vector2Test
 
 			for (int i = 0; i < errorCount; i++)
 			{
-				Console.WriteLine(
-					$"(Error #{i + 1}) value1 ({errorList[i].value1}) - value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) - value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
@@ -134,8 +130,7 @@ public class Vector2Test
 			Vector2 value2 = new Vector2(value2_x, value2_y);
 			Vector2 result = value1 * value2;
 
-			Console.WriteLine(
-				$"(Test #{i + 1}) value1 ({value1}) * value2 ({value2}) = {result} (expected: {expected})");
+			Console.WriteLine($"(Test #{i + 1}) value1 ({value1}) * value2 ({value2}) = {result} (expected: {expected})");
 
 			if (result != expected)
 			{
@@ -151,8 +146,7 @@ public class Vector2Test
 
 			for (int i = 0; i < errorCount; i++)
 			{
-				Console.WriteLine(
-					$"(Error #{i + 1}) value1 ({errorList[i].value1}) * value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) * value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
@@ -180,8 +174,7 @@ public class Vector2Test
 			Vector2 value2 = new Vector2(value2_x, value2_y);
 			Vector2 result = value1 * value2;
 
-			Console.WriteLine(
-				$"(Test #{i + 1}) value1 ({value1}) * value2 ({value2}) = {result} (expected: {expected})");
+			Console.WriteLine($"(Test #{i + 1}) value1 ({value1}) * value2 ({value2}) = {result} (expected: {expected})");
 
 			if (result != expected)
 			{
@@ -197,8 +190,7 @@ public class Vector2Test
 
 			for (int i = 0; i < errorCount; i++)
 			{
-				Console.WriteLine(
-					$"(Error #{i + 1}) value1 ({errorList[i].value1}) * value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) * value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
@@ -226,8 +218,7 @@ public class Vector2Test
 			Vector2 value2 = new Vector2(value2_x, value2_y);
 			Vector2 result = value1 / value2;
 
-			Console.WriteLine(
-				$"(Test #{i + 1}) value1 ({value1}) / value2 ({value2}) = {result} (expected: {expected})");
+			Console.WriteLine($"(Test #{i + 1}) value1 ({value1}) / value2 ({value2}) = {result} (expected: {expected})");
 
 			if (result != expected)
 			{
@@ -243,8 +234,7 @@ public class Vector2Test
 
 			for (int i = 0; i < errorCount; i++)
 			{
-				Console.WriteLine(
-					$"(Error #{i + 1}) value1 ({errorList[i].value1}) / value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) / value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
@@ -279,8 +269,7 @@ public class Vector2Test
 			float value2 = value2_x;
 			Vector2 result = value1 / value2;
 
-			Console.WriteLine(
-				$"(Test #{i + 1}) value1 ({value1}) / value2 ({value2}) = {result} (expected: {expected})");
+			Console.WriteLine($"(Test #{i + 1}) value1 ({value1}) / value2 ({value2}) = {result} (expected: {expected})");
 
 			if (result != expected)
 			{
@@ -296,8 +285,7 @@ public class Vector2Test
 
 			for (int i = 0; i < errorCount; i++)
 			{
-				Console.WriteLine(
-					$"(Error #{i + 1}) value1 ({errorList[i].value1}) / value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) / value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
@@ -315,18 +303,21 @@ public class Vector2Test
 		// Do 5000 tests
 		for (int i = 0; i < 5000; i++)
 		{
-			Vector2 value1 = new Vector2(value1_x = rand.Next(RAND_MIN, RAND_MAX),
+			Vector2 value1 = new Vector2(
+				value1_x = rand.Next(RAND_MIN, RAND_MAX),
 				value1_y = rand.Next(RAND_MIN, RAND_MAX));
-			Vector2 value2 = new Vector2(value2_x = rand.Next(RAND_MIN, RAND_MAX),
+			
+			Vector2 value2 = new Vector2(
+				value2_x = rand.Next(RAND_MIN, RAND_MAX),
 				value2_y = rand.Next(RAND_MIN, RAND_MAX));
 
-			bool expected = (float)Math.Sqrt(value1_x * value1_x + value1_y * value1_y) -
+			bool expected = 
+				(float)Math.Sqrt(value1_x * value1_x + value1_y * value1_y) -
 				(float)Math.Sqrt(value2_x * value2_x + value2_y * value2_y) < 0;
 
 			bool result = value1 < value2;
 
-			Console.WriteLine(
-				$"(Test #{i + 1}) value1 ({value1}) < value2 ({value2}) ? {result} (expected: {expected})");
+			Console.WriteLine($"(Test #{i + 1}) value1 ({value1}) < value2 ({value2}) ? {result} (expected: {expected})");
 
 			if (result != expected)
 			{
@@ -342,8 +333,7 @@ public class Vector2Test
 
 			for (int i = 0; i < errorCount; i++)
 			{
-				Console.WriteLine(
-					$"(Error #{i + 1}) value1 ({errorList[i].value1}) < value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) < value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
@@ -361,18 +351,21 @@ public class Vector2Test
 		// Do 5000 tests
 		for (int i = 0; i < 5000; i++)
 		{
-			Vector2 value1 = new Vector2(value1_x = rand.Next(RAND_MIN, RAND_MAX),
+			Vector2 value1 = new Vector2(
+				value1_x = rand.Next(RAND_MIN, RAND_MAX),
 				value1_y = rand.Next(RAND_MIN, RAND_MAX));
-			Vector2 value2 = new Vector2(value2_x = rand.Next(RAND_MIN, RAND_MAX),
+			
+			Vector2 value2 = new Vector2(
+				value2_x = rand.Next(RAND_MIN, RAND_MAX),
 				value2_y = rand.Next(RAND_MIN, RAND_MAX));
 
-			bool expected = (float)Math.Sqrt(value1_x * value1_x + value1_y * value1_y) -
+			bool expected = 
+				(float)Math.Sqrt(value1_x * value1_x + value1_y * value1_y) -
 				(float)Math.Sqrt(value2_x * value2_x + value2_y * value2_y) > 0;
 
 			bool result = value1 > value2;
 
-			Console.WriteLine(
-				$"(Test #{i + 1}) value1 ({value1}) > value2 ({value2}) ? {result} (expected: {expected})");
+			Console.WriteLine($"(Test #{i + 1}) value1 ({value1}) > value2 ({value2}) ? {result} (expected: {expected})");
 
 			if (result != expected)
 			{
@@ -388,8 +381,7 @@ public class Vector2Test
 
 			for (int i = 0; i < errorCount; i++)
 			{
-				Console.WriteLine(
-					$"(Error #{i + 1}) value1 ({errorList[i].value1}) > value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) > value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");

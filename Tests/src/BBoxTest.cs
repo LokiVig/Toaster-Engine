@@ -77,8 +77,7 @@ public class BBoxTest
 
 			bool result = value1.IntersectingWith(value2);
 
-			Console.WriteLine(
-				$"(Test #{i + 1}) value2 ({value2}) within value1 ({value1}) ? {result} (expected: {expected})");
+			Console.WriteLine($"(Test #{i + 1}) value2 ({value2}) within value1 ({value1}) ? {result} (expected: {expected})");
 
 			if (result != expected) // We have an error!
 			{
@@ -94,8 +93,7 @@ public class BBoxTest
 
 			for (int i = 0; i < errorCount; i++)
 			{
-				Console.WriteLine(
-					$"(Error #{i + 1}) value2 ({errorList[i].value2}) within value1 ({errorList[i].value1}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+				Console.WriteLine($"(Error #{i + 1}) value2 ({errorList[i].value2}) within value1 ({errorList[i].value1}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
@@ -137,8 +135,7 @@ public class BBoxTest
 
 			bool result = value1.IntersectingWith(value2);
 
-			Console.WriteLine(
-				$"(Test #{i + 1}) value2 ({value2}) within value1 ({value1}) ? {result} (expected: {expected})");
+			Console.WriteLine($"(Test #{i + 1}) value2 ({value2}) within value1 ({value1}) ? {result} (expected: {expected})");
 
 			if (result != expected) // We have an error!
 			{
@@ -154,8 +151,7 @@ public class BBoxTest
 
 			for (int i = 0; i < errorCount; i++)
 			{
-				Console.WriteLine(
-					$"(Error #{i + 1}) value2 ({errorList[i].value2}) within value1 ({errorList[i].value1}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+				Console.WriteLine($"(Error #{i + 1}) value2 ({errorList[i].value2}) within value1 ({errorList[i].value1}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");

@@ -50,8 +50,7 @@ public class QuaternionTests
 			Quaternion value2 = new Quaternion(value2_x, value2_y, value2_z, value2_w);
 			Quaternion result = value1 + value2;
 
-			Console.WriteLine(
-				$"(Test #{i + 1}) value1 ({value1}) + value2 ({value2}) = {result} (expected: {expected})");
+			Console.WriteLine($"(Test #{i + 1}) value1 ({value1}) + value2 ({value2}) = {result} (expected: {expected})");
 
 			if (result != expected) // Returns an error if they aren't equal!
 			{
@@ -67,8 +66,7 @@ public class QuaternionTests
 
 			for (int i = 0; i < errorCount; i++)
 			{
-				Console.WriteLine(
-					$"(Error #{i + 1}) value1 ({errorList[i].value1}) + value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) + value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
@@ -100,8 +98,7 @@ public class QuaternionTests
 			Quaternion value2 = new Quaternion(value2_x, value2_y, value2_z, value2_w);
 			Quaternion result = value1 - value2;
 
-			Console.WriteLine(
-				$"(Test #{i + 1}) value1 ({value1}) - value2 ({value2}) = {result} (expected: {expected})");
+			Console.WriteLine($"(Test #{i + 1}) value1 ({value1}) - value2 ({value2}) = {result} (expected: {expected})");
 
 			if (result != expected) // Returns an error if they aren't equal!
 			{
@@ -117,8 +114,7 @@ public class QuaternionTests
 
 			for (int i = 0; i < errorCount; i++)
 			{
-				Console.WriteLine(
-					$"(Error #{i + 1}) value1 ({errorList[i].value1}) - value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) - value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
@@ -161,8 +157,7 @@ public class QuaternionTests
 			Quaternion value2 = new Quaternion(value2_x, value2_y, value2_z, value2_w);
 			Quaternion result = value1 * value2;
 
-			Console.WriteLine(
-				$"(Test #{i + 1}) value1 ({value1}) * value2 ({value2}) = {result} (expected: {expected})");
+			Console.WriteLine($"(Test #{i + 1}) value1 ({value1}) * value2 ({value2}) = {result} (expected: {expected})");
 
 			if (result != expected) // We have an error!
 			{
@@ -178,8 +173,7 @@ public class QuaternionTests
 
 			for (int i = 0; i < errorCount; i++)
 			{
-				Console.WriteLine(
-					$"(Error #{i + 1}) value1 ({errorList[i].value1}) * value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) * value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
@@ -221,8 +215,7 @@ public class QuaternionTests
 			float value2 = value2_x;
 			Quaternion result = value1 * value2;
 
-			Console.WriteLine(
-				$"(Test #{i + 1}) value1 ({value1}) * value2 ({value2}) = {result} (expected: {expected})");
+			Console.WriteLine($"(Test #{i + 1}) value1 ({value1}) * value2 ({value2}) = {result} (expected: {expected})");
 
 			if (result != expected) // We have an error!
 			{
@@ -238,8 +231,7 @@ public class QuaternionTests
 
 			for (int i = 0; i < errorCount; i++)
 			{
-				Console.WriteLine(
-					$"(Error #{i + 1}) value1 ({errorList[i].value1}) * value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) * value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
@@ -282,8 +274,7 @@ public class QuaternionTests
 			Quaternion value2 = new Quaternion(value2_x, value2_y, value2_z, value2_w);
 			Quaternion result = value1 / value2;
 
-			Console.WriteLine(
-				$"(Test #{i + 1}) value1 ({value1}) / value2 ({value2}) = {result} (expected: {expected})");
+			Console.WriteLine($"(Test #{i + 1}) value1 ({value1}) / value2 ({value2}) = {result} (expected: {expected})");
 
 			if (result != expected) // We have an error!
 			{
@@ -299,8 +290,7 @@ public class QuaternionTests
 
 			for (int i = 0; i < errorCount; i++)
 			{
-				Console.WriteLine(
-					$"(Error #{i + 1}) value1 ({errorList[i].value1}) / value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) / value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
@@ -342,8 +332,7 @@ public class QuaternionTests
 			float value2 = value2_x;
 			Quaternion result = value1 / value2;
 
-			Console.WriteLine(
-				$"(Test #{i + 1}) value1 ({value1}) / value2 ({value2}) = {result} (expected: {expected})");
+			Console.WriteLine($"(Test #{i + 1}) value1 ({value1}) / value2 ({value2}) = {result} (expected: {expected})");
 
 			if (result != expected) // We have an error!
 			{
@@ -359,8 +348,7 @@ public class QuaternionTests
 
 			for (int i = 0; i < errorCount; i++)
 			{
-				Console.WriteLine(
-					$"(Error #{i + 1}) value1 ({errorList[i].value1}) / value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) / value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
@@ -396,8 +384,7 @@ public class QuaternionTests
 
 			bool result = value1 < value2;
 
-			Console.WriteLine(
-				$"(Test #{i + 1}) value1 ({value1}) < value2 ({value2}) ? {result} (expected: {expected})");
+			Console.WriteLine($"(Test #{i + 1}) value1 ({value1}) < value2 ({value2}) ? {result} (expected: {expected})");
 
 			if (result != expected)
 			{
@@ -413,8 +400,7 @@ public class QuaternionTests
 
 			for (int i = 0; i < errorCount; i++)
 			{
-				Console.WriteLine(
-					$"(Error #{i + 1}) value1 ({errorList[i].value1}) < value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) < value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
@@ -450,8 +436,7 @@ public class QuaternionTests
 
 			bool result = value1 > value2;
 
-			Console.WriteLine(
-				$"(Test #{i + 1}) value1 ({value1}) > value2 ({value2}) ? {result} (expected: {expected})");
+			Console.WriteLine($"(Test #{i + 1}) value1 ({value1}) > value2 ({value2}) ? {result} (expected: {expected})");
 
 			if (result != expected)
 			{
@@ -467,8 +452,7 @@ public class QuaternionTests
 
 			for (int i = 0; i < errorCount; i++)
 			{
-				Console.WriteLine(
-					$"(Error #{i + 1}) value1 ({errorList[i].value1}) > value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) > value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
