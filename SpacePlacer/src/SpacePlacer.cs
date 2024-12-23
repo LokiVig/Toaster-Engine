@@ -46,18 +46,18 @@ public class SpacePlacer
         }
     }
 
-    private void LoadMap(string directory)
+    private void LoadMap(string path)
     {
-        file = WTF.LoadFile(directory);
+        file = WTF.LoadFile(path);
     }
 
     private void SaveMap()
     {
-        WTF.SaveFile(file?.directory, file);
+        WTF.SaveFile(file?.path, file);
     }
 
     private void SaveMap(WTF inFile)
     {
-        WTF.SaveFile(inFile.directory, inFile);
+        WTF.SaveFile(inFile.path, inFile);
     }
 }

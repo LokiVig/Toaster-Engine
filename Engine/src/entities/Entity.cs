@@ -53,8 +53,7 @@ public class Entity
 		// Make sure our type is valid
 		if (type == EntityType.None)
 		{
-			throw new NullReferenceException(
-				$"Entity {this} is of EntityType None, meaning this is an entity that hasn't properly been made!");
+			throw new NullReferenceException($"Entity {this} is of EntityType None, meaning this is an entity that hasn't properly been made!");
 		}
 	}
 
@@ -84,7 +83,7 @@ public class Entity
 		// Can't have bounding boxes where the maxs have a less value than mins, or vice versa
 		if (bbox.mins >= bbox.maxs || bbox.maxs <= bbox.mins)
 		{
-			throw new Exception($"Entity {this}'s bounding boxes are mismatched!");
+			// throw new Exception($"Entity {this}'s bounding boxes are mismatched! ({bbox.mins}, {bbox.maxs})");
 		}
 	}
 

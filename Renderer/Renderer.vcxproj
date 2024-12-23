@@ -105,14 +105,14 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;CPPDYNAMICLIBRARYTEMPLATE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Users\Loke.Vigstrand\Downloads\glfw-3.4.bin.WIN64\include;C:\Users\Loke.Vigstrand\Downloads\glew-2.1.0-win32\glew-2.1.0\include;C:\Users\Loke.Vigstrand\Downloads\glm-1.0.1-light</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Downloads\glfw-3.4.bin.WIN64\include;E:\Downloads\glew-2.2.0\include;E:\Downloads\glm-1.0.1-light</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Loke.Vigstrand\Downloads\glew-2.1.0-win32\glew-2.1.0\lib\Release\Win32;C:\Users\Loke.Vigstrand\Downloads\glfw-3.4.bin.WIN32\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\Downloads\glew-2.2.0\lib\Release\x64;E:\Downloads\glfw-3.4.bin.WIN32\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -132,14 +132,14 @@
       <PreprocessorDefinitions>_DEBUG;CPPDYNAMICLIBRARYTEMPLATE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Users\Loke.Vigstrand\Downloads\glfw-3.4.bin.WIN64\include;C:\Users\Loke.Vigstrand\Downloads\glew-2.1.0-win32\glew-2.1.0\include;C:\Users\Loke.Vigstrand\Downloads\glm-1.0.1-light</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Downloads\glfw-3.4.bin.WIN64\include;E:\Downloads\glew-2.2.0\include;E:\Downloads\glm-1.0.1-light</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Loke.Vigstrand\Downloads\glew-2.1.0-win32\glew-2.1.0\lib\Release\x64;C:\Users\Loke.Vigstrand\Downloads\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\Downloads\glew-2.2.0\lib\Release\x64;E:\Downloads\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -161,7 +161,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;CPPDYNAMICLIBRARYTEMPLATE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Users\Loke.Vigstrand\Downloads\glfw-3.4.bin.WIN64\include;C:\Users\Loke.Vigstrand\Downloads\glew-2.1.0-win32\glew-2.1.0\include;C:\Users\Loke.Vigstrand\Downloads\glm-1.0.1-light</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Downloads\glfw-3.4.bin.WIN64\include;E:\Downloads\glew-2.2.0\include;E:\Downloads\glm-1.0.1-light</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -170,7 +170,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Loke.Vigstrand\Downloads\glew-2.1.0-win32\glew-2.1.0\lib\Release\Win32;C:\Users\Loke.Vigstrand\Downloads\glfw-3.4.bin.WIN32\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\Downloads\glew-2.2.0\lib\Release\x64;E:\Downloads\glfw-3.4.bin.WIN32\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command>
@@ -188,7 +188,7 @@
       <PreprocessorDefinitions>NDEBUG;CPPDYNAMICLIBRARYTEMPLATE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Users\Loke.Vigstrand\Downloads\glfw-3.4.bin.WIN64\include;C:\Users\Loke.Vigstrand\Downloads\glew-2.1.0-win32\glew-2.1.0\include;C:\Users\Loke.Vigstrand\Downloads\glm-1.0.1-light</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Downloads\glfw-3.4.bin.WIN64\include;E:\Downloads\glew-2.2.0\include;E:\Downloads\glm-1.0.1-light</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -197,7 +197,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Loke.Vigstrand\Downloads\glew-2.1.0-win32\glew-2.1.0\lib\Release\x64;C:\Users\Loke.Vigstrand\Downloads\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>E:\Downloads\glew-2.2.0\lib\Release\x64;E:\Downloads\glfw-3.4.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command>

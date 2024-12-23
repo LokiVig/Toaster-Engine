@@ -107,8 +107,7 @@ public class BBox
 		// If we reach this point, the ray intersects the bounding box within the valid range
 		return true;
 	}
-
-
+	
 	public Vector3 GetCenter()
 	{
 		return (maxs + mins) / 2; // THANK YOU, RUSSELL 🙏

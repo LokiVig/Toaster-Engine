@@ -15,15 +15,15 @@ public class WTF
 {
 	public List<Entity> entities { get; set; } = new(); // List of entities in this WTF file
 	public List<Brush> brushes { get; set; } = new(); // All the brushes in this WTF file
-	public string directory { get; set; } // The directory of which this WTF file is saved at
+	public string path { get; set; } // The directory of which this WTF file is saved at
 
 	public WTF()
 	{
 	}
 
-	public WTF(string directory)
+	public WTF(string path)
 	{
-		this.directory = directory;
+		this.path = path;
 	}
 
 	/// <summary>
@@ -189,6 +189,21 @@ public class WTF
 	}
 
 	/// <summary>
+	/// Save this specific file.<br/>
+	/// Optionally takes a specific <paramref name="directory"/> to save it to.
+	/// </summary>
+	/// <param name="directory">The optional directory to save the file to.</param>
+	public void Save(string directory = null)
+	{
+		if (!string.IsNullOrEmpty(directory))
+		{
+			directory = Path.Combine("maps/", directory);
+		}
+		
+		SaveFile(directory ?? path, this);
+	}
+
+	/// <summary>
 	/// Find a WTF by a specific path
 	/// </summary>
 	/// <param name="directory">The specified path to the WTF</param>
@@ -220,12 +235,18 @@ public class WTF
 	/// <summary>
 	/// Save a WTF to a specified path
 	/// </summary>
-	/// <param name="path">The path of the WTF</param>
+	/// <param name="directory">The path of the WTF</param>
 	/// <param name="inFile">The desired file to save</param>
-	public static void SaveFile(string path, WTF inFile)
+	public static void SaveFile(string directory, WTF inFile)
 	{
-		// A local variable for storing the file
-		WTF file;
+		WTF file; // A local variable for storing the file
+
+		// If the input directory doesn't contain the maps folder...
+		if (!directory.Contains("maps/"))
+		{
+			directory = Path.Combine("maps/", directory); // Add the maps prefix, we should only ever save maps
+														  // in the maps/ folder
+		}
 
 		// Ensure that the "maps/" directory actually exists
 		if (!Directory.Exists("maps/"))
@@ -234,10 +255,10 @@ public class WTF
 		}
 
 		// If we already have a file open, set the path to the current file
-		if (EngineProgram.currentFile != null && !string.IsNullOrEmpty(EngineProgram.currentFile.directory))
+		if (EngineProgram.currentFile != null && !string.IsNullOrEmpty(EngineProgram.currentFile.path))
 		{
 			file = EngineProgram.currentFile;
-			path = file.directory;
+			directory = file.path;
 		}
 		else if (inFile != null) // If the input file wasn't null, set it accordingly
 		{
@@ -252,12 +273,12 @@ public class WTF
 		file.OnSave();
 
 		// Set the file's filepath if it wasn't already sourced from the file itself
-		if (file.directory != path)
+		if (file.path != directory)
 		{
-			file.directory = path;
+			file.path = directory;
 		}
 
 		// Write the WTF file to the path
-		File.WriteAllText(path, JsonSerializer.Serialize(file, EngineProgram.serializerOptions));
+		File.WriteAllText(directory, JsonSerializer.Serialize(file, EngineProgram.serializerOptions));
 	}
 }

@@ -350,6 +350,56 @@ public class Vector3Test
 		}
 	}
 
+	[TestMethod("Less than or equal (<=)")]
+	public void TestLessThanOrEqual()
+	{
+		int errorCount = 0;
+		List<(Vector3 value1, Vector3 value2, bool result, bool expected)> errorList = new();
+		
+		Console.WriteLine("Testing less than or equal (<=)...");
+		
+		// Do 5000 tests
+		for (int i = 0; i < 5000; i++)
+		{
+			Vector3 value1 = new Vector3(
+				value1_x = rand.Next(RAND_MIN, RAND_MAX),
+				value1_y = rand.Next(RAND_MIN, RAND_MAX),
+				value1_z = rand.Next(RAND_MIN, RAND_MAX));
+
+			Vector3 value2 = new Vector3(
+				value2_x = rand.Next(RAND_MIN, RAND_MAX),
+				value2_y = rand.Next(RAND_MIN, RAND_MAX),
+				value2_z = rand.Next(RAND_MIN, RAND_MAX));
+			
+			bool expected = 
+				!((float)Math.Sqrt(value1_x * value1_x + value1_y * value1_y + value1_z * value1_z) -
+				(float)Math.Sqrt(value2_x * value2_x + value2_y * value2_y + value2_z * value2_z) > 0);
+
+			bool result = value1 <= value2;
+			
+			Console.WriteLine($"(Test #{i + 1}) value1 ({value1}) <= value2 ({value2}) ? {result} (expected: {expected})");
+
+			if (result != expected)
+			{
+				errorCount++;
+				errorList.Add((value1, value2, result, expected));
+			}
+		}
+		
+		if (errorCount > 0)
+		{
+			// Add spacing between comments and errorList
+			Console.WriteLine("\n\n");
+
+			for (int i = 0; i < errorCount; i++)
+			{
+				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) <= value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+			}
+
+			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
+		}
+	}
+
 	[TestMethod("Greater than (>)")]
 	public void TestGreaterThan()
 	{
@@ -394,6 +444,56 @@ public class Vector3Test
 			for (int i = 0; i < errorCount; i++)
 			{
 				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) > value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
+			}
+
+			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");
+		}
+	}
+	
+	[TestMethod("Greater than or equal (>=)")]
+	public void TestGreaterThanOrEqual()
+	{
+		int errorCount = 0;
+		List<(Vector3 value1, Vector3 value2, bool result, bool expected)> errorList = new();
+		
+		Console.WriteLine("Testing greater than or equal (>=)...");
+		
+		// Do 5000 tests
+		for (int i = 0; i < 5000; i++)
+		{
+			Vector3 value1 = new Vector3(
+				value1_x = rand.Next(RAND_MIN, RAND_MAX),
+				value1_y = rand.Next(RAND_MIN, RAND_MAX),
+				value1_z = rand.Next(RAND_MIN, RAND_MAX));
+
+			Vector3 value2 = new Vector3(
+				value2_x = rand.Next(RAND_MIN, RAND_MAX),
+				value2_y = rand.Next(RAND_MIN, RAND_MAX),
+				value2_z = rand.Next(RAND_MIN, RAND_MAX));
+			
+			bool expected = 
+				!((float)Math.Sqrt(value1_x * value1_x + value1_y * value1_y + value1_z * value1_z) - 
+				(float)Math.Sqrt(value2_x * value2_x + value2_y * value2_y + value2_z * value2_z) < 0);
+
+			bool result = value1 >= value2;
+			
+			Console.WriteLine($"(Test #{i + 1}) value1 ({value1}) >= value2 ({value2}) ? {result} (expected: {expected})");
+
+			if (result != expected)
+			{
+				errorCount++;
+				errorList.Add((value1, value2, result, expected));
+			}
+		}
+		
+		if (errorCount > 0)
+		{
+			// Add spacing between comments and errorList
+			Console.WriteLine("\n\n");
+
+			for (int i = 0; i < errorCount; i++)
+			{
+				Console.WriteLine($"(Error #{i + 1}) value1 ({errorList[i].value1}) >= value2 ({errorList[i].value2}) != expected ({errorList[i].expected}) (result was {errorList[i].result})");
 			}
 
 			throw new Exception($"errorCount > 0 (errorCount: {errorCount})!");

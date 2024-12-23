@@ -17,7 +17,7 @@ public class TriggerBrush : BrushEntity
 	public Entity eValue { get; set; } = null; // Event Entity value
 	public BBox bbValue { get; set; } = BBox.Zero; // Event BBox value
 
-	public string targetEntity { get; set; } // The entity we wish to target
+	public Entity targetEntity { get; set; } // The entity we wish to target
 	public EntityEvent targetEvent { get; set; } // The desired event
 
 	public TriggerOn triggerOn { get; set; } // When should this trigger, trigger?
@@ -158,10 +158,10 @@ public class TriggerBrush : BrushEntity
 		}
 
 		// Get the entity we're supposed to affect
-		Entity foundTarget = EngineProgram.currentScene.FindEntity(targetEntity);
+		// Entity foundTarget = EngineProgram.currentScene.FindEntity(targetEntity.GetID());
 
 		Console.WriteLine($"TriggerBrush {this} has been triggered.\n" +
-		                  $"\tTarget: {foundTarget}\n" +
+		                  $"\tTarget: {targetEntity}\n" +
 		                  $"\tEvent: {targetEvent}\n" +
 		                  $"\tValues:\n" +
 		                  $"\t\tiValue: {iValue}\n" +
@@ -177,41 +177,41 @@ public class TriggerBrush : BrushEntity
 
 		if (iValue != 0) // Int value event
 		{
-			foundTarget.OnEvent(targetEvent, iValue, this);
+			targetEntity.OnEvent(targetEvent, iValue, this);
 		}
 
 		if (fValue != 0.0f) // Float value event
 		{
-			foundTarget.OnEvent(targetEvent, fValue, this);
+			targetEntity.OnEvent(targetEvent, fValue, this);
 		}
 
 		if (bValue != -1) // Bool value event
 		{
-			foundTarget.OnEvent(targetEvent, bValue == 1, this);
+			targetEntity.OnEvent(targetEvent, bValue == 1, this);
 		}
 
 		if (vValue != Vector3.Zero) // Vector3 value event
 		{
-			foundTarget.OnEvent(targetEvent, vValue, this);
+			targetEntity.OnEvent(targetEvent, vValue, this);
 		}
 
 		if (qValue != Quaternion.Identity) // Quaternion value event
 		{
-			foundTarget.OnEvent(targetEvent, qValue, this);
+			targetEntity.OnEvent(targetEvent, qValue, this);
 		}
 
 		if (eValue != null) // Entity value event
 		{
-			foundTarget.OnEvent(targetEvent, eValue, this);
+			targetEntity.OnEvent(targetEvent, eValue, this);
 		}
 
 		if (bbValue != BBox.Zero) // BBox value event
 		{
-			foundTarget.OnEvent(targetEvent, bbValue, this);
+			targetEntity.OnEvent(targetEvent, bbValue, this);
 		}
 
 		// Regular event, not taking any special inputs
-		foundTarget.OnEvent(targetEvent, this);
+		targetEntity.OnEvent(targetEvent, this);
 
 		// We've triggered this trigger successfully!
 		triggeredCount++; // Triggered count goes up

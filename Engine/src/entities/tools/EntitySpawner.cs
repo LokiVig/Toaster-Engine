@@ -1,10 +1,14 @@
 ﻿using System;
+
 using Toast.Engine.Resources;
 
 namespace Toast.Engine.Entities;
 
 public class EntitySpawner<T> : ToolEntity where T : Entity, new()
 {
+	public bool spawnsEntityOnSpawn { get; set; }
+	public T entityToSpawn { get; } = new T();
+
 	public EntitySpawner()
 	{
 		SetBBox(new BBox(new Vector3(-8, -8, -8), new Vector3(8, 8, 8)));
@@ -14,7 +18,7 @@ public class EntitySpawner<T> : ToolEntity where T : Entity, new()
 	{
 		SetBBox(new BBox(new Vector3(-8, -8, -8), new Vector3(8, 8, 8)));
 	}
-
+	
 	/// <summary>
 	/// Spawn an entity, based on the given argument.
 	/// </summary>
@@ -23,10 +27,10 @@ public class EntitySpawner<T> : ToolEntity where T : Entity, new()
 	{
 		T ent = new T();
 
-		// Make sure the desired entity is not another spawner!
-		if (ent is EntitySpawner<T>)
+		// Make sure the desired entity is not a tool entity!
+		if (ent is ToolEntity)
 		{
-			Console.WriteLine("Can't spawn another spawner!\n");
+			Console.WriteLine("Can't spawn a tool entity!\n");
 			return null;
 		}
 
@@ -34,12 +38,11 @@ public class EntitySpawner<T> : ToolEntity where T : Entity, new()
 		ent.Spawn();
 		// Set the entity's position to our position
 		ent.SetPosition(position);
+		// Generate the entity's ID
+		ent.CreateID();
 
 		// Add the newly spawned entity to the current scene
 		EngineProgram.currentScene?.AddEntity(ent);
-
-		// Generate the entity's ID
-		ent.CreateID();
 
 		Console.WriteLine($"Spawned entity {ent}.\n" +
 		                  $"\tSource: {this}\n" +
@@ -59,8 +62,6 @@ public class EntitySpawner<T> : ToolEntity where T : Entity, new()
 
 public class EntitySpawner : Entity
 {
-	public override EntityType type => EntityType.Tool;
-
 	public EntitySpawner()
 	{
 		SetBBox(new BBox(new Vector3(-8, -8, -8), new Vector3(8, 8, 8)));
@@ -89,12 +90,11 @@ public class EntitySpawner : Entity
 		ent.Spawn();
 		// Set the entity's position to our position
 		ent.SetPosition(position);
+		// Generate the entity's ID
+		ent.CreateID();
 
 		// Add the newly spawned entity to the current scene
 		EngineProgram.currentScene?.AddEntity(ent);
-
-		// Generate the entity's ID
-		ent.CreateID();
 
 		Console.WriteLine($"Spawned entity {ent}.\n" +
 		                  $"\tSource: {this}\n" +
