@@ -24,24 +24,27 @@ public class EngineProgram
 
 	public static IntPtr renderer;
 
+	private static Stopwatch watch = Stopwatch.StartNew();
+
 	public static void Initialize()
 	{
+		// DEBUG
+		Console.WriteLine(External.DebugFunction());
+
 		// Initialize the renderer
 		// renderer = External.CreateRenderer(currentScene);
 	}
-
-	private static Stopwatch watch = Stopwatch.StartNew();
 	
 	public static void Update()
 	{
-		while (true /*renderer != IntPtr.Zero*/)
+		while (renderer != IntPtr.Zero)
 		{
 			// Calculate deltaTime
 			deltaTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
 			watch.Restart();
 
 			// Call the rendering function
-			// External.RenderFrame(renderer);
+			External.RenderFrame(renderer);
 			
 			// Call the OnUpdate event
 			// This makes it so everything subscribed to the event will call their own,

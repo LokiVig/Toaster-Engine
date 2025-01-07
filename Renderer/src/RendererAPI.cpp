@@ -1,13 +1,17 @@
 ﻿#include "Renderer.h"
 
-#define DLL_EXPORT __declspec(dllexport)
+// DEBUG
+extern "C" __declspec(dllexport) int DebugFunction()
+{
+    return 42;
+}
 
-extern "C" DLL_EXPORT Renderer* CreateRenderer(Scene* pScene)
+extern "C" __declspec(dllexport) Renderer* CreateRenderer(Scene* pScene)
 {
     return new Renderer(pScene);
 }
 
-extern "C" DLL_EXPORT void RenderFrame(Renderer* renderer)
+extern "C" __declspec(dllexport) void RenderFrame(Renderer* renderer)
 {
     if (renderer)
     {
@@ -15,7 +19,7 @@ extern "C" DLL_EXPORT void RenderFrame(Renderer* renderer)
     }
 }
 
-extern "C" DLL_EXPORT void ShutdownRenderer(Renderer* renderer)
+extern "C" __declspec(dllexport) void ShutdownRenderer(Renderer* renderer)
 {
     if (renderer)
     {

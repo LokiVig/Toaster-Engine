@@ -1,6 +1,7 @@
-﻿using Toast.Engine.Resources;
+﻿using Toast.Engine.Entities;
+using Toast.Engine.Resources;
 
-namespace Toast.Engine.Entities;
+namespace Toast.Game.NPCs;
 
 public class TestNPC : NPCEntity
 {
@@ -22,5 +23,13 @@ public class TestNPC : NPCEntity
 
 		// Handle movements
 		HandleMovement();
+	}
+
+	protected override void OnDamage()
+	{
+		base.OnDamage();
+		
+		// We should target the thing that last attacked us!
+		SetTarget(lastAttacker);
 	}
 }

@@ -205,6 +205,12 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\GLFW\glfw3.h" />
+    <ClInclude Include="include\GLFW\glfw3native.h" />
+    <ClInclude Include="include\GL\eglew.h" />
+    <ClInclude Include="include\GL\glew.h" />
+    <ClInclude Include="include\GL\glxew.h" />
+    <ClInclude Include="include\GL\wglew.h" />
     <ClInclude Include="src\Renderer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -212,8 +218,9 @@
     <ClCompile Include="src\RendererAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="include\" />
-    <Folder Include="lib\" />
+    <Content Include="lib\glew32.lib" />
+    <Content Include="lib\glfw3.dll" />
+    <Content Include="lib\glfw3.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

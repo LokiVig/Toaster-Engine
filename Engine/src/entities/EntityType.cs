@@ -7,8 +7,8 @@
 public enum EntityType
 {
 	None, // If an entity is of this type, we have a big issue!
-
-	// Misc. entities
+	
+	// All entities should be one of these types
 	Player, // Self-describing
 	Item, // All items should be of this type
 	Prop, // All static, dynamic, physics, etc. prop should be of this type

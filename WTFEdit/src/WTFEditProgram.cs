@@ -1,21 +1,30 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading;
+using System.Diagnostics;
 
 using Toast.Engine.Resources;
 
-namespace Toast.SpacePlacer;
+namespace Toast.WTFEdit;
 
-public class SpacePlacer
+public class Program
 {
-    private WTF file;
+    public static void Main()
+    {
+        WTFEditProgram wtfe = new WTFEditProgram();
+        wtfe.Initialize();
+    }
+}
+
+public class WTFEditProgram
+{
+    private WTF currentFile;
     private float deltaTime;
     private bool active;
 
     public static event Action OnUpdate;
     
     /// <summary>
-    /// Initialize the SpacePlacer program
+    /// Initialize the WTFEdit program
     /// </summary>
     public void Initialize()
     {
@@ -48,12 +57,18 @@ public class SpacePlacer
 
     private void LoadMap(string path)
     {
-        file = WTF.LoadFile(path);
+        currentFile = WTF.LoadFile(path);
     }
 
     private void SaveMap()
     {
-        WTF.SaveFile(file?.path, file);
+        if (currentFile == null)
+        {
+            Console.WriteLine("Error: Can't save map, because no map is loaded!");
+            return;
+        }
+        
+        WTF.SaveFile(currentFile?.path, currentFile);
     }
 
     private void SaveMap(WTF inFile)

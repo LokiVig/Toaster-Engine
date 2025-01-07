@@ -26,13 +26,12 @@ public class Entity
 	public virtual EntityType type { get; private set; } = EntityType.None; // This entity's type, e.g. player / NPC
 	public virtual float health { get; set; } // This entity's health
 
-	private Vector3 velocity; // This entity's current velocity
-	private bool alive; // Is this entity alive?
-	private Entity target; // The entity this entity's targeting
-	private Entity lastAttacker; // The last entity to attack this entity
+	protected Vector3 velocity; // This entity's current velocity
+	protected bool alive; // Is this entity alive?
+	protected Entity target; // The entity this entity's targeting
+	protected Entity lastAttacker; // The last entity to attack this entity
 
 	private const float MAX_VELOCITY = 225;
-	private const float MIN_VELOCITY = -225;
 
 	public Entity()
 	{
@@ -93,7 +92,7 @@ public class Entity
 	protected void HandleMovement()
 	{
 		// Clamp velocity between the min and max values
-		velocity = Vector3.Clamp(velocity, MIN_VELOCITY, MAX_VELOCITY);
+		velocity = Vector3.Clamp(velocity, MAX_VELOCITY * -1, MAX_VELOCITY);
 		
 		// Position is affected by velocity
 		position += velocity * EngineProgram.deltaTime;

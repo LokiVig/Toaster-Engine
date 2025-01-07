@@ -5,6 +5,8 @@ using Toast.Engine;
 using Toast.Engine.Entities;
 using Toast.Engine.Resources;
 
+using Toast.Game.NPCs;
+
 namespace Toast.Game;
 
 /// <summary>
@@ -49,15 +51,13 @@ public class GameProgram
 		EngineProgram.currentFile = new WTF();
 		
 		EntitySpawner<TestNPC> npcSpawner = new EntitySpawner<TestNPC>(new Vector3(0, 5.0f, 0));
-		npcSpawner.spawnsEntityOnSpawn = true;
 		EntitySpawner<Player> playerSpawner = new EntitySpawner<Player>(Vector3.Zero);
-		playerSpawner.spawnsEntityOnSpawn = true;
 
 		TriggerBrush trigger = new TriggerBrush();
 		trigger.SetBBox(new BBox(new Vector3(-15), new Vector3(15)));
 		trigger.triggerBy = TriggerBy.Player;
-		trigger.triggerType = TriggerType.Once;
 		trigger.triggerOn = TriggerOn.Trigger;
+		trigger.triggerType = TriggerType.Once;
 		trigger.targetEvent = EntityEvent.TakeDamage;
 		trigger.targetEntity = npcSpawner.entityToSpawn;
 		trigger.fValue = 100;
@@ -74,10 +74,11 @@ public class GameProgram
 		playerSpawner.Spawn();
 		trigger.Spawn();
 
-		Player player = playerSpawner.SpawnEntity();
+		mainPlayer = playerSpawner.SpawnEntity();
 		TestNPC npc = npcSpawner.SpawnEntity();
 
-		Ray.Trace(player, npc, out object hitObject, RayIgnore.Brushes, [trigger]);
+		Ray.Trace(mainPlayer, npc, out object hitObject, RayIgnore.Brushes, [trigger]);
+		(hitObject as Entity)?.TakeDamage(25, mainPlayer);
 		
 		// Start updating the engine
 		EngineProgram.Update();

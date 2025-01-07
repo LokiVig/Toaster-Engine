@@ -28,6 +28,15 @@ public class Scene
 	}
 
 	/// <summary>
+	/// Load variables from a WTF file loaded from the argument path
+	/// </summary>
+	public static Scene LoadFromFile(string path)
+	{
+		WTF file = WTF.LoadFile(path);
+		return new Scene(file.GetEntities(), file.GetBrushes());
+	}
+
+	/// <summary>
 	/// Remove the entity from the entities list
 	/// </summary>
 	/// <param name="entity">Desired entity to remove</param>

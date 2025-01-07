@@ -6,7 +6,6 @@ namespace Toast.Engine.Entities;
 
 public class EntitySpawner<T> : ToolEntity where T : Entity, new()
 {
-	public bool spawnsEntityOnSpawn { get; set; }
 	public T entityToSpawn { get; } = new T();
 
 	public EntitySpawner()

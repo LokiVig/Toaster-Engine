@@ -10,7 +10,11 @@ public class External
     //
     // Renderer.dll
     //
-
+    
+    // DEBUG
+    [DllImport("Renderer.dll", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int DebugFunction();
+    
     [DllImport("Renderer.dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr CreateRenderer(Scene scene);
 

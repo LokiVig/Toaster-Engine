@@ -22,7 +22,7 @@ void Renderer::Initialize()
 
     if (!window)
     {
-        // (void)fprintf(stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible.\n");
+        (void)fprintf(stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible.\n");
         glfwTerminate();
         return;
     }
@@ -31,7 +31,7 @@ void Renderer::Initialize()
 
     if (glewInit() != GLEW_OK)
     {
-        // (void)fprintf(stderr, "Failed to initialize GLEW.\n");
+        (void)fprintf(stderr, "Failed to initialize GLEW.\n");
         return;
     }
 
