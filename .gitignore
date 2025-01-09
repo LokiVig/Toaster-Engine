@@ -8,6 +8,10 @@ build/*
 .idea/*
 *.user
 
+# Ignore Renderer includes
+Renderer/include/*
+Renderer/lib/*
+
 # Built files for the projects
 WTFEdit/obj/*
 Engine/obj/*
