@@ -101,7 +101,6 @@ void Renderer::Shutdown()
     
     // Tell our C# game that we're shutting down
     m_shuttingDown = true;
-    ShuttingDown();
 }
 
 bool Renderer::ShuttingDown()
