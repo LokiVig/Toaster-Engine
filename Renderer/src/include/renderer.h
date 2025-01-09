@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include <string>
-
 #include "resources/resources.h"
 
 // Window info

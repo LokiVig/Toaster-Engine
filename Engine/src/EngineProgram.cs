@@ -50,7 +50,7 @@ public class EngineProgram
 				renderer = IntPtr.Zero;
 			}
 			
-			External.RenderText(renderer, "FUCK", 0, 0);
+			// External.RenderText(renderer, "FUCK", 0, 0);
 			
 			// Call the OnUpdate event
 			// This makes it so everything subscribed to the event will call their own,
