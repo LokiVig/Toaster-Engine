@@ -112,6 +112,11 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\include\bbox.h" />
+    <ClInclude Include="src\include\brush.h" />
+    <ClInclude Include="src\include\entity.h" />
+    <ClInclude Include="src\include\resources.h" />
+    <ClInclude Include="src\include\vertex.h" />
     <ClInclude Include="src\Renderer.h" />
   </ItemGroup>
   <ItemGroup>

@@ -13,6 +13,14 @@ extern "C" __declspec(dllexport) void RenderFrame(Renderer* renderer)
     }
 }
 
+extern "C" __declspec(dllexport) void ShutdownRenderer(Renderer* renderer)
+{
+    if (renderer)
+    {
+        renderer->Shutdown();
+    }
+}
+
 extern "C" __declspec(dllexport) bool RendererShuttingDown(Renderer* renderer)
 {
     if (renderer)
@@ -23,13 +31,5 @@ extern "C" __declspec(dllexport) bool RendererShuttingDown(Renderer* renderer)
     {
         printf("RendererShuttingDown(Renderer*): ERROR; No renderer found! Assuming true...\n");
         return true;
-    }
-}
-
-extern "C" __declspec(dllexport) void ShutdownRenderer(Renderer* renderer)
-{
-    if (renderer)
-    {
-        renderer->Shutdown();
     }
 }

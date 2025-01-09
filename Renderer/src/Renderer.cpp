@@ -65,11 +65,6 @@ void Renderer::Render()
     glfwPollEvents();
 }
 
-bool Renderer::ShuttingDown()
-{
-    return m_shuttingDown;
-}
-
 void Renderer::Shutdown()
 {
     // Ensure the window is destroyed if it exists
@@ -85,4 +80,9 @@ void Renderer::Shutdown()
     // Tell our C# game that we're shutting down
     m_shuttingDown = true;
     ShuttingDown();
+}
+
+bool Renderer::ShuttingDown()
+{
+    return m_shuttingDown;
 }
