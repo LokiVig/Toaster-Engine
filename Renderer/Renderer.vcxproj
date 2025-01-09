@@ -112,16 +112,17 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\include\bbox.h" />
-    <ClInclude Include="src\include\brush.h" />
-    <ClInclude Include="src\include\entity.h" />
-    <ClInclude Include="src\include\resources.h" />
-    <ClInclude Include="src\include\vertex.h" />
-    <ClInclude Include="src\Renderer.h" />
+    <ClInclude Include="src\include\renderer.h" />
+    <ClInclude Include="src\include\resources\bbox.h" />
+    <ClInclude Include="src\include\resources\brush.h" />
+    <ClInclude Include="src\include\resources\entity.h" />
+    <ClInclude Include="src\include\resources\resources.h" />
+    <ClInclude Include="src\include\resources\scene.h" />
+    <ClInclude Include="src\include\resources\vertex.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Renderer.cpp" />
-    <ClCompile Include="src\RendererAPI.cpp" />
+    <ClCompile Include="src\renderer.cpp" />
+    <ClCompile Include="src\renderer_api.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

@@ -1,20 +1,13 @@
 ﻿#pragma once
 
-#include "include/resources.h"
+#include <string>
 
+#include "resources/resources.h"
+
+// Window info
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
 #define WINDOW_TITLE "Toaster Engine - Game"
-
-class Scene
-{
-public:
-    Scene() = default;
-
-public:
-    vector<Brush> m_brushes = vector<Brush>();
-    vector<Entity> m_entities = vector<Entity>();
-};
 
 class Renderer
 {
@@ -31,6 +24,14 @@ public:
     void Shutdown();
     bool ShuttingDown();
 
+public:
+    void RenderText(const char* text, int x, int y); // C#-accessible function to render text onto the screen
+    void RenderText3D(const char* text, float x, float y, float z); // C#-accessible function to render text in the 3D world
+    
+private:
+    void RenderBrush(Brush brush);
+    void RenderEntity(Entity entity);
+    
 private:
     Scene* m_pScene;
     GLFWwindow* m_pWindow;

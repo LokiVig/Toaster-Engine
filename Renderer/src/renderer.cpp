@@ -1,4 +1,4 @@
-﻿#include "Renderer.h"
+﻿#include "include/renderer.h"
 
 void Renderer::Initialize()
 {
@@ -9,7 +9,7 @@ void Renderer::Initialize()
         (void)fprintf(stderr, "Failed to initialize GLFW\n");
         return;
     }
-
+    
     glfwWindowHint(GLFW_SAMPLES, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -46,6 +46,8 @@ void Renderer::Render()
         return;
     }
     
+    glClearColor(0.25f, 0.25f, 0.75f, 1.0f);
+    
     glClear(GL_COLOR_BUFFER_BIT);
 
     if (m_pScene)
@@ -63,6 +65,26 @@ void Renderer::Render()
     
     glfwSwapBuffers(m_pWindow);
     glfwPollEvents();
+}
+
+void Renderer::RenderText(const char* text, int x, int y)
+{
+    
+}
+
+void Renderer::RenderText3D(const char* text, float x, float y, float z)
+{
+    
+}
+
+void Renderer::RenderBrush(Brush brush)
+{
+        
+}
+
+void Renderer::RenderEntity(Entity entity)
+{
+    
 }
 
 void Renderer::Shutdown()
