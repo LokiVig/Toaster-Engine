@@ -11,15 +11,14 @@ public class External
     // Renderer.dll
     //
     
-    // DEBUG
     [DllImport("Renderer.dll", CallingConvention = CallingConvention.Cdecl)]
-    public static extern int DebugFunction();
-    
-    [DllImport("Renderer.dll", CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr CreateRenderer(Scene scene);
+    public static extern IntPtr CreateRenderer();
 
     [DllImport("Renderer.dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern void RenderFrame(IntPtr renderer);
+
+    [DllImport("Renderer.dll", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool RendererShuttingDown(IntPtr renderer);
 
     [DllImport("Renderer.dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern void ShutdownRenderer(IntPtr renderer);

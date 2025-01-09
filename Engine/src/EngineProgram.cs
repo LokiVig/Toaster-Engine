@@ -28,11 +28,8 @@ public class EngineProgram
 
 	public static void Initialize()
 	{
-		// DEBUG
-		Console.WriteLine(External.DebugFunction());
-
 		// Initialize the renderer
-		// renderer = External.CreateRenderer(currentScene);
+		renderer = External.CreateRenderer();
 	}
 	
 	public static void Update()
@@ -45,6 +42,13 @@ public class EngineProgram
 
 			// Call the rendering function
 			External.RenderFrame(renderer);
+
+			// The renderer is shutting down!
+			// Null the renderer value so we don't continue running without it
+			if (External.RendererShuttingDown(renderer))
+			{
+				renderer = IntPtr.Zero;
+			}
 			
 			// Call the OnUpdate event
 			// This makes it so everything subscribed to the event will call their own,

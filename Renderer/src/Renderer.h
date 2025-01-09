@@ -15,6 +15,7 @@ using namespace glm;
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
+#define WINDOW_TITLE "Toaster Engine - Game"
 
 struct BBox
 {
@@ -49,6 +50,8 @@ public:
 public:
     void GenerateVertices()
     {
+        vertices.resize(8);
+        
         vertices[0] = Vertex(vec3(bbox.maxs.x, bbox.maxs.y, bbox.maxs.z), vec2(1, 1));
         vertices[1] = Vertex(vec3(bbox.mins.x, bbox.maxs.y, bbox.maxs.z), vec2(1, 1));
         vertices[2] = Vertex(vec3(bbox.maxs.x, bbox.maxs.y, bbox.mins.z), vec2(1, 1));
@@ -88,7 +91,7 @@ class Renderer
 {
 public:
     Renderer(Scene* pScene)
-        : m_pScene(pScene)
+        : m_pScene(pScene), m_pWindow(nullptr)
     {
         Initialize();
     }
@@ -96,9 +99,11 @@ public:
 public:
     void Initialize();
     void Render();
+    bool ShuttingDown();
     void Shutdown();
 
 private:
     Scene* m_pScene;
     GLFWwindow* m_pWindow;
+    bool m_shuttingDown;
 };
