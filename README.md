@@ -9,7 +9,7 @@ It most likely means the engine won't be as optimized as one made in, e.g. C++ w
 The provided solution file should be all you need to compile using VS22 or Rider, but the Renderer does need its own set of header and .lib files.
 
 The dependencies needed are: \
-[GLFW](https://github.com/glfw/glfw/releases/download/3.4/glfw-3.4.zip) \
+[GLFW](https://github.com/glfw/glfw/releases/download/3.4/glfw-3.4.bin.WIN64.zip) \
 [GLM](https://github.com/g-truc/glm/releases/download/1.0.1/glm-1.0.1-light.zip) \
 [GLEW](https://sourceforge.net/projects/glew/files/glew/2.1.0/glew-2.1.0-win32.zip/download)
 
