@@ -30,10 +30,10 @@ public struct Vector3 : IEquatable<Vector3>
 		this.z = z;
 	}
 
-	public Vector3(Vector2 vector2, float z)
+	public Vector3(Vector2 xy, float z)
 	{
-		x = vector2.x;
-		y = vector2.y;
+		x = xy.x;
+		y = xy.y;
 		this.z = z;
 	}
 

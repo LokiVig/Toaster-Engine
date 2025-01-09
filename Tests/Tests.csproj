@@ -15,11 +15,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>C:\Users\Loke\source\repos\Toaster-Engine\\build\Debug\net8.0\tests\</OutputPath>
+    <OutputPath>$(SolutionDir)build\$(Configuration)\net8.0\tests</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>C:\Users\Loke\source\repos\Toaster-Engine\\build\Release\net8.0\tests\</OutputPath>
+    <OutputPath>$(SolutionDir)build\$(Configuration)\net8.0\tests</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

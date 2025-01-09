@@ -29,11 +29,11 @@ public struct Vector4 : IEquatable<Vector4>
 		this.w = w;
 	}
 
-	public Vector4(Vector3 vector3, float w = 0)
+	public Vector4(Vector3 xyz, float w = 0)
 	{
-		x = vector3.x;
-		y = vector3.y;
-		z = vector3.z;
+		x = xyz.x;
+		y = xyz.y;
+		z = xyz.z;
 		this.w = w;
 	}
 
