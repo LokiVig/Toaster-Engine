@@ -3,6 +3,7 @@ using System.Threading;
 using System.Diagnostics;
 
 using Toast.Engine.Resources;
+using Toast.Engine;
 
 namespace Toast.WTFEdit;
 
@@ -18,24 +19,24 @@ public class Program
 public class WTFEditProgram
 {
     private WTF currentFile;
-    private float deltaTime;
-    private bool active;
 
-    public static event Action OnUpdate;
-    
     /// <summary>
     /// Initialize the WTFEdit program
     /// </summary>
     public void Initialize()
     {
-        // The program is now active
-        active = true;
+        // Initialize the engine
+        EngineProgram.Initialize("WTFEdit");
+        EngineProgram.OnUpdate += Update;
 
         // !! DEBUG !! \\
         SaveMap(new WTF("maps/test.wtf"));
 
-        // Start the Update function
-        Update();
+        // Start the engine's update function
+        EngineProgram.Update();
+
+        // After having run the update for however many times, shut down the engine
+        EngineProgram.Shutdown();
     }
 
     /// <summary>
@@ -43,16 +44,7 @@ public class WTFEditProgram
     /// </summary>
     private void Update()
     {
-        Stopwatch watch = Stopwatch.StartNew();
 
-        while (active)
-        {
-            deltaTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
-            watch.Restart();
-
-            // Call all the necessary update functions
-            OnUpdate?.Invoke();
-        }
     }
 
     private void LoadMap(string path)

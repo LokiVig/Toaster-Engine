@@ -16,7 +16,7 @@ void Renderer::Initialize()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    m_pWindow = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, nullptr, nullptr);
+    m_pWindow = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, m_pszTitle, nullptr, nullptr);
 
     if (!m_pWindow)
     {
@@ -35,6 +35,11 @@ void Renderer::Initialize()
     }
 
     glfwSetInputMode(m_pWindow, GLFW_STICKY_KEYS, GL_TRUE);
+}
+
+void Renderer::SetScene(Scene* pScene)
+{
+    m_pScene = pScene;
 }
 
 void Renderer::Render()

@@ -4,6 +4,7 @@ using System.Diagnostics;
 
 using Toast.Engine.Entities;
 using Toast.Engine.Resources;
+using System.IO;
 
 namespace Toast.Engine;
 
@@ -26,10 +27,12 @@ public class EngineProgram
 
 	private static Stopwatch watch = Stopwatch.StartNew();
 
-	public static void Initialize()
+	private const string ENGINE_VERSION = "0.0.1";
+
+	public static void Initialize(string title = null)
 	{
 		// Initialize the renderer
-		renderer = External.CreateRenderer();
+		renderer = External.CreateRenderer(title != null ? $"Toaster Engine - V. {ENGINE_VERSION} - {title}" : $"Toaster Engine - V. {ENGINE_VERSION}");
 	}
 	
 	public static void Update()

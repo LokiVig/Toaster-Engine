@@ -1,51 +1,67 @@
 ﻿#include "include/renderer.h"
 
-extern "C" __declspec(dllexport) Renderer* CreateRenderer(Scene* pScene)
+extern "C" __declspec(dllexport) Renderer* CreateRenderer(const char* pszTitle = nullptr)
 {
-    return new Renderer(pScene);
+    return new Renderer(pszTitle);
 }
 
-extern "C" __declspec(dllexport) void RenderFrame(Renderer* renderer)
+extern "C" __declspec(dllexport) void SetScene(Renderer* pRenderer, Scene* pScene)
 {
-    if (renderer)
+    if (pRenderer)
     {
-        renderer->Render();
+        pRenderer->SetScene(pScene);
+    }
+    else
+    {
+        printf("SetScene(Renderer*, Scene*): ERROR; Input renderer is invalid!\n");
+        return;
+    }
+}
+
+extern "C" __declspec(dllexport) void RenderFrame(Renderer* pRenderer)
+{
+    if (pRenderer)
+    {
+        pRenderer->Render();
     }
     else
     {
         printf("RenderFrame(Renderer*): ERROR; Input renderer is invalid!\n");
+        return;
     }
 }
 
-extern "C" __declspec(dllexport) void RenderText(Renderer* renderer, const char* text, int x, int y)
+extern "C" __declspec(dllexport) void RenderText(Renderer* pRenderer, const char* text, int x, int y)
 {
-    if (renderer)
+    if (pRenderer)
     {
-        renderer->RenderText(text, x, y);
+        pRenderer->RenderText(text, x, y);
     }
     else
     {
         printf("RenderText(Renderer*, string, int, int): ERROR; Input renderer is invalid!\n");
+        return;
     }
 }
 
-extern "C" __declspec(dllexport) void ShutdownRenderer(Renderer* renderer)
+extern "C" __declspec(dllexport) void ShutdownRenderer(Renderer* pRenderer)
 {
-    if (renderer)
+    if (pRenderer)
     {
-        renderer->Shutdown();
+        pRenderer->Shutdown();
     }
     else
     {
         printf("ShutdownRenderer(Renderer*): ERROR; Input renderer is invalid!\n");
+        return;
     }
 }
 
-extern "C" __declspec(dllexport) bool RendererShuttingDown(Renderer* renderer)
+extern "C" __declspec(dllexport) bool RendererShuttingDown(Renderer* pRenderer)
 {
-    if (renderer)
+    if (pRenderer)
     {
-        return renderer->ShuttingDown();
+        return pRenderer->ShuttingDown();
     }
     else // No renderer means nothing to run with... Faulty!
     {
