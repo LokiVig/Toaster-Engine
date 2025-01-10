@@ -22,4 +22,4 @@ For glm:\
 
 For GLEW:\
 `include/GL`\
-`lib/glew32s.lib` (from lib/Release/x64/)
+`lib/glew32s.lib` & `lib\glew32.lib` (both from lib/Release/x64/)
