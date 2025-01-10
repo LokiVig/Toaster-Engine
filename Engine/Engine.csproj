@@ -1,12 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <BaseOutputPath>$(SolutionDir)build\</BaseOutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <RootNamespace>DoomNET</RootNamespace>
+    <RootNamespace>Toast.Engine</RootNamespace>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <AssemblyName>$(ProjectName)</AssemblyName>
+    <GenerateDocumentationFile>False</GenerateDocumentationFile>
+    <DocumentationFile>$(OutputDir)</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>$(SolutionDir)build\$(Configuration)</OutputPath>
@@ -15,6 +17,12 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>$(SolutionDir)build\$(Configuration)</OutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <IsTrimmable>False</IsTrimmable>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <IsTrimmable>False</IsTrimmable>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\rendering\textures\dev\" />

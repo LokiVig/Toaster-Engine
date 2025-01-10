@@ -17,12 +17,24 @@ public class WTF
 	public List<Brush> brushes { get; set; } = new(); // All the brushes in this WTF file
 	public string path { get; set; } // The directory of which this WTF file is saved at
 
+	/// <summary>
+	/// WTF file definition without parameters.
+	/// </summary>
 	public WTF()
 	{
 	}
 
+	/// <summary>
+	/// WTF file creation with a specific path.
+	/// </summary>
+	/// <param name="path">The path (mainly filename) of the WTF file.</param>
 	public WTF(string path)
 	{
+		if ( !path.Contains( "maps/" ) )
+		{
+			path = Path.Combine( "maps/", path );
+		}
+
 		this.path = path;
 	}
 
@@ -147,14 +159,14 @@ public class WTF
 	/// <summary>
 	/// Gets the player entity from the map's list of entities
 	/// </summary>
-	public Player GetPlayer()
+	public PlayerEntity GetPlayer()
 	{
 		// Check every entity in our entities list
 		foreach (Entity ent in entities)
 		{
-			if (ent is Player)
+			if (ent is PlayerEntity)
 			{
-				return ent as Player;
+				return ent as PlayerEntity;
 			}
 		}
 

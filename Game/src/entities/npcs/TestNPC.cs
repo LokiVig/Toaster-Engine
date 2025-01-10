@@ -1,13 +1,16 @@
 ﻿using Toast.Engine.Entities;
 using Toast.Engine.Resources;
 
-namespace Toast.Game.NPCs;
+namespace Toast.Game.Entities.NPC;
 
 public class TestNPC : NPCEntity
 {
 	public override float health { get; set; } = 100.0f;
 
-	public TestNPC()
+	protected override Type[] hateList => [];
+	protected override Type[] adoreList => [typeof(Player)];
+
+    public TestNPC()
 	{
 		SetBBox(new BBox(new Vector3(-32, -32, 0), new Vector3(32, 32, 64)));
 	}

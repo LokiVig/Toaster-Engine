@@ -9,6 +9,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Renderer", "Renderer\Renderer.vcxproj", "{50FCA7B3-1A27-44F0-8E5E-ED4098A1FE32}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{653397A6-BBC7-439B-9EFE-B5E54470C74A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{50FCA7B3-1A27-44F0-8E5E-ED4098A1FE32} = {50FCA7B3-1A27-44F0-8E5E-ED4098A1FE32}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game", "Game\Game.csproj", "{71DF6220-2E8F-4504-A647-8A985FFC050E}"
 EndProject

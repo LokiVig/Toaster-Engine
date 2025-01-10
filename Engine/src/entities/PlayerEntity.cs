@@ -2,19 +2,19 @@
 
 namespace Toast.Engine.Entities;
 
-public class Player : Entity
+public partial class PlayerEntity : Entity
 {
     public override EntityType type => EntityType.Player; // This entity is of type Player
     public override float health { get; set; } = 100.0f;
     
-    private float armor = 0.0f; // Remove a certain amount of damage taken if armor isn't 0, and decrease the armor value when taking damage
+    protected float armor = 0.0f; // Remove a certain amount of damage taken if armor isn't 0, and decrease the armor value when taking damage
 
-    public Player()
+    public PlayerEntity()
     {
         SetBBox(new BBox(new Vector3(-32, -32, 0), new Vector3(32, 32, 64)));
     }
 
-    public Player(Vector3 position) : base(position)
+    public PlayerEntity(Vector3 position) : base(position)
     {
         SetBBox(new BBox(new Vector3(-32, -32, 0), new Vector3(32, 32, 64)));
     }

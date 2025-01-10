@@ -2,10 +2,14 @@
 using System.Diagnostics;
 
 using Toast.Engine;
+
 using Toast.Engine.Entities;
+using Toast.Engine.Entities.Tools;
+using Toast.Engine.Entities.Brushes;
+
 using Toast.Engine.Resources;
 
-using Toast.Game.NPCs;
+using Toast.Game.Entities.NPC;
 
 namespace Toast.Game;
 
@@ -32,7 +36,7 @@ public class GameProgram
 {
     public static GameState currentState = GameState.Active; // The state the game currently is in
 
-    private Player mainPlayer;
+    private PlayerEntity mainPlayer;
 
     /// <summary>
     /// Initialize the game
@@ -48,10 +52,10 @@ public class GameProgram
 
         // Initialize everything necessary before the game is actually run
         // DEBUG: Setting up a basic scene to test out certain aspects of what's done
-        EngineProgram.currentFile = new WTF();
+        EngineProgram.currentFile = new WTF("test.wtf");
 
         EntitySpawner<TestNPC> npcSpawner = new EntitySpawner<TestNPC>( new Vector3( 0, 5.0f, 0 ) );
-        EntitySpawner<Player> playerSpawner = new EntitySpawner<Player>( Vector3.Zero );
+        EntitySpawner<PlayerEntity> playerSpawner = new EntitySpawner<PlayerEntity>( Vector3.Zero );
 
         TriggerBrush trigger = new TriggerBrush();
         trigger.SetBBox( new BBox( new Vector3( -15 ), new Vector3( 15 ) ) );
@@ -66,7 +70,7 @@ public class GameProgram
         EngineProgram.currentFile.AddEntity( playerSpawner );
         EngineProgram.currentFile.AddEntity( trigger );
 
-        EngineProgram.currentFile.Save( "test.wtf" );
+        EngineProgram.currentFile.Save();
 
         EngineProgram.currentScene = Scene.LoadFromFile( EngineProgram.currentFile );
 
@@ -114,7 +118,7 @@ public class GameProgram
 [Flags]
 public enum GameState
 {
-    Menu = 1, // Used when accessing any sort of menu
-    Active = 2, // Rendering, updating, doing everything it should
-    Paused = 4, // Paused for any reason, possibly maskable with menu?
+    Menu = 1 << 0, // Used when accessing any sort of menu
+    Active = 1 << 1, // Rendering, updating, doing everything it should
+    Paused = 1 << 2, // Paused for any reason, possibly maskable with menu?
 }

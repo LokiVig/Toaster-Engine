@@ -71,14 +71,14 @@ public class Scene
 	/// <summary>
 	/// Gets the player entity from the scenes list of entities
 	/// </summary>
-	public Player GetPlayer()
+	public PlayerEntity GetPlayer()
 	{
 		// Check every entity in our entities list
 		foreach (Entity ent in entities)
 		{
-			if (ent is Player)
+			if (ent is PlayerEntity)
 			{
-				return ent as Player;
+				return ent as PlayerEntity;
 			}
 		}
 

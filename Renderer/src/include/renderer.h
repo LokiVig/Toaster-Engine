@@ -27,12 +27,14 @@ public:
     void RenderText3D(const char* pszText, float x, float y, float z); // C#-accessible function to render text in the 3D world
     
 private:
-    void RenderBrush(Brush brush);
-    void RenderEntity(Entity entity);
+    void DrawBrush(const Brush brush);
+    void DrawEntity(const Entity entity);
     
 private:
     Scene* m_pScene;
     GLFWwindow* m_pWindow;
     const char* m_pszTitle;
     bool m_shuttingDown;
+
+    GLuint VAO, VBO, EBO;
 };

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Toast.Engine.Entities.Tools;
+
 using Toast.Engine.Resources;
 
 namespace Toast.Engine.Entities;
@@ -8,7 +10,7 @@ namespace Toast.Engine.Entities;
 /// <summary>
 /// An entity.<br/>
 /// Something that can, for example, be seen, interacted with, killed, or other, should be defined as an entity.<br/>
-/// E.g.:
+/// e.g.:
 /// <list type="bullet">
 ///     <item>Triggers</item>
 ///     <item>Player</item>
@@ -170,11 +172,17 @@ public class Entity
 	}
 
 	/// <summary>
-	/// Set the target of this entity, e.g. an enemy should target the <see cref="Player"/>
+	/// Set the target of this entity, e.g. an enemy should target the <see cref="PlayerEntity"/>
 	/// </summary>
-	/// <param name="target">The specific entity we wish to target, 0 should always be the <see cref="Player"/></param>
+	/// <param name="target">The specific entity we wish to target, 0 should always be the <see cref="PlayerEntity"/></param>
 	public void SetTarget(Entity target)
 	{
+		// Can't target null!
+		if ( target == null )
+		{
+			return;
+		}
+
 		// Can't target a dead entity
 		if (!target.IsAlive())
 		{
@@ -185,9 +193,9 @@ public class Entity
 	}
 
 	/// <summary>
-	/// Set the target of this entity by an ID, e.g. an enemy should target the <see cref="Player"/>
+	/// Set the target of this entity by an ID, e.g. an enemy should target the <see cref="PlayerEntity"/>
 	/// </summary>
-	/// <param name="targetID">The ID of the entity we wish to target, 0 should always be the <see cref="Player"/></param>
+	/// <param name="targetID">The ID of the entity we wish to target, 0 should always be the <see cref="PlayerEntity"/></param>
 	public void SetTarget(string targetID)
 	{
 		target = EngineProgram.currentScene?.FindEntity(targetID);
@@ -291,7 +299,7 @@ public class Entity
 			if (entities[i] == this)
 			{
 				// If we are a player
-				if (this is Player)
+				if (this is PlayerEntity)
 				{
 					// We're lucky! We have that designation on us now
 					SetID("player");
@@ -498,6 +506,6 @@ public class Entity
 
 	public override string ToString()
 	{
-		return $"{GetType()} (\"{(string.IsNullOrEmpty(GetID()) ? "N/A" : GetID())}\")";
+		return $"{GetType()} (\"{GetID() ?? "N/A"}\")";
 	}
 }

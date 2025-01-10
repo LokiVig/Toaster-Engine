@@ -37,18 +37,18 @@ public struct Vector3 : IEquatable<Vector3>
 		this.z = z;
 	}
 
-	public static readonly Vector3 One = new Vector3(1, 1, 1);
+	public static readonly Vector3 One  = new Vector3(1, 1, 1);
 	public static readonly Vector3 Zero = new Vector3(0, 0, 0);
 
 	public static readonly Vector3 UnitX = new Vector3(1, 0, 0);
 	public static readonly Vector3 UnitY = new Vector3(0, 1, 0);
 	public static readonly Vector3 UnitZ = new Vector3(0, 0, 1);
 
-	public static readonly Vector3 Up = new Vector3(0, 0, 1);
-	public static readonly Vector3 Down = new Vector3(0, 0, -1);
-	public static readonly Vector3 Right = new Vector3(1, 0, 0);
-	public static readonly Vector3 Left = new Vector3(-1, 0, 0);
-	public static readonly Vector3 Forward = new Vector3(0, 1, 0);
+	public static readonly Vector3 Up       = new Vector3(0, 0, 1);
+	public static readonly Vector3 Down     = new Vector3(0, 0, -1);
+	public static readonly Vector3 Right    = new Vector3(1, 0, 0);
+	public static readonly Vector3 Left     = new Vector3(-1, 0, 0);
+	public static readonly Vector3 Forward  = new Vector3(0, 1, 0);
 	public static readonly Vector3 Backward = new Vector3(0, -1, 0);
 
 	public static float DistanceBetween(Vector3 source, Vector3 dest)
@@ -91,7 +91,7 @@ public struct Vector3 : IEquatable<Vector3>
 		(
 			a.y * b.z - a.z * b.y, // Calculate X component
 			a.z * b.x - a.x * b.z, // Calculate Y component
-			a.x * b.y - a.y * b.x // Calculate Z component
+			a.x * b.y - a.y * b.x  // Calculate Z component
 		);
 	}
 

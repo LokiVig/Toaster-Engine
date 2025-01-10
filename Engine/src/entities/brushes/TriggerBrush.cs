@@ -2,7 +2,7 @@
 
 using Toast.Engine.Resources;
 
-namespace Toast.Engine.Entities;
+namespace Toast.Engine.Entities.Brushes;
 
 /// <summary>
 /// A brush defining stuff to do when e.g. an entity or player enters it.
@@ -15,7 +15,7 @@ public class TriggerBrush : BrushEntity
 	public Vector3 vValue { get; set; } = Vector3.Zero; // Event Vector3 value
 	public Quaternion qValue { get; set; } = Quaternion.Identity; // Event Quaternion value
 	public Entity eValue { get; set; } = null; // Event Entity value
-	public BBox bbValue { get; set; } = BBox.Zero; // Event BBox value
+	public BBox bbValue { get; set; } = BBox.One; // Event BBox value
 
 	public Entity targetEntity { get; set; } // The entity we wish to target
 	public EntityEvent targetEvent { get; set; } // The desired event
@@ -205,7 +205,7 @@ public class TriggerBrush : BrushEntity
 			targetEntity.OnEvent(targetEvent, eValue, this);
 		}
 
-		if (bbValue != BBox.Zero) // BBox value event
+		if (bbValue != BBox.One) // BBox value event
 		{
 			targetEntity.OnEvent(targetEvent, bbValue, this);
 		}

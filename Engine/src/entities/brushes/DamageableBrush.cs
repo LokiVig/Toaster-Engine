@@ -1,4 +1,4 @@
-﻿namespace Toast.Engine.Entities;
+﻿namespace Toast.Engine.Entities.Brushes;
 
 public class DamageableBrush : BrushEntity
 {

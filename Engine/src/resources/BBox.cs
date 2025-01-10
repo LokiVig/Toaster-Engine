@@ -11,7 +11,6 @@ public class BBox
 	public Vector3 maxs { get; set; } // The maximum extents of this BBox
 
 	public static readonly BBox One = new BBox(-Vector3.One, Vector3.One);
-	public static readonly BBox Zero = new BBox(Vector3.Zero, Vector3.Zero);
 
 	public BBox(Vector3 mins, Vector3 maxs)
 	{
