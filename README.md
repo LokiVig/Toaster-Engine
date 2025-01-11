@@ -8,18 +8,4 @@ It most likely means the engine won't be as optimized as one made in, e.g. C++ w
 ## Building
 The provided solution file should be all you need to compile using VS22 or Rider, but the Renderer does need its own set of header and .lib files.
 
-The dependencies needed are: \
-[GLFW](https://github.com/glfw/glfw/releases/download/3.4/glfw-3.4.bin.WIN64.zip) \
-[GLM](https://github.com/g-truc/glm/releases/download/1.0.1/glm-1.0.1-light.zip) \
-[GLEW](https://sourceforge.net/projects/glew/files/glew/2.1.0/glew-2.1.0-win32.zip/download)
-
-They should be placed in their respective folders, include and library files from GLFW should be featured as:\
-`include/glfw`\
-`lib/glfw3.lib`
-
-For glm:\
-`include/glm`
-
-For GLEW:\
-`include/GL`\
-`lib/glew32s.lib` & `lib\glew32.lib` (both from lib/Release/x64/)
+The files can be downloaded from [this .zip file](https://cdn.discordapp.com/attachments/1269130896494170164/1327613873112617043/RendererFiles.zip?ex=6783b445&is=678262c5&hm=334cde70156bc465cebe497f57d48a41201c0e7e00fc6cc96c2fa933d80489e4&). Placing them in `Toaster-Engine/Renderer/` should be everything you need to do.
