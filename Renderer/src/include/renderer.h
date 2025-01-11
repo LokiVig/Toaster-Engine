@@ -1,6 +1,31 @@
 ﻿#pragma once
 
-#include "resources/resources.h"
+// C(++) standard
+#include <stdio.h>
+#include <stdlib.h>
+#include <vector>
+
+// OpenGL
+#define GLEW_STATIC
+#include <GL/glew.h>
+
+// Helps skip putting a GLEW DLL to Sys32
+#pragma comment (lib, "glew32s.lib")
+
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+
+// Namespaces
+using namespace std;
+using namespace glm;
+
+// Toaster Engine
+#include "resources/bitmap.h"
+#include "resources/bbox.h"
+#include "resources/vertex.h"
+#include "resources/entity.h"
+#include "resources/brush.h"
+#include "resources/scene.h"
 
 // Window info
 #define WINDOW_WIDTH 1280
@@ -35,6 +60,7 @@ private:
     GLFWwindow* m_pWindow;
     const char* m_pszTitle;
     bool m_shuttingDown;
+    GLuint m_fontTexture;
 
     GLuint VAO, VBO, EBO;
 };

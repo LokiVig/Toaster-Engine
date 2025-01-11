@@ -14,12 +14,14 @@ void Renderer::Initialize()
 		return;
 	}
 
+	// Set hints for our window
 	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+	// Create the window
 	m_pWindow = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, m_pszTitle, nullptr, nullptr);
 
 	if (!m_pWindow)
@@ -29,6 +31,7 @@ void Renderer::Initialize()
 		return;
 	}
 
+	// We should immediately focus on the newly created window
 	glfwMakeContextCurrent(m_pWindow);
 
 	// Load the icon
@@ -39,6 +42,7 @@ void Renderer::Initialize()
 	stbi_image_free(images[0].pixels); // Free icon
 	stbi_image_free(images[1].pixels); // Free small icon
 
+	// Make sure GLEW initializes correctly
 	if (glewInit() != GLEW_OK)
 	{
 		printf("Renderer::Initialize(): ERROR; Failed to initialize GLEW.\n");
@@ -53,7 +57,12 @@ void Renderer::Initialize()
 
 	glBindVertexArray(VAO);
 
+	// Allow for keyboard input
 	glfwSetInputMode(m_pWindow, GLFW_STICKY_KEYS, GL_TRUE);
+
+	// Load the bitmap font for text rendering
+	Bitmap fontBitmap = Bitmap_Load("resources/textures/engine/consolas.bmp");
+	m_fontTexture = Bitmap_CreateTexture(fontBitmap);
 }
 
 void Renderer::SetScene(Scene* pScene)
@@ -88,12 +97,14 @@ void Renderer::Render()
 			DrawEntity(entity);
 		}
 	}
+
+	RenderText("Holy fuck, toaster in an engine", 700, 800);
 	
-	Brush debugBrush;
+	/*Brush debugBrush;
 	debugBrush.bbox = BBox(vec3(-15, -15, -15), vec3(15, 15, 15));
 	debugBrush.GenerateVertices();
 
-	DrawBrush(debugBrush);
+	DrawBrush(debugBrush);*/
 
 	glfwSwapBuffers(m_pWindow);
 	glfwPollEvents();
@@ -101,7 +112,52 @@ void Renderer::Render()
 
 void Renderer::RenderText(const char* text, int x, int y)
 {
+	glBindTexture(GL_TEXTURE_2D, m_fontTexture);
 
+	float scale = 32.0f; // Character size in pixels
+	float xOffset = x;
+
+	for (const char* c = text; *c != '\0'; ++c)
+	{
+		if (*c < 32 || *c > 126)
+		{
+			continue;
+		}
+
+		float u1, v1, u2, v2;
+		Bitmap_GetCharTexCoords(*c, u1, v1, u2, v2);
+
+		float vertices[] =
+		{
+			xOffset,         y,         u1, v2,
+			xOffset + scale, y,         u2, v2,
+			xOffset + scale, y + scale, u2, v1,
+			xOffset,         y + scale, u1, v1
+		};
+
+		unsigned int indices[] =
+		{
+			0, 1, 2, 0, 2, 3
+		};
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		xOffset += scale; // Move to the next character
+	}
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Renderer::RenderText3D(const char* text, float x, float y, float z)

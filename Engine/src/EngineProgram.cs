@@ -2,37 +2,51 @@
 using System.Text.Json;
 using System.Diagnostics;
 
-using Toast.Engine.Entities;
 using Toast.Engine.Resources;
-using System.IO;
 
 namespace Toast.Engine;
 
 public class EngineProgram
 {
-	public static readonly JsonSerializerOptions serializerOptions = new()
+    //---------------------------------------//
+    //			    Constants				 //
+    //---------------------------------------//
+
+    private const string ENGINE_VERSION = "0.0.1";
+
+    public static readonly JsonSerializerOptions serializerOptions = new()
 	{
 		WriteIndented = true,
 		AllowTrailingCommas = true
 	};
 
-	public static event Action OnUpdate; // Whenever we should update things, this event gets called
+    //---------------------------------------//
+    //               Publics                 //
+    //---------------------------------------//
+
+    public static event Action OnUpdate; // Whenever we should update things, this event gets called
 
 	public static WTF currentFile; // The currently loaded WTF file / map
 	public static Scene currentScene; // The currently running scene, initialized from the current file
 
 	public static float deltaTime; // Helps stopping you from using FPS-dependant calculations
 
-	public static IntPtr renderer;
+	public static IntPtr renderer; // The C++ initialized renderer as a whole
 
-	private static Stopwatch watch = Stopwatch.StartNew();
+    //---------------------------------------//
+    //				 Privates                //
+    //---------------------------------------//
 
-	private const string ENGINE_VERSION = "0.0.1";
+    private static Stopwatch watch = Stopwatch.StartNew(); // Used to calculate delta time
 
-	public static void Initialize(string title = null)
+    //---------------------------------------//
+    //				Functions				 //
+    //---------------------------------------//
+
+    public static void Initialize(string title = null)
 	{
 		// Initialize the renderer
-		renderer = External.CreateRenderer( $"Toaster Engine - v.{ENGINE_VERSION}" + (title != null ? $" - {title}" : "") );
+		renderer = External.CreateRenderer( $"Toaster Engine (v.{ENGINE_VERSION})" + (title != null ? $" - {title}" : "") );
 	}
 	
 	public static void Update()
