@@ -1,5 +1,9 @@
 ﻿#include "include/renderer.h"
 
+// STB Image
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 void Renderer::Initialize()
 {
 	glewExperimental = true;
@@ -26,6 +30,14 @@ void Renderer::Initialize()
 	}
 
 	glfwMakeContextCurrent(m_pWindow);
+
+	// Load the icon
+	GLFWimage images[2];
+	images[0].pixels = stbi_load("resources/textures/engine/toastengine_icon.png", &images[0].width, &images[0].height, 0, 4); // Regular icon
+	images[1].pixels = stbi_load("resources/textures/engine/toastengine_icon_small.png", &images[1].width, &images[1].height, 0, 4); // Small icon
+	glfwSetWindowIcon(m_pWindow, 2, images);
+	stbi_image_free(images[0].pixels); // Free icon
+	stbi_image_free(images[1].pixels); // Free small icon
 
 	if (glewInit() != GLEW_OK)
 	{

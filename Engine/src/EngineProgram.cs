@@ -32,7 +32,7 @@ public class EngineProgram
 	public static void Initialize(string title = null)
 	{
 		// Initialize the renderer
-		renderer = External.CreateRenderer(title != null ? $"Toaster Engine - V. {ENGINE_VERSION} - {title}" : $"Toaster Engine - V. {ENGINE_VERSION}");
+		renderer = External.CreateRenderer( $"Toaster Engine - v.{ENGINE_VERSION}" + (title != null ? $" - {title}" : "") );
 	}
 	
 	public static void Update()

@@ -5,17 +5,11 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <BaseOutputPath>$(SolutionDir)build\net9.0\tests\</BaseOutputPath>
+    <BaseOutputPath>$(SolutionDir)build\$(Configuration)\net9.0\tests\</BaseOutputPath>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
     <AssemblyName>$(ProjectName)</AssemblyName>
     <RootNamespace>DoomNET.Tests</RootNamespace>
     <OutputType>Library</OutputType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>$(SolutionDir)build\$(Configuration)\net8.0\tests</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>$(SolutionDir)build\$(Configuration)\net8.0\tests</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
