@@ -2,11 +2,10 @@
 using System.Diagnostics;
 
 using Toast.Engine;
-
+using Toast.Engine.Math;
 using Toast.Engine.Entities;
 using Toast.Engine.Entities.Tools;
 using Toast.Engine.Entities.Brushes;
-
 using Toast.Engine.Resources;
 
 using Toast.Game.Entities.NPC;

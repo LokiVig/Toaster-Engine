@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toast.Engine.Resources;
+namespace Toast.Engine.Math;
 
 public struct Quaternion : IEquatable<Quaternion>
 {
@@ -38,7 +38,7 @@ public struct Quaternion : IEquatable<Quaternion>
 	/// </summary>
 	public float Length()
 	{
-		return (float)Math.Sqrt(x * x + y * y + z * z + w * w);
+		return (float)MathF.Sqrt(x * x + y * y + z * z + w * w);
 	}
 
 	public static Quaternion Normalize(Quaternion quaternion)
@@ -63,9 +63,9 @@ public struct Quaternion : IEquatable<Quaternion>
 	{
 		axis = axis.Normalized();
 		float halfAngle = angle * 0.5f;
-		float sin = (float)Math.Sin(halfAngle);
+		float sin = (float)MathF.Sin(halfAngle);
 
-		return new Quaternion(axis.x * sin, axis.y * sin, axis.z * sin, (float)Math.Cos(halfAngle));
+		return new Quaternion(axis.x * sin, axis.y * sin, axis.z * sin, (float)MathF.Cos(halfAngle));
 	}
 
 	// This is the only place I could think to place these methods... lol
@@ -77,7 +77,7 @@ public struct Quaternion : IEquatable<Quaternion>
 	/// <returns>Input as degrees.</returns>
 	public static float RadiansToDegrees(float radians)
 	{
-		return radians * 180 / (float)Math.PI;
+		return radians * 180 / (float)MathF.PI;
 	}
 
 	/// <summary>
@@ -87,7 +87,7 @@ public struct Quaternion : IEquatable<Quaternion>
 	/// <returns>Input as radians.</returns>
 	public static float DegreesToRadians(float degrees)
 	{
-		return degrees * (float)Math.PI / 180;
+		return degrees * (float)MathF.PI / 180;
 	}
 
 	public readonly override string ToString()

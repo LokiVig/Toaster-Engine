@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Toast.Engine.Entities.Tools;
-
+using Toast.Engine.Math;
 using Toast.Engine.Resources;
+using Toast.Engine.Entities.Tools;
 
 namespace Toast.Engine.Entities;
 

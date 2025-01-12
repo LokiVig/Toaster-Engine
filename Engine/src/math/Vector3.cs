@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toast.Engine.Resources;
+namespace Toast.Engine.Math;
 
 /// <summary>
 /// Struct defining a point in 3 dimensions (Z -> up)
@@ -61,7 +61,7 @@ public struct Vector3 : IEquatable<Vector3>
 
 	public float Magnitude()
 	{
-		return (float)Math.Sqrt(x * x + y * y + z * z);
+		return (float)MathF.Sqrt(x * x + y * y + z * z);
 	}
 
 	public Vector3 Normalized()
@@ -100,7 +100,48 @@ public struct Vector3 : IEquatable<Vector3>
 
 	public static Vector3 Clamp(Vector3 vec, float min, float max)
 	{
-		return new Vector3(Math.Clamp(vec.x, min, max), Math.Clamp(vec.y, min, max), Math.Clamp(vec.z, min, max));
+		Vector3 result = Zero;
+		
+		if ( vec.x < min )
+		{
+			result.x = min;
+		}
+		else if ( vec.x > max )
+		{
+			result.x = max;
+		}
+		else
+		{
+			result.x = vec.x;
+		}
+
+		if ( vec.y < min )
+		{
+			result.y = min;
+		}
+		else if ( vec.y > max )
+		{
+			result.y = max;
+		}
+		else
+		{
+			result.y = vec.y;
+		}
+
+		if ( vec.z < min )
+		{
+			result.z = min;
+		}
+		else if ( vec.z > max )
+		{
+			result.z = max;
+		}
+		else
+		{
+			result.z = vec.z;
+		}
+
+		return result;
 	}
 
 	public readonly override string ToString()

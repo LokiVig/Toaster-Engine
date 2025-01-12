@@ -3,6 +3,8 @@ using System.Linq;
 
 using Toast.Engine.Entities;
 
+using Toast.Engine.Math;
+
 namespace Toast.Engine.Resources;
 
 public struct Ray

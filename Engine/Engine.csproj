@@ -24,14 +24,9 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<IsTrimmable>False</IsTrimmable>
 	</PropertyGroup>
-	<ItemGroup>
-		<Folder Include="src\rendering\fonts\" />
-		<Folder Include="src\rendering\textures\dev\" />
-		<Folder Include="src\rendering\textures\engine\" />
-	</ItemGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)Engine\src\rendering\shaders\*&quot; &quot;$(OutDir)resources\shaders\&quot;" />
-		<Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)Engine\src\rendering\textures\*&quot; &quot;$(OutDir)resources\textures\&quot;" />
-		<Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)Engine\src\rendering\fonts\*&quot; &quot;$(OutDir)resources\fonts\&quot;" />
+		<Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)Engine\src\resources\rendering\shaders\*&quot; &quot;$(OutDir)resources\shaders\&quot;" />
+		<Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)Engine\src\resources\rendering\textures\*&quot; &quot;$(OutDir)resources\textures\&quot;" />
+		<Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)Engine\src\resources\rendering\fonts\*&quot; &quot;$(OutDir)resources\fonts\&quot;" />
 	</Target>
 </Project>

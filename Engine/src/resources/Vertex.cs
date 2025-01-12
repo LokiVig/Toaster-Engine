@@ -1,4 +1,6 @@
-﻿namespace Toast.Engine.Resources;
+﻿using Toast.Engine.Math;
+
+namespace Toast.Engine.Resources;
 
 public struct Vertex
 {

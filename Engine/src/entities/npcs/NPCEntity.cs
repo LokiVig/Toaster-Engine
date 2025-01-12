@@ -1,8 +1,10 @@
-﻿using Toast.Engine.Resources;
+﻿using System;
+using System.Diagnostics;
+
+using Toast.Engine.Math;
+using Toast.Engine.Resources;
 
 using Toast.Engine.Entities.NPC;
-using System;
-using System.Diagnostics;
 
 namespace Toast.Engine.Entities;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toast.Engine.Resources;
+namespace Toast.Engine.Math;
 
 /// <summary>
 /// Struct defining a point in 2 dimensions
@@ -44,7 +44,7 @@ public struct Vector2 : IEquatable<Vector2>
 
 	public float Magnitude()
 	{
-		return (float)Math.Sqrt(x * x + y * y);
+		return (float)MathF.Sqrt(x * x + y * y);
 	}
 
 	public Vector2 Normalized()

@@ -1,4 +1,5 @@
-﻿using Toast.Engine.Entities;
+﻿using Toast.Engine.Math;
+using Toast.Engine.Entities;
 using Toast.Engine.Resources;
 
 namespace Toast.Game.Entities.NPC;

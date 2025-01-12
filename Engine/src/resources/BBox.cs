@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Toast.Engine.Math;
+
 namespace Toast.Engine.Resources;
 
 /// <summary>
@@ -71,7 +73,7 @@ public class BBox
 			float min = mins[i];
 			float max = maxs[i];
 
-			if (Math.Abs(direction) < epsilon)
+			if (MathF.Abs(direction) < epsilon)
 			{
 				// Ray is parallel to the object (no intersection if origin is outside the object)
 				if (origin < min || origin > max)
@@ -92,8 +94,8 @@ public class BBox
 				}
 
 				// Update the intersection interval
-				tMin = Math.Max(tMin, t1);
-				tMax = Math.Min(tMax, t2);
+				tMin = MathF.Max(tMin, t1);
+				tMax = MathF.Min(tMax, t2);
 
 				// If the interval is invalid, there's no intersection
 				if (tMin > tMax)

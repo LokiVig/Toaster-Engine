@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toast.Engine.Resources;
+namespace Toast.Engine.Math;
 
 public struct Vector4 : IEquatable<Vector4>
 {
@@ -55,7 +55,7 @@ public struct Vector4 : IEquatable<Vector4>
 
 	public float Magnitude()
 	{
-		return (float)Math.Sqrt(x * x + y * y + z * z + w * w);
+		return (float)MathF.Sqrt(x * x + y * y + z * z + w * w);
 	}
 
 	public Vector4 Normalized()
