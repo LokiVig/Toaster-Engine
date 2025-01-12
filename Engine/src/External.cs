@@ -21,7 +21,7 @@ public class External
     public static extern void RenderFrame( IntPtr pRenderer );
 
     [DllImport( "Renderer", CallingConvention = CallingConvention.Cdecl )]
-    public static extern void RenderText( IntPtr pRenderer, string pszText, int x, int y );
+    public static extern void RenderText( IntPtr pRenderer, string pszText, float x, float y, float scale, float r = 1.0f, float g = 1.0f, float b = 1.0f );
 
     [DllImport( "Renderer", CallingConvention = CallingConvention.Cdecl )]
     public static extern void ShutdownRenderer( IntPtr pRenderer );

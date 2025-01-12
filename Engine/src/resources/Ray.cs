@@ -12,8 +12,7 @@ public class Ray
 	/// with <see cref="RayIgnore"/> flags, specific <see langword="object"/>(s) to ignore, and lengths (<see langword="float"/>) 
 	/// </summary>
 	/// <returns><see langword="true"/> and the <see langword="object"/> we hit, <see langword="false"/> and <see langword="null"/> if nothing was hit.</returns>
-	public static bool Trace(Vector3 rayStart, Vector3 rayDirection, out object hitObject,
-		RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, float rayLength = 5000)
+	public static bool Trace(Vector3 rayStart, Vector3 rayDirection, out object hitObject, RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, float rayLength = 5000)
 	{
 		Vector3 rayEnd = (rayStart + rayDirection.Normalized()) * rayLength;
 
@@ -144,8 +143,7 @@ public class Ray
 	/// with <see cref="RayIgnore"/> flags, specific <see langword="object"/>(s) to ignore, and lengths (<see langword="float"/>) 
 	/// </summary>
 	/// <returns><see langword="true"/> and the <see langword="object"/> we hit, <see langword="false"/> and <see langword="null"/> if nothing was hit.</returns>
-	public static bool Trace(Entity entStart, Entity entDirection, out object hitObject,
-		RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, float rayLength = 5000)
+	public static bool Trace(Entity entStart, Entity entDirection, out object hitObject, RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, float rayLength = 5000)
 	{
 		Vector3 rayEnd = (entStart.GetPosition() + entDirection.GetPosition().Normalized()) * rayLength;
 
@@ -276,8 +274,7 @@ public class Ray
 	/// with <see cref="RayIgnore"/> flags, specific <see langword="object"/>(s) to ignore, and lengths (<see langword="float"/>) 
 	/// </summary>
 	/// <returns><see langword="true"/> and the <see langword="object"/> we hit, <see langword="false"/> and <see langword="null"/> if nothing was hit.</returns>
-	public static bool Trace(Vector3 rayStart, Entity entDirection, out object hitObject,
-		RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, float rayLength = 5000)
+	public static bool Trace(Vector3 rayStart, Entity entDirection, out object hitObject, RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, float rayLength = 5000)
 	{
 		Vector3 rayEnd = (rayStart + entDirection.GetPosition().Normalized()) * rayLength;
 
@@ -403,8 +400,7 @@ public class Ray
 		return false;
 	}
 
-	public static bool Trace(Entity entStart, Vector3 rayDirection, out object hitObject,
-		RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, float rayLength = 5000)
+	public static bool Trace(Entity entStart, Vector3 rayDirection, out object hitObject, RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, float rayLength = 5000)
 	{
 		Vector3 rayEnd = (entStart.GetPosition() + rayDirection.Normalized()) * rayLength;
 

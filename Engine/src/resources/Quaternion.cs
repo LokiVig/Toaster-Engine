@@ -1,6 +1,4 @@
-﻿// ReSharper disable CompareOfFloatsByEqualityOperator
-
-using System;
+﻿using System;
 
 namespace Toast.Engine.Resources;
 

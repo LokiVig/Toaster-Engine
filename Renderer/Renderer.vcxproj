@@ -73,7 +73,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;glew32s.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype.lib;glfw3.lib;glew32s.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)lib;</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -106,7 +106,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;glew32s.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype.lib;glfw3.lib;glew32s.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)lib</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -117,16 +117,16 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\include\resources\bitmap.h" />
     <ClInclude Include="src\include\renderer.h" />
+    <ClInclude Include="src\include\rendering\shader.h" />
     <ClInclude Include="src\include\resources\bbox.h" />
     <ClInclude Include="src\include\resources\brush.h" />
+    <ClInclude Include="src\include\rendering\character.h" />
     <ClInclude Include="src\include\resources\entity.h" />
     <ClInclude Include="src\include\resources\scene.h" />
     <ClInclude Include="src\include\resources\vertex.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\bitmap.cpp" />
     <ClCompile Include="src\renderer.cpp" />
     <ClCompile Include="src\renderer_api.cpp" />
   </ItemGroup>

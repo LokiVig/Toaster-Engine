@@ -4,10 +4,6 @@ obj/*
 build/*
 .vs/*
 
-# Rider files
-.idea/*
-*.user
-
 # Ignore Renderer includes
 Renderer/include/*
 Renderer/lib/*

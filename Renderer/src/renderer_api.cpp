@@ -13,7 +13,7 @@ extern "C" __declspec(dllexport) void SetScene(Renderer* pRenderer, Scene* pScen
     }
     else
     {
-        printf("SetScene(Renderer*, Scene*): ERROR; Input renderer is invalid!\n");
+        printf("(Renderer.dll) SetScene(Renderer*, Scene*): ERROR; Input renderer is invalid!\n");
         return;
     }
 }
@@ -26,20 +26,20 @@ extern "C" __declspec(dllexport) void RenderFrame(Renderer* pRenderer)
     }
     else
     {
-        printf("RenderFrame(Renderer*): ERROR; Input renderer is invalid!\n");
+        printf("(Renderer.dll) RenderFrame(Renderer*): ERROR; Input renderer is invalid!\n");
         return;
     }
 }
 
-extern "C" __declspec(dllexport) void RenderText(Renderer* pRenderer, const char* text, int x, int y)
+extern "C" __declspec(dllexport) void RenderText(Renderer* pRenderer, const char* text, float x, float y, float scale, float r = 1.0f, float g = 1.0f, float b = 1.0f)
 {
     if (pRenderer)
     {
-        pRenderer->RenderText(text, x, y);
+        pRenderer->RenderText(text, x, y, scale, r, g, b);
     }
     else
     {
-        printf("RenderText(Renderer*, string, int, int): ERROR; Input renderer is invalid!\n");
+        printf("(Renderer.dll) RenderText(Renderer*, string, int, int): ERROR; Input renderer is invalid!\n");
         return;
     }
 }
@@ -52,7 +52,7 @@ extern "C" __declspec(dllexport) void ShutdownRenderer(Renderer* pRenderer)
     }
     else
     {
-        printf("ShutdownRenderer(Renderer*): ERROR; Input renderer is invalid!\n");
+        printf("(Renderer.dll) ShutdownRenderer(Renderer*): ERROR; Input renderer is invalid!\n");
         return;
     }
 }
@@ -65,7 +65,7 @@ extern "C" __declspec(dllexport) bool RendererShuttingDown(Renderer* pRenderer)
     }
     else // No renderer means nothing to run with... Faulty!
     {
-        printf("RendererShuttingDown(Renderer*): ERROR; No renderer found! Assuming true...\n");
+        printf("(Renderer.dll) RendererShuttingDown(Renderer*): ERROR; No renderer found! Assuming true...\n");
         return true;
     }
 }
