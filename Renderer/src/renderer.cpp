@@ -182,7 +182,7 @@ void Renderer::Render()
 
 void Renderer::RenderText(const char* text, float x, float y, float scale, float r, float g, float b)
 {
-	Shader shader("resources/shaders/text.vs", "resources/shaders/text.fs");
+	Shader shader("resources/shaders/text.vert", "resources/shaders/text.frag");
 	shader.Use();
 	glUniform3f(glGetUniformLocation(shader.m_id, "textColor"), r, g, b);
 	glActiveTexture(GL_TEXTURE0);
