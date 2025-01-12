@@ -5,7 +5,7 @@ using Toast.Engine.Entities;
 
 namespace Toast.Engine.Resources;
 
-public class Ray
+public struct Ray
 {
 	/// <summary>
 	/// Trace a ray from a specified starting position (<see cref="Vector3"/>) to a direction (<see cref="Vector3"/>), 
