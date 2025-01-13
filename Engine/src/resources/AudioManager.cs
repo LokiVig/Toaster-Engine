@@ -31,7 +31,7 @@ public class AudioManager
         }
 
         mciSendString( $"open \"{path}\" type mpegvideo alias {alias}" ); // Load the file
-        mciSendString( $"play {alias} notify" ); // Play the sound
+        mciSendString( $"play {alias}" ); // Play the sound
         playingFiles.Add( new AudioFile { filepath = path, alias = alias } ); // Add a new playing file to the list
     }
 
