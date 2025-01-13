@@ -32,11 +32,11 @@ void Renderer::Initialize()
 	}
 
 	// Initialize a specific font to use
-	if (!InitializeFont("resources/fonts/consola.ttf", 24))
+	/*if (!InitializeFont("resources/fonts/consola.ttf", 24))
 	{
 		glfwTerminate();
 		return;
-	}
+	}*/
 
 	// We should immediately focus on the newly created window
 	glfwMakeContextCurrent(m_pWindow);
@@ -49,11 +49,6 @@ void Renderer::Initialize()
 	stbi_image_free(images[0].pixels); // Free icon
 	stbi_image_free(images[1].pixels); // Free small icon
 
-	// OpenGL states
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	// Make sure GLEW initializes correctly
 	if (glewInit() != GLEW_OK)
 	{
@@ -61,6 +56,11 @@ void Renderer::Initialize()
 		glfwTerminate();
 		return;
 	}
+
+	// OpenGL states
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Allow for keyboard input
 	glfwSetInputMode(m_pWindow, GLFW_STICKY_KEYS, GL_TRUE);
@@ -95,10 +95,15 @@ int Renderer::InitializeFont(const char* filepath, int pixelFontSize)
 		glGenTextures(1, &texture);
 		glBindTexture(GL_TEXTURE_2D, texture);
 		glTexImage2D(
-			GL_TEXTURE_2D, 0, GL_RED,
+			GL_TEXTURE_2D, 
+			0, 
+			GL_RED,
 			m_ftFace->glyph->bitmap.width,
 			m_ftFace->glyph->bitmap.rows,
-			0, GL_RED, GL_UNSIGNED_BYTE, m_ftFace->glyph->bitmap.buffer
+			0,
+			GL_RED, 
+			GL_UNSIGNED_BYTE, 
+			m_ftFace->glyph->bitmap.buffer
 		);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -109,11 +114,11 @@ int Renderer::InitializeFont(const char* filepath, int pixelFontSize)
 		Character character =
 		{
 			texture,
-			glm::ivec2(m_ftFace->glyph->bitmap.width, m_ftFace->glyph->bitmap.rows),
-			glm::ivec2(m_ftFace->glyph->bitmap_left, m_ftFace->glyph->bitmap_top),
+			ivec2(m_ftFace->glyph->bitmap.width, m_ftFace->glyph->bitmap.rows),
+			ivec2(m_ftFace->glyph->bitmap_left, m_ftFace->glyph->bitmap_top),
 			static_cast<unsigned int>(m_ftFace->glyph->advance.x)
 		};
-		m_characters.insert(std::make_pair(c, character));
+		m_characters.insert(pair(c, character));
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 0);

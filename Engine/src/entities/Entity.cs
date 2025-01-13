@@ -54,7 +54,7 @@ public class Entity
 		// Make sure our type is valid
 		if (type == EntityType.None)
 		{
-			throw new NullReferenceException($"Entity {this} is of EntityType None, meaning this is an entity that hasn't properly been made!");
+			EngineProgram.DoError( $"Entity {this} is of EntityType None, meaning this is an entity that hasn't properly been made!", new NullReferenceException() );
 		}
 	}
 

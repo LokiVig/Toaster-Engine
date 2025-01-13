@@ -226,7 +226,7 @@ public class WTF
 		// Couldn't find file from the input path! Throw an exception
 		if (!File.Exists(directory))
 		{
-			throw new FileNotFoundException($"Couldn't find WTF file at \"{directory}\".");
+			EngineProgram.DoError( $"Couldn't find WTF file at \"{directory}\".", new FileNotFoundException() );
 		}
 
 		// Deserialize the file through JSON
@@ -251,7 +251,7 @@ public class WTF
 	/// <param name="inFile">The desired file to save</param>
 	public static void SaveFile(string directory, WTF inFile)
 	{
-		WTF file; // A local variable for storing the file
+		WTF file = null; // A local variable for storing the file
 
 		// If the input directory doesn't contain the maps folder...
 		if (!directory.Contains("maps/"))
@@ -278,7 +278,7 @@ public class WTF
 		}
 		else // We couldn't find a file to save, error!
 		{
-			throw new NullReferenceException("Error saving file, SaveFile().inFile == null && DoomNET.currentFile == null!");
+			EngineProgram.DoError( "Error saving file, SaveFile().inFile == null && EngineProgram.currentFile == null!", new NullReferenceException() );
 		}
 
 		// Call the file's OnSave function

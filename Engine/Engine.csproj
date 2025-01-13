@@ -24,9 +24,14 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<IsTrimmable>False</IsTrimmable>
 	</PropertyGroup>
+	<ItemGroup>
+	  <PackageReference Include="System.Windows.Extensions" Version="9.0.0" />
+	</ItemGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)Engine\src\resources\rendering\shaders\*&quot; &quot;$(OutDir)resources\shaders\&quot;" />
-		<Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)Engine\src\resources\rendering\textures\*&quot; &quot;$(OutDir)resources\textures\&quot;" />
-		<Exec Command="xcopy /E /S /Y &quot;$(SolutionDir)Engine\src\resources\rendering\fonts\*&quot; &quot;$(OutDir)resources\fonts\&quot;" />
+		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)\src\resources\rendering\shaders\*&quot; &quot;$(OutDir)resources\shaders\&quot;" />
+		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)\src\resources\rendering\textures\*&quot; &quot;$(OutDir)resources\textures\&quot;" />
+		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)\src\resources\rendering\fonts\*&quot; &quot;$(OutDir)resources\fonts\&quot;" />
+
+		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)\src\resources\audio\*&quot; &quot;$(OutDir)resources\audio\&quot;" />
 	</Target>
 </Project>

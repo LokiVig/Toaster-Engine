@@ -52,6 +52,18 @@ public class TriggerBrush : BrushEntity
 		// Check if any entity is intersecting with us
 		foreach (Entity entity in EngineProgram.currentFile?.entities!)
 		{
+			// Skip over intersection maths if we're disabled
+			if ( triggerType == TriggerType.Count && triggeredCount > triggerCount )
+			{
+				break;
+			}
+
+			if ( triggerType == TriggerType.Once && hasTriggered )
+			{
+				break;
+			}
+
+			// Do the actual intersection math
 			if (bbox.IntersectingWith(entity.GetBBox()))
 			{
 				// If we do intersect, but the trigger fails for some reason...

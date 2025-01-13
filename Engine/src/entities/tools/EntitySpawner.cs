@@ -30,7 +30,7 @@ public class EntitySpawner<T> : ToolEntity where T : Entity, new()
         // Make sure the desired entity is not a tool entity!
         if ( ent is ToolEntity )
         {
-            Console.WriteLine( "Can't spawn a tool entity!\n" );
+            EngineProgram.DoError( "Can't spawn tool entity!" );
             return null;
         }
 
@@ -82,7 +82,7 @@ public class EntitySpawner : ToolEntity
         // Make sure the desired entity is not a tool entity!
         if ( ent is ToolEntity )
         {
-            Console.WriteLine( "Can't spawn a tool entity!\n" );
+            EngineProgram.DoError( "Can't spawn tool entity!" );
             return null;
         }
 
