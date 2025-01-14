@@ -26,7 +26,7 @@ public class AudioManager
         if ( !File.Exists( path ) )
         {
             // We've gotten an error!
-            EngineProgram.DoError( $"File \"{path}\" doesn't exist!" );
+            Log.Error( $"File \"{path}\" doesn't exist!" );
             return;
         }
 

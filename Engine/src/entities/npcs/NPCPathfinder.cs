@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Toast.Engine.Resources;
+
 namespace Toast.Engine.Entities.NPC;
 
 /// <summary>
@@ -14,7 +16,7 @@ public class NPCPathfinder
     {
         if ( _parent == null )
         {
-            EngineProgram.DoError( "NPCPathfinder _parent variable is null!", new NullReferenceException() );
+            Log.Error( "NPCPathfinder _parent variable is null!", new NullReferenceException() );
         }
 
         parent = _parent;

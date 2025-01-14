@@ -30,7 +30,7 @@ public class EntitySpawner<T> : ToolEntity where T : Entity, new()
         // Make sure the desired entity is not a tool entity!
         if ( ent is ToolEntity )
         {
-            EngineProgram.DoError( "Can't spawn tool entity!" );
+            Log.Error( "Can't spawn tool entity!" );
             return null;
         }
 
@@ -44,11 +44,11 @@ public class EntitySpawner<T> : ToolEntity where T : Entity, new()
         // Add the newly spawned entity to the current scene
         EngineProgram.currentScene?.AddEntity( ent );
 
-        Console.WriteLine( $"Spawned entity {ent}.\n" +
+        Log.Info( $"Spawned entity {ent}.\n" +
                           $"\tSource: {this}\n" +
                           $"\tPosition: {ent.GetPosition()}\n" +
                           $"\tRotation: {ent.GetRotation()}\n" +
-                          $"\tBBox: {ent.GetBBox()}\n" );
+                          $"\tBBox: {ent.GetBBox()}" );
 
         // And return the entity we just spawned
         return ent;
@@ -82,7 +82,7 @@ public class EntitySpawner : ToolEntity
         // Make sure the desired entity is not a tool entity!
         if ( ent is ToolEntity )
         {
-            EngineProgram.DoError( "Can't spawn tool entity!" );
+            Log.Error( "Can't spawn tool entity!" );
             return null;
         }
 
@@ -96,11 +96,11 @@ public class EntitySpawner : ToolEntity
         // Add the newly spawned entity to the current scene
         EngineProgram.currentScene?.AddEntity( ent );
 
-        Console.WriteLine( $"Spawned entity {ent}.\n" +
+        Log.Info( $"Spawned entity {ent}.\n" +
                           $"\tSource: {this}\n" +
                           $"\tPosition: {ent.GetPosition()}\n" +
                           $"\tRotation: {ent.GetRotation()}\n" +
-                          $"\tBBox: {ent.GetBBox()}\n" );
+                          $"\tBBox: {ent.GetBBox()}" );
 
         // And return the entity we just spawned
         return ent;

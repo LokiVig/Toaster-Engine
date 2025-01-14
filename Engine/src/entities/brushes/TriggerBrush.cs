@@ -173,7 +173,7 @@ public class TriggerBrush : BrushEntity
 		// Get the entity we're supposed to affect
 		// Entity foundTarget = EngineProgram.currentScene.FindEntity(targetEntity.GetID());
 
-		Console.WriteLine($"TriggerBrush {this} has been triggered.\n" +
+		Log.Info($"TriggerBrush {this} has been triggered.\n" +
 		                  $"\tTarget: {targetEntity}\n" +
 		                  $"\tEvent: {targetEvent}\n" +
 		                  $"\tValues:\n" +
@@ -186,7 +186,7 @@ public class TriggerBrush : BrushEntity
 		                  $"\t\tbbValue: {(bbValue)}\n" +
 		                  $"\tTrigger type: {triggerType}\n" +
 		                  $"\tTrigger by: {triggerBy}\n" +
-		                  $"\tTrigger on: {triggerOn}\n");
+		                  $"\tTrigger on: {triggerOn}");
 
 		if (iValue != 0) // Int value event
 		{

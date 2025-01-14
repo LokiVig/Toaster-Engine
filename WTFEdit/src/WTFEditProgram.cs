@@ -56,7 +56,7 @@ public class WTFEditProgram
     {
         if (currentFile == null)
         {
-            Console.WriteLine("Error: Can't save map, because no map is loaded!");
+            Log.Error("Can't save map, because no map is loaded!");
             return;
         }
         

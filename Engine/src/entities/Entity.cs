@@ -54,7 +54,7 @@ public class Entity
 		// Make sure our type is valid
 		if (type == EntityType.None)
 		{
-			EngineProgram.DoError( $"Entity {this} is of EntityType None, meaning this is an entity that hasn't properly been made!", new NullReferenceException() );
+			Log.Error( $"Entity {this} is of EntityType None, meaning this is an entity that hasn't properly been made!", new NullReferenceException() );
 		}
 	}
 
@@ -265,7 +265,7 @@ public class Entity
 	{
 		// We've been damaged by someone or something!
 		// How queer! We must log this to the console immediately!!
-		Console.WriteLine($"Entity {this} took damage.\n" +
+		Log.Info($"Entity {this} took damage.\n" +
 		                  $"\tDamage: {damage}\n" +
 		                  $"\tSource: {(source != null ? source : "N/A")}\n" +
 		                  $"\tNew health: {health - damage}\n");
@@ -491,8 +491,8 @@ public class Entity
 		EngineProgram.OnUpdate -= Update;
 
 		// Log to the console that this entity has died!
-		Console.WriteLine($"Entity {this} has died.\n" +
-		                  $"\tLast attacker: {lastAttacker}\n");
+		Log.Info($"Entity {this} has died.\n" +
+		                  $"\tLast attacker: {lastAttacker}");
 	}
 
 	/// <summary>

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Text.Json;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 using Toast.Engine.Resources;
-using System.Runtime.CompilerServices;
-using System.IO;
-using System.Runtime.InteropServices;
 
 namespace Toast.Engine;
 
@@ -53,6 +51,8 @@ public class EngineProgram
     public static void Initialize( string title = null )
     {
         // Find out which OS we're running on
+        // Used for things like the audio manager, etc.
+
 
         // Initialize the global audio manager
         globalAudioManager = new AudioManager();
@@ -61,11 +61,12 @@ public class EngineProgram
         try
         {
             renderer = External.CreateRenderer( $"Toaster Engine (v.{ENGINE_VERSION}){( title != null ? $" - {title}" : "" )}" );
-            DoSuccess("Successfully initialized renderer.");
+            Log.Info("Successfully initialized renderer.", true);
+            globalAudioManager.PlaySuccess();
         }
         catch ( Exception exc )
         {
-            DoError( $"Exception caught while initializing renderer!\n{exc.Message}\n", exc );
+            Log.Error( $"Exception caught while initializing renderer!\n{exc.Message}\n", exc );
         }
     }
 
@@ -96,90 +97,6 @@ public class EngineProgram
             // This makes it so everything subscribed to the event will call their own,
             // subsidiary update method
             OnUpdate?.Invoke();
-        }
-    }
-
-    /// <summary>
-    /// Do the basic success functionality, with <paramref name="message"/>.
-    /// </summary>
-    /// <param name="message">The specific success message used to detail what happened to cause a warning.</param>
-    public static void DoSuccess( string message = null, [CallerLineNumber] int line = 0, [CallerFilePath] string src = "", [CallerMemberName] string method = "" )
-    {
-        // Play the engine's default success sound
-        globalAudioManager.PlaySuccess();
-
-        // Make sure we have a message before we do
-        if ( message != null )
-        {
-            // Get the name of the class that called us
-            string caller = Path.GetFileNameWithoutExtension( src );
-
-            // Check if the method is the constructor...
-            if ( method == ".ctor" )
-            {
-                // Make it more obvious that it is such!
-                method = "Constructor()";
-            }
-
-            // Write to the console what just happened
-            Console.WriteLine( $"(Line {line}) {caller}.{method}: SUCCESS; {message}\n" );
-        }
-    }
-
-    /// <summary>
-    /// Do the basic warning functionality, with <paramref name="message"/>.
-    /// </summary>
-    /// <param name="message">The specific warning message used to detail what happened to cause a warning.</param>
-    public static void DoWarning( string message, [CallerLineNumber] int line = 0, [CallerFilePath] string src = "", [CallerMemberName] string method = "" )
-    {
-        // Get the name of the class that called us
-        string caller = Path.GetFileNameWithoutExtension( src );
-
-        // Check if the method is the constructor...
-        if ( method == ".ctor" )
-        {
-            // Make it more obvious that it is such!
-            method = "Constructor()";
-        }
-
-        // Play the engine's default warning sound
-        globalAudioManager.PlayWarning();
-
-        // Write to the console what just happened
-        Console.WriteLine( $"(Line {line}) {caller}.{method}: WARNING; {message}\n" );
-    }
-
-    /// <summary>
-    /// Do the basic error functionalities, with a <paramref name="message"/> and possible <paramref name="exception"/>.
-    /// </summary>
-    /// <param name="message">The specific error message used to detail what happened to cause an error.</param>
-    /// <param name="exception">The exception we wish to call upon receiving the error.</param>
-    public static void DoError( string message, Exception exception = null, [CallerLineNumber] int line = 0, [CallerFilePath] string src = "", [CallerMemberName] string method = "" )
-    {
-        // Get the name of the class that called us
-        string caller = Path.GetFileNameWithoutExtension( src );
-
-        // Check if the method is the constructor...
-        if ( method == ".ctor" )
-        {
-            // Make it more obvious that it is such!
-            method = "Constructor()";
-        }
-
-        // Play the engine's default error sound
-        globalAudioManager.PlayError();
-
-        // Write to the console what just happened
-        Console.WriteLine( $"(Line {line}) {caller}.{method}: ERROR; {message}\n" );
-
-        // If we have an exception...
-        if ( exception != null )
-        {
-            // Make a new, local exception, with the sourced one as an inner exception
-            Exception localException = new Exception( $"(Line {line}) {caller}.{method}: ERROR; {message}", exception );
-
-            // Throw it!
-            throw localException;
         }
     }
 

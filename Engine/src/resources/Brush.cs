@@ -59,12 +59,11 @@ public struct Brush
         
         #if DEBUG
         // Log the vertices for information's sake
-        Console.WriteLine("Vertices initialized. Their values are:");
+        Log.Info("Vertices initialized. Their values are:");
         foreach (Vertex vertice in vertices)
         {
-            Console.WriteLine($"\t{vertice.ToString()}");
+            Log.Info($"\t{vertice.ToString()}");
         }
-        Console.Write("\n");
         #endif // DEBUG
     }
     
