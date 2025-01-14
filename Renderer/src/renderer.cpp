@@ -32,6 +32,8 @@ void Renderer::Initialize()
 	}
 
 	// Initialize a specific font to use
+	// TODO: This causes an exception, for some odd reason!
+	// Find out the reason and destroy it.
 	/*if (!InitializeFont("resources/fonts/consola.ttf", 24))
 	{
 		glfwTerminate();

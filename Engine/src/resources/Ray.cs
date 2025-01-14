@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Linq;
 
-using Toast.Engine.Entities;
-
 using Toast.Engine.Math;
+using Toast.Engine.Entities;
 
 namespace Toast.Engine.Resources;
 

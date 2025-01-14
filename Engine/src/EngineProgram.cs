@@ -62,7 +62,6 @@ public class EngineProgram
         {
             renderer = External.CreateRenderer( $"Toaster Engine (v.{ENGINE_VERSION}){( title != null ? $" - {title}" : "" )}" );
             Log.Info("Successfully initialized renderer.", true);
-            globalAudioManager.PlaySuccess();
         }
         catch ( Exception exc )
         {

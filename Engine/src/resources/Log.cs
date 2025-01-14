@@ -113,7 +113,7 @@ public struct Log
         if ( exception != null )
         {
             // Make a new, local exception, with the sourced one as an inner exception
-            Exception localException = new Exception( $"(Line {line}) {caller}.{method}: ERROR; {message}", exception );
+            Exception localException = new Exception( $"(Line {line}) {caller}.{method}; {message}", exception );
 
             // Throw it!
             throw localException;

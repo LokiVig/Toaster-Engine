@@ -268,7 +268,7 @@ public class Entity
 		Log.Info($"Entity {this} took damage.\n" +
 		                  $"\tDamage: {damage}\n" +
 		                  $"\tSource: {(source != null ? source : "N/A")}\n" +
-		                  $"\tNew health: {health - damage}\n");
+		                  $"\tNew health: {health - damage}");
 
 		//
 		// I guess we're taking damage now
