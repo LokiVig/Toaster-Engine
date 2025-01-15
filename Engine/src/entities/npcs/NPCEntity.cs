@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 
 using Toast.Engine.Math;
 using Toast.Engine.Resources;
@@ -60,10 +59,19 @@ public class NPCEntity : Entity
 	/// </summary>
 	private void LookForTarget()
 	{
+		// Double check that we don't already have a target
+		if ( target != null )
+		{
+			Log.Warning( "LookForTarget() called, even though target is not null!" );
+			return;
+		}
+
 		// Do a horizontal ray check (don't look up or down) for any entities in our vision
 		for ( int i = 0; i < 50; i++ )
 		{
-			if ( Ray.Trace( this, Vector3.Forward, out object hitObject, RayIgnore.Brushes ) )
+			// Do a ray trace to see whether or not we can find a target
+			// Ignores brushes and brush entities, we should never be able to target them
+			if ( Ray.Trace( this, Vector3.Forward, out object hitObject, RayIgnore.Brushes & RayIgnore.BrushEntities ) )
 			{
 				// Check our adore list for if the entity we hust hit should be followed
 				foreach ( Type type in adoreList )
