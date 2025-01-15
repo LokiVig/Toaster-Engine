@@ -8,6 +8,7 @@ public:
     Vertex(vec3 position, vec2 texCoords)
         : m_position(position), m_texCoords(texCoords)
     {
+        m_normal = vec3(0, 0, 0);
     }
 
 public:

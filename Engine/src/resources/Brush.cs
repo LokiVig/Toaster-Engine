@@ -107,7 +107,7 @@ public struct Brush
         desiredEntity.SetBBox(bbox);
         desiredEntity.SetPosition(bbox.GetCenter());
 
-        EngineProgram.currentFile.RemoveBrush(this);
-        EngineProgram.currentFile.AddEntity(desiredEntity);
+        EngineManager.currentFile.RemoveBrush(this);
+        EngineManager.currentFile.AddEntity(desiredEntity);
     }
 }

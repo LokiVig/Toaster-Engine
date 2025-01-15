@@ -42,7 +42,7 @@ public class EntitySpawner<T> : ToolEntity where T : Entity, new()
         ent.CreateID();
 
         // Add the newly spawned entity to the current scene
-        EngineProgram.currentScene?.AddEntity( ent );
+        EngineManager.currentScene?.AddEntity( ent );
 
         Log.Info( $"Spawned entity {ent}.\n" +
                           $"\tSource: {this}\n" +
@@ -94,7 +94,7 @@ public class EntitySpawner : ToolEntity
         ent.CreateID();
 
         // Add the newly spawned entity to the current scene
-        EngineProgram.currentScene?.AddEntity( ent );
+        EngineManager.currentScene?.AddEntity( ent );
 
         Log.Info( $"Spawned entity {ent}.\n" +
                           $"\tSource: {this}\n" +

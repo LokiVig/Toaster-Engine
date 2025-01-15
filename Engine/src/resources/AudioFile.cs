@@ -4,4 +4,5 @@ public struct AudioFile
 {
     public string filepath;
     public string alias;
+    public bool repeats;
 }

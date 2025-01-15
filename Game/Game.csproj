@@ -5,6 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <BaseOutputPath>$(SolutionDir)build\</BaseOutputPath>
+    <StartupObject></StartupObject>
+    <ApplicationIcon>default_game_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>$(SolutionDir)\build\Debug\</OutputPath>
@@ -12,6 +14,9 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>$(SolutionDir)\build\Release\</OutputPath>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include="default_game_icon.ico" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.csproj" />
   </ItemGroup>

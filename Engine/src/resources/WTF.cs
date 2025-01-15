@@ -230,7 +230,7 @@ public class WTF
 		}
 
 		// Deserialize the file through JSON
-		outFile = JsonSerializer.Deserialize<WTF>(File.OpenRead(directory), EngineProgram.serializerOptions);
+		outFile = JsonSerializer.Deserialize<WTF>(File.OpenRead(directory), EngineManager.serializerOptions);
 	}
 
 	/// <summary>
@@ -267,9 +267,9 @@ public class WTF
 		}
 
 		// If we already have a file open, set the path to the current file
-		if (EngineProgram.currentFile != null && !string.IsNullOrEmpty(EngineProgram.currentFile.path))
+		if (EngineManager.currentFile != null && !string.IsNullOrEmpty(EngineManager.currentFile.path))
 		{
-			file = EngineProgram.currentFile;
+			file = EngineManager.currentFile;
 			directory = file.path;
 		}
 		else if (inFile != null) // If the input file wasn't null, set it accordingly
@@ -291,6 +291,6 @@ public class WTF
 		}
 
 		// Write the WTF file to the path
-		File.WriteAllText(directory, JsonSerializer.Serialize(file, EngineProgram.serializerOptions));
+		File.WriteAllText(directory, JsonSerializer.Serialize(file, EngineManager.serializerOptions));
 	}
 }

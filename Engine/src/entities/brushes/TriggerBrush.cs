@@ -10,13 +10,22 @@ namespace Toast.Engine.Entities.Brushes;
 /// </summary>
 public class TriggerBrush : BrushEntity
 {
-	public int iValue { get; set; } = 0; // Event int value
-	public float fValue { get; set; } = 0.0f; // Event float value
-	public int bValue { get; set; } = -1; // Event bool value (<=-1 -> none, =0 -> false, >=1 -> true)
-	public Vector3 vValue { get; set; } = Vector3.Zero; // Event Vector3 value
-	public Quaternion qValue { get; set; } = Quaternion.Identity; // Event Quaternion value
-	public Entity eValue { get; set; } = null; // Event Entity value
-	public BBox bbValue { get; set; } = BBox.One; // Event BBox value
+	// List of value constants
+	private static readonly int IVALUE_DEFAULT = 0;
+	private static readonly float FVALUE_DEFAULT = 0.0f;
+	private static readonly int BVALUE_DEFAULT = -1;
+	private static readonly Vector3 VVALUE_DEFAULT = Vector3.Zero;
+	private static readonly Quaternion QVALUE_DEFAULT = Quaternion.Identity;
+	private static readonly Entity EVALUE_DEFAULT = null;
+	private static readonly BBox BBVALUE_DEFAULT = BBox.One;
+
+	public int iValue { get; set; } = IVALUE_DEFAULT; // Event int value
+	public float fValue { get; set; } = FVALUE_DEFAULT; // Event float value
+	public int bValue { get; set; } = BVALUE_DEFAULT; // Event bool value (<=-1 -> none, =0 -> false, >=1 -> true)
+	public Vector3 vValue { get; set; } = VVALUE_DEFAULT; // Event Vector3 value
+	public Quaternion qValue { get; set; } = QVALUE_DEFAULT; // Event Quaternion value
+	public Entity eValue { get; set; } = EVALUE_DEFAULT; // Event Entity value
+	public BBox bbValue { get; set; } = BBVALUE_DEFAULT; // Event BBox value
 
 	public Entity targetEntity { get; set; } // The entity we wish to target
 	public EntityEvent targetEvent { get; set; } // The desired event
@@ -49,15 +58,19 @@ public class TriggerBrush : BrushEntity
 
 	protected override void Update()
 	{
+		base.Update();
+
 		// Check if any entity is intersecting with us
-		foreach (Entity entity in EngineProgram.currentFile?.entities!)
+		foreach (Entity entity in EngineManager.currentFile?.entities!)
 		{
 			// Skip over intersection maths if we're disabled
+			// Check our count over our max count
 			if ( triggerType == TriggerType.Count && triggeredCount > triggerCount )
 			{
 				break;
 			}
 
+			// Check if we trigger only once, and if we have been triggered
 			if ( triggerType == TriggerType.Once && hasTriggered )
 			{
 				break;
@@ -150,7 +163,7 @@ public class TriggerBrush : BrushEntity
 				break;
 
 			case TriggerBy.Player: // Only players should be able to trigger this
-				if (triggerEntity?.type == EntityType.Player)
+				if (triggerEntity is PlayerEntity)
 				{
 					break;
 				}
@@ -160,7 +173,7 @@ public class TriggerBrush : BrushEntity
 				}
 
 			case TriggerBy.NPCs: // Only NPCs should be able to trigger this
-				if (triggerEntity?.type == EntityType.NPC)
+				if (triggerEntity is NPCEntity)
 				{
 					break;
 				}
@@ -182,43 +195,43 @@ public class TriggerBrush : BrushEntity
 		                  $"\t\tbValue: {(bValue > -1 ? bValue == 0 ? "False" : "True" : "N/A")}\n" +
 		                  $"\t\tvValue: {vValue}\n" +
 		                  $"\t\tqValue: {qValue}\n" +
-		                  $"\t\teValue: {(eValue == null ? "N/A" : eValue)}\n" +
+		                  $"\t\teValue: {(eValue == EVALUE_DEFAULT ? "N/A" : eValue)}\n" +
 		                  $"\t\tbbValue: {(bbValue)}\n" +
 		                  $"\tTrigger type: {triggerType}\n" +
 		                  $"\tTrigger by: {triggerBy}\n" +
 		                  $"\tTrigger on: {triggerOn}");
 
-		if (iValue != 0) // Int value event
+		if (iValue != IVALUE_DEFAULT) // Int value event
 		{
 			targetEntity.OnEvent(targetEvent, iValue, this);
 		}
 
-		if (fValue != 0.0f) // Float value event
+		if (fValue != FVALUE_DEFAULT) // Float value event
 		{
 			targetEntity.OnEvent(targetEvent, fValue, this);
 		}
 
-		if (bValue != -1) // Bool value event
+		if (bValue != BVALUE_DEFAULT) // Bool value event
 		{
 			targetEntity.OnEvent(targetEvent, bValue == 1, this);
 		}
 
-		if (vValue != Vector3.Zero) // Vector3 value event
+		if (vValue != VVALUE_DEFAULT) // Vector3 value event
 		{
 			targetEntity.OnEvent(targetEvent, vValue, this);
 		}
 
-		if (qValue != Quaternion.Identity) // Quaternion value event
+		if (qValue != QVALUE_DEFAULT) // Quaternion value event
 		{
 			targetEntity.OnEvent(targetEvent, qValue, this);
 		}
 
-		if (eValue != null) // Entity value event
+		if (eValue != EVALUE_DEFAULT) // Entity value event
 		{
 			targetEntity.OnEvent(targetEvent, eValue, this);
 		}
 
-		if (bbValue != BBox.One) // BBox value event
+		if (bbValue != BBVALUE_DEFAULT) // BBox value event
 		{
 			targetEntity.OnEvent(targetEvent, bbValue, this);
 		}

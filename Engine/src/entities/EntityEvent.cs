@@ -11,4 +11,6 @@ public enum EntityEvent
     SetBBox, // Set this entity's BBox
     SpawnEntity, // Tell an EntitySpawner to spawn their entity
     SetRotation, // Set this entity's rotation (Quaternion)
+    PlaySound, // Plays an AudioEntity's audio
+    StopSound, // Stops an AudioEntity's audio
 }

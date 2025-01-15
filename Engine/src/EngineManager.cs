@@ -2,12 +2,13 @@
 using System.Text.Json;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text.Json.Serialization.Metadata;
 
 using Toast.Engine.Resources;
 
 namespace Toast.Engine;
 
-public class EngineProgram
+public class EngineManager
 {
     //---------------------------------------//
     //			    Constants				 //
@@ -16,7 +17,8 @@ public class EngineProgram
     public static readonly JsonSerializerOptions serializerOptions = new()
     {
         WriteIndented = true,
-        AllowTrailingCommas = true
+        AllowTrailingCommas = true,
+        TypeInfoResolver = new DefaultJsonTypeInfoResolver()
     };
 
     private const string ENGINE_VERSION = "0.0.1";
@@ -30,7 +32,7 @@ public class EngineProgram
     public static WTF currentFile; // The currently loaded WTF file / map
     public static Scene currentScene; // The currently running scene, initialized from the current file
 
-    public static AudioManager globalAudioManager; // Global audio manager
+    public static AudioManager audioManager; // Global audio manager
 
     public static OSPlatform activeOS; // The operating system the engine's actively running on
 
@@ -55,13 +57,16 @@ public class EngineProgram
 
 
         // Initialize the global audio manager
-        globalAudioManager = new AudioManager();
+        audioManager = new AudioManager();
+
+        // Initialize file logging
+        Log.OpenLogFile();
 
         // Initialize the renderer
         try
         {
             renderer = External.CreateRenderer( $"Toaster Engine (v.{ENGINE_VERSION}){( title != null ? $" - {title}" : "" )}" );
-            Log.Info("Successfully initialized renderer.", true);
+            Log.Success("Successfully initialized renderer.");
         }
         catch ( Exception exc )
         {
@@ -88,7 +93,7 @@ public class EngineProgram
             }
 
             // Update the global audio manager
-            globalAudioManager.UpdateAllPlayingFiles();
+            audioManager.UpdateAllPlayingFiles();
 
             //External.RenderText(renderer, "FUCK", 1280/2, 720/2, 25.0f);
 
@@ -101,6 +106,10 @@ public class EngineProgram
 
     public static void Shutdown()
     {
+        // End file logging
+        Log.CloseLogFile();
+
+        // Shut down the renderer
         External.ShutdownRenderer( renderer );
     }
 }

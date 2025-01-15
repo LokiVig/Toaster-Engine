@@ -24,9 +24,6 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<IsTrimmable>False</IsTrimmable>
 	</PropertyGroup>
-	<ItemGroup>
-	  <Folder Include="src\tools\" />
-	</ItemGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<!-- Rendering -->
 		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)src\resources\rendering\*&quot; &quot;$(OutDir)resources\&quot;" />

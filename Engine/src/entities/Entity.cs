@@ -20,492 +20,506 @@ namespace Toast.Engine.Entities;
 /// </summary>
 public class Entity
 {
-	public Vector3 position; // This entity's current position
-	public Quaternion rotation; // This entity's current rotation
-	public BBox bbox; // This entity's bounding box
-	
-	public string id { get; set; } // This entity's identifier
-	public virtual EntityType type { get; private set; } = EntityType.None; // This entity's type, e.g. player / NPC
-	public virtual float health { get; set; } // This entity's health
+    public Vector3 position; // This entity's current position
+    public Quaternion rotation; // This entity's current rotation
+    public BBox bbox; // This entity's bounding box
 
-	protected Vector3 velocity; // This entity's current velocity
-	protected bool alive; // Is this entity alive?
-	protected Entity target; // The entity this entity's targeting
-	protected Entity lastAttacker; // The last entity to attack this entity
+    public string id { get; set; } // This entity's identifier
+    public virtual EntityType type { get; private set; } = EntityType.None; // This entity's type, e.g. player / NPC
+    public virtual float health { get; set; } // This entity's health
 
-	private const float MAX_VELOCITY = 225;
+    protected Vector3 velocity; // This entity's current velocity
+    protected bool alive; // Is this entity alive?
+    protected Entity target; // The entity this entity's targeting
+    protected Entity lastAttacker; // The last entity to attack this entity
 
-	public Entity()
-	{
-		ErrorCheck(); // Check for errors
-	}
+    private const float MAX_VELOCITY = 225; // TODO: Calculate this (mass, therefore terminal velocity) from the entity's BBox! Bad constant!
 
-	public Entity(Vector3 position)
-	{
-		this.position = position; // Set our position
-		ErrorCheck(); // Check for errors
-	}
+    public Entity()
+    {
+        ErrorCheck(); // Check for errors
+    }
 
-	/// <summary>
-	/// Method to check for commonplace errors.
-	/// </summary>
-	private void ErrorCheck()
-	{
-		// Make sure our type is valid
-		if (type == EntityType.None)
-		{
-			Log.Error( $"Entity {this} is of EntityType None, meaning this is an entity that hasn't properly been made!", new NullReferenceException() );
-		}
-	}
+    public Entity( Vector3 position )
+    {
+        SetPosition( position ); // Set our position
+        ErrorCheck(); // Check for errors
+    }
 
-	/// <summary>
-	/// A way to initialize this entity, default for all entities
-	/// </summary>
-	public void Spawn()
-	{
-		// Null the velocity
-		velocity = Vector3.Zero;
+    /// <summary>
+    /// Method to check for commonplace errors.
+    /// </summary>
+    private void ErrorCheck()
+    {
+        // Make sure our type is valid
+        if ( type == EntityType.None )
+        {
+            Log.Error( $"Entity {this} is of EntityType None, meaning this is an entity that hasn't properly been made!", new NullReferenceException() );
+        }
+    }
 
-		// This entity is now alive
-		alive = true;
+    /// <summary>
+    /// A way to initialize this entity, default for all entities
+    /// </summary>
+    public void Spawn()
+    {
+        // Null the velocity
+        velocity = Vector3.Zero;
 
-		// Subscribe to the OnUpdate event
-		EngineProgram.OnUpdate += Update;
+        // This entity is now alive
+        alive = true;
 
-		// Call the OnSpawn event
-		OnSpawn();
-	}
+        // Subscribe to the OnUpdate event
+        EngineManager.OnUpdate += Update;
 
-	/// <summary>
-	/// Things to do every frame
-	/// </summary>
-	protected virtual void Update()
-	{
-		// Can't have bounding boxes where the maxs have a less value than mins, or vice versa
-		if (bbox.mins >= bbox.maxs || bbox.maxs <= bbox.mins)
-		{
-			// throw new Exception($"Entity {this}'s bounding boxes are mismatched! ({bbox.mins}, {bbox.maxs})");
-		}
-	}
+        // Call the OnSpawn event
+        OnSpawn();
+    }
 
-	/// <summary>
-	/// Handle movement, caused by velocity
-	/// </summary>
-	protected void HandleMovement()
-	{
-		// Clamp velocity between the min and max values
-		velocity = Vector3.Clamp(velocity, MAX_VELOCITY * -1, MAX_VELOCITY);
-		
-		// Position is affected by velocity
-		position += velocity * EngineProgram.deltaTime;
+    /// <summary>
+    /// Things to do every frame
+    /// </summary>
+    protected virtual void Update()
+    {
+        // Can't have bounding boxes where the maxs have a less value than mins, or vice versa
+        if ( bbox.mins.x >= bbox.maxs.x ||
+             bbox.mins.y >= bbox.maxs.y ||
+             bbox.mins.z >= bbox.maxs.z )
+        {
+            Log.Error( $"{this}'s bound boxes are mismatched! ({bbox})", new ArithmeticException() );
+        }
+    }
 
-		// Velocity decreases with time (effectively drag)
-		velocity *= (1 - 0.75f * EngineProgram.deltaTime);
+    /// <summary>
+    /// Handle movement, caused by velocity
+    /// </summary>
+    protected void HandleMovement()
+    {
+        // Clamp velocity between the min and max values
+        velocity = Vector3.Clamp( velocity, MAX_VELOCITY * -1, MAX_VELOCITY );
 
-		// If the velocity's magnitude <= 0.01, it's effectively zero, so zero it out for the sake of ease
-		if (velocity.Magnitude() <= 0.01f)
-		{
-			velocity = Vector3.Zero;
-		}
-	}
+        // Position is affected by velocity
+        position += velocity * EngineManager.deltaTime;
 
-	/// <summary>
-	/// Get the current health of this entity
-	/// </summary>
-	public float GetHealth()
-	{
-		return health;
-	}
+        // Velocity decreases with time (effectively drag)
+        velocity *= ( 1 - 0.75f * EngineManager.deltaTime );
 
-	/// <summary>
-	/// Get the ID of this entity
-	/// </summary>
-	public string GetID()
-	{
-		return id;
-	}
+        // If the velocity's magnitude <= 0.01, it's effectively zero, so zero it out for the sake of ease
+        if ( velocity.Magnitude() <= 0.01f )
+        {
+            velocity = Vector3.Zero;
+        }
+    }
 
-	/// <summary>
-	/// Gets this entity's position
-	/// </summary>
-	public Vector3 GetPosition()
-	{
-		return position;
-	}
+    /// <summary>
+    /// Get the current health of this entity
+    /// </summary>
+    public float GetHealth()
+    {
+        return health;
+    }
 
-	/// <summary>
-	/// Gets this entity's velocity
-	/// </summary>
-	public Vector3 GetVelocity()
-	{
-		return velocity;
-	}
+    /// <summary>
+    /// Get the ID of this entity
+    /// </summary>
+    public string GetID()
+    {
+        return id;
+    }
 
-	public Quaternion GetRotation()
-	{
-		return rotation;
-	}
+    /// <summary>
+    /// Gets this entity's position
+    /// </summary>
+    public Vector3 GetPosition()
+    {
+        return position;
+    }
 
-	/// <summary>
-	/// Gets this entity's bounding box
-	/// </summary>
-	public BBox GetBBox()
-	{
-		return bbox;
-	}
+    /// <summary>
+    /// Gets this entity's velocity
+    /// </summary>
+    public Vector3 GetVelocity()
+    {
+        return velocity;
+    }
 
-	/// <summary>
-	/// Is this entity alive?
-	/// </summary>
-	/// <returns><see langword="true"/> if alive, <see langword="false"/> if dead</returns>
-	public bool IsAlive()
-	{
-		return alive;
-	}
+    /// <summary>
+    /// Gets this entity's rotation
+    /// </summary>
+    public Quaternion GetRotation()
+    {
+        return rotation;
+    }
 
-	/// <summary>
-	/// Sets this entity's ID
-	/// </summary>
-	public void SetID(string id)
-	{
-		this.id = id;
-	}
+    /// <summary>
+    /// Gets this entity's bounding box
+    /// </summary>
+    public BBox GetBBox()
+    {
+        return bbox;
+    }
 
-	/// <summary>
-	/// Set the target of this entity, e.g. an enemy should target the <see cref="PlayerEntity"/>
-	/// </summary>
-	/// <param name="target">The specific entity we wish to target, 0 should always be the <see cref="PlayerEntity"/></param>
-	public void SetTarget(Entity target)
-	{
-		// Can't target null!
-		if ( target == null )
-		{
-			return;
-		}
+    /// <summary>
+    /// Is this entity alive?
+    /// </summary>
+    /// <returns><see langword="true"/> if alive, <see langword="false"/> if dead</returns>
+    public bool IsAlive()
+    {
+        return alive;
+    }
 
-		// Can't target a dead entity
-		if (!target.IsAlive())
-		{
-			return;
-		}
+    /// <summary>
+    /// Sets this entity's ID
+    /// </summary>
+    public void SetID( string id )
+    {
+        this.id = id;
+    }
 
-		this.target = target;
-	}
+    /// <summary>
+    /// Set the target of this entity, e.g. an enemy should target the <see cref="PlayerEntity"/>
+    /// </summary>
+    /// <param name="target">The specific entity we wish to target, 0 should always be the <see cref="PlayerEntity"/></param>
+    public void SetTarget( Entity target )
+    {
+        // Can't target null!
+        if ( target == null )
+        {
+            this.target = null;
+            return;
+        }
 
-	/// <summary>
-	/// Set the target of this entity by an ID, e.g. an enemy should target the <see cref="PlayerEntity"/>
-	/// </summary>
-	/// <param name="targetID">The ID of the entity we wish to target, 0 should always be the <see cref="PlayerEntity"/></param>
-	public void SetTarget(string targetID)
-	{
-		target = EngineProgram.currentScene?.FindEntity(targetID);
-	}
+        // Can't target a dead entity
+        if ( !target.IsAlive() )
+        {
+            return;
+        }
 
-	/// <summary>
-	/// Set this entity's position by a <see cref="Vector3"/>
-	/// </summary>
-	/// <param name="position">The new, desired position of this entity</param>
-	public void SetPosition(Vector3 position)
-	{
-		this.position = position;
-	}
+        this.target = target;
+    }
 
-	/// <summary>
-	/// Set this entity's velocity by a <see cref="Vector3"/>
-	/// </summary>
-	/// <param name="velocity">The new, desired velocity of this entity</param>
-	public void SetVelocity(Vector3 velocity)
-	{
-		this.velocity = velocity;
-	}
+    /// <summary>
+    /// Set the target of this entity by an ID, e.g. an enemy should target the <see cref="PlayerEntity"/>
+    /// </summary>
+    /// <param name="targetID">The ID of the entity we wish to target, "player" should always be a <see cref="PlayerEntity"/></param>
+    public void SetTarget( string targetID )
+    {
+        target = EngineManager.currentScene?.FindEntity( targetID );
+    }
 
-	/// <summary>
-	/// Set this entity's rotation from a <see cref="Quaternion"/>
-	/// </summary>
-	/// <param name="rotation">The new, desired rotation of this entity</param>
-	public void SetRotation(Quaternion rotation)
-	{
-		this.rotation = rotation;
-	}
+    /// <summary>
+    /// Set this entity's position by a <see cref="Vector3"/>
+    /// </summary>
+    /// <param name="position">The new, desired position of this entity</param>
+    public void SetPosition( Vector3 position )
+    {
+        this.position = position;
+    }
 
-	/// <summary>
-	/// Main use for this is for when a brush is turned into an entity
-	/// </summary>
-	/// <param name="bbox">The new bounding box of this entity</param>
-	public void SetBBox(BBox bbox)
-	{
-		this.bbox = bbox;
-	}
+    /// <summary>
+    /// Set this entity's velocity by a <see cref="Vector3"/>
+    /// </summary>
+    /// <param name="velocity">The new, desired velocity of this entity</param>
+    public void SetVelocity( Vector3 velocity )
+    {
+        this.velocity = velocity;
+    }
 
-	/// <summary>
-	/// Face the current entity towards another, e.g. the player
-	/// </summary>
-	/// <param name="entity">The desired entity we wish to look at</param>
-	public void LookAtEntity(Entity entity = null)
-	{
-		// Do math
-	}
+    /// <summary>
+    /// Set this entity's rotation from a <see cref="Quaternion"/>
+    /// </summary>
+    /// <param name="rotation">The new, desired rotation of this entity</param>
+    public void SetRotation( Quaternion rotation )
+    {
+        this.rotation = rotation;
+    }
 
-	/// <summary>
-	/// Adds the argument <see cref="Vector3"/> value to the velocity.
- 	/// </summary>
-	/// <param name="force">The amount of force to add to this entity's velocity.</param>
-	/// <param name="multiplier">Multiplies the input vector by this value.</param>
-	public void AddForce(Vector3 force, float multiplier = 5)
-	{
-		velocity += force * multiplier;
-	}
+    /// <summary>
+    /// Main use for this is for when a brush is turned into an entity
+    /// </summary>
+    /// <param name="bbox">The new bounding box of this entity</param>
+    public void SetBBox( BBox bbox )
+    {
+        this.bbox = bbox;
+    }
 
-	/// <summary>
-	/// Subtract this entity's health by the parameter and trigger related events
-	/// </summary>
-	/// <param name="damage">The amount of damage this entity should take</param>
-	/// <param name="source">The source entity of the damage</param>
-	public virtual void TakeDamage(float damage, Entity source = null)
-	{
-		// We've been damaged by someone or something!
-		// How queer! We must log this to the console immediately!!
-		Log.Info($"Entity {this} took damage.\n" +
-		                  $"\tDamage: {damage}\n" +
-		                  $"\tSource: {(source != null ? source : "N/A")}\n" +
-		                  $"\tNew health: {health - damage}");
+    /// <summary>
+    /// Face the current entity towards another, e.g. the player
+    /// </summary>
+    /// <param name="entity">The desired entity we wish to look at</param>
+    public void LookAtEntity( Entity entity = null )
+    {
+        // Do math
+    }
 
-		//
-		// I guess we're taking damage now
-		//
+    /// <summary>
+    /// Adds the argument <see cref="Vector3"/> value to the velocity.
+    /// </summary>
+    /// <param name="force">The amount of force to add to this entity's velocity.</param>
+    /// <param name="multiplier">Multiplies the input vector by this value.</param>
+    public void AddForce( Vector3 force, float multiplier = 5 )
+    {
+        velocity += force * multiplier;
+    }
 
-		// Set the last attacker variable appropriately
-		lastAttacker = source;
+    /// <summary>
+    /// Subtract this entity's health by the parameter and trigger related events
+    /// </summary>
+    /// <param name="damage">The amount of damage this entity should take</param>
+    /// <param name="source">The source entity of the damage</param>
+    public virtual void TakeDamage( float damage, Entity source = null )
+    {
+        // We've been damaged by someone or something!
+        // How queer! We must log this to the console immediately!!
+        Log.Info( $"Entity {this} took damage.\n" +
+                          $"\tDamage: {damage}\n" +
+                          $"\tSource: {( source != null ? source : "N/A" )}\n" +
+                          $"\tNew health: {health - damage}" );
 
-		// Lower this entity's health by the set amount of damage
-		health -= damage;
+        //
+        // I guess we're taking damage now
+        //
 
-		// This entity has taken damage! Call the relevant event
-		OnDamage();
-	}
+        // Set the last attacker variable appropriately
+        lastAttacker = source;
 
-	/// <summary>
-	/// Generate an ID for this entity.
-	/// </summary>
-	public void CreateID()
-	{
-		// Easier to use variable for the list of entities in the current scene
-		List<Entity> entities = EngineProgram.currentScene?.GetEntities();
+        // Lower this entity's health by the set amount of damage
+        health -= damage;
 
-		// For every entity...
-		for (int i = 0; i < entities?.Count; i++)
-		{
-			// If the entity we're currently checking is us
-			if (entities[i] == this)
-			{
-				// If we are a player
-				if (this is PlayerEntity)
-				{
-					// We're lucky! We have that designation on us now
-					SetID("player");
-					return; // We don't want to overwrite that special ID
-				}
+        // This entity has taken damage! Call the relevant event
+        OnDamage();
+    }
 
-				// We're just some regular joe, set our entity ID appropriately
-				SetID($"entity {i}");
-			}
-		}
-	}
+    /// <summary>
+    /// Generate an ID for this entity.
+    /// </summary>
+    public void CreateID()
+    {
+        // Easier to use variable for the list of entities in the current scene
+        List<Entity> entities = EngineManager.currentScene?.GetEntities();
 
-	#region ONEVENTS
-	/// <summary>
-	/// Call parameterless event
-	/// </summary>
-	/// <param name="eEvent">Desired event to do to this entity</param>
-	/// <param name="source">The entity that caused this event.</param>
-	public void OnEvent(EntityEvent eEvent, Entity source = null)
-	{
-		switch (eEvent)
-		{
-			case EntityEvent.None: // Do nothing (why'd you want this?)
-				break;
+        // For every entity...
+        for ( int i = 0; i < entities?.Count; i++ )
+        {
+            // If the entity we're currently checking is us
+            if ( entities[i] == this )
+            {
+                // If we are a player
+                if ( this is PlayerEntity )
+                {
+                    // We're lucky! We have that designation on us now
+                    SetID( "player" );
+                    return; // We don't want to overwrite that special ID
+                }
 
-			case EntityEvent.Kill: // Kill this entity
-				OnDeath();
-				break;
+                // We're just some regular joe, set our entity ID appropriately
+                SetID( $"entity {i}" );
+            }
+        }
+    }
 
-			case EntityEvent.Delete: // Delete this entity
-				// Remove this entity from the current scene
-				EngineProgram.currentScene?.RemoveEntity(this);
+    #region ONEVENTS
+    /// <summary>
+    /// Call parameterless event
+    /// </summary>
+    /// <param name="eEvent">Desired event to do to this entity</param>
+    /// <param name="source">The entity that caused this event.</param>
+    public void OnEvent( EntityEvent eEvent, Entity source = null )
+    {
+        switch ( eEvent )
+        {
+            case EntityEvent.None: // Do nothing (why'd you want this?)
+                break;
 
-				// Also kill this entity, for good measure
-				OnDeath();
-				break;
+            case EntityEvent.Kill: // Kill this entity
+                OnDeath();
+                break;
 
-			default: // Most likely happens when an invalid event was attempted on this entity
-				return;
-		}
-	}
+            case EntityEvent.Delete: // Delete this entity
+                                     // Remove this entity from the current scene
+                EngineManager.currentScene?.RemoveEntity( this );
 
-	/// <summary>
-	/// Call an event that takes an <see langword="int"/> for a value.
-	/// </summary>
-	/// <param name="eEvent">Desired event to do to this entity.</param>
-	/// <param name="iValue">Value as <see langword="int"/>.</param>
-	/// <param name="source">The entity that caused this event.</param>
-	public void OnEvent(EntityEvent eEvent, int iValue, Entity source = null)
-	{
-		switch (eEvent)
-		{
-			case EntityEvent.TakeDamage: // This entity should take iValue damage
-				TakeDamage(iValue, source);
-				break;
-		}
-	}
+                // Also kill this entity, for good measure
+                OnDeath();
+                break;
 
-	/// <summary>
-	/// Call an event that takes a <see langword="float"/> for a value.
-	/// </summary>
-	/// <param name="eEvent">Desired event to do to this entity.</param>
-	/// <param name="fValue">Value as <see langword="float"/>.</param>
-	/// <param name="source">The entity that caused this event.</param>
-	public void OnEvent(EntityEvent eEvent, float fValue, Entity source = null)
-	{
-		switch (eEvent)
-		{
-			case EntityEvent.TakeDamage: // This entity should take fValue damage
-				TakeDamage(fValue, source);
-				break;
-		}
-	}
+            case EntityEvent.PlaySound: // As an AudioPlayer entity, play our audio
+                ( this as SoundEntity )?.PlaySound();
+                break;
 
-	/// <summary>
-	/// Call an event hat takes a <see langword="bool"/> for a value.
-	/// </summary>
-	/// <param name="eEvent">Desired event to do to this entity.</param>
-	/// <param name="bValue">Value as <see langword="bool"/>.</param>
-	/// <param name="source">The entity that caused this event.</param>
-	public void OnEvent(EntityEvent eEvent, bool bValue, Entity source = null)
-	{
-		// switch (eEvent)
-		// {
-		//     default:
-		//         break;
-		// }
-	}
+            case EntityEvent.StopSound: // As an AudioPlayer entity, stop our audio
+                ( this as SoundEntity )?.StopSound();
+                break;
 
-	/// <summary>
-	/// Call an event that takes a <see cref="Vector3"/> for a value.
-	/// </summary>
-	/// <param name="eEvent">Desired event to do to this entity.</param>
-	/// <param name="vValue">Value as <see cref="Vector3"/>.</param>
-	/// <param name="source">The entity that caused this event.</param>
-	public void OnEvent(EntityEvent eEvent, Vector3 vValue, Entity source = null)
-	{
-		switch (eEvent)
-		{
-			case EntityEvent.SetPosition: // Set this entity's position according to vValue
-				SetPosition(vValue);
-				break;
-		}
-	}
+            default: // Most likely happens when an invalid event was attempted on this entity
+                return;
+        }
+    }
 
-	/// <summary>
-	/// Call an event that takes a <see cref="Quaternion"/> for a value.
-	/// </summary>
-	/// <param name="eEvent">Desired event to do to this entity.</param>
-	/// <param name="qValue">Value as <see cref="Quaternion"/>.</param>
-	/// <param name="source">The entity that caused this event.</param>
-	public void OnEvent(EntityEvent eEvent, Quaternion qValue, Entity source = null)
-	{
-		switch (eEvent)
-		{
-			case EntityEvent.SetRotation:
-				SetRotation(qValue);
-				break;
-		}
-	}
+    /// <summary>
+    /// Call an event that takes an <see langword="int"/> for a value.
+    /// </summary>
+    /// <param name="eEvent">Desired event to do to this entity.</param>
+    /// <param name="iValue">Value as <see langword="int"/>.</param>
+    /// <param name="source">The entity that caused this event.</param>
+    public void OnEvent( EntityEvent eEvent, int iValue, Entity source = null )
+    {
+        switch ( eEvent )
+        {
+            case EntityEvent.TakeDamage: // This entity should take iValue damage
+                TakeDamage( iValue, source );
+                break;
+        }
+    }
 
-	/// <summary>
-	/// Call an event that takes a <see cref="Entity"/> for a value.
-	/// </summary>
-	/// <param name="eEvent">Desired event to do to this entity.</param>
-	/// <param name="eValue">Value as <see cref="Entity"/>.</param>
-	/// <param name="source">The entity that caused this event.</param>
-	public void OnEvent(EntityEvent eEvent, Entity eValue, Entity source = null)
-	{
-		switch (eEvent)
-		{
-			case EntityEvent.SpawnEntity:
-				(this as EntitySpawner)?.SpawnEntity(eValue);
-				break;
-		}
-	}
+    /// <summary>
+    /// Call an event that takes a <see langword="float"/> for a value.
+    /// </summary>
+    /// <param name="eEvent">Desired event to do to this entity.</param>
+    /// <param name="fValue">Value as <see langword="float"/>.</param>
+    /// <param name="source">The entity that caused this event.</param>
+    public void OnEvent( EntityEvent eEvent, float fValue, Entity source = null )
+    {
+        switch ( eEvent )
+        {
+            case EntityEvent.TakeDamage: // This entity should take fValue damage
+                TakeDamage( fValue, source );
+                break;
+        }
+    }
 
-	/// <summary>
-	/// Call an event that takes a <see cref="BBox"/> for a value.
-	/// </summary>
-	/// <param name="eEvent">Desired event to do to this entity.</param>
-	/// <param name="bbValue">Value as <see cref="BBox"/>.</param>
-	/// <param name="source">The entity that caused this event.</param>
-	public void OnEvent(EntityEvent eEvent, BBox bbValue, Entity source = null)
-	{
-		switch (eEvent)
-		{
-			case EntityEvent.SetBBox: // Set this entity's BBox according to bValue
-				SetBBox(bbValue);
-				break;
-		}
-	}
-	#endregion // ONEVENTS
+    /// <summary>
+    /// Call an event hat takes a <see langword="bool"/> for a value.
+    /// </summary>
+    /// <param name="eEvent">Desired event to do to this entity.</param>
+    /// <param name="bValue">Value as <see langword="bool"/>.</param>
+    /// <param name="source">The entity that caused this event.</param>
+    public void OnEvent( EntityEvent eEvent, bool bValue, Entity source = null )
+    {
+        // switch (eEvent)
+        // {
+        //     default:
+        //         break;
+        // }
+    }
 
-	/// <summary>
-	/// Per entity definition of what to do when they've spawned
-	/// </summary>
-	protected virtual void OnSpawn()
-	{
-		
-	}
+    /// <summary>
+    /// Call an event that takes a <see cref="Vector3"/> for a value.
+    /// </summary>
+    /// <param name="eEvent">Desired event to do to this entity.</param>
+    /// <param name="vValue">Value as <see cref="Vector3"/>.</param>
+    /// <param name="source">The entity that caused this event.</param>
+    public void OnEvent( EntityEvent eEvent, Vector3 vValue, Entity source = null )
+    {
+        switch ( eEvent )
+        {
+            case EntityEvent.SetPosition: // Set this entity's position according to vValue
+                SetPosition( vValue );
+                break;
+        }
+    }
 
-	/// <summary>
-	/// Things to do when this entity takes damage
-	/// </summary>
-	protected virtual void OnDamage()
-	{
-		if (health <= 0) // Is this entity now considered dead?
-		{
-			// Call the OnDeath event
-			OnDeath();
-		}
-		else if (health <= -25.0f) // Should they gib?
-		{
-			// Call the OnXDeath event
-			OnXDeath();
-		}
-	}
+    /// <summary>
+    /// Call an event that takes a <see cref="Quaternion"/> for a value.
+    /// </summary>
+    /// <param name="eEvent">Desired event to do to this entity.</param>
+    /// <param name="qValue">Value as <see cref="Quaternion"/>.</param>
+    /// <param name="source">The entity that caused this event.</param>
+    public void OnEvent( EntityEvent eEvent, Quaternion qValue, Entity source = null )
+    {
+        switch ( eEvent )
+        {
+            case EntityEvent.SetRotation:
+                SetRotation( qValue );
+                break;
+        }
+    }
 
-	/// <summary>
-	/// Things to do when this entity dies
-	/// </summary>
-	protected virtual void OnDeath()
-	{
-		// This entity is no longer alive
-		alive = false;
+    /// <summary>
+    /// Call an event that takes a <see cref="Entity"/> for a value.
+    /// </summary>
+    /// <param name="eEvent">Desired event to do to this entity.</param>
+    /// <param name="eValue">Value as <see cref="Entity"/>.</param>
+    /// <param name="source">The entity that caused this event.</param>
+    public void OnEvent( EntityEvent eEvent, Entity eValue, Entity source = null )
+    {
+        switch ( eEvent )
+        {
+            case EntityEvent.SpawnEntity:
+                ( this as EntitySpawner )?.SpawnEntity( eValue );
+                break;
+        }
+    }
 
-		// Remove this entity from the update list
-		EngineProgram.OnUpdate -= Update;
+    /// <summary>
+    /// Call an event that takes a <see cref="BBox"/> for a value.
+    /// </summary>
+    /// <param name="eEvent">Desired event to do to this entity.</param>
+    /// <param name="bbValue">Value as <see cref="BBox"/>.</param>
+    /// <param name="source">The entity that caused this event.</param>
+    public void OnEvent( EntityEvent eEvent, BBox bbValue, Entity source = null )
+    {
+        switch ( eEvent )
+        {
+            case EntityEvent.SetBBox: // Set this entity's BBox according to bValue
+                SetBBox( bbValue );
+                break;
+        }
+    }
+    #endregion // ONEVENTS
 
-		// Log to the console that this entity has died!
-		Log.Info($"Entity {this} has died.\n" +
-		                  $"\tLast attacker: {lastAttacker}");
-	}
+    /// <summary>
+    /// Per entity definition of what to do when they've spawned
+    /// </summary>
+    protected virtual void OnSpawn()
+    {
 
-	/// <summary>
-	/// Things to do when this entity dies a gory death
-	/// </summary>
-	protected virtual void OnXDeath()
-	{
-		// Also trigger OnDeath, but replace their sprite with a gory version
-		OnDeath();
-	}
+    }
 
-	public override string ToString()
-	{
-		return $"{GetType()} (\"{GetID() ?? "N/A"}\")";
-	}
+    /// <summary>
+    /// Things to do when this entity takes damage
+    /// </summary>
+    protected virtual void OnDamage()
+    {
+        if ( health <= 0 ) // Is this entity now considered dead?
+        {
+            // Call the OnDeath event
+            OnDeath();
+        }
+        else if ( health <= -25.0f ) // Should they gib?
+        {
+            // Call the OnXDeath event
+            OnXDeath();
+        }
+    }
+
+    /// <summary>
+    /// Things to do when this entity dies
+    /// </summary>
+    protected virtual void OnDeath()
+    {
+        // This entity is no longer alive
+        alive = false;
+
+        // Remove this entity from the update list
+        EngineManager.OnUpdate -= Update;
+
+        // Log to the console that this entity has died!
+        Log.Info( $"Entity {this} has died.\n" +
+                          $"\tLast attacker: {lastAttacker}" );
+    }
+
+    /// <summary>
+    /// Things to do when this entity dies a gory death
+    /// </summary>
+    protected virtual void OnXDeath()
+    {
+        // Also trigger OnDeath, but replace their sprite with a gory version
+        OnDeath();
+    }
+
+    public override string ToString()
+    {
+        return $"{GetType()} (\"{GetID() ?? "N/A"}\")";
+    }
 }
