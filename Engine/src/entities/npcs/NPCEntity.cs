@@ -58,20 +58,13 @@ public class NPCEntity : Entity
 	/// For the entity to be targeted its type needs to be in either the <see cref="hateList"/> or <see cref="adoreList"/>.
 	/// </summary>
 	private void LookForTarget()
-	{
-		// Double check that we don't already have a target
-		if ( target != null )
-		{
-			Log.Warning( "LookForTarget() called, even though target is not null!" );
-			return;
-		}
-
+	{ 
 		// Do a horizontal ray check (don't look up or down) for any entities in our vision
 		for ( int i = 0; i < 50; i++ )
 		{
 			// Do a ray trace to see whether or not we can find a target
 			// Ignores brushes and brush entities, we should never be able to target them
-			if ( Ray.Trace( this, Vector3.Forward, out object hitObject, RayIgnore.Brushes & RayIgnore.BrushEntities ) )
+			if ( Ray.Trace( this, Vector3.Forward, out object hitObject, RayIgnore.Brushes & RayIgnore.BrushEntities, logInfo: false ) )
 			{
 				// Check our adore list for if the entity we hust hit should be followed
 				foreach ( Type type in adoreList )

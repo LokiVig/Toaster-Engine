@@ -145,13 +145,11 @@ public struct Ray
         // The hitObject is therefore null
         hitObject = null;
 
-        // Also log to console
-        Log.Info( $"Trace failed.\n" +
-                          $"\tStart: {rayStart}\n" +
-                          $"\tDirection: {rayDirection} ({rayDirection.Normalized()})\n" +
-                          $"\tHit object: N/A\n" +
-                          $"\tRayIgnore: {rayIgnore}\n" +
-                          $"\tIgnored objects: {( ignoredObjects == null ? "N/A" : $"\n\t\t{string.Join( "\n\t\t", ignoredObjects.Select( obj => obj.ToString() ) )}" )}" );
+        if ( logInfo )
+        {
+            // Also log to console
+            LogTrace( rayStart, rayDirection, hitObject, rayIgnore, ignoredObjects );
+        }
 
         // We didn't hit anything, so it's false
         return false;
@@ -239,6 +237,7 @@ public struct Ray
                     if ( logInfo )
                     {
                         // Log to the console that we've succeeded
+                        LogTrace( entStart, entDirection, hitObject, rayIgnore, ignoredObjects );
                     }
 
                     return true;
@@ -281,12 +280,7 @@ public struct Ray
                     if ( logInfo )
                     {
                         // Log to the console that we've succeeded
-                        Log.Info( $"Trace succeeded.\n" +
-                                          $"\tStart: {entStart}\n" +
-                                          $"\tDirection: {entDirection}\n" +
-                                          $"\tHit object: {hitObject}\n" +
-                                          $"\tRayIgnore: {rayIgnore}\n" +
-                                          $"\tIgnored objects: {( ignoredObjects == null ? "N/A" : $"\n\t\t{string.Join( "\n\t\t", ignoredObjects.Select( obj => obj.ToString() ) )}" )}" );
+                        LogTrace( entStart, entDirection, hitObject, rayIgnore, ignoredObjects );
                     }
 
                     return true;
@@ -298,13 +292,11 @@ public struct Ray
         // The hitObject is therefore null
         hitObject = null;
 
-        // Log to the console that we've failed
-        Log.Info( $"Trace failed.\n" +
-                          $"\tStart: {entStart}\n" +
-                          $"\tDirection: {entDirection}\n" +
-                          $"\tHit object: {hitObject}\n" +
-                          $"\tRayIgnore: {rayIgnore}\n" +
-                          $"\tIgnored objects: {( ignoredObjects == null ? "N/A" : $"\n\t\t{string.Join( "\n\t\t", ignoredObjects.Select( obj => obj.ToString() ) )}" )}" );
+        if ( logInfo )
+        {
+            // Log to the console that we've failed
+            LogTrace( entStart, entDirection, hitObject, rayIgnore, ignoredObjects );
+        }
 
         // We didn't hit anything, so it's false
         return false;
@@ -315,7 +307,7 @@ public struct Ray
     /// with <see cref="RayIgnore"/> flags, specific <see langword="object"/>(s) to ignore, and lengths (<see langword="float"/>) 
     /// </summary>
     /// <returns><see langword="true"/> and the <see langword="object"/> we hit, <see langword="false"/> and <see langword="null"/> if nothing was hit.</returns>
-    public static bool Trace( Vector3 rayStart, Entity entDirection, out object hitObject, RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, float rayLength = 5000 )
+    public static bool Trace( Vector3 rayStart, Entity entDirection, out object hitObject, RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, bool logInfo = true, float rayLength = 5000 )
     {
         Vector3 rayEnd = ( rayStart + entDirection.GetPosition().Normalized() ) * rayLength;
 
@@ -389,13 +381,11 @@ public struct Ray
                         }
                     }
 
-                    // Log to the console that we've succeeded
-                    Log.Info( $"Trace succeeded.\n" +
-                                      $"\tStart: {rayStart}\n" +
-                                      $"\tDirection: {entDirection}\n" +
-                                      $"\tHit object: {hitObject}\n" +
-                                      $"\tRayIgnore: {rayIgnore}\n" +
-                                      $"\tIgnored objects: {( ignoredObjects == null ? "N/A" : $"\n\t\t{string.Join( "\n\t\t", ignoredObjects.Select( obj => obj.ToString() ) )}" )}" );
+                    if ( logInfo )
+                    {
+                        // Log to the console that we've succeeded
+                        LogTrace( rayStart, entDirection, hitObject, rayIgnore, ignoredObjects );
+                    }
 
                     return true;
                 }
@@ -434,13 +424,11 @@ public struct Ray
                         }
                     }
 
-                    // Log to the console that we've succeeded
-                    Log.Info( $"Trace succeeded.\n" +
-                                      $"\tStart: {rayStart}\n" +
-                                      $"\tDirection: {entDirection}\n" +
-                                      $"\tHit object: {hitObject}\n" +
-                                      $"\tRayIgnore: {rayIgnore}\n" +
-                                      $"\tIgnored objects: {( ignoredObjects == null ? "N/A" : $"\n\t\t{string.Join( "\n\t\t", ignoredObjects.Select( obj => obj.ToString() ) )}" )}" );
+                    if ( logInfo )
+                    {
+                        // Log to the console that we've succeeded
+                        LogTrace( rayStart, entDirection, hitObject, rayIgnore, ignoredObjects );
+                    }
 
                     return true;
                 }
@@ -451,19 +439,17 @@ public struct Ray
         // The hitObject is therefore null
         hitObject = null;
 
-        // Also log to console
-        Log.Info( $"Trace failed.\n" +
-                          $"\tStart: {rayStart}\n" +
-                          $"\tDirection: {entDirection}\n" +
-                          $"\tHit object: N/A\n" +
-                          $"\tRayIgnore: {rayIgnore}\n" +
-                          $"\tIgnored objects: {( ignoredObjects == null ? "N/A" : $"\n\t\t{string.Join( "\n\t\t", ignoredObjects.Select( obj => obj.ToString() ) )}" )}" );
+        if ( logInfo )
+        {
+            // Also log to console
+            LogTrace( rayStart, entDirection, hitObject, rayIgnore, ignoredObjects );
+        }
 
         // We didn't hit anything, so it's false
         return false;
     }
 
-    public static bool Trace( Entity entStart, Vector3 rayDirection, out object hitObject, RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, float rayLength = 5000 )
+    public static bool Trace( Entity entStart, Vector3 rayDirection, out object hitObject, RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, bool logInfo = true, float rayLength = 5000 )
     {
         Vector3 rayEnd = ( entStart.GetPosition() + rayDirection.Normalized() ) * rayLength;
 
@@ -537,9 +523,11 @@ public struct Ray
                         }
                     }
 
-                    // Log to the console that we've succeeded
-                    LogSuccessfulTrace()
-
+                    if ( logInfo )
+                    {
+                        // Log to the console that we've succeeded
+                        LogTrace( entStart, rayDirection, hitObject, rayIgnore, ignoredObjects );
+                    }
 
                     return true;
                 }
@@ -578,13 +566,11 @@ public struct Ray
                         }
                     }
 
-                    // Log to the console that we've succeeded
-                    Log.Info( $"Trace succeeded.\n" +
-                                      $"\tStart: {entStart}\n" +
-                                      $"\tDirection: {rayDirection} ({rayDirection.Normalized()})\n" +
-                                      $"\tHit object: {hitObject}\n" +
-                                      $"\tRayIgnore: {rayIgnore}\n" +
-                                      $"\tIgnored objects: {( ignoredObjects == null ? "N/A" : $"\n\t\t{string.Join( "\n\t\t", ignoredObjects.Select( obj => obj.ToString() ) )}" )}" );
+                    if ( logInfo )
+                    {
+                        // Log to the console that we've succeeded
+                        LogTrace( entStart, rayDirection, hitObject, rayIgnore, ignoredObjects );
+                    }
 
                     return true;
                 }
@@ -595,13 +581,11 @@ public struct Ray
         // The hitObject is therefore null
         hitObject = null;
 
-        // Also log to console
-        Log.Info( $"Trace failed.\n" +
-                          $"\tStart: {entStart}\n" +
-                          $"\tDirection: {rayDirection} ({rayDirection.Normalized()})\n" +
-                          $"\tHit object: N/A\n" +
-                          $"\tRayIgnore: {rayIgnore}\n" +
-                          $"\tIgnored objects: {( ignoredObjects == null ? "N/A" : $"\n\t\t{string.Join( "\n\t\t", ignoredObjects.Select( obj => obj.ToString() ) )}" )}" );
+        if ( logInfo )
+        {
+            // Also log to console
+            LogTrace( entStart, rayDirection, hitObject, rayIgnore, ignoredObjects );
+        }
 
         // We didn't hit anything, so it's false
         return false;
@@ -617,7 +601,7 @@ public struct Ray
                           $"\tIgnored objects: {( ignoredObjects == null ? "N/A" : $"\n\t\t{string.Join( "\n\t\t", ignoredObjects.Select( obj => obj.ToString() ) )}" )}" );
     }
 
-    private static void LogTrace( Entity entStart, Entity entDirection, object hitObject, RayIgnore rayIgnore, object[] ignoredObjects, bool successful )
+    private static void LogTrace( Entity entStart, Entity entDirection, object hitObject, RayIgnore rayIgnore, object[] ignoredObjects )
     {
         Log.Info( $"Trace {( hitObject != null ? "succeeded" : "failed" )}.\n" +
                           $"\tStart: {entStart}\n" +
@@ -627,7 +611,7 @@ public struct Ray
                           $"\tIgnored objects: {( ignoredObjects == null ? "N/A" : $"\n\t\t{string.Join( "\n\t\t", ignoredObjects.Select( obj => obj.ToString() ) )}" )}" );
     }
 
-    private static void LogTrace( Vector3 rayStart, Entity entDirection, object hitObject, RayIgnore rayIgnore, object[] ignoredObjects, bool successful )
+    private static void LogTrace( Vector3 rayStart, Entity entDirection, object hitObject, RayIgnore rayIgnore, object[] ignoredObjects )
     {
         Log.Info( $"Trace {( hitObject != null ? "succeeded" : "failed" )}.\n" +
                           $"\tStart: {rayStart}\n" +
@@ -637,7 +621,7 @@ public struct Ray
                           $"\tIgnored objects: {( ignoredObjects == null ? "N/A" : $"\n\t\t{string.Join( "\n\t\t", ignoredObjects.Select( obj => obj.ToString() ) )}" )}" );
     }
 
-    private static void LogTrace( Entity entStart, Vector3 rayDirection, object hitObject, RayIgnore rayIgnore, object[] ignoredObjects, bool successful )
+    private static void LogTrace( Entity entStart, Vector3 rayDirection, object hitObject, RayIgnore rayIgnore, object[] ignoredObjects )
     {
         Log.Info( $"Trace {( hitObject != null ? "succeeded" : "failed" )}.\n" +
                           $"\tStart: {entStart}\n" +
