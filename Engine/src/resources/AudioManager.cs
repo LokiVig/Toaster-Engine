@@ -43,11 +43,12 @@ public class AudioManager
             // If they do...
             if ( currentFile.alias == alias )
             {
-                // Generate a more unique alias for it
+                // Index for a unique alias found!
                 break;
             }
         }
 
+        // Apply the index to the alias
         alias = $"{alias}{i}";
 
         mciSendString( $"open \"{path}\" type mpegvideo alias {alias}" ); // Load the file

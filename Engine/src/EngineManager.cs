@@ -66,7 +66,7 @@ public class EngineManager
         try
         {
             renderer = External.CreateRenderer( $"Toaster Engine (v.{ENGINE_VERSION}){( title != null ? $" - {title}" : "" )}" );
-            Log.Success("Successfully initialized renderer.");
+            Log.Success( "Successfully initialized renderer." );
         }
         catch ( Exception exc )
         {
@@ -94,8 +94,6 @@ public class EngineManager
 
             // Update the global audio manager
             audioManager.UpdateAllPlayingFiles();
-
-            //External.RenderText(renderer, "FUCK", 1280/2, 720/2, 25.0f);
 
             // Call the OnUpdate event
             // This makes it so everything subscribed to the event will call their own,
