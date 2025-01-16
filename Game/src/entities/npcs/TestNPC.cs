@@ -26,7 +26,7 @@ public class TestNPC : NPCEntity
 		base.Update();
 
 		// Handle movements
-		HandleMovement();
+		ApplyVelocity();
 	}
 
 	protected override void OnDamage()

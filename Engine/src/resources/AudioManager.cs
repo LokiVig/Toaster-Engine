@@ -81,10 +81,10 @@ public class AudioManager
             mciSendString( $"status {file.alias} mode", status, status.Length, IntPtr.Zero );
             string strStatus = new string( status );
 
-            Log.Info( $"Status of sound \"{file.filepath}\" (alias \"{file.alias}\"): \"{strStatus}\"" );
+            //Log.Info( $"Status of sound \"{file.filepath}\" (alias \"{file.alias}\"): \"{strStatus}\"" );
 
             // If its status is "stopped"...
-            if ( strStatus.Contains( "stopped" ) )
+            if ( strStatus.Contains( "stopped" ) || string.IsNullOrEmpty(strStatus) )
             {
                 StopSound( file.alias ); // Call the stop sound function, doing as what the name suggests
             }

@@ -100,8 +100,6 @@ public class GameManager
     /// </summary>
     private void Update()
     {
-        EngineManager.audioManager.PlayWarning();
-
         // Things to do when there is a loaded scene
         if ( EngineManager.currentScene != null )
         {

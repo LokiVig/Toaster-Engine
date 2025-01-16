@@ -91,9 +91,9 @@ public class Entity
     }
 
     /// <summary>
-    /// Handle movement, caused by velocity
+    /// Applies velocity to this entity.
     /// </summary>
-    protected void HandleMovement()
+    protected void ApplyVelocity()
     {
         // Clamp velocity between the min and max values
         velocity = Vector3.Clamp( velocity, MAX_VELOCITY * -1, MAX_VELOCITY );
@@ -102,7 +102,7 @@ public class Entity
         position += velocity * EngineManager.deltaTime;
 
         // Velocity decreases with time (effectively drag)
-        velocity *= ( 1 - 0.75f * EngineManager.deltaTime );
+        velocity *= ( 1 - 0.75f ) * EngineManager.deltaTime;
 
         // If the velocity's magnitude <= 0.01, it's effectively zero, so zero it out for the sake of ease
         if ( velocity.Magnitude() <= 0.01f )

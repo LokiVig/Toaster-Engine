@@ -30,7 +30,7 @@ public partial class PlayerEntity : Entity
         base.Update();
 
         // Handle movements
-        HandleMovement();
+        ApplyVelocity();
     }
 
     public override void TakeDamage( float damage, Entity source = null )
