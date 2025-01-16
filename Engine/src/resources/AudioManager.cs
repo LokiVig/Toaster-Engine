@@ -21,16 +21,34 @@ public class AudioManager
     /// </summary>
     /// <param name="path">The path to the specific sound we wish to play.</param>
     /// <param name="alias">Effectively which channel this sound is played on. This should be unique!</param>
-    /// <param name="repeats">Determines whether or not this sound should repeat or not.</param>
+    /// <param name="repeats">Determines whether or not this sound should repeat (loop) or not.</param>
     public void PlaySound( string path, string alias = "sfx", bool repeats = false )
     {
+        // Index of repeated alias files
+        int i = 0;
+
         // If the file from the specified path doesn't actually exist...
         if ( !File.Exists( path ) )
         {
             // We've gotten an error!
-            Log.Error( $"File \"{path}\" doesn't exist!" );
+            Log.Warning( $"File \"{path}\" doesn't exist!" );
             return;
         }
+
+        // Check every other currently playing audio for if they have the same alias
+        for ( i = 0; i < playingFiles.Count; i++ )
+        {
+            AudioFile currentFile = playingFiles[i];
+
+            // If they do...
+            if ( currentFile.alias == alias )
+            {
+                // Generate a more unique alias for it
+                break;
+            }
+        }
+
+        alias = $"{alias}{i}";
 
         mciSendString( $"open \"{path}\" type mpegvideo alias {alias}" ); // Load the file
 
@@ -52,18 +70,20 @@ public class AudioManager
     /// </summary>
     public void UpdateAllPlayingFiles()
     {
-        // Check every playing audio file...
-        for ( int i = playingFiles.Count - 1; i >= 0; i-- )
+        for (int i = 0; i < playingFiles.Count; i++ )
         {
-            // The current file
+            // Get the current file
             AudioFile file = playingFiles[i];
 
             // Get its status
             char[] status = new char[128];
             mciSendString( $"status {file.alias} mode", status, status.Length, IntPtr.Zero );
+            string strStatus = new string( status );
+
+            Log.Info( $"Status of sound \"{file.filepath}\" (alias \"{file.alias}\"): \"{strStatus}\"" );
 
             // If its status is "stopped"...
-            if ( status.ToString() == "stopped" )
+            if ( strStatus.Contains( "stopped" ) )
             {
                 StopSound( file.alias ); // Call the stop sound function, doing as what the name suggests
             }
@@ -82,8 +102,10 @@ public class AudioManager
             // If we have a file with this alias...
             if ( file.alias == alias )
             {
-                mciSendString( $"close {alias}" ); // Stop the sound!
+                mciSendString( $"stop {alias}" ); // Stop the sound
+                mciSendString( $"close {alias}" ); // Close the sound
                 playingFiles.Remove( file ); // Remove it from our list of playing sounds
+
                 return; // Get outta here! After this is the fail case
             }
         }

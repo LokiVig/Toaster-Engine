@@ -1,6 +1,4 @@
-﻿using System;
-
-using Toast.Engine.Math;
+﻿using Toast.Engine.Math;
 using Toast.Engine.Resources;
 
 namespace Toast.Engine.Entities.Tools;
@@ -38,11 +36,12 @@ public class EntitySpawner<T> : ToolEntity where T : Entity, new()
         ent.Spawn();
         // Set the entity's position to our position
         ent.SetPosition( position );
-        // Generate the entity's ID
-        ent.CreateID();
 
         // Add the newly spawned entity to the current scene
         EngineManager.currentScene?.AddEntity( ent );
+
+        // Generate the entity's ID
+        ent.GenerateID();
 
         Log.Info( $"Spawned entity {ent}.\n" +
                           $"\tSource: {this}\n" +
@@ -91,7 +90,7 @@ public class EntitySpawner : ToolEntity
         // Set the entity's position to our position
         ent.SetPosition( position );
         // Generate the entity's ID
-        ent.CreateID();
+        ent.GenerateID();
 
         // Add the newly spawned entity to the current scene
         EngineManager.currentScene?.AddEntity( ent );

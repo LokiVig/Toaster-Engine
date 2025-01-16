@@ -84,7 +84,7 @@ public class GameManager
         mainPlayer = playerSpawner.SpawnEntity();
         TestNPC npc = npcSpawner.SpawnEntity();
 
-        Ray.Trace( mainPlayer, npc, out object hitObject, RayIgnore.Brushes, [trigger] );
+        Ray.Trace( mainPlayer, npc, out object hitObject, RayIgnore.Brushes | RayIgnore.BrushEntities );
         ( hitObject as Entity )?.TakeDamage( 25, mainPlayer );
 
         // Start updating the engine
@@ -100,6 +100,8 @@ public class GameManager
     /// </summary>
     private void Update()
     {
+        EngineManager.audioManager.PlayWarning();
+
         // Things to do when there is a loaded scene
         if ( EngineManager.currentScene != null )
         {

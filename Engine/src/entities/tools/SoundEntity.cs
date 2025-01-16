@@ -6,7 +6,7 @@ namespace Toast.Engine.Entities.Tools;
 public class SoundEntity : ToolEntity
 {
     public string audioPath { get; set; } = "resources/audio/engine/error.mp3"; // The actual audio we should play
-    public string audioAlias { get; set; } = "soundEffectSFX"; // The Audio Manager would prefer to have a special alias for different audios, specified here
+    public string audioAlias { get; set; } = "soundentitysfx"; // The Audio Manager would prefer to have a special alias for different audios, specified here
     public float audioVolume { get; set; } = 1.0f; // The volume of this audio // TODO: Decide if volume's between 0.0-1.0, or 0.0-100.0!
     public bool audioRepeats { get; set; } // Toggles whether or not this audio should repeat
 
@@ -29,13 +29,13 @@ public class SoundEntity : ToolEntity
         {
             // Start doing so!
             EngineManager.audioManager.PlaySound( audioPath, audioAlias, audioRepeats );
-            Log.Info( $"Playing audio: \"{audioPath}\"...", true );
+            Log.Info( $"Playing sound: \"{audioPath}\"...", true );
             playing = true;
         }
         else // Otherwise...
         {
             // Don't do anything
-            Log.Warning( $"{this} is already playing audio \"{audioPath}\"!" );
+            Log.Warning( $"{this} is already playing sound: \"{audioPath}\"!" );
             return;
         }
     }
@@ -54,6 +54,17 @@ public class SoundEntity : ToolEntity
             // Don't do anything
             Log.Warning( $"{this} has been told to have its audio stop playing, but there's no audio playing!" );
             return;
+        }
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        if ( !playing )
+        {
+            // Remove ourselves from the current scene automatically
+            EngineManager.currentScene.RemoveEntity( this );
         }
     }
 }

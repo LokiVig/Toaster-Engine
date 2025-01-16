@@ -18,7 +18,7 @@ public struct Ray
         Vector3 rayEnd = ( rayStart + rayDirection.Normalized() ) * rayLength;
 
         // If we're not ignoring entities
-        if ( ( rayIgnore & RayIgnore.Entities ) != 0 )
+        if ( ( rayIgnore & RayIgnore.Entities ) == 0 )
         {
             // Check every entity
             foreach ( Entity entity in EngineManager.currentScene?.GetEntities()! )
@@ -33,7 +33,7 @@ public struct Ray
                     continue;
                 }
 
-                // Ignore any entities that share the same position as the rayStart
+                // Ignore the ray source, aka the entity that we're tracing from
                 if ( entity.GetPosition() == rayStart )
                 {
                     continue;
@@ -44,21 +44,30 @@ public struct Ray
                 //
 
                 // Ignore brush entities
-                if ( ( rayIgnore & RayIgnore.BrushEntities ) == 0 && entity is BrushEntity )
+                if ( ( rayIgnore & RayIgnore.BrushEntities ) != 0 )
                 {
-                    continue;
+                    if ( entity.type == EntityType.Brush )
+                    {
+                        continue;
+                    }
                 }
 
                 // Ignore NPCs
-                if ( ( rayIgnore & RayIgnore.NPCEntities ) == 0 && entity is NPCEntity )
+                if ( ( rayIgnore & RayIgnore.NPCEntities ) != 0 )
                 {
-                    continue;
+                    if ( entity.type == EntityType.NPC )
+                    {
+                        continue;
+                    }
                 }
 
                 // Ignore players
-                if ( ( rayIgnore & RayIgnore.Players ) == 0 && entity is PlayerEntity )
+                if ( ( rayIgnore & RayIgnore.Players ) != 0 )
                 {
-                    continue;
+                    if ( entity.type == EntityType.Player )
+                    {
+                        continue;
+                    }
                 }
 
                 // Are we intersecting with this entity's bounding box?
@@ -165,10 +174,10 @@ public struct Ray
         Vector3 rayEnd = ( entStart.GetPosition() + entDirection.GetPosition().Normalized() ) * rayLength;
 
         // If we're not ignoring entities
-        if ( ( rayIgnore & RayIgnore.Entities ) != 0 )
+        if ( ( rayIgnore & RayIgnore.Entities ) == 0 )
         {
             // Check every entity
-            foreach ( Entity entity in EngineManager.currentScene?.GetEntities()! )
+            foreach ( Entity entity in EngineManager.currentScene?.GetEntities() )
             {
                 //
                 // Automatically ignored entities
@@ -191,21 +200,30 @@ public struct Ray
                 //
 
                 // Ignore brush entities
-                if ( ( rayIgnore & RayIgnore.BrushEntities ) == 0 && entity is BrushEntity )
+                if ( ( rayIgnore & RayIgnore.BrushEntities ) != 0 )
                 {
-                    continue;
+                    if ( entity.type == EntityType.Brush )
+                    {
+                        continue;
+                    }
                 }
 
                 // Ignore NPCs
-                if ( ( rayIgnore & RayIgnore.NPCEntities ) == 0 && entity is NPCEntity )
+                if ( ( rayIgnore & RayIgnore.NPCEntities ) != 0 )
                 {
-                    continue;
+                    if ( entity.type == EntityType.NPC )
+                    {
+                        continue;
+                    }
                 }
 
                 // Ignore players
-                if ( ( rayIgnore & RayIgnore.Players ) == 0 && entity is PlayerEntity )
+                if ( ( rayIgnore & RayIgnore.Players ) != 0 )
                 {
-                    continue;
+                    if ( entity.type == EntityType.Player )
+                    {
+                        continue;
+                    }
                 }
 
                 // Are we intersecting with this entity's bounding box?
@@ -246,7 +264,7 @@ public struct Ray
         }
 
         // If we're not ignoring brushes
-        if ( ( rayIgnore & RayIgnore.Brushes ) != 0 )
+        if ( ( rayIgnore & RayIgnore.Brushes ) == 0 )
         {
             // Check every brush
             foreach ( Brush brush in EngineManager.currentScene?.GetBrushes()! )
@@ -312,7 +330,7 @@ public struct Ray
         Vector3 rayEnd = ( rayStart + entDirection.GetPosition().Normalized() ) * rayLength;
 
         // If we're not ignoring entities
-        if ( ( rayIgnore & RayIgnore.Entities ) != 0 )
+        if ( ( rayIgnore & RayIgnore.Entities ) == 0 )
         {
             // Check every entity
             foreach ( Entity entity in EngineManager.currentScene?.GetEntities()! )
@@ -327,7 +345,7 @@ public struct Ray
                     continue;
                 }
 
-                // Ignore any entities that share the same position as the rayStart
+                // Ignore the ray source, aka the entity that we're tracing from
                 if ( entity.GetPosition() == rayStart )
                 {
                     continue;
@@ -338,21 +356,30 @@ public struct Ray
                 //
 
                 // Ignore brush entities
-                if ( ( rayIgnore & RayIgnore.BrushEntities ) == 0 && entity is BrushEntity )
+                if ( ( rayIgnore & RayIgnore.BrushEntities ) != 0 )
                 {
-                    continue;
+                    if ( entity.type == EntityType.Brush )
+                    {
+                        continue;
+                    }
                 }
 
                 // Ignore NPCs
-                if ( ( rayIgnore & RayIgnore.NPCEntities ) == 0 && entity is NPCEntity )
+                if ( ( rayIgnore & RayIgnore.NPCEntities ) != 0 )
                 {
-                    continue;
+                    if ( entity.type == EntityType.NPC )
+                    {
+                        continue;
+                    }
                 }
 
                 // Ignore players
-                if ( ( rayIgnore & RayIgnore.Players ) == 0 && entity is PlayerEntity )
+                if ( ( rayIgnore & RayIgnore.Players ) != 0 )
                 {
-                    continue;
+                    if ( entity.type == EntityType.Player )
+                    {
+                        continue;
+                    }
                 }
 
                 // Are we intersecting with this entity's bounding box?
@@ -449,12 +476,17 @@ public struct Ray
         return false;
     }
 
+    /// <summary>
+    /// Trace a ray from a specified starting position (<see cref="Entity"/>) to a direction (<see cref="Vector3"/>), 
+    /// with <see cref="RayIgnore"/> flags, specific <see langword="object"/>(s) to ignore, and lengths (<see langword="float"/>) 
+    /// </summary>
+    /// <returns><see langword="true"/> and the <see langword="object"/> we hit, <see langword="false"/> and <see langword="null"/> if nothing was hit.</returns>
     public static bool Trace( Entity entStart, Vector3 rayDirection, out object hitObject, RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, bool logInfo = true, float rayLength = 5000 )
     {
         Vector3 rayEnd = ( entStart.GetPosition() + rayDirection.Normalized() ) * rayLength;
 
         // If we're not ignoring entities
-        if ( ( rayIgnore & RayIgnore.Entities ) != 0 )
+        if ( ( rayIgnore & RayIgnore.Entities ) == 0 )
         {
             // Check every entity
             foreach ( Entity entity in EngineManager.currentScene?.GetEntities()! )
@@ -480,21 +512,30 @@ public struct Ray
                 //
 
                 // Ignore brush entities
-                if ( ( rayIgnore & RayIgnore.BrushEntities ) == 0 && entity is BrushEntity )
+                if ( ( rayIgnore & RayIgnore.BrushEntities ) != 0 )
                 {
-                    continue;
+                    if ( entity.type == EntityType.Brush )
+                    {
+                        continue;
+                    }
                 }
 
                 // Ignore NPCs
-                if ( ( rayIgnore & RayIgnore.NPCEntities ) == 0 && entity is NPCEntity )
+                if ( ( rayIgnore & RayIgnore.NPCEntities ) != 0 )
                 {
-                    continue;
+                    if ( entity.type == EntityType.NPC )
+                    {
+                        continue;
+                    }
                 }
 
                 // Ignore players
-                if ( ( rayIgnore & RayIgnore.Players ) == 0 && entity is PlayerEntity )
+                if ( ( rayIgnore & RayIgnore.Players ) != 0 )
                 {
-                    continue;
+                    if ( entity.type == EntityType.Player )
+                    {
+                        continue;
+                    }
                 }
 
                 // Are we intersecting with this entity's bounding box?
@@ -591,6 +632,10 @@ public struct Ray
         return false;
     }
 
+    /// <summary>
+    /// Logs a <see cref="Trace(Vector3, Vector3, out object, RayIgnore, object[], bool, float)"/>, automatically determining if it was
+    /// successful or not.
+    /// </summary>
     private static void LogTrace( Vector3 rayStart, Vector3 rayDirection, object hitObject, RayIgnore rayIgnore, object[] ignoredObjects )
     {
         Log.Info( $"Trace {( hitObject != null ? "succeeded" : "failed" )}.\n" +
@@ -601,30 +646,42 @@ public struct Ray
                           $"\tIgnored objects: {( ignoredObjects == null ? "N/A" : $"\n\t\t{string.Join( "\n\t\t", ignoredObjects.Select( obj => obj.ToString() ) )}" )}" );
     }
 
+    /// <summary>
+    /// Logs a <see cref="Trace(Entity, Entity, out object, RayIgnore, object[], bool, float)"/>, automatically determining if it was
+    /// successful or not.
+    /// </summary>
     private static void LogTrace( Entity entStart, Entity entDirection, object hitObject, RayIgnore rayIgnore, object[] ignoredObjects )
     {
         Log.Info( $"Trace {( hitObject != null ? "succeeded" : "failed" )}.\n" +
-                          $"\tStart: {entStart}\n" +
-                          $"\tDirection: {entDirection}\n" +
+                          $"\tStart: {entStart} ({entStart.GetPosition()})\n" +
+                          $"\tDirection: {entDirection} ({entDirection.GetPosition()})\n" +
                           $"\tHit object: {hitObject ?? "N/A"}\n" +
                           $"\tRayIgnore: {rayIgnore}\n" +
                           $"\tIgnored objects: {( ignoredObjects == null ? "N/A" : $"\n\t\t{string.Join( "\n\t\t", ignoredObjects.Select( obj => obj.ToString() ) )}" )}" );
     }
 
+    /// <summary>
+    /// Logs a <see cref="Trace(Vector3, Entity, out object, RayIgnore, object[], bool, float)"/>, automatically determining if it was
+    /// successful or not.
+    /// </summary>
     private static void LogTrace( Vector3 rayStart, Entity entDirection, object hitObject, RayIgnore rayIgnore, object[] ignoredObjects )
     {
         Log.Info( $"Trace {( hitObject != null ? "succeeded" : "failed" )}.\n" +
                           $"\tStart: {rayStart}\n" +
-                          $"\tDirection: {entDirection}\n" +
+                          $"\tDirection: {entDirection} ({entDirection.GetPosition()})\n" +
                           $"\tHit object: {hitObject ?? "N/A"}\n" +
                           $"\tRayIgnore: {rayIgnore}\n" +
                           $"\tIgnored objects: {( ignoredObjects == null ? "N/A" : $"\n\t\t{string.Join( "\n\t\t", ignoredObjects.Select( obj => obj.ToString() ) )}" )}" );
     }
 
+    /// <summary>
+    /// Logs a <see cref="Trace(Entity, Vector3, out object, RayIgnore, object[], bool, float)"/>, automatically determining if it was
+    /// successful or not.
+    /// </summary>
     private static void LogTrace( Entity entStart, Vector3 rayDirection, object hitObject, RayIgnore rayIgnore, object[] ignoredObjects )
     {
         Log.Info( $"Trace {( hitObject != null ? "succeeded" : "failed" )}.\n" +
-                          $"\tStart: {entStart}\n" +
+                          $"\tStart: {entStart} ({entStart.GetPosition()})\n" +
                           $"\tDirection: {rayDirection}\n" +
                           $"\tHit object: {hitObject ?? "N/A"}\n" +
                           $"\tRayIgnore: {rayIgnore}\n" +

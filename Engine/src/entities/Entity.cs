@@ -182,7 +182,8 @@ public class Entity
     /// <param name="target">The specific entity we wish to target, 0 should always be the <see cref="PlayerEntity"/></param>
     public void SetTarget( Entity target )
     {
-        // Can't target null!
+        // We can't check if a null entity is dead or not, 
+        // so we're handling a null target before such
         if ( target == null )
         {
             this.target = null;
@@ -192,6 +193,7 @@ public class Entity
         // Can't target a dead entity
         if ( !target.IsAlive() )
         {
+            this.target = null;
             return;
         }
 
@@ -293,7 +295,7 @@ public class Entity
     /// <summary>
     /// Generate an ID for this entity.
     /// </summary>
-    public void CreateID()
+    public void GenerateID()
     {
         // Easier to use variable for the list of entities in the current scene
         List<Entity> entities = EngineManager.currentScene?.GetEntities();
@@ -304,11 +306,10 @@ public class Entity
             // If the entity we're currently checking is us
             if ( entities[i] == this )
             {
-                // If we are a player
+                // If we are a player...
                 if ( this is PlayerEntity )
                 {
-                    // We're lucky! We have that designation on us now
-                    SetID( "player" );
+                    SetID( "player" ); // We're lucky! We have that special designation on us now
                     return; // We don't want to overwrite that special ID
                 }
 

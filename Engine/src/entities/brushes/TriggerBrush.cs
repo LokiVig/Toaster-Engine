@@ -1,6 +1,4 @@
-﻿using System;
-
-using Toast.Engine.Math;
+﻿using Toast.Engine.Math;
 using Toast.Engine.Resources;
 
 namespace Toast.Engine.Entities.Brushes;
@@ -61,7 +59,7 @@ public class TriggerBrush : BrushEntity
 		base.Update();
 
 		// Check if any entity is intersecting with us
-		foreach (Entity entity in EngineManager.currentFile?.entities!)
+		foreach (Entity entity in EngineManager.currentFile?.entities)
 		{
 			// Skip over intersection maths if we're disabled
 			// Check our count over our max count
@@ -154,6 +152,12 @@ public class TriggerBrush : BrushEntity
 				}
 
 				break;
+		}
+
+		// By default we should ignore other brush entities and all tool entities
+		if ( triggerEntity is ToolEntity || triggerEntity is BrushEntity )
+		{
+			return false;
 		}
 
 		switch (triggerBy)
