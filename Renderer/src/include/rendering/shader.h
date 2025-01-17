@@ -121,6 +121,12 @@ public:
 	// Activate the shader
 	void Use()
 	{
+		// Make sure we aren't a nullptr
+		if (!this)
+		{
+			return;
+		}
+
 		glUseProgram(m_id);
 	}
 

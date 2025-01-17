@@ -229,7 +229,7 @@ public class WTF
         // Couldn't find file from the input path! Throw an exception
         if ( !File.Exists( directory ) )
         {
-            Log.Error( $"Couldn't find WTF file at \"{directory}\".", new FileNotFoundException() );
+            Log.Error<FileNotFoundException>( $"Couldn't find WTF file at \"{directory}\"." );
         }
 
         // Deserialize the file through JSON
@@ -281,7 +281,7 @@ public class WTF
         }
         else // We couldn't find a file to save, error!
         {
-            Log.Error( "Error saving file, SaveFile().inFile == null && EngineProgram.currentFile == null!", new NullReferenceException() );
+            Log.Error<NullReferenceException>( "Error saving file, SaveFile().inFile == null && EngineProgram.currentFile == null!" );
         }
 
         // Call the file's OnSave function

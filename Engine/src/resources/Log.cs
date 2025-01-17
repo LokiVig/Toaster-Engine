@@ -24,7 +24,7 @@ public struct Log
     public static void OpenLogFile()
     {
         // This will automatically make a logging file for us if we don't already have one
-        FileStream logFile = File.Open(PATH_LOG, FileMode.OpenOrCreate);
+        FileStream logFile = File.Open( PATH_LOG, FileMode.OpenOrCreate );
         logFile.Close(); // Close the file stream
 
         // Overwrite all text in the file with emptyness
@@ -84,7 +84,7 @@ public struct Log
             Console.WriteLine( $"(Line {line}) {caller}.{method}: INFO; {message}\n" );
 
             // Write to the log file
-            logWriter.WriteLine($"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: INFO; {message}\n");
+            logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: INFO; {message}\n" );
         }
         else // Otherwise...
         {
@@ -104,7 +104,7 @@ public struct Log
     public static void Success( string message, [CallerLineNumber] int line = 0, [CallerFilePath] string src = "", [CallerMemberName] string method = "" )
     {
         // Play the engine's default success sound
-        EngineManager.audioManager.PlaySuccess();
+        AudioManager.PlaySuccess();
 
         // Get the name of the class that called us
         string caller = Path.GetFileNameWithoutExtension( src );
@@ -131,7 +131,7 @@ public struct Log
     public static void Warning( string message, [CallerLineNumber] int line = 0, [CallerFilePath] string src = "", [CallerMemberName] string method = "" )
     {
         // Play the engine's default warning sound
-        EngineManager.audioManager.PlayWarning();
+        AudioManager.PlayWarning();
 
         // Get the name of the class that called us
         string caller = Path.GetFileNameWithoutExtension( src );
@@ -151,15 +151,57 @@ public struct Log
     }
 
     /// <summary>
-    /// Log an error to the console, with a <paramref name="message"/> and optional <paramref name="exception"/>.<br/>
+    /// Log an error to the console, with a <paramref name="message"/>.<br/>
     /// Features an error sound effect.
     /// </summary>
     /// <param name="message">The specific error message used to detail what happened to cause an error.</param>
-    /// <param name="exception">The exception we wish to call upon receiving the error.</param>
+    public static void Error<T>( string message, [CallerLineNumber] int line = 0, [CallerFilePath] string src = "", [CallerMemberName] string method = "" ) where T : Exception, new()
+    {
+        // Play the engine's default error sound
+        AudioManager.PlayError();
+
+        // Get the name of the class that called us
+        string caller = Path.GetFileNameWithoutExtension( src );
+
+        // Check if the method is the constructor...
+        if ( method == ".ctor" )
+        {
+            // Make it more obvious that it is such!
+            method = "Constructor()";
+        }
+
+        // Write to the console what just happened
+        Console.WriteLine( $"(Line {line}) {caller}.{method}: ERROR; {message}\n" );
+
+        // Write to the log file
+        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: ERROR; {message}\n" );
+
+        // Create an exception from the type designated by the caller
+        T exception = new T();
+
+        // Make a new, local exception, with the sourced one as an inner exception
+        Exception localException = new Exception( $"(Line {line}) {caller}.{method}; {message}", exception );
+
+        // Write to the log that we've encountered an exception!
+        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : !!! EXCEPTION CAUGHT - READ ABOVE ERROR MESSAGE !!!\n" );
+
+        // Close the log file, we don't want to keep it running after an exception has been caught
+        CloseLogFile();
+
+        // Throw it!
+        throw localException;
+    }
+
+    /// <summary>
+    /// Log an error to the console, with a <paramref name="message"/> and an optional <paramref name="exception"/>.<br/>
+    /// Features an error sound effect.
+    /// </summary>
+    /// <param name="message">The specific error message used to detail what happened to cause an error.</param>
+    /// <param name="exception">The optional exception to derive from.</param>
     public static void Error( string message, Exception exception = null, [CallerLineNumber] int line = 0, [CallerFilePath] string src = "", [CallerMemberName] string method = "" )
     {
         // Play the engine's default error sound
-        EngineManager.audioManager.PlayError();
+        AudioManager.PlayError();
 
         // Get the name of the class that called us
         string caller = Path.GetFileNameWithoutExtension( src );

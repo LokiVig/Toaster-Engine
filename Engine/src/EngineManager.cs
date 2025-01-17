@@ -32,8 +32,6 @@ public class EngineManager
     public static WTF currentFile; // The currently loaded WTF file / map
     public static Scene currentScene; // The currently running scene, initialized from the current file
 
-    public static AudioManager audioManager; // Global audio manager
-
     public static OSPlatform activeOS; // The operating system the engine's actively running on
 
     public static float deltaTime; // Helps stopping you from using FPS-dependant calculations
@@ -55,17 +53,13 @@ public class EngineManager
         // Find out which OS we're running on
         // Used for things like the audio manager, etc.
 
-
-        // Initialize the global audio manager
-        audioManager = new AudioManager();
-
         // Initialize file logging
         Log.OpenLogFile();
 
         // Initialize the renderer
         try
         {
-            renderer = External.CreateRenderer( $"Toaster Engine (v.{ENGINE_VERSION}){( title != null ? $" - {title}" : "" )}" );
+            renderer = External.Renderer_Initialize( $"Toaster Engine (v.{ENGINE_VERSION}){( title != null ? $" - {title}" : "" )}" );
             Log.Success( "Successfully initialized renderer." );
         }
         catch ( Exception exc )
@@ -83,17 +77,19 @@ public class EngineManager
             watch.Restart();
 
             // Call the rendering function
-            External.RenderFrame( renderer );
+            External.Renderer_RenderFrame( renderer );
 
             // The renderer is shutting down!
             // Null the renderer value so we don't continue running without it
-            if ( External.RendererShuttingDown( renderer ) )
+            if ( External.Renderer_ShuttingDown( renderer ) )
             {
                 renderer = IntPtr.Zero;
             }
 
-            // Update the global audio manager
-            audioManager.UpdateAllPlayingFiles();
+            External.Renderer_DrawText( renderer, "Test text!", 1280/2, 720/2, 24 );
+
+            // Update the static audio manager
+            AudioManager.UpdateAllPlayingFiles();
 
             // Call the OnUpdate event
             // This makes it so everything subscribed to the event will call their own,
@@ -108,6 +104,6 @@ public class EngineManager
         Log.CloseLogFile();
 
         // Shut down the renderer
-        External.ShutdownRenderer( renderer );
+        External.Renderer_Shutdown( renderer );
     }
 }

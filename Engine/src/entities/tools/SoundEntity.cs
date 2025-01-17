@@ -5,32 +5,41 @@ namespace Toast.Engine.Entities.Tools;
 
 public class SoundEntity : ToolEntity
 {
-    public string audioPath { get; set; } = "resources/audio/engine/error.mp3"; // The actual audio we should play
+    public string audioPath { get; set; } = "resources/audio/engine/error"; // The actual audio we should play
     public string audioAlias { get; set; } = "soundentitysfx"; // The Audio Manager would prefer to have a special alias for different audios, specified here
     public float audioVolume { get; set; } = 1.0f; // The volume of this audio // TODO: Decide if volume's between 0.0-1.0, or 0.0-100.0!
     public bool audioRepeats { get; set; } // Toggles whether or not this audio should repeat
 
     private bool playing; // Determines whether or not this entity's already playing an audio
 
-    public SoundEntity() 
+    public SoundEntity()
     {
         SetBBox( new BBox( new Vector3( -8 ), new Vector3( 8 ) ) );
     }
-    
+
     public SoundEntity( Vector3 position ) : base( position )
     {
         SetBBox( new BBox( new Vector3( -8 ), new Vector3( 8 ) ) );
     }
-    
+
     public void PlaySound()
     {
         // If we're not already playing our audio...
         if ( !playing )
         {
-            // Start doing so!
-            EngineManager.audioManager.PlaySound( audioPath, audioAlias, audioRepeats );
-            Log.Info( $"Playing sound: \"{audioPath}\"...", true );
-            playing = true;
+            // Try to do so!
+            if ( AudioManager.PlaySound( audioPath, audioAlias, audioRepeats ) )
+            {
+                Log.Info( $"Playing sound: \"{audioPath}\"...", true );
+                playing = true;
+            }
+            else // If it failed for some reason...
+            {
+                // We should return!
+                // We shouldn't need to log cause of the fact that the failed AudioManager.PlaySound oughta log
+                // the issue for us
+                return;
+            }
         }
         else // Otherwise...
         {
@@ -46,7 +55,7 @@ public class SoundEntity : ToolEntity
         if ( playing )
         {
             // Stop it!
-            EngineManager.audioManager.StopSound( audioAlias );
+            AudioManager.StopSound( audioAlias );
             playing = false;
         }
         else // Otherwise...

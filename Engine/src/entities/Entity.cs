@@ -54,7 +54,7 @@ public class Entity
         // Make sure our type is valid
         if ( type == EntityType.None )
         {
-            Log.Error( $"Entity {this} is of EntityType None, meaning this is an entity that hasn't properly been made!", new NullReferenceException() );
+            Log.Error<NullReferenceException>( $"Entity {this} is of EntityType None, meaning this is an entity that hasn't properly been made!" );
         }
     }
 
@@ -86,7 +86,7 @@ public class Entity
              bbox.mins.y >= bbox.maxs.y ||
              bbox.mins.z >= bbox.maxs.z )
         {
-            Log.Error( $"{this}'s bound boxes are mismatched! ({bbox})", new ArithmeticException() );
+            Log.Error<ArithmeticException>( $"{this}'s bound boxes are mismatched! ({bbox})" );
         }
     }
 

@@ -12,20 +12,20 @@ public class External
     //
 
     [DllImport( "Renderer", CallingConvention = CallingConvention.Cdecl )]
-    public static extern IntPtr CreateRenderer(string pszTitle = null);
+    public static extern IntPtr Renderer_Initialize(string pszTitle = null);
 
     [DllImport( "Renderer", CallingConvention = CallingConvention.Cdecl )]
-    public static extern void SetScene( IntPtr pRenderer, Scene pScene );
+    public static extern void Renderer_SetScene( IntPtr pRenderer, Scene pScene );
 
     [DllImport( "Renderer", CallingConvention = CallingConvention.Cdecl )]
-    public static extern void RenderFrame( IntPtr pRenderer );
+    public static extern void Renderer_RenderFrame( IntPtr pRenderer );
 
     [DllImport( "Renderer", CallingConvention = CallingConvention.Cdecl )]
-    public static extern void RenderText( IntPtr pRenderer, string pszText, float x, float y, float scale, float r = 1.0f, float g = 1.0f, float b = 1.0f );
+    public static extern void Renderer_DrawText( IntPtr pRenderer, string pszText, float x, float y, float scale, float r = 1.0f, float g = 1.0f, float b = 1.0f );
 
     [DllImport( "Renderer", CallingConvention = CallingConvention.Cdecl )]
-    public static extern void ShutdownRenderer( IntPtr pRenderer );
+    public static extern void Renderer_Shutdown( IntPtr pRenderer );
 
     [DllImport( "Renderer", CallingConvention = CallingConvention.Cdecl )]
-    public static extern bool RendererShuttingDown( IntPtr pRenderer );
+    public static extern bool Renderer_ShuttingDown( IntPtr pRenderer );
 }

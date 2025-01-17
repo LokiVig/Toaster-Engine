@@ -1,11 +1,11 @@
 ﻿#include "include/renderer.h"
 
-extern "C" __declspec(dllexport) Renderer* CreateRenderer(const char* pszTitle = nullptr)
+extern "C" __declspec(dllexport) Renderer* Renderer_Initialize(const char* pszTitle = nullptr)
 {
     return new Renderer(pszTitle);
 }
 
-extern "C" __declspec(dllexport) void SetScene(Renderer* pRenderer, Scene* pScene)
+extern "C" __declspec(dllexport) void Renderer_SetScene(Renderer* pRenderer, Scene* pScene)
 {
     if (pRenderer)
     {
@@ -18,7 +18,7 @@ extern "C" __declspec(dllexport) void SetScene(Renderer* pRenderer, Scene* pScen
     }
 }
 
-extern "C" __declspec(dllexport) void RenderFrame(Renderer* pRenderer)
+extern "C" __declspec(dllexport) void Renderer_RenderFrame(Renderer* pRenderer)
 {
     if (pRenderer)
     {
@@ -31,11 +31,11 @@ extern "C" __declspec(dllexport) void RenderFrame(Renderer* pRenderer)
     }
 }
 
-extern "C" __declspec(dllexport) void RenderText(Renderer* pRenderer, const char* text, float x, float y, float scale, float r = 1.0f, float g = 1.0f, float b = 1.0f)
+extern "C" __declspec(dllexport) void Renderer_DrawText(Renderer* pRenderer, const char* text, float x, float y, float scale, float r = 1.0f, float g = 1.0f, float b = 1.0f)
 {
     if (pRenderer)
     {
-        pRenderer->RenderText(text, x, y, scale, r, g, b);
+        pRenderer->DrawText(text, x, y, scale, r, g, b);
     }
     else
     {
@@ -44,7 +44,7 @@ extern "C" __declspec(dllexport) void RenderText(Renderer* pRenderer, const char
     }
 }
 
-extern "C" __declspec(dllexport) void ShutdownRenderer(Renderer* pRenderer)
+extern "C" __declspec(dllexport) void Renderer_Shutdown(Renderer* pRenderer)
 {
     if (pRenderer)
     {
@@ -57,7 +57,7 @@ extern "C" __declspec(dllexport) void ShutdownRenderer(Renderer* pRenderer)
     }
 }
 
-extern "C" __declspec(dllexport) bool RendererShuttingDown(Renderer* pRenderer)
+extern "C" __declspec(dllexport) bool Renderer_ShuttingDown(Renderer* pRenderer)
 {
     if (pRenderer)
     {

@@ -16,7 +16,7 @@ public class NPCPathfinder
     {
         if ( _parent == null )
         {
-            Log.Error( "NPCPathfinder _parent variable is null!", new NullReferenceException() );
+            Log.Error<NullReferenceException>( "NPCPathfinder _parent variable is null!" );
         }
 
         parent = _parent;

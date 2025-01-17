@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace Toast.Engine.Resources;
 
-public class AudioManager
+public static class AudioManager
 {
     [DllImport( "winmm.dll", CharSet = CharSet.Auto )]
     private static extern int mciSendString( [In] string command, [Optional, In, Out] char[] returnValue, [Optional, In] int returnLength, [Optional, In] IntPtr callback );
@@ -14,7 +14,7 @@ public class AudioManager
     private const string AUDIO_WARNING_PATH = "resources/audio/engine/warning.mp3";
     private const string AUDIO_ERROR_PATH = "resources/audio/engine/error.mp3";
 
-    private List<AudioFile> playingFiles = new List<AudioFile>();
+    private static List<AudioFile> playingFiles = new List<AudioFile>();
 
     /// <summary>
     /// Plays a sound effect from a specified path.
@@ -22,7 +22,7 @@ public class AudioManager
     /// <param name="path">The path to the specific sound we wish to play.</param>
     /// <param name="alias">Effectively which channel this sound is played on. This should be unique!</param>
     /// <param name="repeats">Determines whether or not this sound should repeat (loop) or not.</param>
-    public void PlaySound( string path, string alias = "sfx", bool repeats = false )
+    public static bool PlaySound( string path, string alias = "sfx", bool repeats = false )
     {
         // Index of repeated alias files
         int i = 0;
@@ -32,24 +32,14 @@ public class AudioManager
         {
             // We've gotten an error!
             Log.Warning( $"File \"{path}\" doesn't exist!" );
-            return;
+            return false;
         }
 
-        // Check every other currently playing audio for if they have the same alias
-        for ( i = 0; i < playingFiles.Count; i++ )
-        {
-            AudioFile currentFile = playingFiles[i];
-
-            // If they do...
-            if ( currentFile.alias == alias )
-            {
-                // Index for a unique alias found!
-                break;
-            }
-        }
+        // Get the index of the sound that should now play
+        for ( i = 0; i < playingFiles.Count; i++ ) ;
 
         // Apply the index to the alias
-        alias = $"{alias}{i}";
+        alias = $"{alias}_{i}";
 
         mciSendString( $"open \"{path}\" type mpegvideo alias {alias}" ); // Load the file
 
@@ -64,12 +54,15 @@ public class AudioManager
         }
 
         playingFiles.Add( new AudioFile { filepath = path, alias = alias, repeats = repeats } ); // Add a new playing file to the list
+
+        // Successful audio playback! Returning true...
+        return true;
     }
 
     /// <summary>
     /// Updates every single audio file currently in our <see cref="playingFiles"/> list.
     /// </summary>
-    public void UpdateAllPlayingFiles()
+    public static void UpdateAllPlayingFiles()
     {
         for (int i = 0; i < playingFiles.Count; i++ )
         {
@@ -95,7 +88,7 @@ public class AudioManager
     /// Stops a specific sound effect based on its alias.
     /// </summary>
     /// <param name="alias">The alias, effectively sound channel, of the sound we wish to stop.</param>
-    public void StopSound( string alias )
+    public static void StopSound( string alias )
     {
         // Check every file...
         foreach ( AudioFile file in playingFiles )
@@ -118,7 +111,7 @@ public class AudioManager
     /// <summary>
     /// Plays the engine's success sound.
     /// </summary>
-    public void PlaySuccess()
+    public static void PlaySuccess()
     {
         PlaySound( AUDIO_SUCCESS_PATH, "success" );
     }
@@ -126,7 +119,7 @@ public class AudioManager
     /// <summary>
     /// Plays the engine's warning sound
     /// </summary>
-    public void PlayWarning()
+    public static void PlayWarning()
     {
         PlaySound( AUDIO_WARNING_PATH, "warning" );
     }
@@ -134,7 +127,7 @@ public class AudioManager
     /// <summary>
     /// Plays the engine's error sound.
     /// </summary>
-    public void PlayError()
+    public static void PlayError()
     {
         PlaySound( AUDIO_ERROR_PATH, "error" );
     }
