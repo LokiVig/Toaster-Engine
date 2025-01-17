@@ -13,7 +13,7 @@ extern "C" __declspec(dllexport) void Renderer_SetScene(Renderer* pRenderer, Sce
     }
     else
     {
-        printf("(Renderer.dll) SetScene(Renderer*, Scene*): ERROR; Input renderer is invalid!\n");
+        printf("(Renderer.dll) Renderer_SetScene(Renderer*, Scene*): ERROR; Input renderer is invalid!\n");
         return;
     }
 }
@@ -26,7 +26,7 @@ extern "C" __declspec(dllexport) void Renderer_RenderFrame(Renderer* pRenderer)
     }
     else
     {
-        printf("(Renderer.dll) RenderFrame(Renderer*): ERROR; Input renderer is invalid!\n");
+        printf("(Renderer.dll) Renderer_RenderFrame(Renderer*): ERROR; Input renderer is invalid!\n");
         return;
     }
 }
@@ -39,8 +39,21 @@ extern "C" __declspec(dllexport) void Renderer_DrawText(Renderer* pRenderer, con
     }
     else
     {
-        printf("(Renderer.dll) RenderText(Renderer*, string, int, int): ERROR; Input renderer is invalid!\n");
+        printf("(Renderer.dll) Renderer_DrawText(Renderer*, string, int, int): ERROR; Input renderer is invalid!\n");
         return;
+    }
+}
+
+extern "C" __declspec(dllexport) bool Renderer_KeyDown(Renderer* pRenderer, int key)
+{
+    if (pRenderer)
+    {
+        return pRenderer->KeyDown(key);
+    }
+    else
+    {
+        printf("(Renderer.dll) Renderer_KeyDown(Renderer*, int): ERROR; Input renderer is invalid!\n");
+        return false;
     }
 }
 
@@ -52,7 +65,7 @@ extern "C" __declspec(dllexport) void Renderer_Shutdown(Renderer* pRenderer)
     }
     else
     {
-        printf("(Renderer.dll) ShutdownRenderer(Renderer*): ERROR; Input renderer is invalid!\n");
+        printf("(Renderer.dll) Renderer_Shutdown(Renderer*): ERROR; Input renderer is invalid!\n");
         return;
     }
 }
@@ -65,7 +78,7 @@ extern "C" __declspec(dllexport) bool Renderer_ShuttingDown(Renderer* pRenderer)
     }
     else // No renderer means nothing to run with... Faulty!
     {
-        printf("(Renderer.dll) RendererShuttingDown(Renderer*): ERROR; No renderer found! Assuming true...\n");
+        printf("(Renderer.dll) Renderer_ShuttingDown(Renderer*): ERROR; No renderer found! Assuming true...\n");
         return true;
     }
 }

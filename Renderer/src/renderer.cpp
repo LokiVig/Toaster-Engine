@@ -258,6 +258,11 @@ void Renderer::RenderText3D(const char* text, float x, float y, float z)
 
 }
 
+bool Renderer::KeyDown(int key)
+{
+	return glfwGetKey(m_pWindow, key) == GLFW_PRESS;
+}
+
 void Renderer::DrawBrush(const Brush brush)
 {
 	// Initialize buffers and arrays

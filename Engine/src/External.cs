@@ -20,6 +20,9 @@ public class External
     [DllImport( "Renderer", CallingConvention = CallingConvention.Cdecl )]
     public static extern void Renderer_RenderFrame( IntPtr pRenderer );
 
+    [DllImport("Renderer", CallingConvention = CallingConvention.Cdecl )]
+    public static extern bool Renderer_KeyDown( IntPtr pRenderer, GLFWKey key );
+
     [DllImport( "Renderer", CallingConvention = CallingConvention.Cdecl )]
     public static extern void Renderer_DrawText( IntPtr pRenderer, string pszText, float x, float y, float scale, float r = 1.0f, float g = 1.0f, float b = 1.0f );
 

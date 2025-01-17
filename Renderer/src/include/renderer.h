@@ -77,6 +77,9 @@ public:
     void DrawText(const char* text, float x, float y, float scale, float r, float g, float b); // C#-accessible function to render text onto the screen
     void RenderText3D(const char* pszText, float x, float y, float z); // C#-accessible function to render text in the 3D world
 
+public:
+    bool KeyDown(int key);
+
 private:
     int InitializeFont(const char* filepath, int pixelFontSize);
 
