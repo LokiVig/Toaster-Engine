@@ -24,12 +24,8 @@ public struct Log
     public static void OpenLogFile()
     {
         // This will automatically make a logging file for us if we don't already have one
-        FileStream logFile = File.Open( PATH_LOG, FileMode.OpenOrCreate );
+        FileStream logFile = File.Open( PATH_LOG, FileMode.Create );
         logFile.Close(); // Close the file stream
-
-        // Overwrite all text in the file with emptyness
-        // We don't want old logs sitting in the same place
-        File.WriteAllText( PATH_LOG, "" );
 
         // Write to the log file
         logWriter = File.AppendText( PATH_LOG );

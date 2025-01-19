@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text.Json.Serialization.Metadata;
 
 using Toast.Engine.Resources;
+using Toast.Renderer;
 
 namespace Toast.Engine;
 
@@ -36,8 +37,6 @@ public class EngineManager
 
     public static float deltaTime; // Helps stopping you from using FPS-dependant calculations
 
-    public static IntPtr renderer; // The C++ initialized renderer as a whole
-
     //---------------------------------------//
     //				 Privates                //
     //---------------------------------------//
@@ -59,7 +58,7 @@ public class EngineManager
         // Initialize the renderer
         try
         {
-            renderer = External.Renderer_Initialize( $"Toaster Engine (v.{ENGINE_VERSION}){( title != null ? $" - {title}" : "" )}" );
+            Renderer.Initialize( $"Toaster Engine - (v.{ENGINE_VERSION}){(title != null ? $" - {title}" : "")}" );
             Log.Success( "Successfully initialized renderer." );
         }
         catch ( Exception exc )
@@ -70,23 +69,14 @@ public class EngineManager
 
     public static void Update()
     {
-        while ( renderer != IntPtr.Zero )
+        while ( !Renderer.ShuttingDown() )
         {
             // Calculate deltaTime
             deltaTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
             watch.Restart();
 
-            // Call the rendering function
-            External.Renderer_RenderFrame( renderer );
-
-            // The renderer is shutting down!
-            // Null the renderer value so we don't continue running without it
-            if ( External.Renderer_ShuttingDown( renderer ) )
-            {
-                renderer = IntPtr.Zero;
-            }
-
-            External.Renderer_DrawText( renderer, "Test text!", 1280/2, 720/2, 24 );
+            // Call the renderer's function that'll render stuff
+            Renderer.RenderFrame();
 
             // Update the static audio manager
             AudioManager.UpdateAllPlayingFiles();
@@ -103,7 +93,7 @@ public class EngineManager
         // End file logging
         Log.CloseLogFile();
 
-        // Shut down the renderer
-        External.Renderer_Shutdown( renderer );
+        // Clear everything from the renderer
+        Renderer.Shutdown();
     }
 }

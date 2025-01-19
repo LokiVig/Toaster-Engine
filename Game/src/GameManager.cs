@@ -36,7 +36,7 @@ public class GameManager
 {
     public static GameState currentState = GameState.Active; // The state the game currently is in
 
-    private PlayerEntity? mainPlayer;
+    private PlayerEntity mainPlayer;
 
     /// <summary>
     /// Initialize the game
@@ -44,7 +44,7 @@ public class GameManager
     public void Initialize()
     {
         // Initialize the engine
-        EngineManager.Initialize("Game"); // Call the engine's initialize function
+        EngineManager.Initialize( "Game" ); // Call the engine's initialize function
         EngineManager.OnUpdate += Update; // After the engine's done updating, this class should update
                                           // The engine's update function is a lot more focused on, well, engine-wide
                                           // prospects, while this class's should be focused more on the game-specific
@@ -52,7 +52,7 @@ public class GameManager
 
         // Initialize everything necessary before the game is actually run
         // DEBUG: Setting up a basic scene to test out certain aspects of what's done
-        EngineManager.currentFile = new WTF("test.wtf");
+        EngineManager.currentFile = new WTF( "test.wtf" );
 
         EntitySpawner<TestNPC> npcSpawner = new( new Vector3( 0, 5.0f, 0 ) );
         EntitySpawner<Player> playerSpawner = new( Vector3.Zero );

@@ -333,15 +333,11 @@ public class Entity
                 break;
 
             case EntityEvent.Kill: // Kill this entity
-                OnDeath();
+                OnDeath(); // Instantly just calls the OnDeath method
                 break;
 
             case EntityEvent.Delete: // Delete this entity
-                                     // Remove this entity from the current scene
-                EngineManager.currentScene?.RemoveEntity( this );
-
-                // Also kill this entity, for good measure
-                OnDeath();
+                Remove(); // Removes us from everything
                 break;
 
             case EntityEvent.PlaySound: // As an AudioPlayer entity, play our audio
@@ -517,6 +513,26 @@ public class Entity
     {
         // Also trigger OnDeath, but replace their sprite with a gory version
         OnDeath();
+    }
+
+    /// <summary>
+    /// Deletes a specified entity from the scene and from existence.
+    /// </summary>
+    /// <param name="ent">The entity we wish to delete.</param>
+    public static void Delete( Entity ent )
+    {
+        EngineManager.OnUpdate -= ent.Update;
+        EngineManager.currentScene?.RemoveEntity( ent );
+        ent = null;
+    }
+
+    /// <summary>
+    /// Removes this specific entity.<br/>
+    /// Effectively just calls <see cref="Delete(Entity)"/> with <see langword="this"/> as its argument.
+    /// </summary>
+    public void Remove()
+    {
+        Delete( this );
     }
 
     public override string ToString()
