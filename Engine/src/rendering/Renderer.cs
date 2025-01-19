@@ -5,7 +5,7 @@ using Veldrid.StartupUtilities;
 using Toast.Engine.Resources;
 using Toast.Engine.Entities;
 
-namespace Toast.Renderer;
+namespace Toast.Engine.Rendering;
 
 public class Renderer
 {

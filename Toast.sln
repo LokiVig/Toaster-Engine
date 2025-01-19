@@ -10,8 +10,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game", "Game\Game.csproj", "{71DF6220-2E8F-4504-A647-8A985FFC050E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Renderer", "Renderer\Renderer.csproj", "{5B0EE835-58CE-4B90-BE32-90FADC37CBD2}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,10 +32,6 @@ Global
 		{71DF6220-2E8F-4504-A647-8A985FFC050E}.Debug|x64.Build.0 = Debug|Any CPU
 		{71DF6220-2E8F-4504-A647-8A985FFC050E}.Release|x64.ActiveCfg = Release|Any CPU
 		{71DF6220-2E8F-4504-A647-8A985FFC050E}.Release|x64.Build.0 = Release|Any CPU
-		{5B0EE835-58CE-4B90-BE32-90FADC37CBD2}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{5B0EE835-58CE-4B90-BE32-90FADC37CBD2}.Debug|x64.Build.0 = Debug|Any CPU
-		{5B0EE835-58CE-4B90-BE32-90FADC37CBD2}.Release|x64.ActiveCfg = Release|Any CPU
-		{5B0EE835-58CE-4B90-BE32-90FADC37CBD2}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

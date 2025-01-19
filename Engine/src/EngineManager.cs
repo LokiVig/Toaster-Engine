@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text.Json.Serialization.Metadata;
 
 using Toast.Engine.Resources;
-using Toast.Renderer;
+using Toast.Engine.Rendering;
 
 namespace Toast.Engine;
 
