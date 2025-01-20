@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
 using System.Collections.Generic;
+
+using Newtonsoft.Json;
 
 using Toast.Engine.Entities;
 
@@ -16,6 +17,11 @@ public class WTF
     public List<Entity> entities { get; set; } = new(); // List of entities in this WTF file
     public List<Brush> brushes { get; set; } = new(); // All the brushes in this WTF file
     public string path { get; set; } // The directory of which this WTF file is saved at
+
+    private static JsonSerializer serializer = new()
+    {
+        Formatting = Formatting.Indented,
+    };
 
     /// <summary>
     /// WTF file definition without parameters.
@@ -232,8 +238,15 @@ public class WTF
             Log.Error<FileNotFoundException>( $"Couldn't find WTF file at \"{directory}\"." );
         }
 
-        // Deserialize the file through JSON
-        outFile = JsonSerializer.Deserialize<WTF>( File.OpenRead( directory ), EngineManager.serializerOptions );
+        // Get the json reader from our directory
+        using ( StreamReader sr = File.OpenText( directory ) )
+        {
+            using ( JsonReader reader = new JsonTextReader( sr ) )
+            {
+                // Deserialize the file from our reader
+                outFile = serializer.Deserialize<WTF>( reader );
+            }
+        }
     }
 
     /// <summary>
@@ -294,6 +307,12 @@ public class WTF
         }
 
         // Write the WTF file to the path
-        File.WriteAllText( path, JsonSerializer.Serialize( file, EngineManager.serializerOptions ) );
+        using ( StreamWriter sw = new StreamWriter( path ) )
+        {
+            using ( JsonWriter writer = new JsonTextWriter( sw ) )
+            {
+                serializer.Serialize( writer, file );
+            }
+        }
     }
 }

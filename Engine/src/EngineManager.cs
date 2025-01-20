@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Text.Json;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Text.Json.Serialization.Metadata;
+
+using Veldrid;
 
 using Toast.Engine.Resources;
 using Toast.Engine.Rendering;
+using System.Diagnostics;
 
 namespace Toast.Engine;
 
@@ -14,13 +14,6 @@ public class EngineManager
     //---------------------------------------//
     //			    Constants				 //
     //---------------------------------------//
-
-    public static readonly JsonSerializerOptions serializerOptions = new()
-    {
-        WriteIndented = true,
-        AllowTrailingCommas = true,
-        TypeInfoResolver = new DefaultJsonTypeInfoResolver()
-    };
 
     private const string ENGINE_VERSION = "0.0.1";
 
@@ -41,7 +34,8 @@ public class EngineManager
     //				 Privates                //
     //---------------------------------------//
 
-    private static Stopwatch watch = Stopwatch.StartNew(); // Used to calculate delta time
+    private static float lastFrameTime; // Time of the last frame in seconds
+    private static bool debugUIOpen; // Used to determine whether or not we should display the debug UI
 
     //---------------------------------------//
     //				Functions				 //
@@ -55,36 +49,63 @@ public class EngineManager
         // Initialize file logging
         Log.OpenLogFile();
 
-        // Initialize the renderer
         try
         {
-            Renderer.Initialize( $"Toaster Engine - (v.{ENGINE_VERSION}){(title != null ? $" - {title}" : "")}" );
+            // Initialize the renderer
+            Renderer.Initialize( $"Toaster Engine - (v.{ENGINE_VERSION}){( title != null ? $" - {title}" : "" )}" );
             Log.Success( "Successfully initialized renderer." );
         }
         catch ( Exception exc )
         {
             Log.Error( $"Exception caught while initializing renderer!\n{exc.Message}\n", exc );
         }
+
+        // Connect our InputManager's events to the Renderer's events for simplicity's sakes
+        Renderer.window.KeyDown += InputManager.OnKeyDown;
+        Renderer.window.KeyUp += InputManager.OnKeyUp;
     }
 
     public static void Update()
     {
+        Stopwatch watch = Stopwatch.StartNew();
+
         while ( !Renderer.ShuttingDown() )
         {
-            // Calculate deltaTime
-            deltaTime = watch.ElapsedTicks / (float)Stopwatch.Frequency;
-            watch.Restart();
+            // Calculate the time elapsed since the last frame
+            float currentTime = (float)watch.Elapsed.TotalSeconds;
+            deltaTime = currentTime - lastFrameTime;
+            lastFrameTime = currentTime;
 
-            // Call the renderer's function that'll render stuff
-            Renderer.RenderFrame();
+            // Ensure deltaTime is non-negative
+            deltaTime = Math.Max( 0, deltaTime );
 
             // Update the static audio manager
             AudioManager.UpdateAllPlayingFiles();
+
+            // Open the debug UI if the F12 key is pressed
+            if ( InputManager.IsKeyDown( Key.F12 ) )
+            {
+                debugUIOpen = true;
+            }
+
+            // Handle ImGui things
+            HandleUI();
 
             // Call the OnUpdate event
             // This makes it so everything subscribed to the event will call their own,
             // subsidiary update method
             OnUpdate?.Invoke();
+
+            // Call the renderer's function that'll render stuff
+            Renderer.RenderFrame( currentScene );
+        }
+    }
+
+    private static void HandleUI()
+    {
+        if ( debugUIOpen )
+        {
+            DebugUI.Open( ref debugUIOpen );
         }
     }
 

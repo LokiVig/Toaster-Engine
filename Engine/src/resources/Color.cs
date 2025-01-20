@@ -1,4 +1,4 @@
-﻿using Toast.Engine.Math;
+﻿using System.Numerics;
 
 namespace Toast.Engine.Resources;
 
@@ -16,9 +16,9 @@ public struct Color
     {
         // Initializes a color dependant on a Vector3
         // Its x, y, and z values defines the R, G and B values of the color
-        r = (byte)rgb.x;
-        g = (byte)rgb.y;
-        b = (byte)rgb.z;
+        r = (byte)rgb.X;
+        g = (byte)rgb.Y;
+        b = (byte)rgb.Z;
         this.a = a;
     }
 

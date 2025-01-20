@@ -1,4 +1,5 @@
-﻿using Toast.Engine.Math;
+﻿using System.Numerics;
+
 using Toast.Engine.Resources;
 
 namespace Toast.Engine.Entities.Tools;

@@ -1,6 +1,5 @@
 ﻿using System;
-
-using Toast.Engine.Math;
+using System.Numerics;
 
 namespace Toast.Engine.Resources;
 
@@ -33,9 +32,9 @@ public class BBox
 			return false;
 		}
 
-		return mins.x <= other.maxs.x && maxs.x >= other.mins.x &&
-		       mins.y <= other.maxs.y && maxs.y >= other.mins.y &&
-		       mins.z <= other.maxs.z && maxs.z >= other.mins.z;
+		return mins.X <= other.maxs.X && maxs.X >= other.mins.X &&
+		       mins.Y <= other.maxs.Y && maxs.Y >= other.mins.Y &&
+		       mins.Z <= other.maxs.Z && maxs.Z >= other.mins.Z;
 	}
 
 	/// <summary>
@@ -45,9 +44,9 @@ public class BBox
 	/// <returns><see langword="true"/> if the point is intersecting with the BBox, <see langword="false"/> if not</returns>
 	public bool IntersectingWith(Vector3 point)
 	{
-		return point.x >= mins.x && point.x <= maxs.x &&
-		       point.y >= mins.y && point.y <= maxs.y &&
-		       point.z >= mins.z && point.z <= maxs.z;
+		return point.X >= mins.X && point.X <= maxs.X &&
+		       point.Y >= mins.Y && point.Y <= maxs.Y &&
+		       point.Z >= mins.Z && point.Z <= maxs.Z;
 	}
 
 	/// <summary>

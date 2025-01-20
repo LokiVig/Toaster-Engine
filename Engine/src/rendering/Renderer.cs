@@ -1,6 +1,10 @@
-﻿using Veldrid;
+﻿using System.Numerics;
+
+using Veldrid;
 using Veldrid.Sdl2;
 using Veldrid.StartupUtilities;
+
+using ImGuiNET;
 
 using Toast.Engine.Resources;
 using Toast.Engine.Entities;
@@ -10,17 +14,22 @@ namespace Toast.Engine.Rendering;
 public class Renderer
 {
     public static Sdl2Window window;
-
-    private static GraphicsDevice graphicsDevice;
+    public static GraphicsDevice graphicsDevice;
 
     private static ResourceFactory resourceFactory;
+    private static DeviceBuffer vertexBuffer;
+    private static DeviceBuffer indexBuffer;
+    private static Shader[] shaders;
+    private static Pipeline pipeline;
     private static CommandList commandList;
-    
+
+    private static ImGuiController controller;
+
     /// <summary>
     /// Initializes a DirectX 11 rendered window with a specified title.
     /// </summary>
     /// <param name="title">The title of the window we wish to open.</param>
-    public static void Initialize(string title)
+    public static void Initialize( string title )
     {
         // Create a window using Veldrid's StartupUtilities
         WindowCreateInfo windowCI = new WindowCreateInfo()
@@ -29,7 +38,7 @@ public class Renderer
             Y = 100,
             WindowWidth = 1280,
             WindowHeight = 720,
-            WindowTitle = title,
+            WindowTitle = title
         };
 
         window = VeldridStartup.CreateWindow( ref windowCI );
@@ -42,10 +51,24 @@ public class Renderer
 #else
             Debug = true,
 #endif // RELEASE
+            PreferDepthRangeZeroToOne = true,
             SwapchainDepthFormat = PixelFormat.R16_UNorm,
         };
 
         graphicsDevice = VeldridStartup.CreateGraphicsDevice( window, options, GraphicsBackend.Direct3D11 );
+
+        // The things to do when the window is resized
+        window.Resized += () =>
+        {
+            graphicsDevice.MainSwapchain.Resize( (uint)window.Width, (uint)window.Height );
+            controller.WindowResized( window.Width, window.Height );
+        };
+
+        // Create an ImGui context
+        ImGui.CreateContext();
+
+        // Initializes a new ImGui controller
+        controller = new ImGuiController( graphicsDevice, graphicsDevice.MainSwapchain.Framebuffer.OutputDescription, window.Width, window.Height );
 
         // Create our other, default resources
         CreateResources();
@@ -67,16 +90,13 @@ public class Renderer
     /// <summary>
     /// Renders a frame to the window.
     /// </summary>
-    public static void RenderFrame(Scene scene = null)
+    public static void RenderFrame( Scene scene = null )
     {
-        // Handle processing events
-        Sdl2Events.ProcessEvents();
+        // Pump window events
+        InputSnapshot inputSnapshot = window.PumpEvents();
 
-        // Begin rendering
+        // Begin commands
         commandList.Begin();
-        commandList.SetFramebuffer( graphicsDevice.SwapchainFramebuffer );
-        commandList.ClearColorTarget( 0, RgbaFloat.CornflowerBlue );
-        commandList.End();
 
         // If we have a scene to render from
         if ( scene != null )
@@ -92,9 +112,25 @@ public class Renderer
             }
         }
 
+        // Render directly to the window
+        commandList.SetFramebuffer( graphicsDevice.MainSwapchain.Framebuffer );
+        commandList.ClearColorTarget( 0, RgbaFloat.CornflowerBlue );
+
+        // Render the ImGui controller
+        controller.Render(graphicsDevice, commandList);
+
+        // Update the ImGui controller
+        controller.Update( EngineManager.deltaTime, inputSnapshot );
+
+        // End commands
+        commandList.End();
+
         // Submit commands and present the frame
         graphicsDevice.SubmitCommands( commandList );
-        graphicsDevice.SwapBuffers();
+        graphicsDevice.SwapBuffers(graphicsDevice.MainSwapchain);
+
+        // Handle processing events
+        //Sdl2Events.ProcessEvents();
     }
 
     /// <summary>
@@ -140,7 +176,21 @@ public class Renderer
     /// </summary>
     public static void Shutdown()
     {
-        commandList.Dispose();
-        graphicsDevice.Dispose();
+        // TODO: Remove all '?' after having actually written functionality for the variables
+
+        pipeline?.Dispose();
+
+        if ( shaders != null )
+        {
+            foreach ( Shader shader in shaders )
+            {
+                shader.Dispose();
+            }
+        }
+
+        commandList?.Dispose();
+        vertexBuffer?.Dispose();
+        indexBuffer?.Dispose();
+        graphicsDevice?.Dispose();
     }
 }

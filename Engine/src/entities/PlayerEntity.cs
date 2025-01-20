@@ -1,4 +1,5 @@
-﻿using Toast.Engine.Math;
+﻿using System.Numerics;
+
 using Toast.Engine.Resources;
 
 namespace Toast.Engine.Entities;
@@ -6,7 +7,7 @@ namespace Toast.Engine.Entities;
 public partial class PlayerEntity : Entity
 {
     public override EntityType type => EntityType.Player; // This entity is of type Player
-    public override float health { get; set; } = 100.0f;
+    public override float maxHealth { get; set; } = 100.0f;
     
     protected float armor = 0.0f; // Remove a certain amount of damage taken if armor isn't 0, and decrease the armor value when taking damage
 

@@ -44,7 +44,7 @@ public struct Log
         // Stop our runtime clock
         runtime.Stop();
 
-        // Write the message
+        // Write infomatically filled messages to show that this is the end of the file
         logWriter.WriteLine( "-----------------------------------------------" );
         logWriter.WriteLine( "End of engine log file." );
         logWriter.WriteLine( $"Total engine runtime was: {runtime.Elapsed.ToString()}" );
@@ -179,7 +179,7 @@ public struct Log
         Exception localException = new Exception( $"(Line {line}) {caller}.{method}; {message}", exception );
 
         // Write to the log that we've encountered an exception!
-        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : !!! EXCEPTION CAUGHT - READ ABOVE ERROR MESSAGE !!!\n" );
+        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : !!! EXCEPTION OF TYPE \"{exception.GetType().ToString().ToUpper()}\" CAUGHT - READ ABOVE ERROR MESSAGE !!!\n" );
 
         // Close the log file, we don't want to keep it running after an exception has been caught
         CloseLogFile();
@@ -222,7 +222,7 @@ public struct Log
             Exception localException = new Exception( $"(Line {line}) {caller}.{method}; {message}", exception );
 
             // Write to the log that we've encountered an exception!
-            logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : !!! EXCEPTION CAUGHT - READ ABOVE ERROR MESSAGE !!!\n" );
+            logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : !!! EXCEPTION OF TYPE \"{exception.GetType().ToString().ToUpper()}\" CAUGHT - READ ABOVE ERROR MESSAGE !!!\n" );
 
             // Close the log file, we don't want to keep it running after an exception has been caught
             CloseLogFile();

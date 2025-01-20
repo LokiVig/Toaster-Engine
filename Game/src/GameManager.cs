@@ -1,15 +1,16 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Numerics;
 
 using Toast.Engine;
-using Toast.Engine.Math;
 using Toast.Engine.Entities;
 using Toast.Engine.Entities.Tools;
 using Toast.Engine.Entities.Brushes;
 using Toast.Engine.Resources;
+using Toast.Engine.Rendering;
 
 using Toast.Game.Entities;
 using Toast.Game.Entities.NPC;
+
+using Veldrid;
 
 namespace Toast.Game;
 
@@ -65,7 +66,7 @@ public class GameManager
         trigger.triggerOn = TriggerOn.Trigger;
         trigger.triggerType = TriggerType.Once;
         trigger.targetEvent = EntityEvent.PlaySound;
-        trigger.targetEntity = audioPlayer;
+        trigger.targetEntity = "entity 3"; // DEBUG!
 
         EngineManager.currentFile.AddEntity( npcSpawner );
         EngineManager.currentFile.AddEntity( playerSpawner );
@@ -111,6 +112,27 @@ public class GameManager
             // Everything below this if-statement will be run only when the game is in an
             // active state
             return;
+        }
+
+        // Get user inputs to move the player
+        if ( InputManager.IsKeyDown( Key.W ) )
+        {
+            mainPlayer.AddForce( new Vector3(0, 255, 0) );
+        }
+
+        if ( InputManager.IsKeyDown( Key.S ) )
+        {
+            mainPlayer.AddForce( new Vector3( 0, -255, 0 ) );
+        }
+
+        if ( InputManager.IsKeyDown( Key.D ) )
+        {
+            mainPlayer.AddForce( new Vector3( 255, 0, 0 ) );
+        }
+
+        if ( InputManager.IsKeyDown( Key.A ) )
+        {
+            mainPlayer.AddForce( new Vector3( -255, 0, 0 ) );
         }
     }
 }

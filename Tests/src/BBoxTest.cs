@@ -1,4 +1,5 @@
-﻿using Toast.Engine.Math;
+﻿using System.Numerics;
+
 using Toast.Engine.Resources;
 
 namespace Resources;
@@ -130,9 +131,9 @@ public class BBoxTest
 			BBox value1 = new BBox(mins1, maxs1);
 			Vector3 value2 = new Vector3(maxs2_x, maxs2_y, maxs2_z);
 
-			bool expected = value2.x >= mins1.x && value2.x <= maxs1.x &&
-			                value2.y >= mins1.y && value2.y <= maxs1.y &&
-			                value2.z >= mins1.z && value2.z <= maxs1.z;
+			bool expected = value2.X >= mins1.X && value2.X <= maxs1.X &&
+			                value2.Y >= mins1.Y && value2.Y <= maxs1.Y &&
+			                value2.Z >= mins1.Z && value2.Z <= maxs1.Z;
 
 			bool result = value1.IntersectingWith(value2);
 

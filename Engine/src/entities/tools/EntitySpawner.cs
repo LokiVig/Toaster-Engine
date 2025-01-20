@@ -1,11 +1,16 @@
-﻿using Toast.Engine.Math;
+﻿using System.Numerics;
+
 using Toast.Engine.Resources;
 
 namespace Toast.Engine.Entities.Tools;
 
+/// <summary>
+/// Tool entity which allows the spawning of another entity in the current scene.
+/// </summary>
+/// <typeparam name="T">The <see cref="Entity"/> we wish to spawn.</typeparam>
 public class EntitySpawner<T> : ToolEntity where T : Entity, new()
 {
-    public T entityToSpawn { get; } = new T();
+    public T entityToSpawn { get; private set; }
 
     public EntitySpawner()
     {
@@ -23,34 +28,34 @@ public class EntitySpawner<T> : ToolEntity where T : Entity, new()
     /// <returns>The recently spawned entity.</returns>
     public T SpawnEntity()
     {
-        T ent = new T();
+        entityToSpawn = new T();
 
         // Make sure the desired entity is not a tool entity!
-        if ( ent is ToolEntity )
+        if ( entityToSpawn is ToolEntity )
         {
             Log.Error( "Can't spawn tool entity!" );
             return null;
         }
 
         // The entity should spawn!
-        ent.Spawn();
+        entityToSpawn.Spawn();
         // Set the entity's position to our position
-        ent.SetPosition( position );
+        entityToSpawn.SetPosition( position );
 
         // Add the newly spawned entity to the current scene
-        EngineManager.currentScene?.AddEntity( ent );
+        EngineManager.currentScene?.AddEntity( entityToSpawn );
 
         // Generate the entity's ID
-        ent.GenerateID();
+        entityToSpawn.GenerateID();
 
-        Log.Info( $"Spawned entity {ent}.\n" +
+        Log.Info( $"Spawned entity {entityToSpawn}.\n" +
                           $"\tSource: {this}\n" +
-                          $"\tPosition: {ent.GetPosition()}\n" +
-                          $"\tRotation: {ent.GetRotation()}\n" +
-                          $"\tBBox: {ent.GetBBox()}" );
+                          $"\tPosition: {entityToSpawn.GetPosition()}\n" +
+                          $"\tRotation: {entityToSpawn.GetRotation()}\n" +
+                          $"\tBBox: {entityToSpawn.GetBBox()}" );
 
         // And return the entity we just spawned
-        return ent;
+        return entityToSpawn;
     }
 
     public override string ToString()
@@ -59,6 +64,9 @@ public class EntitySpawner<T> : ToolEntity where T : Entity, new()
     }
 }
 
+/// <summary>
+/// <inheritdoc cref="EntitySpawner{T}"/>
+/// </summary>
 public class EntitySpawner : ToolEntity
 {
     public EntitySpawner()

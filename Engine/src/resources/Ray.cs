@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Numerics;
 
-using Toast.Engine.Math;
 using Toast.Engine.Entities;
 
 namespace Toast.Engine.Resources;
@@ -15,7 +15,7 @@ public struct Ray
     /// <returns><see langword="true"/> and the <see langword="object"/> we hit, <see langword="false"/> and <see langword="null"/> if nothing was hit.</returns>
     public static bool Trace( Vector3 rayStart, Vector3 rayDirection, out object hitObject, RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, bool logInfo = true, float rayLength = 5000 )
     {
-        Vector3 rayEnd = ( rayStart + rayDirection.Normalized() ) * rayLength;
+        Vector3 rayEnd = ( rayStart + Vector3.Normalize( rayDirection ) ) * rayLength;
 
         // If we're not ignoring entities
         if ( ( rayIgnore & RayIgnore.Entities ) == 0 )
@@ -171,7 +171,7 @@ public struct Ray
     /// <returns><see langword="true"/> and the <see langword="object"/> we hit, <see langword="false"/> and <see langword="null"/> if nothing was hit.</returns>
     public static bool Trace( Entity entStart, Entity entDirection, out object hitObject, RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, bool logInfo = true, float rayLength = 5000 )
     {
-        Vector3 rayEnd = ( entStart.GetPosition() + entDirection.GetPosition().Normalized() ) * rayLength;
+        Vector3 rayEnd = ( entStart.GetPosition() + Vector3.Normalize( entDirection.GetPosition() ) ) * rayLength;
 
         // If we're not ignoring entities
         if ( ( rayIgnore & RayIgnore.Entities ) == 0 )
@@ -327,7 +327,7 @@ public struct Ray
     /// <returns><see langword="true"/> and the <see langword="object"/> we hit, <see langword="false"/> and <see langword="null"/> if nothing was hit.</returns>
     public static bool Trace( Vector3 rayStart, Entity entDirection, out object hitObject, RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, bool logInfo = true, float rayLength = 5000 )
     {
-        Vector3 rayEnd = ( rayStart + entDirection.GetPosition().Normalized() ) * rayLength;
+        Vector3 rayEnd = ( rayStart + Vector3.Normalize( entDirection.GetPosition() ) ) * rayLength;
 
         // If we're not ignoring entities
         if ( ( rayIgnore & RayIgnore.Entities ) == 0 )
@@ -483,7 +483,7 @@ public struct Ray
     /// <returns><see langword="true"/> and the <see langword="object"/> we hit, <see langword="false"/> and <see langword="null"/> if nothing was hit.</returns>
     public static bool Trace( Entity entStart, Vector3 rayDirection, out object hitObject, RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, bool logInfo = true, float rayLength = 5000 )
     {
-        Vector3 rayEnd = ( entStart.GetPosition() + rayDirection.Normalized() ) * rayLength;
+        Vector3 rayEnd = ( entStart.GetPosition() + Vector3.Normalize( rayDirection ) ) * rayLength;
 
         // If we're not ignoring entities
         if ( ( rayIgnore & RayIgnore.Entities ) == 0 )

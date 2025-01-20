@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Numerics;
 
-using Toast.Engine.Math;
 using Toast.Engine.Resources;
 
 using Toast.Engine.Entities.NPC;
@@ -11,7 +11,7 @@ public class NPCEntity : Entity
 {
 	public override EntityType type => EntityType.NPC; // This entity is of type NPC
 
-	protected virtual Type[] hateList { get; set; }
+    protected virtual Type[] hateList { get; set; }
 	protected virtual Type[] adoreList { get; set; }
 
 	private NPCPathfinder pathfinder;
@@ -64,7 +64,7 @@ public class NPCEntity : Entity
 		{
 			// Do a ray trace to see whether or not we can find a target
 			// Ignores brushes and brush entities, we should never be able to target them
-			if ( Ray.Trace( this, Vector3.Forward, out object hitObject, RayIgnore.Brushes & RayIgnore.BrushEntities, logInfo: false ) )
+			if ( Ray.Trace( this, /* Forward */ Vector3.One, out object hitObject, RayIgnore.Brushes & RayIgnore.BrushEntities, logInfo: false ) )
 			{
 				// Check our adore list for if the entity we hust hit should be followed
 				foreach ( Type type in adoreList )

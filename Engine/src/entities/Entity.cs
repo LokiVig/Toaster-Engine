@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Numerics;
 using System.Collections.Generic;
 
-using Toast.Engine.Math;
 using Toast.Engine.Resources;
 using Toast.Engine.Entities.Tools;
 
@@ -21,13 +21,14 @@ namespace Toast.Engine.Entities;
 public class Entity
 {
     public Vector3 position; // This entity's current position
-    public Quaternion rotation; // This entity's current rotation
+    public Vector4 rotation; // This entity's current rotation
     public BBox bbox; // This entity's bounding box
 
     public string id { get; set; } // This entity's identifier
     public virtual EntityType type { get; private set; } = EntityType.None; // This entity's type, e.g. player / NPC
-    public virtual float health { get; set; } // This entity's health
+    public virtual float maxHealth { get; set; } // This entity's max health
 
+    protected float health; // This entity's health
     protected Vector3 velocity; // This entity's current velocity
     protected bool alive; // Is this entity alive?
     protected Entity target; // The entity this entity's targeting
@@ -54,7 +55,7 @@ public class Entity
         // Make sure our type is valid
         if ( type == EntityType.None )
         {
-            Log.Error<NullReferenceException>( $"Entity {this} is of EntityType None, meaning this is an entity that hasn't properly been made!" );
+            Log.Error<NullReferenceException>( $"Entity {this} is of EntityType None, meaning this is an entity that hasn't properly been initialized, read, or otherwise!" );
         }
     }
 
@@ -65,6 +66,9 @@ public class Entity
     {
         // Null the velocity
         velocity = Vector3.Zero;
+
+        // Set our health to our maxHealth variable
+        health = maxHealth;
 
         // This entity is now alive
         alive = true;
@@ -82,9 +86,9 @@ public class Entity
     protected virtual void Update()
     {
         // Can't have bounding boxes where the maxs have a less value than mins, or vice versa
-        if ( bbox.mins.x >= bbox.maxs.x ||
-             bbox.mins.y >= bbox.maxs.y ||
-             bbox.mins.z >= bbox.maxs.z )
+        if ( bbox.mins.X >= bbox.maxs.X ||
+             bbox.mins.Y >= bbox.maxs.Y ||
+             bbox.mins.Z >= bbox.maxs.Z )
         {
             Log.Error<ArithmeticException>( $"{this}'s bound boxes are mismatched! ({bbox})" );
         }
@@ -96,7 +100,7 @@ public class Entity
     protected void ApplyVelocity()
     {
         // Clamp velocity between the min and max values
-        velocity = Vector3.Clamp( velocity, MAX_VELOCITY * -1, MAX_VELOCITY );
+        velocity = Vector3.Clamp( velocity, new Vector3(-MAX_VELOCITY), new Vector3(MAX_VELOCITY) );
 
         // Position is affected by velocity
         position += velocity * EngineManager.deltaTime;
@@ -104,8 +108,8 @@ public class Entity
         // Velocity decreases with time (effectively drag)
         velocity *= ( 1 - 0.75f ) * EngineManager.deltaTime;
 
-        // If the velocity's magnitude <= 0.01, it's effectively zero, so zero it out for the sake of ease
-        if ( velocity.Magnitude() <= 0.01f )
+        // If the velocity's magnitude <= 0.000001, it's effectively zero, so zero it out for the sake of ease
+        if ( velocity.Length() <= 0.00001f )
         {
             velocity = Vector3.Zero;
         }
@@ -114,9 +118,9 @@ public class Entity
     /// <summary>
     /// Get the current health of this entity
     /// </summary>
-    public float GetHealth()
+    public ref float GetHealth()
     {
-        return health;
+        return ref health;
     }
 
     /// <summary>
@@ -130,33 +134,33 @@ public class Entity
     /// <summary>
     /// Gets this entity's position
     /// </summary>
-    public Vector3 GetPosition()
+    public ref Vector3 GetPosition()
     {
-        return position;
+        return ref position;
     }
 
     /// <summary>
     /// Gets this entity's velocity
     /// </summary>
-    public Vector3 GetVelocity()
+    public ref Vector3 GetVelocity()
     {
-        return velocity;
+        return ref velocity;
     }
 
     /// <summary>
     /// Gets this entity's rotation
     /// </summary>
-    public Quaternion GetRotation()
+    public ref Vector4 GetRotation()
     {
-        return rotation;
+        return ref rotation;
     }
 
     /// <summary>
     /// Gets this entity's bounding box
     /// </summary>
-    public BBox GetBBox()
+    public ref BBox GetBBox()
     {
-        return bbox;
+        return ref bbox;
     }
 
     /// <summary>
@@ -228,10 +232,10 @@ public class Entity
     }
 
     /// <summary>
-    /// Set this entity's rotation from a <see cref="Quaternion"/>
+    /// Set this entity's rotation from a <see cref="Vector4"/>
     /// </summary>
     /// <param name="rotation">The new, desired rotation of this entity</param>
-    public void SetRotation( Quaternion rotation )
+    public void SetRotation( Vector4 rotation )
     {
         this.rotation = rotation;
     }
@@ -417,12 +421,12 @@ public class Entity
     }
 
     /// <summary>
-    /// Call an event that takes a <see cref="Quaternion"/> for a value.
+    /// Call an event that takes a <see cref="Vector4"/> for a value.
     /// </summary>
     /// <param name="eEvent">Desired event to do to this entity.</param>
-    /// <param name="qValue">Value as <see cref="Quaternion"/>.</param>
+    /// <param name="qValue">Value as <see cref="Vector4"/>.</param>
     /// <param name="source">The entity that caused this event.</param>
-    public void OnEvent( EntityEvent eEvent, Quaternion qValue, Entity source = null )
+    public void OnEvent( EntityEvent eEvent, Vector4 qValue, Entity source = null )
     {
         switch ( eEvent )
         {

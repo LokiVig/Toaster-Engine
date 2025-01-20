@@ -1,4 +1,5 @@
-﻿using Toast.Engine.Math;
+﻿using System.Numerics;
+
 using Toast.Engine.Resources;
 
 namespace Toast.Engine.Entities.Brushes;
@@ -12,20 +13,20 @@ public class TriggerBrush : BrushEntity
     private static readonly int IVALUE_DEFAULT = 0;
     private static readonly float FVALUE_DEFAULT = 0.0f;
     private static readonly int BVALUE_DEFAULT = -1;
-    private static readonly Vector3 VVALUE_DEFAULT = Vector3.Zero;
-    private static readonly Quaternion QVALUE_DEFAULT = Quaternion.Identity;
+    private static readonly Vector3 V3VALUE_DEFAULT = Vector3.Zero;
+    private static readonly Vector4 V4VALUE_DEFAULT = Vector4.Zero;
     private static readonly Entity EVALUE_DEFAULT = null;
     private static readonly BBox BBVALUE_DEFAULT = BBox.One;
 
     public int iValue { get; set; } = IVALUE_DEFAULT; // Event int value
     public float fValue { get; set; } = FVALUE_DEFAULT; // Event float value
     public int bValue { get; set; } = BVALUE_DEFAULT; // Event bool value (<=-1 -> none, =0 -> false, >=1 -> true)
-    public Vector3 vValue { get; set; } = VVALUE_DEFAULT; // Event Vector3 value
-    public Quaternion qValue { get; set; } = QVALUE_DEFAULT; // Event Quaternion value
+    public Vector3 v3Value { get; set; } = V3VALUE_DEFAULT; // Event Vector3 value
+    public Vector4 v4Value { get; set; } = V4VALUE_DEFAULT; // Event Quaternion value
     public Entity eValue { get; set; } = EVALUE_DEFAULT; // Event Entity value
     public BBox bbValue { get; set; } = BBVALUE_DEFAULT; // Event BBox value
 
-    public Entity targetEntity { get; set; } // The entity we wish to target
+    public string targetEntity { get; set; } // The entity we wish to target (decided by an entity's ID)
     public EntityEvent targetEvent { get; set; } // The desired event
 
     public TriggerOn triggerOn { get; set; } // When should this trigger, trigger?
@@ -187,18 +188,18 @@ public class TriggerBrush : BrushEntity
                 }
         }
 
-        // Get the entity we're supposed to affect
-        // Entity foundTarget = EngineProgram.currentScene.FindEntity(targetEntity.GetID());
+        // Get the entity we're supposed to effect
+        Entity foundTarget = EngineManager.currentScene.FindEntity(targetEntity);
 
         Log.Info( $"TriggerBrush {this} has been triggered.\n" +
-                          $"\tTarget: {targetEntity}\n" +
+                          $"\tTarget: {foundTarget}\n" +
                           $"\tEvent: {targetEvent}\n" +
                           $"\tValues:\n" +
                           $"\t\tiValue: {iValue}\n" +
                           $"\t\tfValue: {fValue}\n" +
                           $"\t\tbValue: {( bValue > BVALUE_DEFAULT ? ( bValue == 0 ? "False" : "True" ) : "N/A" )}\n" +
-                          $"\t\tvValue: {vValue}\n" +
-                          $"\t\tqValue: {qValue}\n" +
+                          $"\t\tvValue: {v3Value}\n" +
+                          $"\t\tqValue: {v4Value}\n" +
                           $"\t\teValue: {( eValue == EVALUE_DEFAULT ? "N/A" : eValue )}\n" +
                           $"\t\tbbValue: {( bbValue )}\n" +
                           $"\tTrigger type: {triggerType}\n" +
@@ -207,41 +208,41 @@ public class TriggerBrush : BrushEntity
 
         if ( iValue != IVALUE_DEFAULT ) // Int value event
         {
-            targetEntity.OnEvent( targetEvent, iValue, this );
+            foundTarget.OnEvent( targetEvent, iValue, this );
         }
 
         if ( fValue != FVALUE_DEFAULT ) // Float value event
         {
-            targetEntity.OnEvent( targetEvent, fValue, this );
+            foundTarget.OnEvent( targetEvent, fValue, this );
         }
 
         if ( bValue != BVALUE_DEFAULT ) // Bool value event
         {
-            targetEntity.OnEvent( targetEvent, bValue == 1, this );
+            foundTarget.OnEvent( targetEvent, bValue == 1, this );
         }
 
-        if ( vValue != VVALUE_DEFAULT ) // Vector3 value event
+        if ( v3Value != V3VALUE_DEFAULT ) // Vector3 value event
         {
-            targetEntity.OnEvent( targetEvent, vValue, this );
+            foundTarget.OnEvent( targetEvent, v3Value, this );
         }
 
-        if ( qValue != QVALUE_DEFAULT ) // Quaternion value event
+        if ( v4Value != V4VALUE_DEFAULT ) // Quaternion value event
         {
-            targetEntity.OnEvent( targetEvent, qValue, this );
+            foundTarget.OnEvent( targetEvent, v4Value, this );
         }
 
         if ( eValue != EVALUE_DEFAULT ) // Entity value event
         {
-            targetEntity.OnEvent( targetEvent, eValue, this );
+            foundTarget.OnEvent( targetEvent, eValue, this );
         }
 
         if ( bbValue != BBVALUE_DEFAULT ) // BBox value event
         {
-            targetEntity.OnEvent( targetEvent, bbValue, this );
+            foundTarget.OnEvent( targetEvent, bbValue, this );
         }
 
         // Regular event, not taking any special inputs
-        targetEntity.OnEvent( targetEvent, this );
+        foundTarget.OnEvent( targetEvent, this );
 
         // We've triggered this trigger successfully!
         triggeredCount++; // Triggered count goes up
