@@ -6,10 +6,10 @@ namespace Toast.Engine.Entities.Tools;
 
 public class SoundEntity : ToolEntity
 {
-    public string audioPath { get; set; } = "resources/audio/engine/error.mp3"; // The actual audio we should play
-    public string audioAlias { get; set; } = "soundentitysfx"; // The Audio Manager would prefer to have a special alias for different audios, specified here
-    public float audioVolume { get; set; } = 1.0f; // The volume of this audio // TODO: Decide if volume's between 0.0<->1.0, or 0.0<->100.0!
-    public bool audioRepeats { get; set; } // Toggles whether or not this audio should repeat
+    public string audioPath = "resources/audio/engine/error.mp3"; // The actual audio we should play
+    public string audioAlias = "soundentitysfx"; // The Audio Manager would prefer to have a special alias for different audios, specified here
+    public float audioVolume = 1.0f; // The volume of this audio // TODO: Decide if volume's between 0.0<->1.0, or 0.0<->100.0!
+    public bool audioRepeats; // Toggles whether or not this audio should repeat
 
     private bool playing; // Determines whether or not this entity's already playing an audio
 
@@ -25,14 +25,13 @@ public class SoundEntity : ToolEntity
 
     public void PlaySound()
     {
-        // If we're not already playing our audio...
+        // If we're not already playing our sound...
         if ( !playing )
         {
-            // Try to do so!
-            if ( AudioManager.PlaySound( audioPath, audioAlias, audioRepeats ) )
+            // Try to play our sound!
+            if ( AudioManager.PlaySound( audioPath, audioAlias, audioVolume, audioRepeats ) )
             {
                 Log.Info( $"Playing sound: \"{audioPath}\"...", true );
-                playing = true;
             }
             else // If it failed for some reason...
             {
@@ -42,12 +41,18 @@ public class SoundEntity : ToolEntity
                 return;
             }
         }
-        else // Otherwise...
+        else // Otherwise, if we are, we should get a warning!
         {
-            // Don't do anything
-            Log.Warning( $"{this} is already playing sound: \"{audioPath}\"!" );
+            Log.Warning( $"Can't play sound \"{audioPath}\" as we're already playing a sound!" );
             return;
         }
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        playing = AudioManager.FileIsPlaying( AudioManager.FindPlayingFile( audioAlias ) );
     }
 
     public void StopSound()
@@ -55,15 +60,8 @@ public class SoundEntity : ToolEntity
         // If we're playing our audio...
         if ( playing )
         {
-            // Stop it!
-            AudioManager.StopSound( audioAlias );
+            AudioManager.StopSound(AudioManager.FindPlayingFile(audioAlias).alias);
             playing = false;
-        }
-        else // Otherwise...
-        {
-            // Don't do anything
-            Log.Warning( $"{this} has been told to have its audio stop playing, but there's no audio playing!" );
-            return;
         }
     }
 }

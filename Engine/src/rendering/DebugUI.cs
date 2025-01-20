@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Numerics;
+using System.Text;
 
 using ImGuiNET;
 
 using Toast.Engine.Entities;
+using Toast.Engine.Entities.Brushes;
+using Toast.Engine.Entities.Tools;
 
 namespace Toast.Engine.Rendering;
 
@@ -31,7 +35,7 @@ public static class DebugUI
                     // Create a tree node for every entity
                     if ( ImGui.TreeNodeEx( $"{entities[i]}", ImGuiTreeNodeFlags.Framed ) )
                     {
-                        ImGui.Text( $"Type: {entities[i].type}" );
+                        ImGui.Text( $"Type: \"{entities[i].type}\"" );
                         ImGui.Text( $"Alive? {entities[i].IsAlive()}" );
                         ImGui.DragFloat( "Health", ref entities[i].GetHealth() );
 
@@ -40,6 +44,29 @@ public static class DebugUI
                             ImGui.InputFloat3( "Position", ref entities[i].GetPosition() );
                             ImGui.InputFloat3( "Velocity", ref entities[i].GetVelocity() );
                             ImGui.InputFloat4( "Rotation", ref entities[i].GetRotation() );
+                        }
+
+                        // Show different things depending on different entity types
+                        if ( entities[i] is SoundEntity soundEntity )
+                        {
+                            ImGui.SeparatorText( "Sound Entity Variables" );
+
+                            ImGui.InputText( "Sound Path", ref soundEntity.audioPath, 2048 );
+                            ImGui.InputText( "Sound Alias", ref soundEntity.audioAlias, 2048 );
+                            ImGui.SliderFloat( "Sound Volume", ref soundEntity.audioVolume, 0.0f, 1.0f );
+                            ImGui.Checkbox( "Sound Repeats", ref soundEntity.audioRepeats );
+
+                            ImGui.Separator();
+
+                            if ( ImGui.Button( "Play Sound" ) )
+                            {
+                                soundEntity.PlaySound();
+                            }
+
+                            if ( ImGui.Button( "Stop Sound" ) )
+                            {
+                                soundEntity.StopSound();
+                            }
                         }
 
                         ImGui.TreePop();

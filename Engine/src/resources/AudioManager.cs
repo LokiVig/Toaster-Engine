@@ -21,8 +21,9 @@ public static class AudioManager
     /// </summary>
     /// <param name="path">The path to the specific sound we wish to play.</param>
     /// <param name="alias">Effectively which channel this sound is played on. This should be unique!</param>
+    /// <param name="volume">Determines the volume of which this sound should play at.</param>
     /// <param name="repeats">Determines whether or not this sound should repeat (loop) or not.</param>
-    public static bool PlaySound( string path, string alias = "sfx", bool repeats = false )
+    public static bool PlaySound( string path, string alias = "sfx", float volume = 1.0f, bool repeats = false )
     {
         // Index of repeated alias files
         int i = 0;
@@ -46,17 +47,54 @@ public static class AudioManager
         // If this sound effect should repeat (e.g. if the sound is ambience or music)...
         if ( repeats )
         {
-            mciSendString( $"play {alias} wait repeat" ); // Play the sound repeatedly
+            mciSendString( $"play {alias} repeat" ); // Play the sound repeatedly
         }
         else // Otherwise...
         {
             mciSendString( $"play {alias}" ); // Play the sound once
         }
 
-        playingFiles.Add( new AudioFile { filepath = path, alias = alias, repeats = repeats } ); // Add a new playing file to the list
+        playingFiles.Add( new AudioFile { filepath = path, alias = alias, volume = volume, repeats = repeats } ); // Add a new playing file to the list
 
         // Successful audio playback! Returning true...
         return true;
+    }
+
+    /// <summary>
+    /// Returns the AudioManager's list of currently playing <see cref="AudioFile"/>'s.
+    /// </summary>
+    public static List<AudioFile> GetPlayingFiles()
+    {
+        return playingFiles;
+    }
+
+    /// <summary>
+    /// Checks whether or not the argument file is in our list of playing files,<br/>
+    /// therefore is playing.
+    /// </summary>
+    public static bool FileIsPlaying( AudioFile file )
+    {
+        return playingFiles.Contains( file );
+    }
+
+    /// <summary>
+    /// Find a currently playing file from an alias.
+    /// </summary>
+    public static AudioFile FindPlayingFile( string alias )
+    {
+        // For every file we're currently playing...
+        foreach ( AudioFile file in playingFiles )
+        {
+            // Check if the current one contains the argument alias...
+            if ( file.alias.Contains( alias ) )
+            {
+                // If so, return it!
+                return file;
+            }
+        }
+
+        // Couldn't find one! Returning null
+        return null;
     }
 
     /// <summary>
@@ -64,7 +102,7 @@ public static class AudioManager
     /// </summary>
     public static void UpdateAllPlayingFiles()
     {
-        for (int i = 0; i < playingFiles.Count; i++ )
+        for ( int i = 0; i < playingFiles.Count; i++ )
         {
             // Get the current file
             AudioFile file = playingFiles[i];
@@ -77,7 +115,7 @@ public static class AudioManager
             //Log.Info( $"Status of sound \"{file.filepath}\" (alias \"{file.alias}\"): \"{strStatus}\"" );
 
             // If its status is "stopped"...
-            if ( strStatus.Contains( "stopped" ) || string.IsNullOrEmpty(strStatus) )
+            if ( strStatus.Contains( "stopped" ) || string.IsNullOrEmpty( strStatus ) )
             {
                 StopSound( file.alias ); // Call the stop sound function, doing as what the name suggests
             }
@@ -99,6 +137,7 @@ public static class AudioManager
                 mciSendString( $"stop {alias}" ); // Stop the sound
                 mciSendString( $"close {alias}" ); // Close the sound
                 playingFiles.Remove( file ); // Remove it from our list of playing sounds
+                file.Dispose(); // Dispose of the file
 
                 return; // Get outta here! After this is the fail case
             }
