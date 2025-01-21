@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 using Toast.Engine.Resources;
 
@@ -210,6 +211,15 @@ public class TriggerBrush : BrushEntity
 
         // Get the entity we're supposed to effect
         Entity foundTarget = EngineManager.currentScene.FindEntity(targetEntity);
+
+        // Make sure our found target isn't null
+        if ( foundTarget == null )
+        {
+            // Though, if it is...
+            // We've got a null reference error!
+            Log.Error<NullReferenceException>( $"Trigger brush {this} found entity returned null!" );
+            return false;
+        }
 
         Log.Info( $"TriggerBrush {this} has been triggered.\n" +
                           $"\tTarget: {foundTarget}\n" +

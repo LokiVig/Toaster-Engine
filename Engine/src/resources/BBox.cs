@@ -8,8 +8,8 @@ namespace Toast.Engine.Resources;
 /// </summary>
 public class BBox
 {
-	public Vector3 mins { get; set; } // The minimum extents of this BBox
-	public Vector3 maxs { get; set; } // The maximum extents of this BBox
+	public Vector3 mins; // The minimum extents of this BBox
+	public Vector3 maxs; // The maximum extents of this BBox
 
 	public static readonly BBox One = new BBox(-Vector3.One, Vector3.One);
 

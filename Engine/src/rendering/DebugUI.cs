@@ -24,6 +24,10 @@ public static class DebugUI
             // Set the default window size
             ImGui.SetWindowSize( new Vector2( 750, 500 ) );
 
+            // Display framerate / frametime
+            ImGui.Text( $"Frametime: {1000 / ImGui.GetIO().Framerate:.##}ms" );
+            ImGui.Text( $"Framerate: {ImGui.GetIO().Framerate:.#}FPS" );
+
             // Entities \\
             if ( ImGui.TreeNodeEx( "Entities", ImGuiTreeNodeFlags.Framed ) )
             {
@@ -43,6 +47,12 @@ public static class DebugUI
                             ImGui.InputFloat3( "Position", ref entities[i].GetPosition() );
                             ImGui.InputFloat3( "Velocity", ref entities[i].GetVelocity() );
                             ImGui.InputFloat4( "Rotation", ref entities[i].GetRotation() );
+
+                            ImGui.SeparatorText( "Bounding Box" );
+                            {
+                                ImGui.InputFloat3( "Mins", ref entities[i].GetBBox().mins );
+                                ImGui.InputFloat3( "Maxs", ref entities[i].GetBBox().maxs );
+                            }
                         }
 
                         //
@@ -155,12 +165,85 @@ public static class DebugUI
 
                             ImGui.Separator();
 
-                            byte[] triggererBuffer = new byte[2048];
-                            ImGui.InputText( "Entity Triggering This Trigger", triggererBuffer, (uint)triggererBuffer.Length );
+                            #region ENTITYEVENTS
+                            if ( ImGui.BeginCombo( "Entity Event", $"{trigger.targetEvent}" ) )
+                            {
+                                if ( ImGui.Selectable( $"{EntityEvent.None}" ) )
+                                {
+                                    trigger.targetEvent = EntityEvent.None;
+                                }
+
+                                if ( ImGui.Selectable( $"{EntityEvent.Kill}" ) )
+                                {
+                                    trigger.targetEvent = EntityEvent.Kill;
+                                }
+
+                                if ( ImGui.Selectable( $"{EntityEvent.Delete}" ) )
+                                {
+                                    trigger.targetEvent = EntityEvent.Delete;
+                                }
+
+                                if ( ImGui.Selectable( $"{EntityEvent.SetHealth}" ) )
+                                {
+                                    trigger.targetEvent = EntityEvent.SetHealth;
+                                }
+
+                                if ( ImGui.Selectable( $"{EntityEvent.TakeDamage}" ) )
+                                {
+                                    trigger.targetEvent = EntityEvent.TakeDamage;
+                                }
+
+                                if ( ImGui.Selectable( $"{EntityEvent.SetPosition}" ) )
+                                {
+                                    trigger.targetEvent = EntityEvent.SetPosition;
+                                }
+
+                                if ( ImGui.Selectable( $"{EntityEvent.SetBBox}" ) )
+                                {
+                                    trigger.targetEvent = EntityEvent.SetBBox;
+                                }
+
+                                if ( ImGui.Selectable( $"{EntityEvent.SpawnEntity}" ) )
+                                {
+                                    trigger.targetEvent = EntityEvent.SpawnEntity;
+                                }
+
+                                if ( ImGui.Selectable( $"{EntityEvent.SetRotation}" ) )
+                                {
+                                    trigger.targetEvent = EntityEvent.SetRotation;
+                                }
+
+                                if ( ImGui.Selectable( $"{EntityEvent.PlaySound}" ) )
+                                {
+                                    trigger.targetEvent = EntityEvent.PlaySound;
+                                }
+
+                                if ( ImGui.Selectable( $"{EntityEvent.StopSound}" ) )
+                                {
+                                    trigger.targetEvent = EntityEvent.StopSound;
+                                }
+
+                                ImGui.EndCombo();
+                            }
+                            #endregion
+
+                            #region TRIGGERVALUES
+                            ImGui.Separator();
+
+                            ImGui.InputInt( "Int Value", ref trigger.iValue );
+                            ImGui.InputFloat( "Float Value", ref trigger.fValue );
+                            ImGui.SliderInt( "Bool Value", ref trigger.bValue, -1, 1);
+                            ImGui.InputFloat3( "Vector3 Value", ref trigger.v3Value );
+                            ImGui.InputFloat4( "Vector4 Value", ref trigger.v4Value );
+                            ImGui.InputFloat3( "Bounding Box Mins", ref trigger.bbValue.mins );
+                            ImGui.InputFloat3( "Bounding Box Maxs", ref trigger.bbValue.maxs );
+                            #endregion
+
+                            ImGui.Separator();
 
                             if ( ImGui.Button( "Trigger" ) )
                             {
-                                trigger.OnTrigger(EngineManager.currentScene.FindEntity(Encoding.Default.GetString(triggererBuffer)));
+                                trigger.OnTrigger(null);
                             }
                         }
 
@@ -193,9 +276,6 @@ public static class DebugUI
 
                 ImGui.TreePop();
             }
-
-            ImGui.Text( $"Frametime: {1000 / ImGui.GetIO().Framerate:.##}ms" );
-            ImGui.Text( $"Framerate: {ImGui.GetIO().Framerate:.#}FPS" );
 
             ImGui.End();
         }
