@@ -18,21 +18,21 @@ public class TriggerBrush : BrushEntity
     private static readonly Entity EVALUE_DEFAULT = null;
     private static readonly BBox BBVALUE_DEFAULT = BBox.One;
 
-    public int iValue { get; set; } = IVALUE_DEFAULT; // Event int value
-    public float fValue { get; set; } = FVALUE_DEFAULT; // Event float value
-    public int bValue { get; set; } = BVALUE_DEFAULT; // Event bool value (<=-1 -> none, =0 -> false, >=1 -> true)
-    public Vector3 v3Value { get; set; } = V3VALUE_DEFAULT; // Event Vector3 value
-    public Vector4 v4Value { get; set; } = V4VALUE_DEFAULT; // Event Quaternion value
-    public Entity eValue { get; set; } = EVALUE_DEFAULT; // Event Entity value
-    public BBox bbValue { get; set; } = BBVALUE_DEFAULT; // Event BBox value
+    public int iValue = IVALUE_DEFAULT; // Event int value
+    public float fValue = FVALUE_DEFAULT; // Event float value
+    public int bValue = BVALUE_DEFAULT; // Event bool value (<=-1 -> none, =0 -> false, >=1 -> true)
+    public Vector3 v3Value = V3VALUE_DEFAULT; // Event Vector3 value
+    public Vector4 v4Value = V4VALUE_DEFAULT; // Event Quaternion value
+    public Entity eValue = EVALUE_DEFAULT; // Event Entity value
+    public BBox bbValue = BBVALUE_DEFAULT; // Event BBox value
 
-    public string targetEntity { get; set; } // The entity we wish to target (decided by an entity's ID)
-    public EntityEvent targetEvent { get; set; } // The desired event
+    public string targetEntity; // The entity we wish to target (decided by an entity's ID)
+    public EntityEvent targetEvent; // The desired event
 
-    public TriggerOn triggerOn { get; set; } // When should this trigger, trigger?
-    public TriggerType triggerType { get; set; } // Which type of trigger is this?
-    public TriggerBy triggerBy { get; set; } // What should this trigger, trigger from?
-    public int triggerCount { get; set; } // The max amount of times this trigger should be triggered
+    public TriggerOn triggerOn; // When should this trigger, trigger?
+    public TriggerType triggerType; // Which type of trigger is this?
+    public TriggerBy triggerBy; // What should this trigger, trigger from?
+    public int triggerCount; // The max amount of times this trigger should be triggered
 
     private int triggeredCount; // The amount of times this trigger has been triggered
     private bool hasTriggered; // Determines whether this trigger has already been triggered
@@ -89,6 +89,26 @@ public class TriggerBrush : BrushEntity
                 break;
             }
         }
+    }
+
+    /// <summary>
+    /// Has this TriggerBrush been triggered?<br/>
+    /// Main use for this is the Debug UI, determining whether or not this TriggerBrush has already been<br/>
+    /// triggered when our <see cref="triggerType"/> is <see cref="TriggerType.Once"/>.
+    /// </summary>
+    public bool HasBeenTriggered()
+    {
+        return hasTriggered;
+    }
+
+    /// <summary>
+    /// How many times has this TriggerBrush been triggered?<br/>
+    /// Main use for this is the Debug UI, displaying how many times this TriggerBrush has been<br/>
+    /// triggered when our <see cref="triggerType"/> is <see cref="TriggerType.Count"/>.
+    /// </summary>
+    public int TriggeredCount()
+    {
+        return triggeredCount;
     }
 
     /// <summary>
@@ -177,7 +197,7 @@ public class TriggerBrush : BrushEntity
                     return false;
                 }
 
-            case TriggerBy.NPCs: // Only NPCs should be able to trigger this
+            case TriggerBy.NPC: // Only NPCs should be able to trigger this
                 if ( triggerEntity is NPCEntity )
                 {
                     break;
@@ -265,7 +285,7 @@ public enum TriggerBy
 {
     All, // Trigger by all things
     Player, // Trigger only by the player
-    NPCs, // Trigger only by NPCs
+    NPC, // Trigger only by NPCs
 }
 
 public enum TriggerType

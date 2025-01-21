@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Numerics;
 using System.Text;
 
@@ -46,7 +45,11 @@ public static class DebugUI
                             ImGui.InputFloat4( "Rotation", ref entities[i].GetRotation() );
                         }
 
+                        //
                         // Show different things depending on different entity types
+                        //
+
+                        // Sound entity
                         if ( entities[i] is SoundEntity soundEntity )
                         {
                             ImGui.SeparatorText( "Sound Entity Variables" );
@@ -69,6 +72,110 @@ public static class DebugUI
                             }
                         }
 
+                        // Trigger brush
+                        if ( entities[i] is TriggerBrush trigger )
+                        {
+                            ImGui.SeparatorText( "Trigger Brush Variables" );
+
+                            ImGui.InputText( "Target Entity", ref trigger.targetEntity, 2048 );
+
+                            if ( ImGui.BeginCombo( "Trigger Type", $"{trigger.triggerType}" ) )
+                            {
+                                if ( ImGui.Selectable( $"{TriggerType.Once}" ) )
+                                {
+                                    trigger.triggerType = TriggerType.Once;
+                                }
+
+                                if ( ImGui.Selectable( $"{TriggerType.Multiple}" ) )
+                                {
+                                    trigger.triggerType = TriggerType.Multiple;
+                                }
+
+                                if ( ImGui.Selectable( $"{TriggerType.Count}" ) )
+                                {
+                                    trigger.triggerType = TriggerType.Count;
+                                }
+
+                                ImGui.EndCombo();
+                            }
+
+                            if ( ImGui.BeginCombo( "Trigger By", $"{trigger.triggerBy}" ) )
+                            {
+                                if ( ImGui.Selectable( $"{TriggerBy.All}" ) )
+                                {
+                                    trigger.triggerBy = TriggerBy.All;
+                                }
+
+                                if ( ImGui.Selectable( $"{TriggerBy.Player}" ) )
+                                {
+                                    trigger.triggerBy = TriggerBy.Player;
+                                }
+
+                                if ( ImGui.Selectable( $"{TriggerBy.NPC}" ) )
+                                {
+                                    trigger.triggerBy = TriggerBy.NPC;
+                                }
+
+                                ImGui.EndCombo();
+                            }
+
+                            if ( ImGui.BeginCombo( "Trigger On", $"{trigger.triggerOn}" ) )
+                            {
+                                if ( ImGui.Selectable( $"{TriggerOn.Trigger}" ) )
+                                {
+                                    trigger.triggerOn = TriggerOn.Trigger;
+                                }
+
+                                if ( ImGui.Selectable( $"{TriggerOn.Enter}" ) )
+                                {
+                                    trigger.triggerOn = TriggerOn.Enter;
+                                }
+
+                                if ( ImGui.Selectable( $"{TriggerOn.Exit}" ) )
+                                {
+                                    trigger.triggerOn = TriggerOn.Exit;
+                                }
+
+                                ImGui.EndCombo();
+                            }
+
+                            if ( trigger.triggerType == TriggerType.Count )
+                            {
+                                ImGui.Separator();
+
+                                ImGui.InputInt( "Max Trigger Count", ref trigger.triggerCount );
+                                ImGui.Text( $"Current Trigger Count: {trigger.TriggeredCount()}" );
+                            }
+                            else if ( trigger.triggerType == TriggerType.Once )
+                            {
+                                ImGui.Separator();
+
+                                ImGui.Text( $"Has Been Triggered? {trigger.HasBeenTriggered()}" );
+                            }
+
+                            ImGui.Separator();
+
+                            byte[] triggererBuffer = new byte[2048];
+                            ImGui.InputText( "Entity Triggering This Trigger", triggererBuffer, (uint)triggererBuffer.Length );
+
+                            if ( ImGui.Button( "Trigger" ) )
+                            {
+                                trigger.OnTrigger(EngineManager.currentScene.FindEntity(Encoding.Default.GetString(triggererBuffer)));
+                            }
+                        }
+
+                        ImGui.Separator();
+
+                        if ( ImGui.Button( "Kill Entity" ) )
+                        {
+                            entities[i].OnEvent( EntityEvent.Kill );
+                        }
+
+                        if ( ImGui.Button( "Remove Entity" ) )
+                        {
+                            entities[i].Remove();
+                        }
+
                         ImGui.TreePop();
                     }
                 }
@@ -87,8 +194,8 @@ public static class DebugUI
                 ImGui.TreePop();
             }
 
-            ImGui.Text( $"Frametime: {1000 / ImGui.GetIO().Framerate:.##}" );
-            ImGui.Text( $"Framerate: {ImGui.GetIO().Framerate:.#}" );
+            ImGui.Text( $"Frametime: {1000 / ImGui.GetIO().Framerate:.##}ms" );
+            ImGui.Text( $"Framerate: {ImGui.GetIO().Framerate:.#}FPS" );
 
             ImGui.End();
         }

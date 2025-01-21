@@ -507,7 +507,7 @@ public class Entity
 
         // Log to the console that this entity has died!
         Log.Info( $"Entity {this} has died.\n" +
-                          $"\tLast attacker: {lastAttacker}" );
+                          $"\tLast attacker: {(lastAttacker != null ? lastAttacker : "N/A")}" );
     }
 
     /// <summary>
