@@ -7,11 +7,11 @@ namespace Toast.Engine.Entities.Tools;
 public class SoundEntity : ToolEntity
 {
     public string audioPath = "resources/audio/engine/error.mp3"; // The actual audio we should play
-    public string audioAlias = "soundentitysfx"; // The Audio Manager would prefer to have a special alias for different audios, specified here
-    public float audioVolume = 1.0f; // The volume of this audio // TODO: Decide if volume's between 0.0<->1.0, or 0.0<->100.0!
+    public float audioVolume = 1.0f; // The volume of this audio, this should be a range between 0.0<->1.0!
     public bool audioRepeats; // Toggles whether or not this audio should repeat
 
     private bool playing; // Determines whether or not this entity's already playing an audio
+    private AudioFile localAudioFile; // Our local audio file, generated when we play our sound
 
     public SoundEntity()
     {
@@ -29,17 +29,7 @@ public class SoundEntity : ToolEntity
         if ( !playing )
         {
             // Try to play our sound!
-            if ( AudioManager.PlaySound( audioPath, audioAlias, audioVolume, audioRepeats ) )
-            {
-                Log.Info( $"Playing sound: \"{audioPath}\"...", true );
-            }
-            else // If it failed for some reason...
-            {
-                // We should return!
-                // We shouldn't need to log cause of the fact that the failed AudioManager.PlaySound oughta log
-                // the issue for us
-                return;
-            }
+            localAudioFile = AudioManager.PlaySound( audioPath, audioVolume, audioRepeats );
         }
         else // Otherwise, if we are, we should get a warning!
         {
@@ -52,7 +42,7 @@ public class SoundEntity : ToolEntity
     {
         base.Update();
 
-        playing = AudioManager.FileIsPlaying( AudioManager.FindPlayingFile( audioAlias ) );
+        playing = AudioManager.FileIsPlaying( localAudioFile );
     }
 
     public void StopSound()
@@ -60,7 +50,7 @@ public class SoundEntity : ToolEntity
         // If we're playing our audio...
         if ( playing )
         {
-            AudioManager.StopSound(AudioManager.FindPlayingFile(audioAlias).alias);
+            AudioManager.StopSound( localAudioFile );
             playing = false;
         }
     }

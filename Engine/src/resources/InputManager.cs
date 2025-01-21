@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 
-using Toast.Engine.Rendering;
-
 using Veldrid;
 
 namespace Toast.Engine.Resources;

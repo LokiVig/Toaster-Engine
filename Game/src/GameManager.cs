@@ -59,6 +59,9 @@ public class GameManager
         EntitySpawner<Player> playerSpawner = new( Vector3.Zero );
 
         SoundEntity audioPlayer = new SoundEntity( new Vector3( 0, 0, 15.0f ) );
+        audioPlayer.audioPath = "resources/audio/music/debugmusic.mp3";
+        audioPlayer.audioVolume = 0.25f;
+        audioPlayer.audioRepeats = true;
 
         TriggerBrush trigger = new TriggerBrush();
         trigger.SetBBox( new BBox( new Vector3( -15 ), new Vector3( 15 ) ) );

@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Numerics;
-using System.Text;
+using System.Collections.Generic;
 
 using ImGuiNET;
 
@@ -65,7 +64,6 @@ public static class DebugUI
                             ImGui.SeparatorText( "Sound Entity Variables" );
 
                             ImGui.InputText( "Sound Path", ref soundEntity.audioPath, 2048 );
-                            ImGui.InputText( "Sound Alias", ref soundEntity.audioAlias, 2048 );
                             ImGui.SliderFloat( "Sound Volume", ref soundEntity.audioVolume, 0.0f, 1.0f );
                             ImGui.Checkbox( "Sound Repeats", ref soundEntity.audioRepeats );
 
@@ -165,7 +163,7 @@ public static class DebugUI
 
                             ImGui.Separator();
 
-                            #region ENTITYEVENTS
+                            #region ENTITY_EVENTS
                             if ( ImGui.BeginCombo( "Entity Event", $"{trigger.targetEvent}" ) )
                             {
                                 if ( ImGui.Selectable( $"{EntityEvent.None}" ) )
@@ -227,7 +225,7 @@ public static class DebugUI
                             }
                             #endregion
 
-                            #region TRIGGERVALUES
+                            #region TRIGGER_VALUES
                             ImGui.Separator();
 
                             ImGui.InputInt( "Int Value", ref trigger.iValue );

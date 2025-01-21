@@ -130,7 +130,7 @@ public class Renderer
         graphicsDevice.SwapBuffers(graphicsDevice.MainSwapchain);
 
         // Handle processing events
-        //Sdl2Events.ProcessEvents();
+        Sdl2Events.ProcessEvents();
     }
 
     /// <summary>

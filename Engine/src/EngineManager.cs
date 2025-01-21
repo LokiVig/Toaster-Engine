@@ -26,8 +26,6 @@ public class EngineManager
     public static WTF currentFile; // The currently loaded WTF file / map
     public static Scene currentScene; // The currently running scene, initialized from the current file
 
-    public static OSPlatform activeOS; // The operating system the engine's actively running on
-
     public static float deltaTime; // Helps stopping you from using FPS-dependant calculations
 
     //---------------------------------------//
@@ -43,9 +41,6 @@ public class EngineManager
 
     public static void Initialize( string title = null )
     {
-        // Find out which OS we're running on
-        // Used for things like the audio manager, etc.
-
         // Initialize file logging
         Log.OpenLogFile();
 
@@ -79,8 +74,8 @@ public class EngineManager
             // Ensure deltaTime is non-negative
             deltaTime = Math.Max( 0, deltaTime );
 
-            // Update the static audio manager
-            AudioManager.UpdateAllPlayingFiles();
+            // Update the audio manager
+            AudioManager.UpdatePlayingFiles();
 
             // Open the debug UI if the F12 key is pressed
             if ( InputManager.IsKeyDown( Key.F12 ) )
