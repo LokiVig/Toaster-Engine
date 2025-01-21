@@ -146,7 +146,7 @@ public static class AudioManager
     }
 
     /// <summary>
-    /// Plays the engine's warning sound
+    /// Plays the engine's warning sound.
     /// </summary>
     public static void PlayWarning()
     {

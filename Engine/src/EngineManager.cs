@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 using Veldrid;
 
 using Toast.Engine.Resources;
 using Toast.Engine.Rendering;
-using System.Diagnostics;
 
 namespace Toast.Engine;
 
