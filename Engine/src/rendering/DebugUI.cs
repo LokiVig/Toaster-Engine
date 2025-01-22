@@ -18,7 +18,9 @@ public static class DebugUI
 {
     public static void Open( ref bool open )
     {
-        if ( ImGui.Begin( "- Debug Menu -", ref open, ImGuiWindowFlags.NoSavedSettings ) )
+        open = true;
+
+        if ( ImGui.Begin( "- Debug Menu -", ref open, ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDocking ) )
         {
             // Set the default window size
             ImGui.SetWindowSize( new Vector2( 750, 500 ) );
@@ -28,7 +30,7 @@ public static class DebugUI
             ImGui.Text( $"Framerate: {ImGui.GetIO().Framerate:.#}FPS" );
 
             // Entities \\
-            if ( ImGui.TreeNodeEx( "Entities", ImGuiTreeNodeFlags.Framed ) )
+            if ( ImGui.TreeNodeEx( "Entities", ImGuiTreeNodeFlags.Framed | ImGuiTreeNodeFlags.DefaultOpen ) )
             {
                 List<Entity> entities = EngineManager.currentScene.GetEntities();
 
@@ -41,7 +43,7 @@ public static class DebugUI
                         ImGui.Text( $"Alive? {entities[i].IsAlive()}" );
                         ImGui.DragFloat( "Health", ref entities[i].GetHealth() );
 
-                        ImGui.SeparatorText( "Transform" );
+                        if (ImGui.TreeNodeEx("Transform", ImGuiTreeNodeFlags.DefaultOpen))
                         {
                             ImGui.InputFloat3( "Position", ref entities[i].GetPosition() );
                             ImGui.InputFloat3( "Velocity", ref entities[i].GetVelocity() );
@@ -52,6 +54,8 @@ public static class DebugUI
                                 ImGui.InputFloat3( "Mins", ref entities[i].GetBBox().mins );
                                 ImGui.InputFloat3( "Maxs", ref entities[i].GetBBox().maxs );
                             }
+
+                            ImGui.TreePop();
                         }
 
                         //
@@ -265,7 +269,7 @@ public static class DebugUI
             }
 
             // Debug Commands \\
-            if ( ImGui.TreeNodeEx( "Commands", ImGuiTreeNodeFlags.Framed ) )
+            if ( ImGui.TreeNodeEx( "Commands", ImGuiTreeNodeFlags.Framed | ImGuiTreeNodeFlags.DefaultOpen ) )
             {
                 if ( ImGui.Button( "Exit Game" ) )
                 {

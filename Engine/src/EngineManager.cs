@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 using Veldrid;
 
@@ -32,6 +33,7 @@ public class EngineManager
     //---------------------------------------//
 
     private static float lastFrameTime; // Time of the last frame in seconds
+
     private static bool debugUIOpen; // Used to determine whether or not we should display the debug UI
 
     //---------------------------------------//
@@ -42,6 +44,11 @@ public class EngineManager
     {
         // Initialize file logging
         Log.OpenLogFile();
+
+        // Initialize default console commands
+        ConsoleManager.AddCommand( new ConsoleCommand() { alias = "clear", onCall = ConsoleUI.Clear } );
+        ConsoleManager.AddCommand( new ConsoleCommand() { alias = "shutdown", onCall = Shutdown } ); // TODO: This causes an exception! Fix!
+        ConsoleManager.AddCommand( new ConsoleCommand() { alias = "playsound", onArgsCall = ( List<object> args ) => { AudioManager.PlaySound( (string)args[0] ); } } );
 
         try
         {
@@ -82,8 +89,8 @@ public class EngineManager
                 debugUIOpen = true;
             }
 
-            // Handle ImGui things
-            HandleUI();
+            // Manage UI elements (mainly ImGui related)
+            ManageUI();
 
             // Call the OnUpdate event
             // This makes it so everything subscribed to the event will call their own,
@@ -95,11 +102,12 @@ public class EngineManager
         }
     }
 
-    private static void HandleUI()
+    private static void ManageUI()
     {
         if ( debugUIOpen )
         {
             DebugUI.Open( ref debugUIOpen );
+            ConsoleUI.Open( ref debugUIOpen );
         }
     }
 

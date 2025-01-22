@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 
+using Toast.Engine.Rendering;
+
 namespace Toast.Engine.Resources;
 
 public struct Log
@@ -77,7 +79,7 @@ public struct Log
         if ( extraInfo )
         {
             // Add the line of where it was called, the caller, the method that called us, then the message
-            Console.WriteLine( $"(Line {line}) {caller}.{method}: INFO; {message}\n" );
+            ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: INFO; {message}\n" );
 
             // Write to the log file
             logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: INFO; {message}\n" );
@@ -85,7 +87,7 @@ public struct Log
         else // Otherwise...
         {
             // Just write the message
-            Console.WriteLine( $"{message}\n" );
+            ConsoleUI.WriteLine( $"{message}\n" );
 
             // Write to the log file
             logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : {message}\n" );
@@ -113,7 +115,7 @@ public struct Log
         }
 
         // Write to the console what just happened
-        Console.WriteLine( $"(Line {line}) {caller}.{method}: SUCCESS; {message}\n" );
+        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: SUCCESS; {message}\n" );
 
         // Write to the log file
         logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: SUCCESS; {message}\n" );
@@ -140,7 +142,7 @@ public struct Log
         }
 
         // Write to the console what just happened
-        Console.WriteLine( $"(Line {line}) {caller}.{method}: WARNING; {message}\n" );
+        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: WARNING; {message}\n" );
 
         // Write to the log file
         logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: WARNING; {message}\n" );
@@ -167,7 +169,7 @@ public struct Log
         }
 
         // Write to the console what just happened
-        Console.WriteLine( $"(Line {line}) {caller}.{method}: ERROR; {message}\n" );
+        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: ERROR; {message}\n" );
 
         // Write to the log file
         logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: ERROR; {message}\n" );
@@ -210,7 +212,7 @@ public struct Log
         }
 
         // Write to the console what just happened
-        Console.WriteLine( $"(Line {line}) {caller}.{method}: ERROR; {message}\n" );
+        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: ERROR; {message}\n" );
 
         // Write to the log file
         logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: ERROR; {message}\n" );

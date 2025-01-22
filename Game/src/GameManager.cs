@@ -51,6 +51,9 @@ public class GameManager
                                           // prospects, while this class's should be focused more on the game-specific
                                           // functionalities
 
+        // We shouldn't have the regular terminal appear
+        
+
         // Initialize everything necessary before the game is actually run
         // DEBUG: Setting up a basic scene to test out certain aspects of what's done
         EngineManager.currentFile = new WTF( "test.wtf" );
