@@ -43,7 +43,7 @@ public static class DebugUI
                         ImGui.Text( $"Alive? {entities[i].IsAlive()}" );
                         ImGui.DragFloat( "Health", ref entities[i].GetHealth() );
 
-                        if (ImGui.TreeNodeEx("Transform", ImGuiTreeNodeFlags.DefaultOpen))
+                        if ( ImGui.TreeNodeEx( "Transform", ImGuiTreeNodeFlags.DefaultOpen ) )
                         {
                             ImGui.InputFloat3( "Position", ref entities[i].GetPosition() );
                             ImGui.InputFloat3( "Velocity", ref entities[i].GetVelocity() );
@@ -91,7 +91,7 @@ public static class DebugUI
 
                             ImGui.InputText( "Target Entity", ref trigger.targetEntity, 2048 );
 
-                            if ( ImGui.BeginCombo( "Trigger Type", $"{trigger.triggerType}" ) )
+                            if ( ImGui.BeginCombo( "Trigger Type", $"{trigger.triggerType}", ImGuiComboFlags.WidthFitPreview ) )
                             {
                                 if ( ImGui.Selectable( $"{TriggerType.Once}" ) )
                                 {
@@ -111,7 +111,7 @@ public static class DebugUI
                                 ImGui.EndCombo();
                             }
 
-                            if ( ImGui.BeginCombo( "Trigger By", $"{trigger.triggerBy}" ) )
+                            if ( ImGui.BeginCombo( "Trigger By", $"{trigger.triggerBy}", ImGuiComboFlags.WidthFitPreview ) )
                             {
                                 if ( ImGui.Selectable( $"{TriggerBy.All}" ) )
                                 {
@@ -131,7 +131,7 @@ public static class DebugUI
                                 ImGui.EndCombo();
                             }
 
-                            if ( ImGui.BeginCombo( "Trigger On", $"{trigger.triggerOn}" ) )
+                            if ( ImGui.BeginCombo( "Trigger On", $"{trigger.triggerOn}", ImGuiComboFlags.WidthFitPreview ) )
                             {
                                 if ( ImGui.Selectable( $"{TriggerOn.Trigger}" ) )
                                 {
@@ -234,7 +234,7 @@ public static class DebugUI
 
                             ImGui.InputInt( "Int Value", ref trigger.iValue );
                             ImGui.InputFloat( "Float Value", ref trigger.fValue );
-                            ImGui.SliderInt( "Bool Value", ref trigger.bValue, -1, 1);
+                            ImGui.SliderInt( "Bool Value", ref trigger.bValue, -1, 1 );
                             ImGui.InputFloat3( "Vector3 Value", ref trigger.v3Value );
                             ImGui.InputFloat4( "Vector4 Value", ref trigger.v4Value );
                             ImGui.InputFloat3( "Bounding Box Mins", ref trigger.bbValue.mins );
@@ -245,7 +245,7 @@ public static class DebugUI
 
                             if ( ImGui.Button( "Trigger" ) )
                             {
-                                trigger.OnTrigger(null);
+                                trigger.OnTrigger( null );
                             }
                         }
 
@@ -271,9 +271,14 @@ public static class DebugUI
             // Debug Commands \\
             if ( ImGui.TreeNodeEx( "Commands", ImGuiTreeNodeFlags.Framed | ImGuiTreeNodeFlags.DefaultOpen ) )
             {
+                if ( ImGui.Button( "Open Console" ) )
+                {
+                    ConsoleUI.Open( ref open );
+                }
+
                 if ( ImGui.Button( "Exit Game" ) )
                 {
-                    Environment.Exit( 255 );
+                    EngineManager.EnvironmentShutdown();
                 }
 
                 ImGui.TreePop();

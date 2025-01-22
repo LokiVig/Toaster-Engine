@@ -40,6 +40,10 @@ public class EngineManager
     //				Functions				 //
     //---------------------------------------//
 
+    /// <summary>
+    /// Initialize a new Toaster Engine instance with an optional <paramref name="title"/> argument.
+    /// </summary>
+    /// <param name="title">The title this instance of Toaster Engine should run.</param>
     public static void Initialize( string title = null )
     {
         // Initialize file logging
@@ -47,16 +51,17 @@ public class EngineManager
 
         // Initialize default console commands
         ConsoleManager.AddCommand( new ConsoleCommand() { alias = "clear", onCall = ConsoleUI.Clear } );
-        ConsoleManager.AddCommand( new ConsoleCommand() { alias = "shutdown", onCall = Shutdown } ); // TODO: This causes an exception! Fix!
+        ConsoleManager.AddCommand( new ConsoleCommand() { alias = "quit", onCall = EnvironmentShutdown } );
         ConsoleManager.AddCommand( new ConsoleCommand() { alias = "playsound", onArgsCall = ( List<object> args ) => { AudioManager.PlaySound( (string)args[1] ); } } );
 
+        // Try to...
         try
         {
             // Initialize the renderer
             Renderer.Initialize( $"Toaster Engine - (v.{ENGINE_VERSION}){( title != null ? $" - {title}" : "" )}" );
             Log.Success( "Successfully initialized renderer." );
         }
-        catch ( Exception exc )
+        catch ( Exception exc ) // Handle any exceptions we encounter!
         {
             Log.Error( $"Exception caught while initializing renderer!\n{exc.Message}\n", exc );
         }
@@ -66,6 +71,9 @@ public class EngineManager
         Renderer.window.KeyUp += InputManager.OnKeyUp;
     }
 
+    /// <summary>
+    /// Things to do for every frame.
+    /// </summary>
     public static void Update()
     {
         Stopwatch watch = Stopwatch.StartNew();
@@ -111,6 +119,18 @@ public class EngineManager
         }
     }
 
+    /// <summary>
+    /// Used for the "exit" console command, instantly closes the application with the code 0.
+    /// </summary>
+    public static void EnvironmentShutdown()
+    {
+        Shutdown(); // Call the regular shutdown function
+        Environment.Exit( 0 ); // Exit the environment
+    }
+
+    /// <summary>
+    /// Shut down the engine after a hard day of calling update functions and etc.
+    /// </summary>
     public static void Shutdown()
     {
         // End file logging
