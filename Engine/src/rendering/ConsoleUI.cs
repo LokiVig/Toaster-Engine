@@ -62,7 +62,7 @@ public static class ConsoleUI
         {
             // All of the collective arguments
             // Null by default, allows for commands without arguments to be called too
-            string[] args = null;
+            object[] args = null;
 
             // If our input has spaces...
             if ( input.Contains( " " ) )
@@ -72,7 +72,7 @@ public static class ConsoleUI
             }
 
             // Find our command, either from the first variable of our args list, or directly from our input
-            ConsoleCommand command = ConsoleManager.FindCommand( args != null ? args[0] : input );
+            ConsoleCommand command = ConsoleManager.FindCommand( args != null ? (string)args[0] : input );
 
             // Make sure our command actually is found...
             if ( command == null )

@@ -48,7 +48,15 @@ public class EngineManager
         // Initialize default console commands
         ConsoleManager.AddCommand( new ConsoleCommand() { alias = "clear", onCall = ConsoleUI.Clear } );
         ConsoleManager.AddCommand( new ConsoleCommand() { alias = "shutdown", onCall = Shutdown } ); // TODO: This causes an exception! Fix!
-        ConsoleManager.AddCommand( new ConsoleCommand() { alias = "playsound", onArgsCall = ( List<object> args ) => { AudioManager.PlaySound( (string)args[0] ); } } );
+
+        ConsoleManager.AddCommand( new ConsoleCommand() { alias = "playsound", onArgsCall = ( List<object> args ) => 
+        {
+            float arg2 = 1.0f;
+            bool arg3 = false;
+            
+
+            AudioManager.PlaySound( (string)args[1], arg2, arg3 ); 
+        } } );
 
         try
         {
