@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 using NAudio.Wave;
 
@@ -67,6 +68,12 @@ public static class AudioManager
         }
         catch ( Exception exc ) // Problem caught!
         {
+            if ( exc is FileNotFoundException )
+            {
+                Log.Warning( $"Couldn't find file at path \"{filepath}\"!" );
+                return null;
+            }
+
             Log.Error( $"Exception caught when trying to play sound \"{filepath}\"", exc );
             return null;
         }

@@ -55,7 +55,7 @@ public static class ConsoleUI
     private static void TryCommand()
     {
         // Log the input
-        Log.Info( input, true );
+        Log.Info( input );
 
         // Make sure the input isn't actually empty
         if ( input != string.Empty )
