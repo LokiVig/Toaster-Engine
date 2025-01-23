@@ -110,14 +110,14 @@ public class Renderer
         ConsoleManager.AddCommand( new ConsoleCommand
         {
             alias = "r_windowstate",
-            description = $"Changes which mode the main window should display in, windowed, fullscreen, or borderless fullscreen. (Values are: \"windowed\", \"fullscreen\", \"borderless\".)",
-            
+            description = $"Changes which mode the main window should display in, windowed, fullscreen, or borderless fullscreen.",
+
             onCall = () =>
             {
                 Log.Error( "Can't call r_windowstate without arguments! You need at least one argument specifying which mode the window should be in." );
             },
 
-            onArgsCall = (List<object> args) =>
+            onArgsCall = ( List<object> args ) =>
             {
                 if ( args[1].ToString().ToLower() == "windowed" )
                 {
@@ -135,21 +135,36 @@ public class Renderer
                 {
                     Log.Error( "Invalid input! Argument 1 needs to be either \"windowed\", \"fullscreen\", or \"borderless\"" );
                 }
+            }
+        } );
 
-                // If we have more than one argument...
-                if ( args.Count - 1 > 1 )
+        // R(enderer) WindowResolution
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "r_windowresolution",
+            description = "Changes the resolution of which the renderer window is displayed at.",
+
+            onCall = () =>
+            {
+                Log.Error( "Fuck you." );
+            },
+
+            onArgsCall = ( List<object> args ) =>
+            {
+                if ( !int.TryParse( (string)args[1], out int width ) )
                 {
-                    // Assume width and height arguments as well
-                    if ( int.TryParse( (string)args[2], out int width ) )
-                    {
-                        window.Width = width;
-                    }
-
-                    if ( int.TryParse( (string)args[3], out int height ) )
-                    {
-                        window.Height = height;
-                    }
+                    Log.Error( "First argument was an invalid integer value!" );
+                    return;
                 }
+
+                if ( !int.TryParse( (string)args[2], out int height ) )
+                {
+                    Log.Error( "Second argument was an invalid integer value!" );
+                    return;
+                }
+
+                window.Width = width;
+                window.Height = height;
             }
         } );
     }
