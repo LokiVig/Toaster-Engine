@@ -166,7 +166,7 @@ public static class DebugUI
                             ImGui.Separator();
 
                             #region ENTITY_EVENTS
-                            if ( ImGui.BeginCombo( "Entity Event", $"{trigger.targetEvent}" ) )
+                            if ( ImGui.BeginCombo( "Entity Event", $"{trigger.targetEvent}", ImGuiComboFlags.WidthFitPreview ) )
                             {
                                 if ( ImGui.Selectable( $"{EntityEvent.None}" ) )
                                 {

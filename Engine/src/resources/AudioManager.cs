@@ -70,9 +70,9 @@ public static class AudioManager
     private static void RepeatSound( AudioFile file )
     {
         // Do things that will effectively make it repeat
-        //file.waveOutEvent.Stop(); // Stop it at its end
-        //file.mp3FileReader.Position = 0; // Set its position to 0 (the start of the audio file)
-        //file.waveOutEvent.Play(); // Play the sound again
+        file.audioPlayer.Pause(); // Pause the audio
+        PlaySound( file.filepath, file.volume, file.repeats ); // Play the same file again
+        file.Dispose(); // Then dispose of the file
     }
 
     /// <summary>
@@ -98,13 +98,13 @@ public static class AudioManager
                 // If the file should repeat...
                 if ( file.repeats )
                 {
-                    // Do things that will make this file repeat itself
-                    RepeatSound( file );
+                    RepeatSound( file ); // Do things that will make this file repeat itself
+                    playingFiles[i] = null; // Remove the file from the list
                 }
                 else // Otherwise!
                 {
                     StopSound( file ); // Just stop the sound as per regular
-                    file.Dispose(); // Call the file's dispose method, clear up everything from memory
+                    file.Dispose(); // Call the file's dispose method
                     playingFiles[i] = null; // Also remove it from the list
                 }
             }

@@ -6,6 +6,7 @@ using Veldrid;
 
 using Toast.Engine.Resources;
 using Toast.Engine.Rendering;
+using System.IO;
 
 namespace Toast.Engine;
 
@@ -79,7 +80,8 @@ public class EngineManager
         {
             alias = "clear",
             description = "Clears the console's logs. (Does NOT clear the log file!)",
-            onCall = ConsoleUI.Clear
+            onCall = ConsoleUI.Clear,
+            onArgsCall = ( List<object> args ) => { ConsoleUI.Clear(); }
         } );
 
         // Help
@@ -96,7 +98,48 @@ public class EngineManager
         {
             alias = "playsound",
             description = "Plays a sound from a specified path (should be something like \"resources/audio/engine/error.mp3\".)",
-            onArgsCall = ( List<object> args ) => { AudioManager.PlaySound( (string)args[1] ); }
+            onCall = () => { Log.Error( "Can't play a sound without a specified path to it!" ); },
+            onArgsCall = ( List<object> args ) => 
+            { 
+                // Make sure the specified file exists
+                if ( !File.Exists( (string)args[1] ) )
+                {
+                    Log.Error( $"Couldn't find file at path \"{args[1]}\"!" );
+                    return;
+                }
+                
+                // Play the sound!
+                AudioManager.PlaySound( (string)args[1] ); 
+                Log.Info( $"Playing sound \"{args[1]}\"..." );
+            }
+        } );
+
+        // ToggleCommand
+        ConsoleManager.AddCommand( new ConsoleCommand()
+        {
+            alias = "togglecommand",
+            description = "Disables or enables a specific console command.",
+            onCall = () => { Log.Error( "Cannot toggle a console command without specifying a command!" ); },
+            onArgsCall = (List<object> args) =>
+            {
+                // Find the command
+                ConsoleCommand command = ConsoleManager.FindCommand( (string)args[1] );
+
+                // If we did actually find a command...
+                if ( command != null )
+                {
+                    // If its alias is our own...
+                    if ( command.alias == "togglecommand" )
+                    {
+                        // We can't toggle its status!
+                        Log.Warning( "Can't toggle the toggle command, that'd be problematic!" );
+                        return;
+                    }
+
+                    // Toggle its state!
+                    command.enabled = !command.enabled;
+                }
+            }
         } );
 
         // Quit
@@ -104,7 +147,8 @@ public class EngineManager
         {
             alias = "quit",
             description = "Shuts the engine down entirely.",
-            onCall = EnvironmentShutdown
+            onCall = EnvironmentShutdown,
+            onArgsCall = (List<object> args) => { EnvironmentShutdown(); }
         } );
     }
 

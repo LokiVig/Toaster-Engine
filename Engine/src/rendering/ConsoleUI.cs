@@ -8,11 +8,17 @@ using Toast.Engine.Resources;
 
 namespace Toast.Engine.Rendering;
 
+/// <summary>
+/// The main UI element to display the console.
+/// </summary>
 public static class ConsoleUI
 {
-    private static List<string> logs = new();
-    private static string input = string.Empty;
+    private static List<string> logs = new(); // This console's log of messages
+    private static string input = string.Empty; // The current user input, used for console commands, etc.
 
+    /// <summary>
+    /// Displays the console.
+    /// </summary>
     public static void Display( ref bool open )
     {
         if ( ImGui.Begin( "Console", ref open, ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDocking ) )
@@ -44,48 +50,6 @@ public static class ConsoleUI
             }
 
             ImGui.End();
-        }
-    }
-
-    /// <summary>
-    /// Forces the console to do a specified command, skips having to open the console to call it manually.
-    /// </summary>
-    public static void DoCommand( string commandAlias )
-    {
-        // Log to the console that we're executing this command
-        Log.Info( commandAlias );
-
-        // Initialize a, at first null, list of arguments
-        object[] args = null;
-
-        // If we have spacing...
-        if ( commandAlias.Contains( " " ) )
-        {
-            // Args should be the input split at those spaces!
-            args = commandAlias.Split( " " );
-        }
-
-        // Find the command we want to execute
-        ConsoleCommand command = ConsoleManager.FindCommand( args != null ? (string)args[0] : commandAlias );
-
-        // If it returned null...
-        if ( command == null )
-        {
-            // We should exit out of this!
-            // No need to log a warning or anything either, ConsoleManager.FindCommand should do that for us
-            return;
-        }
-
-        // If we have extra arguments...
-        if ( args != null )
-        {
-            // Call the command's argument-filled action
-            command.onArgsCall?.Invoke( new List<object>( args ) );
-        }
-        else // Otherwise!
-        {
-            // Just call the command's regular action
-            command.onCall?.Invoke();
         }
     }
 
@@ -125,6 +89,14 @@ public static class ConsoleUI
             if ( command == null )
             {
                 // If not, return!!!
+                return;
+            }
+
+            // If this command is disabled...
+            if ( !command.enabled )
+            {
+                // Log such to the console and get outta here!
+                Log.Info( $"Found command \"{command.alias}\", but the command is disabled, therefore we cannot call it!", true );
                 return;
             }
 

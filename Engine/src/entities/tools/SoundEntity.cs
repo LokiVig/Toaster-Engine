@@ -36,7 +36,7 @@ public class SoundEntity : ToolEntity
         }
         else // Otherwise, if we are, we should get a warning!
         {
-            Log.Warning( $"Can't play sound \"{audioPath}\" as we're already playing a sound!" );
+            Log.Warning( $"Can't play sound \"{audioPath}\" as we're already playing our sound!" );
             return;
         }
     }
