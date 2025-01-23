@@ -12,9 +12,9 @@ namespace Toast.Engine.Resources;
 /// </summary>
 public static class AudioManager
 {
-    private const string AUDIO_SUCCESS_PATH = "resources/audio/engine/success.mp3";
-    private const string AUDIO_WARNING_PATH = "resources/audio/engine/warning.mp3";
-    private const string AUDIO_ERROR_PATH = "resources/audio/engine/error.mp3";
+    private const string PATH_AUDIO_SUCCESS = "resources/audio/engine/success.mp3";
+    private const string PATH_AUDIO_WARNING = "resources/audio/engine/warning.mp3";
+    private const string PATH_AUDIO_ERROR = "resources/audio/engine/error.mp3";
 
     private static List<AudioFile> playingFiles = new List<AudioFile>();
 
@@ -156,7 +156,7 @@ public static class AudioManager
     /// </summary>
     public static void PlaySuccess()
     {
-        PlaySound( AUDIO_SUCCESS_PATH );
+        PlaySound( PATH_AUDIO_SUCCESS );
     }
 
     /// <summary>
@@ -164,7 +164,7 @@ public static class AudioManager
     /// </summary>
     public static void PlayWarning()
     {
-        PlaySound( AUDIO_WARNING_PATH );
+        PlaySound( PATH_AUDIO_WARNING );
     }
 
     /// <summary>
@@ -172,6 +172,6 @@ public static class AudioManager
     /// </summary>
     public static void PlayError()
     {
-        PlaySound( AUDIO_ERROR_PATH );
+        PlaySound( PATH_AUDIO_ERROR );
     }
 }

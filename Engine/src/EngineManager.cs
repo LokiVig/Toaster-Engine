@@ -76,7 +76,7 @@ public class EngineManager
     private static void InitializeConsoleCommands()
     {
         // Clear
-        ConsoleManager.AddCommand( new ConsoleCommand()
+        ConsoleManager.AddCommand( new ConsoleCommand
         {
             alias = "clear",
             description = "Clears the console's logs. (Does NOT clear the log file!)",
@@ -85,7 +85,7 @@ public class EngineManager
         } );
 
         // Help
-        ConsoleManager.AddCommand( new ConsoleCommand()
+        ConsoleManager.AddCommand( new ConsoleCommand
         {
             alias = "help",
             description = "Displays information about a command, or the list of available commands.",
@@ -94,33 +94,33 @@ public class EngineManager
         } );
 
         // Play sound
-        ConsoleManager.AddCommand( new ConsoleCommand()
+        ConsoleManager.AddCommand( new ConsoleCommand
         {
             alias = "playsound",
             description = "Plays a sound from a specified path (should be something like \"resources/audio/engine/error.mp3\".)",
             onCall = () => { Log.Error( "Can't play a sound without a specified path to it!" ); },
-            onArgsCall = ( List<object> args ) => 
-            { 
+            onArgsCall = ( List<object> args ) =>
+            {
                 // Make sure the specified file exists
                 if ( !File.Exists( (string)args[1] ) )
                 {
                     Log.Error( $"Couldn't find file at path \"{args[1]}\"!" );
                     return;
                 }
-                
+
                 // Play the sound!
-                AudioManager.PlaySound( (string)args[1] ); 
+                AudioManager.PlaySound( (string)args[1] );
                 Log.Info( $"Playing sound \"{args[1]}\"..." );
             }
         } );
 
         // ToggleCommand
-        ConsoleManager.AddCommand( new ConsoleCommand()
+        ConsoleManager.AddCommand( new ConsoleCommand
         {
             alias = "togglecommand",
             description = "Disables or enables a specific console command.",
             onCall = () => { Log.Error( "Cannot toggle a console command without specifying a command!" ); },
-            onArgsCall = (List<object> args) =>
+            onArgsCall = ( List<object> args ) =>
             {
                 // Find the command
                 ConsoleCommand command = ConsoleManager.FindCommand( (string)args[1] );
@@ -143,12 +143,12 @@ public class EngineManager
         } );
 
         // Quit
-        ConsoleManager.AddCommand( new ConsoleCommand()
+        ConsoleManager.AddCommand( new ConsoleCommand
         {
             alias = "quit",
             description = "Shuts the engine down entirely.",
             onCall = EnvironmentShutdown,
-            onArgsCall = (List<object> args) => { EnvironmentShutdown(); }
+            onArgsCall = ( List<object> args ) => { EnvironmentShutdown(); }
         } );
     }
 

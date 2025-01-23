@@ -47,7 +47,7 @@ public struct Log
         runtime.Stop();
 
         // Write infomatically filled messages to show that this is the end of the file
-        logWriter.WriteLine( "-----------------------------------------------" );
+        logWriter.WriteLine( "\n-----------------------------------------------" );
         logWriter.WriteLine( "End of engine log file." );
         logWriter.WriteLine( $"Total engine runtime was: {runtime.Elapsed.ToString()}" );
 
@@ -82,7 +82,7 @@ public struct Log
             ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: INFO; {message}" );
 
             // Write to the log file
-            logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: INFO; {message}\n" );
+            logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: INFO; {message}" );
         }
         else // Otherwise...
         {
@@ -90,7 +90,7 @@ public struct Log
             ConsoleUI.WriteLine( $"{message}" );
 
             // Write to the log file
-            logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : {message}\n" );
+            logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : {message}" );
         }
     }
 
@@ -118,7 +118,7 @@ public struct Log
         ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: SUCCESS; {message}" );
 
         // Write to the log file
-        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: SUCCESS; {message}\n" );
+        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: SUCCESS; {message}" );
     }
 
     /// <summary>
@@ -145,7 +145,7 @@ public struct Log
         ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: WARNING; {message}" );
 
         // Write to the log file
-        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: WARNING; {message}\n" );
+        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: WARNING; {message}" );
     }
 
     /// <summary>
@@ -172,7 +172,7 @@ public struct Log
         ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: ERROR; {message}" );
 
         // Write to the log file
-        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: ERROR; {message}\n" );
+        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: ERROR; {message}" );
 
         // Create an exception from the type designated by the caller
         T exception = new T();
@@ -212,7 +212,7 @@ public struct Log
         ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: ERROR; {message}" );
 
         // Write to the log file
-        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: ERROR; {message}\n" );
+        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: ERROR; {message}" );
 
         // If we have an exception...
         if ( exception != null )

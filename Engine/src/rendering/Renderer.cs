@@ -6,6 +6,7 @@ using ImGuiNET;
 
 using Toast.Engine.Resources;
 using Toast.Engine.Entities;
+using System.Collections.Generic;
 
 namespace Toast.Engine.Rendering;
 
@@ -29,6 +30,9 @@ public class Renderer
     /// <param name="title">The title of the window we wish to open.</param>
     public static void Initialize( string title )
     {
+        // Initialize default renderer console commands
+        InitializeConsoleCommands();
+
         // Create a window using Veldrid's StartupUtilities
         WindowCreateInfo windowCI = new WindowCreateInfo()
         {
@@ -73,6 +77,84 @@ public class Renderer
     }
 
     /// <summary>
+    /// A quick method to define and initialize console commands related to the renderer.
+    /// </summary>
+    private static void InitializeConsoleCommands()
+    {
+        // R(enderer) VSync
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "r_vsync",
+            description = "Toggles VSync on the renderer.",
+
+            onCall = () =>
+            {
+                // Toggle the VSync option
+                graphicsDevice.MainSwapchain.SyncToVerticalBlank = !graphicsDevice.MainSwapchain.SyncToVerticalBlank;
+
+                // Log its current status
+                Log.Info( $"VSync is now {( graphicsDevice.MainSwapchain.SyncToVerticalBlank ? "enabled" : "disabled" )}.", true );
+            },
+
+            onArgsCall = ( List<object> args ) =>
+            {
+                // Toggle the VSync option
+                graphicsDevice.MainSwapchain.SyncToVerticalBlank = !graphicsDevice.MainSwapchain.SyncToVerticalBlank;
+
+                // Log its current status
+                Log.Info( $"VSync is now {( graphicsDevice.MainSwapchain.SyncToVerticalBlank ? "enabled" : "disabled" )}.", true );
+            }
+        } );
+
+        // R(enderer) WindowState
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "r_windowstate",
+            description = $"Changes which mode the main window should display in, windowed, fullscreen, or borderless fullscreen. (Values are: \"windowed\", \"fullscreen\", \"borderless\".)",
+            
+            onCall = () =>
+            {
+                Log.Error( "Can't call r_windowstate without arguments! You need at least one argument specifying which mode the window should be in." );
+            },
+
+            onArgsCall = (List<object> args) =>
+            {
+                if ( args[1].ToString().ToLower() == "windowed" )
+                {
+                    window.WindowState = WindowState.Normal;
+                }
+                else if ( args[1].ToString().ToLower() == "fullscreen" )
+                {
+                    window.WindowState = WindowState.FullScreen;
+                }
+                else if ( args[1].ToString().ToLower() == "borderless" )
+                {
+                    window.WindowState = WindowState.BorderlessFullScreen;
+                }
+                else // Assume invalid input
+                {
+                    Log.Error( "Invalid input! Argument 1 needs to be either \"windowed\", \"fullscreen\", or \"borderless\"" );
+                }
+
+                // If we have more than one argument...
+                if ( args.Count - 1 > 1 )
+                {
+                    // Assume width and height arguments as well
+                    if ( int.TryParse( (string)args[2], out int width ) )
+                    {
+                        window.Width = width;
+                    }
+
+                    if ( int.TryParse( (string)args[3], out int height ) )
+                    {
+                        window.Height = height;
+                    }
+                }
+            }
+        } );
+    }
+
+    /// <summary>
     /// Initializes all of our resources needed to render things.
     /// </summary>
     private static void CreateResources()
@@ -83,9 +165,6 @@ public class Renderer
 
         // Define our command list variable
         commandList = resourceFactory.CreateCommandList();
-
-        // We should have v-sync on by default
-        graphicsDevice.MainSwapchain.SyncToVerticalBlank = true;
     }
 
     /// <summary>
@@ -118,7 +197,7 @@ public class Renderer
         commandList.ClearColorTarget( 0, RgbaFloat.CornflowerBlue );
 
         // Render the ImGui controller
-        controller.Render(graphicsDevice, commandList);
+        controller.Render( graphicsDevice, commandList );
 
         // Update the ImGui controller
         controller.Update( EngineManager.deltaTime, inputSnapshot );
@@ -128,7 +207,7 @@ public class Renderer
 
         // Submit commands and present the frame
         graphicsDevice.SubmitCommands( commandList );
-        graphicsDevice.SwapBuffers(graphicsDevice.MainSwapchain);
+        graphicsDevice.SwapBuffers( graphicsDevice.MainSwapchain );
 
         // Handle processing events
         Sdl2Events.ProcessEvents();

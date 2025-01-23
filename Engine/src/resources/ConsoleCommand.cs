@@ -9,7 +9,6 @@ public class ConsoleCommand
 {
     public string alias;
     public string description;
-    public List<object> args = new();
 
     public Action onCall;
     public Action<List<object>> onArgsCall;

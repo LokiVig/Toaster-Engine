@@ -1,12 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System.IO;
+using System.Collections.Generic;
 
-using Toast.Engine.Rendering;
+using Newtonsoft.Json;
+using System;
 
 namespace Toast.Engine.Resources;
 
 public static class ConsoleManager
 {
+    private const string PATH_COMMANDS = "resources/cmds.txt";
+
     private static List<ConsoleCommand> commands = new();
+
+    private static JsonSerializer serializer = new()
+    {
+        Formatting = Formatting.Indented,
+    };
 
     /// <summary>
     /// Adds a <see cref="ConsoleCommand"/> to this console manager's list of commands.
@@ -70,7 +79,7 @@ public static class ConsoleManager
         foreach ( ConsoleCommand command in commands )
         {
             // Display its information!
-            Log.Info( $"\t{command.alias} - {command.description} {(command.enabled ? "" : "(*DISABLED*)")}" );
+            Log.Info( $"\t{command.alias} - {command.description} {( command.enabled ? "" : "(*DISABLED*)" )}" );
         }
     }
 
@@ -87,7 +96,7 @@ public static class ConsoleManager
         if ( command != null )
         {
             // Display its info!
-            Log.Info( $"\t{commandAlias} - {command.description} {(command.enabled ? "" : "(*DISABLED*)")}" );
+            Log.Info( $"\t{commandAlias} - {command.description} {( command.enabled ? "" : "(*DISABLED*)" )}" );
         }
     }
 
