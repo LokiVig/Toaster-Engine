@@ -85,6 +85,9 @@ public class Renderer
 
         // Define our command list variable
         commandList = resourceFactory.CreateCommandList();
+
+        // We should have v-sync on by default
+        graphicsDevice.MainSwapchain.SyncToVerticalBlank = true;
     }
 
     /// <summary>

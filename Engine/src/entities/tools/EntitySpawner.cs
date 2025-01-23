@@ -10,7 +10,8 @@ namespace Toast.Engine.Entities.Tools;
 /// <typeparam name="T">The <see cref="Entity"/> we wish to spawn.</typeparam>
 public class EntitySpawner<T> : ToolEntity where T : Entity, new()
 {
-    public T entityToSpawn { get; private set; }
+    // TODO: This results in inefficient encoding when writing to WTF file! Find some way around this!
+    public T entityToSpawn { get; private set; } = new T();
 
     public EntitySpawner()
     {

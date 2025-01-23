@@ -8,6 +8,7 @@ namespace Toast.Engine.Resources;
 public class ConsoleCommand
 {
     public string alias;
+    public string description;
     public List<object> args = new();
 
     public Action onCall;

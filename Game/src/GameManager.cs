@@ -63,7 +63,7 @@ public class GameManager
 
         SoundEntity audioPlayer = new SoundEntity( new Vector3( 0, 0, 15.0f ) );
         audioPlayer.audioPath = "resources/audio/music/debugmusic.mp3";
-        audioPlayer.audioVolume = 0.25f;
+        audioPlayer.audioVolume = 25;
         audioPlayer.audioRepeats = true;
 
         TriggerBrush trigger = new TriggerBrush();

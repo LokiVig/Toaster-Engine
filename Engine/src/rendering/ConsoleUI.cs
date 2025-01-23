@@ -13,28 +13,25 @@ public static class ConsoleUI
     private static List<string> logs = new();
     private static string input = string.Empty;
 
-    public static void Open( ref bool open )
+    public static void Display( ref bool open )
     {
-        open = true;
-
-        ImGui.SetNextWindowSize( new Vector2( 1000f, 500f ) );
-
         if ( ImGui.Begin( "Console", ref open, ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDocking ) )
         {
-            if ( ImGui.BeginChild( "Logs", ImGui.GetWindowSize() / 1.15f, ImGuiChildFlags.Borders ) )
+            ImGui.SetWindowSize( new Vector2( 800f, 600f ) );
+
+            if ( ImGui.BeginChild( "Logs", new Vector2(790f, 540f), ImGuiChildFlags.Borders | ImGuiChildFlags.AlwaysUseWindowPadding | ImGuiChildFlags.AutoResizeX | ImGuiChildFlags.AlwaysAutoResize ) )
             {
                 for ( int i = 0; i < logs.Count; i++ )
                 {
-                    if ( ImGui.Selectable( $"{logs[i]}" ) )
-                    {
-                        ImGui.SetClipboardText( logs[i] );
-                    }
+                    ImGui.TextWrapped( logs[i] );
                 }
+
+                ImGui.SetScrollY( ImGui.GetScrollMaxY() );
 
                 ImGui.EndChild();
             }
 
-            if ( ImGui.InputText( " ", ref input, 2048, ImGuiInputTextFlags.NoUndoRedo | ImGuiInputTextFlags.EnterReturnsTrue ) )
+            if ( ImGui.InputText( "##", ref input, 2048, ImGuiInputTextFlags.NoUndoRedo | ImGuiInputTextFlags.EnterReturnsTrue ) )
             {
                 TryCommand();
             }
@@ -47,6 +44,48 @@ public static class ConsoleUI
             }
 
             ImGui.End();
+        }
+    }
+
+    /// <summary>
+    /// Forces the console to do a specified command, skips having to open the console to call it manually.
+    /// </summary>
+    public static void DoCommand( string commandAlias )
+    {
+        // Log to the console that we're executing this command
+        Log.Info( commandAlias );
+
+        // Initialize a, at first null, list of arguments
+        object[] args = null;
+
+        // If we have spacing...
+        if ( commandAlias.Contains( " " ) )
+        {
+            // Args should be the input split at those spaces!
+            args = commandAlias.Split( " " );
+        }
+
+        // Find the command we want to execute
+        ConsoleCommand command = ConsoleManager.FindCommand( args != null ? (string)args[0] : commandAlias );
+
+        // If it returned null...
+        if ( command == null )
+        {
+            // We should exit out of this!
+            // No need to log a warning or anything either, ConsoleManager.FindCommand should do that for us
+            return;
+        }
+
+        // If we have extra arguments...
+        if ( args != null )
+        {
+            // Call the command's argument-filled action
+            command.onArgsCall?.Invoke( new List<object>( args ) );
+        }
+        else // Otherwise!
+        {
+            // Just call the command's regular action
+            command.onCall?.Invoke();
         }
     }
 
@@ -76,7 +115,7 @@ public static class ConsoleUI
             if ( localInput.Contains( " " ) )
             {
                 // We should split our arguments on these spaces!
-                args = localInput.Split(" ");
+                args = localInput.Split( " " );
             }
 
             // Find our command, either from the first variable of our args list, or directly from our input
@@ -93,7 +132,7 @@ public static class ConsoleUI
             if ( args != null )
             {
                 // Call the argumented version of this command's function!
-                command.onArgsCall?.Invoke( new List<object>(args) );
+                command.onArgsCall?.Invoke( new List<object>( args ) );
             }
             else // Otherwise!
             {
@@ -118,7 +157,7 @@ public static class ConsoleUI
     public static void WriteLine( string message )
     {
         // Add the argument message to our list of logs
-        logs.Add( $"({DateTime.Now.ToLongTimeString()}) : <ENGINE> {message}\n" ); // TODO: Implement some way to determine if this
+        logs.Add( $"({DateTime.Now.ToLongTimeString()}) : {message}\n" ); // TODO: Implement some way to determine if this
                                                                                    // log is from the engine, game, otherwise
     }
 }

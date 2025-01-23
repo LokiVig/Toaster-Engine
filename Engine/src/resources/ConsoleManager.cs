@@ -59,6 +59,39 @@ public static class ConsoleManager
     }
 
     /// <summary>
+    /// Log every available command to the console, and their description
+    /// </summary>
+    public static void DisplayCommands()
+    {
+        // Display a header / introduction to what we just did
+        Log.Info( "List of available commands and their status:" );
+
+        // For every command...
+        foreach ( ConsoleCommand command in commands )
+        {
+            // Display its information!
+            Log.Info( $"\t{command.alias} - {command.description} {(command.enabled ? "" : "(*DISABLED*)")}" );
+        }
+    }
+
+    /// <summary>
+    /// Log the information about a specific command.
+    /// </summary>
+    /// <param name="commandAlias">The alias of the <see cref="ConsoleCommand"/> we wish to display info of.</param>
+    public static void DisplayCommand( string commandAlias )
+    {
+        // Find the command
+        ConsoleCommand command = FindCommand( commandAlias );
+
+        // If we have found command...
+        if ( command != null )
+        {
+            // Display its info!
+            Log.Info( $"\t{commandAlias} - {command.description} {(command.enabled ? "" : "(*DISABLED*)")}" );
+        }
+    }
+
+    /// <summary>
     /// Removes a <see cref="ConsoleCommand"/> from this console manager's list of commands.
     /// </summary>
     public static void RemoveCommand( ConsoleCommand command )

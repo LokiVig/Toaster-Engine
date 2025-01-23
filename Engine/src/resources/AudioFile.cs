@@ -1,23 +1,20 @@
 ﻿using System;
 
-using NAudio.Wave;
+using AudioPlayer = NetCoreAudio.Player;
 
 namespace Toast.Engine.Resources;
 
 public class AudioFile : IDisposable
 {
     public string filepath;
-    public float volume;
+    public byte volume;
     public bool repeats;
 
-    public Mp3FileReader mp3FileReader;
-    public WaveOutEvent waveOutEvent;
+    public AudioPlayer audioPlayer;
 
     public void Dispose()
     {
         filepath = null;
-
-        mp3FileReader.Dispose();
-        waveOutEvent.Dispose();
+        audioPlayer = null;
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Collections.Generic;
 
-using NAudio.Wave;
+using AudioPlayer = NetCoreAudio.Player;
 
 namespace Toast.Engine.Resources;
 
@@ -16,7 +16,6 @@ public static class AudioManager
     private const string AUDIO_ERROR_PATH = "resources/audio/engine/error.mp3";
 
     private static List<AudioFile> playingFiles = new List<AudioFile>();
-    private static List<WaveOutEvent> waveOutEvents = new List<WaveOutEvent>();
 
     /// <summary>
     /// Plays a sound effect from a specified path.
@@ -24,56 +23,42 @@ public static class AudioManager
     /// <param name="filepath">The path to the specific sound we wish to play.</param>
     /// <param name="volume">Determines the volume of which this sound should play at. (Scale of 0.0f - 1.0f)</param>
     /// <param name="repeats">Determines whether or not this sound should repeat (loop) or not.</param>
-    public static AudioFile PlaySound( string filepath, float volume = 1.0f, bool repeats = false )
+    public static AudioFile PlaySound( string filepath, byte volume = 100, bool repeats = false )
     {
         // Try to...
         try
         {
-            // Create a new event
-            WaveOutEvent waveOut = new WaveOutEvent();
+            AudioPlayer audioPlayer = new AudioPlayer(); // Initialize an audio player
+            audioPlayer.SetVolume( volume ); // Set its volume
+            audioPlayer.Play( filepath ); // And play the sound from the argument file path!
 
-            // Read the MP3 file
-            Mp3FileReader mp3Reader = new Mp3FileReader( filepath );
-
-            // Initialize and play the MP3 file
-            waveOut.Volume = volume;
-            waveOut.Init( mp3Reader );
-            waveOut.Play();
-
-            // Add our event to our list of events
-            waveOutEvents.Add( waveOut );
-
-            // Create a new AudioFile for us to return
+            // Make a new file
             AudioFile file = new AudioFile()
             {
-                // Basic info
                 filepath = filepath,
                 volume = volume,
                 repeats = repeats,
 
-                // Audio related variables
-                mp3FileReader = mp3Reader,
-                waveOutEvent = waveOut
+                audioPlayer = audioPlayer
             };
 
-            // Dispose our local audio related variables
-            mp3Reader.Dispose();
-            waveOut.Dispose();
-
-            // Add our new file to the list of playing files
+            // Add it to our list of playing files
             playingFiles.Add( file );
 
-            // Return our newly created audio file variable
+            // And return it!
             return file;
         }
         catch ( Exception exc ) // Problem caught!
         {
+            // If we couldn't find the file...
             if ( exc is FileNotFoundException )
             {
+                // We shouldn't throw the exception, just log a warning that we couldn't find it!
                 Log.Warning( $"Couldn't find file at path \"{filepath}\"!" );
                 return null;
             }
 
+            // Log the error and throw the provided exception
             Log.Error( $"Exception caught when trying to play sound \"{filepath}\"", exc );
             return null;
         }
@@ -96,10 +81,19 @@ public static class AudioManager
     public static void UpdatePlayingFiles()
     {
         // Check every actively playing file...
-        foreach ( AudioFile file in playingFiles )
+        for ( int i = 0; i < playingFiles.Count; i++ )
         {
+            AudioFile file = playingFiles[i];
+
+            // If we encountered a null file...
+            if ( file == null )
+            {
+                playingFiles.Remove( file ); // Remove it from the list!
+                continue; // Continue to the next file
+            }
+
             // If its status is stopped...
-            if ( file.waveOutEvent.PlaybackState == PlaybackState.Stopped )
+            if ( !file.audioPlayer.Playing )
             {
                 // If the file should repeat...
                 if ( file.repeats )
@@ -109,9 +103,9 @@ public static class AudioManager
                 }
                 else // Otherwise!
                 {
-                    // Just stop the sound as per regular
-                    StopSound( file );
-                    continue;
+                    StopSound( file ); // Just stop the sound as per regular
+                    file.Dispose(); // Call the file's dispose method, clear up everything from memory
+                    playingFiles[i] = null; // Also remove it from the list
                 }
             }
         }
@@ -123,8 +117,7 @@ public static class AudioManager
     /// <param name="file">The <see cref="AudioFile"/> we wish to stop the sound of.</param>
     public static void StopSound( AudioFile file )
     {
-        file.waveOutEvent.Stop(); // Stop the input file's sound
-        file.Dispose(); // Also dispose of it
+        file.audioPlayer.Stop(); // Stop the input file's sound
     }
 
     /// <summary>

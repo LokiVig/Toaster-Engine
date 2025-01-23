@@ -50,9 +50,7 @@ public class EngineManager
         Log.OpenLogFile();
 
         // Initialize default console commands
-        ConsoleManager.AddCommand( new ConsoleCommand() { alias = "clear", onCall = ConsoleUI.Clear } );
-        ConsoleManager.AddCommand( new ConsoleCommand() { alias = "quit", onCall = EnvironmentShutdown } );
-        ConsoleManager.AddCommand( new ConsoleCommand() { alias = "playsound", onArgsCall = ( List<object> args ) => { AudioManager.PlaySound( (string)args[1] ); } } );
+        InitializeConsoleCommands();
 
         // Try to...
         try
@@ -63,12 +61,51 @@ public class EngineManager
         }
         catch ( Exception exc ) // Handle any exceptions we encounter!
         {
-            Log.Error( $"Exception caught while initializing renderer!\n{exc.Message}\n", exc );
+            Log.Error( $"Exception caught while initializing renderer!", exc );
         }
 
         // Connect our InputManager's events to the Renderer's events for simplicity's sakes
         Renderer.window.KeyDown += InputManager.OnKeyDown;
         Renderer.window.KeyUp += InputManager.OnKeyUp;
+    }
+
+    /// <summary>
+    /// Initializes the most basic of console commands.
+    /// </summary>
+    private static void InitializeConsoleCommands()
+    {
+        // Clear
+        ConsoleManager.AddCommand( new ConsoleCommand()
+        {
+            alias = "clear",
+            description = "Clears the console's logs. (Does NOT clear the log file!)",
+            onCall = ConsoleUI.Clear
+        } );
+
+        // Help
+        ConsoleManager.AddCommand( new ConsoleCommand()
+        {
+            alias = "help",
+            description = "Displays information about a command, or the list of available commands.",
+            onCall = ConsoleManager.DisplayCommands,
+            onArgsCall = ( List<object> args ) => { ConsoleManager.DisplayCommand( (string)args[1] ); }
+        } );
+
+        // Play sound
+        ConsoleManager.AddCommand( new ConsoleCommand()
+        {
+            alias = "playsound",
+            description = "Plays a sound from a specified path (should be something like \"resources/audio/engine/error.mp3\".)",
+            onArgsCall = ( List<object> args ) => { AudioManager.PlaySound( (string)args[1] ); }
+        } );
+
+        // Quit
+        ConsoleManager.AddCommand( new ConsoleCommand()
+        {
+            alias = "quit",
+            description = "Shuts the engine down entirely.",
+            onCall = EnvironmentShutdown
+        } );
     }
 
     /// <summary>
@@ -114,13 +151,13 @@ public class EngineManager
     {
         if ( debugUIOpen )
         {
-            DebugUI.Open( ref debugUIOpen );
-            ConsoleUI.Open( ref debugUIOpen );
+            DebugUI.Display( ref debugUIOpen );
+            ConsoleUI.Display( ref debugUIOpen );
         }
     }
 
     /// <summary>
-    /// Used for the "exit" console command, instantly closes the application with the code 0.
+    /// Used primarily for the "quit" console command, instantly closes the application with the code 0.
     /// </summary>
     public static void EnvironmentShutdown()
     {

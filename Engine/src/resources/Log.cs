@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 using Toast.Engine.Rendering;
@@ -79,7 +79,7 @@ public struct Log
         if ( extraInfo )
         {
             // Add the line of where it was called, the caller, the method that called us, then the message
-            ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: INFO; {message}\n" );
+            ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: INFO; {message}" );
 
             // Write to the log file
             logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: INFO; {message}\n" );
@@ -87,7 +87,7 @@ public struct Log
         else // Otherwise...
         {
             // Just write the message
-            ConsoleUI.WriteLine( $"{message}\n" );
+            ConsoleUI.WriteLine( $"{message}" );
 
             // Write to the log file
             logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : {message}\n" );
@@ -115,7 +115,7 @@ public struct Log
         }
 
         // Write to the console what just happened
-        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: SUCCESS; {message}\n" );
+        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: SUCCESS; {message}" );
 
         // Write to the log file
         logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: SUCCESS; {message}\n" );
@@ -142,7 +142,7 @@ public struct Log
         }
 
         // Write to the console what just happened
-        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: WARNING; {message}\n" );
+        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: WARNING; {message}" );
 
         // Write to the log file
         logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: WARNING; {message}\n" );
@@ -169,7 +169,7 @@ public struct Log
         }
 
         // Write to the console what just happened
-        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: ERROR; {message}\n" );
+        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: ERROR; {message}" );
 
         // Write to the log file
         logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: ERROR; {message}\n" );
@@ -179,9 +179,6 @@ public struct Log
 
         // Make a new, local exception, with the sourced one as an inner exception
         Exception localException = new Exception( $"(Line {line}) {caller}.{method}; {message}", exception );
-
-        // Write to the log that we've encountered an exception!
-        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : !!! EXCEPTION OF TYPE \"{exception.GetType().ToString().ToUpper()}\" CAUGHT - READ ABOVE ERROR MESSAGE !!!\n" );
 
         // Close the log file, we don't want to keep it running after an exception has been caught
         CloseLogFile();
@@ -212,7 +209,7 @@ public struct Log
         }
 
         // Write to the console what just happened
-        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: ERROR; {message}\n" );
+        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: ERROR; {message}" );
 
         // Write to the log file
         logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: ERROR; {message}\n" );
@@ -222,9 +219,6 @@ public struct Log
         {
             // Make a new, local exception, with the sourced one as an inner exception
             Exception localException = new Exception( $"(Line {line}) {caller}.{method}; {message}", exception );
-
-            // Write to the log that we've encountered an exception!
-            logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : !!! EXCEPTION OF TYPE \"{exception.GetType().ToString().ToUpper()}\" CAUGHT - READ ABOVE ERROR MESSAGE !!!\n" );
 
             // Close the log file, we don't want to keep it running after an exception has been caught
             CloseLogFile();

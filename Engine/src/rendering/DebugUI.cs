@@ -16,10 +16,8 @@ namespace Toast.Engine.Rendering;
 /// </summary>
 public static class DebugUI
 {
-    public static void Open( ref bool open )
+    public static void Display( ref bool open )
     {
-        open = true;
-
         if ( ImGui.Begin( "- Debug Menu -", ref open, ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDocking ) )
         {
             // Set the default window size
@@ -68,7 +66,7 @@ public static class DebugUI
                             ImGui.SeparatorText( "Sound Entity Variables" );
 
                             ImGui.InputText( "Sound Path", ref soundEntity.audioPath, 2048 );
-                            ImGui.SliderFloat( "Sound Volume", ref soundEntity.audioVolume, 0.0f, 1.0f );
+                            ImGui.SliderInt( "Sound Volume", ref soundEntity.audioVolume, 0, 100 );
                             ImGui.Checkbox( "Sound Repeats", ref soundEntity.audioRepeats );
 
                             ImGui.Separator();
@@ -271,11 +269,6 @@ public static class DebugUI
             // Debug Commands \\
             if ( ImGui.TreeNodeEx( "Commands", ImGuiTreeNodeFlags.Framed | ImGuiTreeNodeFlags.DefaultOpen ) )
             {
-                if ( ImGui.Button( "Open Console" ) )
-                {
-                    ConsoleUI.Open( ref open );
-                }
-
                 if ( ImGui.Button( "Exit Game" ) )
                 {
                     EngineManager.EnvironmentShutdown();
