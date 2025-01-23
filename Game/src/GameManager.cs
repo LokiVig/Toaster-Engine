@@ -5,7 +5,6 @@ using Toast.Engine.Entities;
 using Toast.Engine.Entities.Tools;
 using Toast.Engine.Entities.Brushes;
 using Toast.Engine.Resources;
-using Toast.Engine.Rendering;
 
 using Toast.Game.Entities;
 using Toast.Game.Entities.NPC;
@@ -63,7 +62,7 @@ public class GameManager
 
         SoundEntity audioPlayer = new SoundEntity( new Vector3( 0, 0, 15.0f ) );
         audioPlayer.audioPath = "resources/audio/music/debugmusic.mp3";
-        audioPlayer.audioVolume = 25;
+        audioPlayer.audioVolume = 0.25f;
         audioPlayer.audioRepeats = true;
 
         TriggerBrush trigger = new TriggerBrush();

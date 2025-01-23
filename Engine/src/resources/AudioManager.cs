@@ -2,7 +2,8 @@
 using System.IO;
 using System.Collections.Generic;
 
-using AudioPlayer = NetCoreAudio.Player;
+using NAudio;
+using NAudio.Wave;
 
 namespace Toast.Engine.Resources;
 
@@ -23,29 +24,37 @@ public static class AudioManager
     /// <param name="filepath">The path to the specific sound we wish to play.</param>
     /// <param name="volume">Determines the volume of which this sound should play at. (Scale of 0.0f - 1.0f)</param>
     /// <param name="repeats">Determines whether or not this sound should repeat (loop) or not.</param>
-    public static AudioFile PlaySound( string filepath, byte volume = 100, bool repeats = false )
+    public static AudioFile PlaySound( string filepath, float volume = 1.0f, bool repeats = false )
     {
         // Try to...
         try
         {
-            AudioPlayer audioPlayer = new AudioPlayer(); // Initialize an audio player
-            audioPlayer.SetVolume( volume ); // Set its volume
-            audioPlayer.Play( filepath ); // And play the sound from the argument file path!
+            // Read the file
+            AudioFileReader fileReader = new AudioFileReader( filepath );
 
-            // Make a new file
+            // Initialize a WaveOutEvent
+            WaveOutEvent waveEvent = new WaveOutEvent();
+
+            // Make a new file with these variables
             AudioFile file = new AudioFile()
             {
                 filepath = filepath,
                 volume = volume,
                 repeats = repeats,
 
-                audioPlayer = audioPlayer
+                fileReader = fileReader,
+                waveEvent = waveEvent
             };
 
-            // Add it to our list of playing files
+            // Actually play the sound
+            file.waveEvent.Volume = volume;
+            file.waveEvent.Init( fileReader );
+            file.waveEvent.Play();
+
+            // Add the new file to our list of playing files
             playingFiles.Add( file );
 
-            // And return it!
+            // Return our newly made file
             return file;
         }
         catch ( Exception exc ) // Problem caught!
@@ -69,10 +78,10 @@ public static class AudioManager
     /// </summary>
     private static void RepeatSound( AudioFile file )
     {
-        // Do things that will effectively make it repeat
-        file.audioPlayer.Pause(); // Pause the audio
-        PlaySound( file.filepath, file.volume, file.repeats ); // Play the same file again
-        file.Dispose(); // Then dispose of the file
+        // Do things that will effectively make the file repeat
+        file.waveEvent.Pause();
+        file.fileReader.Position = 0;
+        file.waveEvent.Play();
     }
 
     /// <summary>
@@ -93,7 +102,7 @@ public static class AudioManager
             }
 
             // If its status is stopped...
-            if ( !file.audioPlayer.Playing )
+            if ( file.waveEvent.PlaybackState == PlaybackState.Stopped )
             {
                 // If the file should repeat...
                 if ( file.repeats )
@@ -104,8 +113,6 @@ public static class AudioManager
                 else // Otherwise!
                 {
                     StopSound( file ); // Just stop the sound as per regular
-                    file.Dispose(); // Call the file's dispose method
-                    playingFiles[i] = null; // Also remove it from the list
                 }
             }
         }
@@ -115,9 +122,16 @@ public static class AudioManager
     /// Stop a specified <see cref="AudioFile"/>.
     /// </summary>
     /// <param name="file">The <see cref="AudioFile"/> we wish to stop the sound of.</param>
-    public static void StopSound( AudioFile file )
+    public static void StopSound( AudioFile file, bool dispose = true )
     {
-        file.audioPlayer.Stop(); // Stop the input file's sound
+        file.waveEvent.Stop();
+
+        if ( dispose )
+        {
+            file.Dispose(); // Call the file's dispose method
+        }
+
+        playingFiles.Remove( file );
     }
 
     /// <summary>

@@ -66,8 +66,10 @@ public static class DebugUI
                             ImGui.SeparatorText( "Sound Entity Variables" );
 
                             ImGui.InputText( "Sound Path", ref soundEntity.audioPath, 2048 );
-                            ImGui.SliderInt( "Sound Volume", ref soundEntity.audioVolume, 0, 100 );
+                            ImGui.SliderFloat( "Sound Volume", ref soundEntity.audioVolume, 0.0f, 1.0f );
                             ImGui.Checkbox( "Sound Repeats", ref soundEntity.audioRepeats );
+
+
 
                             ImGui.Separator();
 

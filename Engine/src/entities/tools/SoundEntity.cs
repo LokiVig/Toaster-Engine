@@ -7,11 +7,11 @@ namespace Toast.Engine.Entities.Tools;
 public class SoundEntity : ToolEntity
 {
     public string audioPath = "resources/audio/engine/error.mp3"; // The actual audio we should play
-    public int audioVolume = 100; // The volume of this audio, this should be a range between 0<->100!
+    public float audioVolume = 1.0f; // The volume of this audio, this should be a range between 0.0<->1.0!
     public bool audioRepeats; // Toggles whether or not this audio should repeat
+    public AudioFile localAudioFile; // Our local audio file, generated when we play our sound
 
     private bool playing; // Determines whether or not this entity's already playing an audio
-    private AudioFile localAudioFile; // Our local audio file, generated when we play our sound
 
     public SoundEntity()
     {
@@ -32,7 +32,8 @@ public class SoundEntity : ToolEntity
         if ( !playing )
         {
             // Try to play our sound!
-            localAudioFile = AudioManager.PlaySound( audioPath, (byte)audioVolume, audioRepeats );
+            localAudioFile = AudioManager.PlaySound( audioPath, audioVolume, audioRepeats );
+            Log.Info( $"Playing sound \"{audioPath}\"..." );
         }
         else // Otherwise, if we are, we should get a warning!
         {
