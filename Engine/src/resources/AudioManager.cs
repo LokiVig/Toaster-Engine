@@ -19,6 +19,43 @@ public static class AudioManager
     private static List<AudioFile> playingFiles = new List<AudioFile>();
 
     /// <summary>
+    /// Plays a sound from the console.
+    /// </summary>
+    public static void PlaySound( List<object> args )
+    {
+        // The amount of arguments (-1 cause the first one is always the command itself)
+        int argCount = args.Count - 1;
+
+        string filepath = (string)args[1]; // Get the filepath
+        float volume = 1.0f; // Default volume
+        bool repeats = false; // Default repeat status
+
+        // If we have enough arguments for it...
+        if ( argCount >= 1 )
+        {
+            // Get the volume
+            if ( !float.TryParse( (string)args[2], out volume ) )
+            {
+                Log.Warning( "Second argument is an invalid float!" );
+                return;
+            }
+        }
+
+        // If we have enough arguments for it...
+        if ( argCount >= 2 )
+        {
+            // Do we repeat?
+            if ( !bool.TryParse( (string)args[3], out repeats ) )
+            {
+                Log.Warning( "Third argument is an invalid bool!" );
+                return;
+            }
+        }
+
+        PlaySound( filepath, volume, repeats );
+    }
+
+    /// <summary>
     /// Plays a sound effect from a specified path.
     /// </summary>
     /// <param name="filepath">The path to the specific sound we wish to play.</param>
@@ -87,7 +124,7 @@ public static class AudioManager
     /// <summary>
     /// Method to update all actively playing audio files.
     /// </summary>
-    public static void UpdatePlayingFiles()
+    public static void Update()
     {
         // Check every actively playing file...
         for ( int i = 0; i < playingFiles.Count; i++ )
@@ -124,14 +161,10 @@ public static class AudioManager
     /// <param name="file">The <see cref="AudioFile"/> we wish to stop the sound of.</param>
     public static void StopSound( AudioFile file, bool dispose = true )
     {
-        file.waveEvent.Stop();
+        file.waveEvent.Stop(); // Stop the sound
+        file.Dispose(); // Call the file's dispose method
 
-        if ( dispose )
-        {
-            file.Dispose(); // Call the file's dispose method
-        }
-
-        playingFiles.Remove( file );
+        playingFiles.Remove( file ); // Remove the file from our list
     }
 
     /// <summary>

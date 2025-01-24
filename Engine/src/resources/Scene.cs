@@ -24,7 +24,8 @@ public class Scene
 	/// </summary>
 	public static Scene LoadFromFile(WTF file)
 	{
-		return new Scene(file.GetEntities(), file.GetBrushes());
+		EngineManager.currentFile = file; // Set the engine's current file
+		return new Scene(file.GetEntities(), file.GetBrushes()); // Return a new scene
 	}
 
 	/// <summary>
@@ -32,23 +33,24 @@ public class Scene
 	/// </summary>
 	public static Scene LoadFromFile(string path)
 	{
-		WTF file = WTF.LoadFile(path);
-		return new Scene(file.GetEntities(), file.GetBrushes());
+		WTF file = WTF.LoadFile(path); // Load the WTF file
+		EngineManager.currentFile = file; // Set the engine's current file appropriately
+		return new Scene(file.GetEntities(), file.GetBrushes()); // Return a new scene
 	}
 
 	/// <summary>
-	/// Remove the entity from the entities list
+	/// Remove an entity from the entities list.
 	/// </summary>
-	/// <param name="entity">Desired entity to remove</param>
+	/// <param name="entity">Desired entity to remove.</param>
 	public void RemoveEntity(Entity entity)
 	{
 		entities.Remove(entity);
 	}
 
 	/// <summary>
-	/// Remove the entity from the entities list
+	/// Remove an entity from the entities list.
 	/// </summary>
-	/// <param name="id">Desired entity to remove</param>
+	/// <param name="id">The ID of the entity we wish to remove.</param>
 	public void RemoveEntity(string id)
 	{
 		foreach (Entity entity in entities.ToList())
@@ -61,7 +63,7 @@ public class Scene
 	}
 
 	/// <summary>
-	/// Returns this scenes list of entities
+	/// Returns this scene's list of entities.
 	/// </summary>
 	public List<Entity> GetEntities()
 	{
@@ -69,7 +71,7 @@ public class Scene
 	}
 
 	/// <summary>
-	/// Gets the player entity from the scenes list of entities
+	/// Gets the player entity from the scene's list of entities.
 	/// </summary>
 	public PlayerEntity GetPlayer()
 	{

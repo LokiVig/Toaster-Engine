@@ -50,8 +50,19 @@ public class GameManager
                                           // prospects, while this class's should be focused more on the game-specific
                                           // functionalities
 
-        // We shouldn't have the regular terminal appear
-        
+        // If we couldn't load our keybinds...
+        if ( !InputManager.LoadKeybinds() )
+        {
+            // Initialize our default keybinds
+            CreateKeybinds();
+        }
+
+        // If we couldn't load our console commands...
+        if ( !ConsoleManager.LoadCommands() )
+        {
+            // Initialize our console commands
+            CreateCommands();
+        }
 
         // Initialize everything necessary before the game is actually run
         // DEBUG: Setting up a basic scene to test out certain aspects of what's done
@@ -102,6 +113,64 @@ public class GameManager
     }
 
     /// <summary>
+    /// Initializes this game's default keybinds, and which console command they correspond to.
+    /// </summary>
+    private void CreateKeybinds()
+    {
+        // Add movement keybinds
+        InputManager.AddKeybind( new Keybind { alias = "move_forward",  key = Key.W, commandAlias = "+move_forward"  } ); // Forwards movement
+        InputManager.AddKeybind( new Keybind { alias = "move_backward", key = Key.S, commandAlias = "+move_backward" } ); // Backwards movement
+        InputManager.AddKeybind( new Keybind { alias = "move_left",     key = Key.A, commandAlias = "+move_left"     } ); // Leftwards movement
+        InputManager.AddKeybind( new Keybind { alias = "move_right",    key = Key.D, commandAlias = "+move_right"    } ); // Rightwards movement
+    }
+
+    /// <summary>
+    /// Initializes this game's console commands.
+    /// </summary>
+    private void CreateCommands()
+    {
+        // Move Forward
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "+move_forward",
+            description = "Moves the main player entity forward.",
+
+            onCall = () => { mainPlayer.AddForce( new Vector3( 0, 255, 0 ) ); },
+            onArgsCall = (List<object> args) => { mainPlayer.AddForce( new Vector3( 0, 255, 0 ) ); }
+        } );
+
+        // Move Backward
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "+move_backward",
+            description = "Moves the main player entity backward.",
+
+            onCall = () => { mainPlayer.AddForce( new Vector3( 0, -255, 0 ) ); },
+            onArgsCall = (List<object> args) => { mainPlayer.AddForce( new Vector3( 0, -255, 0 ) ); }
+        } );
+
+        // Move Left
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "+move_left",
+            description = "Moves the main player entity left.",
+
+            onCall = () => { mainPlayer.AddForce( new Vector3( -255, 0, 0 ) ); },
+            onArgsCall = ( List<object> args ) => { mainPlayer.AddForce( new Vector3( -255, 0, 0 ) ); }
+        } );
+
+        // Move Right
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "+move_right",
+            description = "Moves the main player entity right.",
+
+            onCall = () => { mainPlayer.AddForce( new Vector3( 255, 0, 0 ) ); },
+            onArgsCall = ( List<object> args ) => { mainPlayer.AddForce( new Vector3( 255, 0, 0 ) ); }
+        } );
+    }
+
+    /// <summary>
     /// Defines things to do every frame the game is run.
     /// </summary>
     private void Update()
@@ -117,27 +186,6 @@ public class GameManager
             // Everything below this if-statement will be run only when the game is in an
             // active state
             return;
-        }
-
-        // Get user inputs to move the player
-        if ( InputManager.IsKeyDown( Key.W ) )
-        {
-            mainPlayer.AddForce( new Vector3(0, 255, 0) );
-        }
-
-        if ( InputManager.IsKeyDown( Key.S ) )
-        {
-            mainPlayer.AddForce( new Vector3( 0, -255, 0 ) );
-        }
-
-        if ( InputManager.IsKeyDown( Key.D ) )
-        {
-            mainPlayer.AddForce( new Vector3( 255, 0, 0 ) );
-        }
-
-        if ( InputManager.IsKeyDown( Key.A ) )
-        {
-            mainPlayer.AddForce( new Vector3( -255, 0, 0 ) );
         }
     }
 }

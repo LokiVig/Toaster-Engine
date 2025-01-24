@@ -18,6 +18,8 @@ public static class DebugUI
 {
     public static void Display( ref bool open )
     {
+        open = true;
+
         if ( ImGui.Begin( "- Debug Menu -", ref open, ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDocking ) )
         {
             // Set the default window size
@@ -30,9 +32,9 @@ public static class DebugUI
             // Entities \\
             if ( ImGui.TreeNodeEx( "Entities", ImGuiTreeNodeFlags.Framed | ImGuiTreeNodeFlags.DefaultOpen ) )
             {
-                List<Entity> entities = EngineManager.currentScene.GetEntities();
+                List<Entity> entities = EngineManager.currentScene?.GetEntities();
 
-                for ( int i = 0; i < entities.Count; i++ )
+                for ( int i = 0; i < entities?.Count; i++ )
                 {
                     // Create a tree node for every entity
                     if ( ImGui.TreeNodeEx( $"{entities[i]}", ImGuiTreeNodeFlags.Framed ) )
@@ -68,8 +70,6 @@ public static class DebugUI
                             ImGui.InputText( "Sound Path", ref soundEntity.audioPath, 2048 );
                             ImGui.SliderFloat( "Sound Volume", ref soundEntity.audioVolume, 0.0f, 1.0f );
                             ImGui.Checkbox( "Sound Repeats", ref soundEntity.audioRepeats );
-
-
 
                             ImGui.Separator();
 
@@ -271,7 +271,7 @@ public static class DebugUI
             // Debug Commands \\
             if ( ImGui.TreeNodeEx( "Commands", ImGuiTreeNodeFlags.Framed | ImGuiTreeNodeFlags.DefaultOpen ) )
             {
-                if ( ImGui.Button( "Exit Game" ) )
+                if ( ImGui.Button( "Shutdown" ) )
                 {
                     EngineManager.EnvironmentShutdown();
                 }

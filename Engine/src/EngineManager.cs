@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 
@@ -6,7 +7,6 @@ using Veldrid;
 
 using Toast.Engine.Resources;
 using Toast.Engine.Rendering;
-using System.IO;
 
 namespace Toast.Engine;
 
@@ -35,7 +35,10 @@ public class EngineManager
 
     private static float lastFrameTime; // Time of the last frame in seconds
 
-    private static bool debugUIOpen; // Used to determine whether or not we should display the debug UI
+    private static bool takesInput = true; // Determines whether or not we should take regular input
+
+    private static bool consoleOpen; // Used to determine whether or not we should display the console
+    private static bool debugOpen; // Used to determine whether or not we should display the debug UI
 
     //---------------------------------------//
     //				Functions				 //
@@ -50,14 +53,21 @@ public class EngineManager
         // Initialize file logging
         Log.OpenLogFile();
 
-        // Initialize default console commands
-        InitializeConsoleCommands();
+        // Create default console commands
+        CreateConsoleCommands();
+
+        // If we couldn't load our keybinds file...
+        if ( !InputManager.LoadKeybinds() )
+        {
+            // Create default keybinds
+            CreateKeybinds();
+        }
 
         // Try to...
         try
         {
             // Initialize the renderer
-            Renderer.Initialize( $"Toaster Engine - (v.{ENGINE_VERSION}){( title != null ? $" - {title}" : "" )}" );
+            Renderer.Initialize( $"Toaster Engine (v.{ENGINE_VERSION}){( title != null ? $" - {title}" : "" )}" );
             Log.Success( "Successfully initialized renderer." );
         }
         catch ( Exception exc ) // Handle any exceptions we encounter!
@@ -73,15 +83,26 @@ public class EngineManager
     /// <summary>
     /// Initializes the most basic of console commands.
     /// </summary>
-    private static void InitializeConsoleCommands()
+    private static void CreateConsoleCommands()
     {
         // Clear
         ConsoleManager.AddCommand( new ConsoleCommand
         {
             alias = "clear",
             description = "Clears the console's logs. (Does NOT clear the log file!)",
+
             onCall = ConsoleUI.Clear,
-            onArgsCall = ( List<object> args ) => { ConsoleUI.Clear(); }
+            onArgsCall = ConsoleManager.InvalidCommand
+        } );
+
+        // Console
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "console",
+            description = "Toggles the display of the console.",
+
+            onCall = ToggleConsole,
+            onArgsCall = ConsoleManager.InvalidCommand
         } );
 
         // Help
@@ -89,8 +110,19 @@ public class EngineManager
         {
             alias = "help",
             description = "Displays information about a command, or the list of available commands.",
+
             onCall = ConsoleManager.DisplayCommands,
-            onArgsCall = ( List<object> args ) => { ConsoleManager.DisplayCommand( (string)args[1] ); }
+            onArgsCall = ConsoleManager.DisplayCommand
+        } );
+
+        // Open debug (UI)
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "open_debug",
+            description = "Opens the debug UI menu, displaying special game information.",
+
+            onCall = ToggleDebug,
+            onArgsCall = ConsoleManager.InvalidCommand
         } );
 
         // Play sound
@@ -98,48 +130,39 @@ public class EngineManager
         {
             alias = "playsound",
             description = "Plays a sound from a specified path (should be something like \"resources/audio/engine/error.mp3\".)",
-            onCall = () => { Log.Error( "Can't play a sound without a specified path to it!" ); },
-            onArgsCall = ( List<object> args ) =>
-            {
-                // Make sure the specified file exists
-                if ( !File.Exists( (string)args[1] ) )
-                {
-                    Log.Error( $"Couldn't find file at path \"{args[1]}\"!" );
-                    return;
-                }
 
-                // Play the sound!
-                AudioManager.PlaySound( (string)args[1] );
-                Log.Info( $"Playing sound \"{args[1]}\"..." );
-            }
+            onCall = ConsoleManager.InvalidCommand,
+            onArgsCall = AudioManager.PlaySound
         } );
 
-        // ToggleCommand
+        // Bind
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "bind",
+            description = "Binds a key to an action defined by an alias.",
+
+            onCall = ConsoleManager.InvalidCommand,
+            onArgsCall = InputManager.EditKeybind
+        } );
+
+        // Show bindings
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "showbindings",
+            description = "Displays all bindings.",
+
+            onCall = InputManager.DisplayKeybinds,
+            onArgsCall = ConsoleManager.InvalidCommand
+        } );
+
+        // Toggle command
         ConsoleManager.AddCommand( new ConsoleCommand
         {
             alias = "togglecommand",
             description = "Disables or enables a specific console command.",
-            onCall = () => { Log.Error( "Cannot toggle a console command without specifying a command!" ); },
-            onArgsCall = ( List<object> args ) =>
-            {
-                // Find the command
-                ConsoleCommand command = ConsoleManager.FindCommand( (string)args[1] );
 
-                // If we did actually find a command...
-                if ( command != null )
-                {
-                    // If its alias is our own...
-                    if ( command.alias == "togglecommand" )
-                    {
-                        // We can't toggle its status!
-                        Log.Warning( "Can't toggle the toggle command, that'd be problematic!" );
-                        return;
-                    }
-
-                    // Toggle its state!
-                    command.enabled = !command.enabled;
-                }
-            }
+            onCall = ConsoleManager.InvalidCommand,
+            onArgsCall = ConsoleManager.ToggleCommand
         } );
 
         // Quit
@@ -147,9 +170,55 @@ public class EngineManager
         {
             alias = "quit",
             description = "Shuts the engine down entirely.",
+
             onCall = EnvironmentShutdown,
-            onArgsCall = ( List<object> args ) => { EnvironmentShutdown(); }
+            onArgsCall = ConsoleManager.InvalidCommand
         } );
+    }
+
+    /// <summary>
+    /// Initializes engine-wide keybinds.
+    /// </summary>
+    private static void CreateKeybinds()
+    {
+        // Open the console when F12 is pressed
+        InputManager.AddKeybind( new Keybind { alias = "console", key = Key.F12, commandAlias = "console" } );
+
+        // Unbound (by default) keybind to shutdown the engine
+        InputManager.AddKeybind( new Keybind { alias = "quit", key = Key.Unknown, commandAlias = "quit" } );
+    }
+
+    /// <summary>
+    /// Sets the engine's regular ability to take inputs.
+    /// </summary>
+    public static void ToggleInput(bool status)
+    {
+        // Set the status of the takesInput variable
+        takesInput = status;
+    }
+
+    /// <summary>
+    /// Toggles the console. Mainly used with console commands.
+    /// </summary>
+    private static void ToggleConsole()
+    {
+        consoleOpen = !consoleOpen;
+    }
+
+    /// <summary>
+    /// Toggles the debug UI. Mainly used with console commands.
+    /// </summary>
+    private static void ToggleDebug()
+    {
+        debugOpen = !debugOpen;
+    }
+
+    /// <summary>
+    /// Does the engine currently take inputs?
+    /// </summary>
+    public static bool TakesInput()
+    {
+        return takesInput;
     }
 
     /// <summary>
@@ -170,13 +239,10 @@ public class EngineManager
             deltaTime = Math.Max( 0, deltaTime );
 
             // Update the audio manager
-            AudioManager.UpdatePlayingFiles();
+            AudioManager.Update();
 
-            // Open the debug UI if the F12 key is pressed
-            if ( InputManager.IsKeyDown( Key.F12 ) )
-            {
-                debugUIOpen = true;
-            }
+            // Update the input manager
+            InputManager.Update();
 
             // Manage UI elements (mainly ImGui related)
             ManageUI();
@@ -193,10 +259,16 @@ public class EngineManager
 
     private static void ManageUI()
     {
-        if ( debugUIOpen )
+        // Manage the console
+        if ( consoleOpen )
         {
-            DebugUI.Display( ref debugUIOpen );
-            ConsoleUI.Display( ref debugUIOpen );
+            ConsoleUI.Display( ref consoleOpen );
+        }
+
+        // Manage the debug UI
+        if ( debugOpen )
+        {
+            DebugUI.Display( ref debugOpen );
         }
     }
 
@@ -214,6 +286,9 @@ public class EngineManager
     /// </summary>
     public static void Shutdown()
     {
+        // Save the keybinds
+        InputManager.SaveKeybinds();
+
         // End file logging
         Log.CloseLogFile();
 

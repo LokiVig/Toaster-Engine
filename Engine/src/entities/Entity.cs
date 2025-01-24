@@ -99,14 +99,15 @@ public class Entity
     /// </summary>
     protected void ApplyVelocity()
     {
-        // Clamp velocity between the min and max values
+        // Clamp velocity between the min and max values, and normalize it
         velocity = Vector3.Clamp( velocity, new Vector3(-MAX_VELOCITY), new Vector3(MAX_VELOCITY) );
+        Vector3.Normalize( velocity );
 
         // Position is affected by velocity
         position += velocity * EngineManager.deltaTime;
 
         // Velocity decreases with time (effectively drag)
-        velocity *= ( 1 - 0.75f ) * EngineManager.deltaTime;
+        velocity *= ( 1 - 0.25f ) * EngineManager.deltaTime;
 
         // If the velocity's magnitude <= 0.000001, it's effectively zero, so zero it out for the sake of ease
         if ( velocity.Length() <= 0.00001f )

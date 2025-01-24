@@ -12,6 +12,10 @@ namespace Toast.Engine.Rendering;
 
 public class Renderer
 {
+    // A window should not be able to be less than these two values!
+    public const int WINDOW_MIN_WIDTH = 800;
+    public const int WINDOW_MIN_HEIGHT = 600;
+
     public static Sdl2Window window;
     public static GraphicsDevice graphicsDevice;
 
@@ -31,7 +35,7 @@ public class Renderer
     public static void Initialize( string title )
     {
         // Initialize default renderer console commands
-        InitializeConsoleCommands();
+        CreateConsoleCommands();
 
         // Create a window using Veldrid's StartupUtilities
         WindowCreateInfo windowCI = new WindowCreateInfo()
@@ -79,7 +83,7 @@ public class Renderer
     /// <summary>
     /// A quick method to define and initialize console commands related to the renderer.
     /// </summary>
-    private static void InitializeConsoleCommands()
+    private static void CreateConsoleCommands()
     {
         // R(enderer) VSync
         ConsoleManager.AddCommand( new ConsoleCommand
@@ -87,23 +91,8 @@ public class Renderer
             alias = "r_vsync",
             description = "Toggles VSync on the renderer.",
 
-            onCall = () =>
-            {
-                // Toggle the VSync option
-                graphicsDevice.MainSwapchain.SyncToVerticalBlank = !graphicsDevice.MainSwapchain.SyncToVerticalBlank;
-
-                // Log its current status
-                Log.Info( $"VSync is now {( graphicsDevice.MainSwapchain.SyncToVerticalBlank ? "enabled" : "disabled" )}.", true );
-            },
-
-            onArgsCall = ( List<object> args ) =>
-            {
-                // Toggle the VSync option
-                graphicsDevice.MainSwapchain.SyncToVerticalBlank = !graphicsDevice.MainSwapchain.SyncToVerticalBlank;
-
-                // Log its current status
-                Log.Info( $"VSync is now {( graphicsDevice.MainSwapchain.SyncToVerticalBlank ? "enabled" : "disabled" )}.", true );
-            }
+            onCall = ToggleVSync,
+            onArgsCall = ConsoleManager.InvalidCommand
         } );
 
         // R(enderer) WindowState
@@ -112,30 +101,8 @@ public class Renderer
             alias = "r_windowstate",
             description = $"Changes which mode the main window should display in, windowed, fullscreen, or borderless fullscreen.",
 
-            onCall = () =>
-            {
-                Log.Error( "Can't call r_windowstate without arguments! You need at least one argument specifying which mode the window should be in." );
-            },
-
-            onArgsCall = ( List<object> args ) =>
-            {
-                if ( args[1].ToString().ToLower() == "windowed" )
-                {
-                    window.WindowState = WindowState.Normal;
-                }
-                else if ( args[1].ToString().ToLower() == "fullscreen" )
-                {
-                    window.WindowState = WindowState.FullScreen;
-                }
-                else if ( args[1].ToString().ToLower() == "borderless" )
-                {
-                    window.WindowState = WindowState.BorderlessFullScreen;
-                }
-                else // Assume invalid input
-                {
-                    Log.Error( "Invalid input! Argument 1 needs to be either \"windowed\", \"fullscreen\", or \"borderless\"" );
-                }
-            }
+            onCall = ConsoleManager.InvalidCommand,
+            onArgsCall = ChangeWindowState
         } );
 
         // R(enderer) WindowResolution
@@ -144,29 +111,91 @@ public class Renderer
             alias = "r_windowresolution",
             description = "Changes the resolution of which the renderer window is displayed at.",
 
-            onCall = () =>
-            {
-                Log.Error( "Fuck you." );
-            },
-
-            onArgsCall = ( List<object> args ) =>
-            {
-                if ( !int.TryParse( (string)args[1], out int width ) )
-                {
-                    Log.Error( "First argument was an invalid integer value!" );
-                    return;
-                }
-
-                if ( !int.TryParse( (string)args[2], out int height ) )
-                {
-                    Log.Error( "Second argument was an invalid integer value!" );
-                    return;
-                }
-
-                window.Width = width;
-                window.Height = height;
-            }
+            onCall = ConsoleManager.InvalidCommand,
+            onArgsCall = ChangeWindowResolution
         } );
+    }
+
+    /// <summary>
+    /// Toggles VSync through the console
+    /// </summary>
+    private static void ToggleVSync()
+    {
+        // Toggle the VSync option
+        graphicsDevice.MainSwapchain.SyncToVerticalBlank = !graphicsDevice.MainSwapchain.SyncToVerticalBlank;
+
+        // Log its current status
+        Log.Info( $"VSync is now {( graphicsDevice.MainSwapchain.SyncToVerticalBlank ? "enabled" : "disabled" )}.", true );
+    }
+
+    /// <summary>
+    /// Changes the window's current state through the console.
+    /// </summary>
+    private static void ChangeWindowState( List<object> args )
+    {
+        switch ( args[1].ToString().ToLower() )
+        {
+            case "windowed":
+                window.WindowState = WindowState.Normal;
+                break;
+
+            case "fullscreen":
+                window.WindowState = WindowState.FullScreen;
+                break;
+
+            case "borderless":
+                window.WindowState = WindowState.BorderlessFullScreen;
+                break;
+
+            default:
+                Log.Warning( "Invalid input! Argument 1 needs to be either \"windowed\", \"fullscreen\", or \"borderless\"" );
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Changes the window's current resolution through the console.
+    /// </summary>
+    private static void ChangeWindowResolution(List<object> args)
+    {
+        // If we have more than 2 arguments...
+        if ( ( args.Count - 1 ) > 2 || ( args.Count - 1 ) < 2 )
+        {
+            Log.Warning( "Invalid amount of arguments! You need at least, and at most, 2 arguments, one for the height value and one for the width value!" );
+            return;
+        }
+
+        // Get the width...
+        if ( !int.TryParse( (string)args[1], out int width ) )
+        {
+            Log.Warning( "First argument was an invalid integer value!" );
+            return;
+        }
+
+        // Get the height...
+        if ( !int.TryParse( (string)args[2], out int height ) )
+        {
+            Log.Warning( "Second argument was an invalid integer value!" );
+            return;
+        }
+
+        // Make sure width is more than the minimum allowed width
+        if ( width < WINDOW_MIN_WIDTH )
+        {
+            Log.Warning( $"Couldn't set window width to {width} as it's less than the minimum acceptable width ({WINDOW_MIN_WIDTH})!" );
+            width = WINDOW_MIN_WIDTH;
+        }
+
+        // Make sure height is more than the minimum allowed height
+        if ( height < WINDOW_MIN_HEIGHT )
+        {
+            Log.Warning( $"Couldn't set window height to {height} as it's less than the minimum acceptable height ({WINDOW_MIN_HEIGHT})!" );
+            height = WINDOW_MIN_HEIGHT;
+        }
+
+        // Set the window's width and height appropriately!
+        window.Width = width;
+        window.Height = height;
     }
 
     /// <summary>

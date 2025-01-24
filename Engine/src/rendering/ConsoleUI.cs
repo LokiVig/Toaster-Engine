@@ -21,29 +21,42 @@ public static class ConsoleUI
     /// </summary>
     public static void Display( ref bool open )
     {
-        if ( ImGui.Begin( "Console", ref open, ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDocking ) )
+        // The main console window
+        if ( ImGui.Begin( "Console", ref open, 
+             ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDocking | ImGuiWindowFlags.NoResize ) )
         {
+            EngineManager.ToggleInput( !ImGui.IsWindowFocused() );
+
+            // Set its size to one that'd fit even the smallest of screens
             ImGui.SetWindowSize( new Vector2( 800f, 600f ) );
 
-            if ( ImGui.BeginChild( "Logs", new Vector2(790f, 540f), ImGuiChildFlags.Borders | ImGuiChildFlags.AlwaysUseWindowPadding | ImGuiChildFlags.AutoResizeX | ImGuiChildFlags.AlwaysAutoResize ) )
+            // The actual logs!
+            if ( ImGui.BeginChild( "Logs", new Vector2( 782.5f, 542.5f ), 
+                 ImGuiChildFlags.Borders | ImGuiChildFlags.AlwaysUseWindowPadding, 
+                 ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.ChildWindow ) )
             {
+                // Make a wrapped text for every log
                 for ( int i = 0; i < logs.Count; i++ )
                 {
                     ImGui.TextWrapped( logs[i] );
                 }
 
+                // Scroll to the bottom of the logs
                 ImGui.SetScrollY( ImGui.GetScrollMaxY() );
 
                 ImGui.EndChild();
             }
 
+            // Text input handler
             if ( ImGui.InputText( "##", ref input, 2048, ImGuiInputTextFlags.NoUndoRedo | ImGuiInputTextFlags.EnterReturnsTrue ) )
             {
+
                 TryCommand();
             }
 
             ImGui.SameLine();
 
+            // Button to console the current text input
             if ( ImGui.Button( "Input" ) )
             {
                 TryCommand();
@@ -130,6 +143,6 @@ public static class ConsoleUI
     {
         // Add the argument message to our list of logs
         logs.Add( $"({DateTime.Now.ToLongTimeString()}) : {message}\n" ); // TODO: Implement some way to determine if this
-                                                                                   // log is from the engine, game, otherwise
+                                                                          // log is from the engine, game, otherwise
     }
 }

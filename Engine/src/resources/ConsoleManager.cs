@@ -8,7 +8,7 @@ namespace Toast.Engine.Resources;
 
 public static class ConsoleManager
 {
-    private const string PATH_COMMANDS = "resources/cmds.txt";
+    private const string PATH_COMMANDS = "resources/commands.txt";
 
     private static List<ConsoleCommand> commands = new();
 
@@ -68,6 +68,36 @@ public static class ConsoleManager
     }
 
     /// <summary>
+    /// Try to load our list of commands from our saved path.
+    /// </summary>
+    public static bool LoadCommands()
+    {
+        if ( !File.Exists( PATH_COMMANDS ) )
+        {
+            return false;
+        }
+
+        try
+        {
+            using ( StreamReader sr = new StreamReader( PATH_COMMANDS ) )
+            {
+                using ( JsonReader reader = new JsonTextReader( sr ) )
+                {
+
+                }
+            }
+        }
+        catch ( Exception exc )
+        {
+            Log.Error( "Unmanaged exception caught!", exc );
+            return false;
+        }
+
+        // Some other error happened
+        return false;
+    }
+
+    /// <summary>
     /// Log every available command to the console, and their description
     /// </summary>
     public static void DisplayCommands()
@@ -86,18 +116,57 @@ public static class ConsoleManager
     /// <summary>
     /// Log the information about a specific command.
     /// </summary>
-    /// <param name="commandAlias">The alias of the <see cref="ConsoleCommand"/> we wish to display info of.</param>
-    public static void DisplayCommand( string commandAlias )
+    public static void DisplayCommand( List<object> args )
     {
         // Find the command
-        ConsoleCommand command = FindCommand( commandAlias );
+        ConsoleCommand command = FindCommand( (string)args[1] );
 
         // If we have found command...
         if ( command != null )
         {
             // Display its info!
-            Log.Info( $"\t{commandAlias} - {command.description} {( command.enabled ? "" : "(*DISABLED*)" )}" );
+            Log.Info( $"\t{args[1]} - {command.description} {( command.enabled ? "" : "(*DISABLED*)" )}" );
         }
+    }
+
+    /// <summary>
+    /// Toggles a command through the console.
+    /// </summary>
+    public static void ToggleCommand( List<object> args )
+    {
+        // Find the command
+        ConsoleCommand command = FindCommand( (string)args[1] );
+
+        // If we did actually find a command...
+        if ( command != null )
+        {
+            // If its alias is our own...
+            if ( command.alias == "togglecommand" )
+            {
+                // We can't toggle its status!
+                Log.Warning( "Can't toggle the toggle command, that'd be problematic!" );
+                return;
+            }
+
+            // Toggle its state!
+            command.enabled = !command.enabled;
+        }
+    }
+
+    /// <summary>
+    /// An un-argumented invalid command.
+    /// </summary>
+    public static void InvalidCommand()
+    {
+        Log.Warning( "This command only supports arguments! Please try to run the command again, with fitting arguments!" );
+    }
+
+    /// <summary>
+    /// An argumented invalid command.
+    /// </summary>
+    public static void InvalidCommand( List<object> args )
+    {
+        Log.Warning( "This command does not support arguments! Please try to run the command again, without any arguments!" );
     }
 
     /// <summary>
