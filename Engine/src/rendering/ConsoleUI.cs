@@ -25,6 +25,7 @@ public static class ConsoleUI
         if ( ImGui.Begin( "Console", ref open, 
              ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDocking | ImGuiWindowFlags.NoResize ) )
         {
+            // We should only take inputs when the console isn't focused
             EngineManager.ToggleInput( !ImGui.IsWindowFocused() );
 
             // Set its size to one that'd fit even the smallest of screens

@@ -40,4 +40,7 @@
 		<PackageReference Include="Veldrid.StartupUtilities" Version="4.9.0" />
 		<PackageReference Include="Veldrid.SPIRV" Version="1.0.15" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="src\resources\rendering\fonts\" />
+	</ItemGroup>
 </Project>

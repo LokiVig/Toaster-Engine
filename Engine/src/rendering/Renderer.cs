@@ -91,8 +91,7 @@ public class Renderer
             alias = "r_vsync",
             description = "Toggles VSync on the renderer.",
 
-            onCall = ToggleVSync,
-            onArgsCall = ConsoleManager.InvalidCommand
+            onCall = ToggleVSync
         } );
 
         // R(enderer) WindowState
@@ -101,7 +100,6 @@ public class Renderer
             alias = "r_windowstate",
             description = $"Changes which mode the main window should display in, windowed, fullscreen, or borderless fullscreen.",
 
-            onCall = ConsoleManager.InvalidCommand,
             onArgsCall = ChangeWindowState
         } );
 
@@ -111,7 +109,6 @@ public class Renderer
             alias = "r_windowresolution",
             description = "Changes the resolution of which the renderer window is displayed at.",
 
-            onCall = ConsoleManager.InvalidCommand,
             onArgsCall = ChangeWindowResolution
         } );
     }

@@ -1,8 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections.Generic;
 
 using Newtonsoft.Json;
-using System;
+
+using DynamicExpresso;
 
 namespace Toast.Engine.Resources;
 
@@ -83,7 +85,17 @@ public static class ConsoleManager
             {
                 using ( JsonReader reader = new JsonTextReader( sr ) )
                 {
+                    if ( ( commands = serializer.Deserialize<List<ConsoleCommand>>( reader ) ) != null )
+                    {
+                        Interpreter interpreter = new Interpreter();
+                        foreach ( ConsoleCommand command in commands )
+                        {
+                            command.onCall = interpreter.ParseAsDelegate<Action>( command.onCallAlias );
+                            command.onArgsCall = interpreter.ParseAsDelegate<Action<List<object>>>( command.onArgsCallAlias );
+                        }
 
+                        return true;
+                    }
                 }
             }
         }
@@ -95,6 +107,26 @@ public static class ConsoleManager
 
         // Some other error happened
         return false;
+    }
+
+    public static void SaveCommands()
+    {
+        FileStream file = File.Open( PATH_COMMANDS, FileMode.Create );
+        file.Close();
+
+        using ( StreamWriter sw = new StreamWriter( PATH_COMMANDS ) )
+        {
+            using ( JsonWriter writer = new JsonTextWriter( sw ) )
+            {
+                foreach ( ConsoleCommand command in commands )
+                {
+                    command.onCallAlias = command.onCall.Method.Name;
+                    command.onArgsCallAlias = command.onArgsCall.Method.Name;
+                }
+
+                serializer.Serialize( writer, commands );
+            }
+        }
     }
 
     /// <summary>

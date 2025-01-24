@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Numerics;
 
+using Newtonsoft.Json;
+
 using Toast.Engine.Entities;
 
 namespace Toast.Engine.Resources;
@@ -12,7 +14,7 @@ public struct Brush
 {
     public string id { get; set; } // The id of this brush, can be set by the mapper
     public BBox bbox { get; set; } = BBox.One; // The extents of this brush
-    public Vertex[] vertices { get; set; } // The vertices of this brush
+    [JsonIgnore] public Vertex[] vertices { get; set; } // The vertices of this brush
     
     /// <summary>
     /// Create a brush with specified mins and maxs
@@ -44,17 +46,17 @@ public struct Brush
         vertices =
         [
             // Comments are organized like this:
-            // {position on face}, {face} - {position on face}, {face} - {position on face}, {face}
+            // {position on face} - {face}, {position on face} - {face}, {position on face} - {face}
             // This is so you don't have to guess which is which, it's about as much as one can do when it comes to
             // making this have any semblence of being readable
-            new Vertex(new Vector3(bbox.maxs.X, bbox.maxs.Y, bbox.maxs.Z), Vector2.One), // Top left,     front - Bottom left,  top    - Top right,    left
-            new Vertex(new Vector3(bbox.mins.X, bbox.maxs.Y, bbox.maxs.Z), Vector2.One), // Top right,    front - Bottom right, top    - Top left,     right
-            new Vertex(new Vector3(bbox.maxs.X, bbox.maxs.Y, bbox.mins.Z), Vector2.One), // Bottom left,  front - Top left,     bottom - Bottom right, left
-            new Vertex(new Vector3(bbox.mins.X, bbox.maxs.Y, bbox.mins.Z), Vector2.One), // Bottom right, front - Top right,    bottom - Bottom left,  right
-            new Vertex(new Vector3(bbox.maxs.X, bbox.mins.Y, bbox.maxs.Z), Vector2.One), // Top left,     back  - Top left,     top    - Top left,     left
-            new Vertex(new Vector3(bbox.mins.X, bbox.mins.Y, bbox.maxs.Z), Vector2.One), // Top right,    back  - Top right,    top    - Top right,    right
-            new Vertex(new Vector3(bbox.maxs.X, bbox.mins.Y, bbox.mins.Z), Vector2.One), // Bottom left,  back  - Bottom left,  bottom - Bottom left,  left
-            new Vertex(new Vector3(bbox.mins.X, bbox.mins.Y, bbox.mins.Z), Vector2.One), // Bottom right, back  - Bottom right, bottom - Bottom right, right
+            new Vertex(new Vector3(bbox.maxs.X, bbox.maxs.Y, bbox.maxs.Z), Vector2.One), // Top left     - front, Bottom left  - top,    Top right    - left
+            new Vertex(new Vector3(bbox.mins.X, bbox.maxs.Y, bbox.maxs.Z), Vector2.One), // Top right    - front, Bottom right - top,    Top left     - right
+            new Vertex(new Vector3(bbox.maxs.X, bbox.maxs.Y, bbox.mins.Z), Vector2.One), // Bottom left  - front, Top left     - bottom, Bottom right - left
+            new Vertex(new Vector3(bbox.mins.X, bbox.maxs.Y, bbox.mins.Z), Vector2.One), // Bottom right - front, Top right    - bottom, Bottom left  - right
+            new Vertex(new Vector3(bbox.maxs.X, bbox.mins.Y, bbox.maxs.Z), Vector2.One), // Top left     - back, Top left      - top,    Top left     - left
+            new Vertex(new Vector3(bbox.mins.X, bbox.mins.Y, bbox.maxs.Z), Vector2.One), // Top right    - back, Top right     - top,    Top right    - right
+            new Vertex(new Vector3(bbox.maxs.X, bbox.mins.Y, bbox.mins.Z), Vector2.One), // Bottom left  - back, Bottom left   - bottom, Bottom left  - left
+            new Vertex(new Vector3(bbox.mins.X, bbox.mins.Y, bbox.mins.Z), Vector2.One), // Bottom right - back, Bottom right  - bottom, Bottom right - right
         ];
         
         #if DEBUG

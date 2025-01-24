@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 
 using Veldrid;
-using DynamicExpresso;
 
 namespace Toast.Engine.Resources;
 
@@ -91,13 +90,10 @@ public static class InputManager
     /// </summary>
     public static void SaveKeybinds()
     {
-        // If the file doesn't exist...
-        if ( !File.Exists( PATH_KEYBINDS ) )
-        {
-            // Create it!
-            FileStream file = File.Open( PATH_KEYBINDS, FileMode.Create );
-            file.Close();
-        }
+        // Create the file we want to write to!
+        FileStream file = File.Open( PATH_KEYBINDS, FileMode.Create );
+        file.Close();
+
 
         // Try to...
         try

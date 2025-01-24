@@ -2,7 +2,6 @@
 using System.IO;
 using System.Collections.Generic;
 
-using NAudio;
 using NAudio.Wave;
 
 namespace Toast.Engine.Resources;
@@ -31,10 +30,10 @@ public static class AudioManager
         bool repeats = false; // Default repeat status
 
         // If we have enough arguments for it...
-        if ( argCount >= 1 )
+        if ( argCount >= 2 )
         {
             // Get the volume
-            if ( !float.TryParse( (string)args[2], out volume ) )
+            if ( !float.TryParse( args[2].ToString().Replace(".", ","), out volume ) )
             {
                 Log.Warning( "Second argument is an invalid float!" );
                 return;
@@ -42,7 +41,7 @@ public static class AudioManager
         }
 
         // If we have enough arguments for it...
-        if ( argCount >= 2 )
+        if ( argCount >= 3 )
         {
             // Do we repeat?
             if ( !bool.TryParse( (string)args[3], out repeats ) )

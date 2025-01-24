@@ -53,8 +53,13 @@ public class EngineManager
         // Initialize file logging
         Log.OpenLogFile();
 
-        // Create default console commands
-        CreateConsoleCommands();
+#if !DEBUG
+        // If we can't load our commands...
+        if ( !ConsoleManager.LoadCommands() )
+        {
+            // Create default console commands
+            CreateConsoleCommands();
+        }
 
         // If we couldn't load our keybinds file...
         if ( !InputManager.LoadKeybinds() )
@@ -62,6 +67,13 @@ public class EngineManager
             // Create default keybinds
             CreateKeybinds();
         }
+#else
+        // Create default console commands
+        CreateConsoleCommands();
+
+        // Create default keybinds
+        CreateKeybinds();
+#endif // !DEBUG
 
         // Try to...
         try
@@ -91,8 +103,7 @@ public class EngineManager
             alias = "clear",
             description = "Clears the console's logs. (Does NOT clear the log file!)",
 
-            onCall = ConsoleUI.Clear,
-            onArgsCall = ConsoleManager.InvalidCommand
+            onCall = ConsoleUI.Clear
         } );
 
         // Console
@@ -101,8 +112,7 @@ public class EngineManager
             alias = "console",
             description = "Toggles the display of the console.",
 
-            onCall = ToggleConsole,
-            onArgsCall = ConsoleManager.InvalidCommand
+            onCall = EnableConsole
         } );
 
         // Help
@@ -118,11 +128,10 @@ public class EngineManager
         // Open debug (UI)
         ConsoleManager.AddCommand( new ConsoleCommand
         {
-            alias = "open_debug",
-            description = "Opens the debug UI menu, displaying special game information.",
+            alias = "debug",
+            description = "Toggles the debug UI menu, displaying specific engine and game information.",
 
-            onCall = ToggleDebug,
-            onArgsCall = ConsoleManager.InvalidCommand
+            onCall = ToggleDebug
         } );
 
         // Play sound
@@ -131,7 +140,6 @@ public class EngineManager
             alias = "playsound",
             description = "Plays a sound from a specified path (should be something like \"resources/audio/engine/error.mp3\".)",
 
-            onCall = ConsoleManager.InvalidCommand,
             onArgsCall = AudioManager.PlaySound
         } );
 
@@ -141,7 +149,6 @@ public class EngineManager
             alias = "bind",
             description = "Binds a key to an action defined by an alias.",
 
-            onCall = ConsoleManager.InvalidCommand,
             onArgsCall = InputManager.EditKeybind
         } );
 
@@ -151,8 +158,7 @@ public class EngineManager
             alias = "showbindings",
             description = "Displays all bindings.",
 
-            onCall = InputManager.DisplayKeybinds,
-            onArgsCall = ConsoleManager.InvalidCommand
+            onCall = InputManager.DisplayKeybinds
         } );
 
         // Toggle command
@@ -161,7 +167,6 @@ public class EngineManager
             alias = "togglecommand",
             description = "Disables or enables a specific console command.",
 
-            onCall = ConsoleManager.InvalidCommand,
             onArgsCall = ConsoleManager.ToggleCommand
         } );
 
@@ -171,8 +176,7 @@ public class EngineManager
             alias = "quit",
             description = "Shuts the engine down entirely.",
 
-            onCall = EnvironmentShutdown,
-            onArgsCall = ConsoleManager.InvalidCommand
+            onCall = EnvironmentShutdown
         } );
     }
 
@@ -191,18 +195,18 @@ public class EngineManager
     /// <summary>
     /// Sets the engine's regular ability to take inputs.
     /// </summary>
-    public static void ToggleInput(bool status)
+    public static void ToggleInput( bool status )
     {
         // Set the status of the takesInput variable
         takesInput = status;
     }
 
     /// <summary>
-    /// Toggles the console. Mainly used with console commands.
+    /// Enables the console. Mainly used with console commands.
     /// </summary>
-    private static void ToggleConsole()
+    private static void EnableConsole()
     {
-        consoleOpen = !consoleOpen;
+        consoleOpen = true;
     }
 
     /// <summary>
@@ -288,6 +292,9 @@ public class EngineManager
     {
         // Save the keybinds
         InputManager.SaveKeybinds();
+
+        // Save our commands
+        ConsoleManager.SaveCommands();
 
         // End file logging
         Log.CloseLogFile();
