@@ -22,28 +22,26 @@ public static class ConsoleUI
     public static void Display( ref bool open )
     {
         // The main console window
-        if ( ImGui.Begin( "Console", ref open, 
+        if ( ImGui.Begin( "Console", ref open,
              ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDocking | ImGuiWindowFlags.NoResize ) )
         {
             // We should only take inputs when the console isn't focused
             EngineManager.ToggleInput( !ImGui.IsWindowFocused() );
 
-            // Set its size to one that'd fit even the smallest of screens
+            // Set the console window's size to one that'd fit even the smallest of screens
             ImGui.SetWindowSize( new Vector2( 800f, 600f ) );
 
             // The actual logs!
-            if ( ImGui.BeginChild( "Logs", new Vector2( 782.5f, 542.5f ), 
-                 ImGuiChildFlags.Borders | ImGuiChildFlags.AlwaysUseWindowPadding, 
-                 ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.ChildWindow ) )
+            if ( ImGui.BeginChild( "Logs", new Vector2( 782.5f, 542.5f ),
+                 ImGuiChildFlags.Borders | ImGuiChildFlags.AlwaysUseWindowPadding,
+                 ImGuiWindowFlags.ChildWindow ) )
             {
                 // Make a wrapped text for every log
                 for ( int i = 0; i < logs.Count; i++ )
                 {
                     ImGui.TextWrapped( logs[i] );
+                    ImGui.SetScrollY( ImGui.GetScrollMaxY() );
                 }
-
-                // Scroll to the bottom of the logs
-                ImGui.SetScrollY( ImGui.GetScrollMaxY() );
 
                 ImGui.EndChild();
             }

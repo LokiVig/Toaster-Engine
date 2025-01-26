@@ -25,15 +25,11 @@ public static class InputManager
     /// </summary>
     public static void OnKeyDown( KeyEvent ev )
     {
-        // If it's pressed down...
-        if ( ev.Down )
+        // If our current list of keys down doesn't contain that key...
+        if ( !keysDown.Contains( ev.Key ) )
         {
-            // If our current list of keys down doesn't contain that key...
-            if ( !keysDown.Contains( ev.Key ) )
-            {
-                // Add it to our list of keys down!
-                keysDown.Add( ev.Key );
-            }
+            // Add it to our list of keys down!
+            keysDown.Add( ev.Key );
         }
     }
 
@@ -171,7 +167,7 @@ public static class InputManager
         }
 
         // If we can't find a bind from our first argument...
-        if ( ( bindToEdit = InputManager.FindKeybind( (string)args[1] ) ) == null )
+        if ( ( bindToEdit = FindKeybind( (string)args[1] ) ) == null )
         {
             Log.Warning( $"Couldn't find keybind with the alias of \"{args[1]}\"!" );
             return;
@@ -185,9 +181,34 @@ public static class InputManager
             return;
         }
 
-        // Change the bind's key!
-        bindToEdit.key = key;
-        Log.Info( $"Successfully bound action \"{args[1]}\" to key \"{args[2]}\"!", true );
+        bindToEdit.key = key; // Change the bind's key!
+        Log.Info( $"Successfully bound action \"{args[1]}\" to key \"{args[2]}\"!", true ); // Log our success
+    }
+
+    /// <summary>
+    /// Unbinds a keybind through the console.
+    /// </summary>
+    public static void UnbindKeybind( List<object> args )
+    {
+        int argCount = args.Count - 1; // The amount of provided arguments (-1 because the first argument is the command itself in this case)
+        Keybind bindToEdit = null; // The bind we're going to edit
+
+        // Make sure we have the right amount of arguments
+        if ( argCount < 1 || argCount > 1 )
+        {
+            Log.Warning( "Invalid amount of arguments! You need at least, and at most, one argument defining the keybind you wish to unbind." );
+            return;
+        }
+
+        // If we can't find a keybind from our fist argument...
+        if ( ( bindToEdit = FindKeybind( (string)args[1] ) ) == null )
+        {
+            Log.Warning( $"Couldn't find keybind with the alias of \"{args[1]}\"!" );
+            return;
+        }
+
+        bindToEdit.key = Key.Unknown; // Set the found keybind's key to unknown!
+        Log.Info( $"Successfully unbound keybind \"{args[1]}\"!", true ); // Log our success
     }
 
     /// <summary>

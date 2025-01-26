@@ -12,16 +12,21 @@ namespace Toast.Engine.Resources;
 /// </summary>
 public struct Brush
 {
-    public string id { get; set; } // The id of this brush, can be set by the mapper
-    public BBox bbox { get; set; } = BBox.One; // The extents of this brush
-    [JsonIgnore] public Vertex[] vertices { get; set; } // The vertices of this brush
-    
+    public string id; // The id of this brush, can be set by the mapper
+    public BBox bbox = BBox.One; // The extents of this brush
+
+    [JsonIgnore]
+    public Vertex[] vertices; // The vertices of this brush
+
+    [JsonIgnore]
+    public ushort[] indices;
+
     /// <summary>
     /// Create a brush with specified mins and maxs
     /// </summary>
     /// <param name="mins">The minimum values, e.g. bottom of the brush</param>
     /// <param name="maxs">The maximum values, e.g. top of the brush</param>
-    public Brush(Vector3 mins, Vector3 maxs)
+    public Brush( Vector3 mins, Vector3 maxs )
     {
         bbox.mins = mins;
         bbox.maxs = maxs;
@@ -31,7 +36,7 @@ public struct Brush
     /// <summary>
     /// Create a brush with a specified <see cref="BBox"/>
     /// </summary>
-    public Brush(BBox bbox)
+    public Brush( BBox bbox )
     {
         this.bbox = bbox;
         InitializeVertices();
@@ -58,21 +63,32 @@ public struct Brush
             new Vertex(new Vector3(bbox.maxs.X, bbox.mins.Y, bbox.mins.Z), Vector2.One), // Bottom left  - back, Bottom left   - bottom, Bottom left  - left
             new Vertex(new Vector3(bbox.mins.X, bbox.mins.Y, bbox.mins.Z), Vector2.One), // Bottom right - back, Bottom right  - bottom, Bottom right - right
         ];
-        
-        #if DEBUG
+
+        // Initialize our array of indices
+        indices =
+        [
+            0, 1, 2, 0, 2, 3,
+            4, 6, 5, 4, 7, 6,
+            8, 9, 10, 8, 10, 11, 
+            12, 14, 13, 12, 15, 14, 
+            16, 17, 18, 16, 18, 19,
+            20, 21, 22, 20, 22, 23
+        ];
+
+#if DEBUG
         // Log the vertices for information's sake
-        Log.Info("Vertices initialized. Their values are:");
-        foreach (Vertex vertice in vertices)
+        Log.Info( "Vertices initialized. Their values are:" );
+        foreach ( Vertex vertice in vertices )
         {
-            Log.Info($"\t{vertice.ToString()}");
+            Log.Info( $"\t{vertice.ToString()}" );
         }
-        #endif // DEBUG
+#endif // DEBUG
     }
-    
+
     /// <summary>
     /// Set the ID of this brush
     /// </summary>
-    public void SetID(string id)
+    public void SetID( string id )
     {
         this.id = id;
     }
@@ -80,7 +96,7 @@ public struct Brush
     /// <summary>
     /// Set the BBox of this brush
     /// </summary>
-    public void SetBBox(BBox bbox)
+    public void SetBBox( BBox bbox )
     {
         this.bbox = bbox;
     }
@@ -104,12 +120,12 @@ public struct Brush
     /// <summary>
     /// Turn this brush into an entity
     /// </summary>
-    public void TurnIntoEntity<T>(T desiredEntity) where T : Entity
+    public void TurnIntoEntity<T>( T desiredEntity ) where T : Entity
     {
-        desiredEntity.SetBBox(bbox);
-        desiredEntity.SetPosition(bbox.GetCenter());
+        desiredEntity.SetBBox( bbox );
+        desiredEntity.SetPosition( bbox.GetCenter() );
 
-        EngineManager.currentFile.RemoveBrush(this);
-        EngineManager.currentFile.AddEntity(desiredEntity);
+        EngineManager.currentFile.RemoveBrush( this );
+        EngineManager.currentFile.AddEntity( desiredEntity );
     }
 }

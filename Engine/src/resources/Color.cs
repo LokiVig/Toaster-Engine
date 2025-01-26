@@ -35,9 +35,10 @@ public struct Color
     // Specific, pre-defined colors
     //
     
-    public static readonly Color White = new Color(255, 255, 255); // White color
-    public static readonly Color Red   = new Color(255, 0  , 0  ); // Red color
-    public static readonly Color Green = new Color(0  , 255, 0  ); // Green color
-    public static readonly Color Blue  = new Color(0  , 0  , 255); // Blue color
-    public static readonly Color Black = new Color(0  , 0  , 0  ); // Black color
+    public static readonly Color White  = new Color(255, 255, 255); // White color
+    public static readonly Color Red    = new Color(255,   0,   0); // Red color
+    public static readonly Color Green  = new Color(  0, 255,   0); // Green color
+    public static readonly Color Blue   = new Color(  0,   0, 255); // Blue color
+    public static readonly Color Yellow = new Color(255, 255,   0); // Yellow color
+    public static readonly Color Black  = new Color(  0,   0,   0); // Black color
 }

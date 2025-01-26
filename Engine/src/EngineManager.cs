@@ -1,7 +1,5 @@
 ﻿using System;
-using System.IO;
 using System.Diagnostics;
-using System.Collections.Generic;
 
 using Veldrid;
 
@@ -10,7 +8,7 @@ using Toast.Engine.Rendering;
 
 namespace Toast.Engine;
 
-public class EngineManager
+public static class EngineManager
 {
     //---------------------------------------//
     //			    Constants				 //
@@ -143,6 +141,24 @@ public class EngineManager
             onArgsCall = AudioManager.PlaySound
         } );
 
+        // Display sounds
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "displaysounds",
+            description = "Displays all currently playing audio files.",
+
+            onCall = AudioManager.DisplayPlayingFiles
+        } );
+
+        // Stop sound(s)
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "stopsound",
+            description = "Stops all actively playing sounds.",
+
+            onCall = AudioManager.StopAllSounds
+        } );
+
         // Bind
         ConsoleManager.AddCommand( new ConsoleCommand
         {
@@ -152,13 +168,22 @@ public class EngineManager
             onArgsCall = InputManager.EditKeybind
         } );
 
-        // Show bindings
+        // Display binds
         ConsoleManager.AddCommand( new ConsoleCommand
         {
-            alias = "showbindings",
+            alias = "displaybinds",
             description = "Displays all bindings.",
 
             onCall = InputManager.DisplayKeybinds
+        } );
+
+        // Unbind
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "unbind",
+            description = "Unbinds a key from an action. (Effectively just sets its key value to \"Unknown\".)",
+
+            onArgsCall = InputManager.UnbindKeybind
         } );
 
         // Toggle command
@@ -232,6 +257,7 @@ public class EngineManager
     {
         Stopwatch watch = Stopwatch.StartNew();
 
+        // While the renderer isn't shutting down...
         while ( !Renderer.ShuttingDown() )
         {
             // Calculate the time elapsed since the last frame
@@ -256,8 +282,8 @@ public class EngineManager
             // subsidiary update method
             OnUpdate?.Invoke();
 
-            // Call the renderer's function that'll render stuff
-            Renderer.RenderFrame( currentScene );
+            // Call the RenderFrame method from the renderer
+            Renderer.RenderFrame( currentScene ?? null );
         }
     }
 

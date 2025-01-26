@@ -1,4 +1,6 @@
-﻿using Veldrid;
+﻿using System.Collections.Generic;
+
+using Veldrid;
 using Veldrid.Sdl2;
 using Veldrid.StartupUtilities;
 
@@ -6,7 +8,9 @@ using ImGuiNET;
 
 using Toast.Engine.Resources;
 using Toast.Engine.Entities;
-using System.Collections.Generic;
+using Veldrid.SPIRV;
+using System.IO;
+using System;
 
 namespace Toast.Engine.Rendering;
 
@@ -19,17 +23,17 @@ public class Renderer
     public static Sdl2Window window;
     public static GraphicsDevice graphicsDevice;
 
-    private static ResourceFactory resourceFactory;
-    private static DeviceBuffer vertexBuffer;
-    private static DeviceBuffer indexBuffer;
+    private static CommandList commandList;
     private static Shader[] shaders;
     private static Pipeline pipeline;
-    private static CommandList commandList;
+    private static VertexLayoutDescription vertexLayout;
+
+    private static string shaderExtension;
 
     private static ImGuiController controller;
 
     /// <summary>
-    /// Initializes a DirectX 11 rendered window with a specified title.
+    /// Initializes a Direct3D 11 rendered window with a specified title.
     /// </summary>
     /// <param name="title">The title of the window we wish to open.</param>
     public static void Initialize( string title )
@@ -47,6 +51,7 @@ public class Renderer
             WindowTitle = title
         };
 
+        // Create our window
         window = VeldridStartup.CreateWindow( ref windowCI );
 
         // Create a graphics device using Direct3D 11
@@ -76,8 +81,50 @@ public class Renderer
         // Initializes a new ImGui controller
         controller = new ImGuiController( graphicsDevice, graphicsDevice.MainSwapchain.Framebuffer.OutputDescription, window.Width, window.Height );
 
-        // Create our other, default resources
+        // Create our default resources
         CreateResources();
+    }
+
+    /// <summary>
+    /// Creates the resources required for rendering.
+    /// </summary>
+    private static void CreateResources()
+    {
+        ResourceFactory factory = graphicsDevice.ResourceFactory;
+
+        commandList = factory.CreateCommandList();
+
+        // Get which type of shader extensions we should have, depending on the backend
+        shaderExtension = graphicsDevice.BackendType == GraphicsBackend.Direct3D11 ? "hlsl" : "glsl";
+
+        // Initialize our input layout
+        vertexLayout = new VertexLayoutDescription(
+            new VertexElementDescription( "Position", VertexElementSemantic.Position, VertexElementFormat.Float3 ),
+            new VertexElementDescription( "Normal", VertexElementSemantic.Normal, VertexElementFormat.Float3 ),
+            new VertexElementDescription( "TexCoord", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2 ),
+            new VertexElementDescription( "Color", VertexElementSemantic.Color, VertexElementFormat.Float4 )
+        );
+
+        // Initialize our shaders
+        shaders =
+        [
+            factory.CreateFromSpirv(new ShaderDescription(ShaderStages.Vertex, File.ReadAllBytes($"resources/shaders/brush-vert.{shaderExtension}"), "main" )),
+            factory.CreateFromSpirv(new ShaderDescription(ShaderStages.Fragment, File.ReadAllBytes($"resources/shaders/brush-frag.{shaderExtension}"), "main" ))
+        ];
+
+        // Create our graphics pipeline
+        pipeline = factory.CreateGraphicsPipeline( new GraphicsPipelineDescription(
+            BlendStateDescription.SingleOverrideBlend,
+            DepthStencilStateDescription.DepthOnlyLessEqual,
+            RasterizerStateDescription.Default,
+            PrimitiveTopology.TriangleList,
+            new ShaderSetDescription(
+                [ vertexLayout ],
+                shaders
+            ),
+            Array.Empty<ResourceLayout>(),
+            graphicsDevice.SwapchainFramebuffer.OutputDescription
+            ));
     }
 
     /// <summary>
@@ -153,7 +200,7 @@ public class Renderer
     /// <summary>
     /// Changes the window's current resolution through the console.
     /// </summary>
-    private static void ChangeWindowResolution(List<object> args)
+    private static void ChangeWindowResolution( List<object> args )
     {
         // If we have more than 2 arguments...
         if ( ( args.Count - 1 ) > 2 || ( args.Count - 1 ) < 2 )
@@ -196,19 +243,6 @@ public class Renderer
     }
 
     /// <summary>
-    /// Initializes all of our resources needed to render things.
-    /// </summary>
-    private static void CreateResources()
-    {
-        // Define our resource factory variable
-        // This is to shorten down the later variable definitions
-        resourceFactory = graphicsDevice.ResourceFactory;
-
-        // Define our command list variable
-        commandList = resourceFactory.CreateCommandList();
-    }
-
-    /// <summary>
     /// Renders a frame to the window.
     /// </summary>
     public static void RenderFrame( Scene scene = null )
@@ -218,6 +252,10 @@ public class Renderer
 
         // Begin commands
         commandList.Begin();
+
+        // Render directly to the window
+        commandList.SetFramebuffer( graphicsDevice.MainSwapchain.Framebuffer );
+        commandList.ClearColorTarget( 0, RgbaFloat.CornflowerBlue );
 
         // If we have a scene to render from
         if ( scene != null )
@@ -232,10 +270,6 @@ public class Renderer
                 DrawBrush( brush );
             }
         }
-
-        // Render directly to the window
-        commandList.SetFramebuffer( graphicsDevice.MainSwapchain.Framebuffer );
-        commandList.ClearColorTarget( 0, RgbaFloat.CornflowerBlue );
 
         // Render the ImGui controller
         controller.Render( graphicsDevice, commandList );
@@ -271,7 +305,10 @@ public class Renderer
     /// <param name="brush">The brush we wish to render.</param>
     private static void DrawBrush( Brush brush )
     {
+        ResourceFactory factory = graphicsDevice.ResourceFactory;
 
+        DeviceBuffer vBuffer = factory.CreateBuffer( new BufferDescription( (uint)brush.vertices.Length, BufferUsage.VertexBuffer ) );
+        DeviceBuffer iBuffer = factory.CreateBuffer( new BufferDescription( (uint)brush.indices.Length, BufferUsage.IndexBuffer ) );
     }
 
     /// <summary>
@@ -297,21 +334,7 @@ public class Renderer
     /// </summary>
     public static void Shutdown()
     {
-        // TODO: Remove all '?' after having actually written functionality for the variables
-
-        pipeline?.Dispose();
-
-        if ( shaders != null )
-        {
-            foreach ( Shader shader in shaders )
-            {
-                shader.Dispose();
-            }
-        }
-
-        commandList?.Dispose();
-        vertexBuffer?.Dispose();
-        indexBuffer?.Dispose();
-        graphicsDevice?.Dispose();
+        commandList.Dispose();
+        graphicsDevice.Dispose();
     }
 }

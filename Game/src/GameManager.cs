@@ -9,8 +9,6 @@ using Toast.Engine.Resources;
 using Toast.Game.Entities;
 using Toast.Game.Entities.NPC;
 
-using Veldrid;
-
 namespace Toast.Game;
 
 /// <summary>

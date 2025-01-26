@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 
 using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 
 namespace Toast.Engine.Resources;
 
@@ -11,10 +12,12 @@ namespace Toast.Engine.Resources;
 /// </summary>
 public static class AudioManager
 {
+    // Constant paths to engine-important audio files
     private const string PATH_AUDIO_SUCCESS = "resources/audio/engine/success.mp3";
     private const string PATH_AUDIO_WARNING = "resources/audio/engine/warning.mp3";
     private const string PATH_AUDIO_ERROR = "resources/audio/engine/error.mp3";
 
+    // Our list of actively playing sound files
     private static List<AudioFile> playingFiles = new List<AudioFile>();
 
     /// <summary>
@@ -25,7 +28,7 @@ public static class AudioManager
         // The amount of arguments (-1 cause the first one is always the command itself)
         int argCount = args.Count - 1;
 
-        string filepath = (string)args[1]; // Get the filepath
+        string filepath = args[1].ToString().ToLower(); // Get the filepath
         float volume = 1.0f; // Default volume
         bool repeats = false; // Default repeat status
 
@@ -68,6 +71,10 @@ public static class AudioManager
             // Read the file
             AudioFileReader fileReader = new AudioFileReader( filepath );
 
+            // Create a volume provider for independent volume control
+            VolumeSampleProvider volumeProvider = new VolumeSampleProvider( fileReader.ToSampleProvider() );
+            volumeProvider.Volume = volume; // Actually set the volume
+
             // Initialize a WaveOutEvent
             WaveOutEvent waveEvent = new WaveOutEvent();
 
@@ -83,8 +90,7 @@ public static class AudioManager
             };
 
             // Actually play the sound
-            file.waveEvent.Volume = volume;
-            file.waveEvent.Init( fileReader );
+            file.waveEvent.Init( volumeProvider );
             file.waveEvent.Play();
 
             // Add the new file to our list of playing files
@@ -114,10 +120,16 @@ public static class AudioManager
     /// </summary>
     private static void RepeatSound( AudioFile file )
     {
+        //
         // Do things that will effectively make the file repeat
-        file.waveEvent.Pause();
-        file.fileReader.Position = 0;
-        file.waveEvent.Play();
+        //
+
+        file.waveEvent.Pause(); // Pause the playback
+        playingFiles.Remove( file ); // Remove the file from our list of playing files
+
+        file.fileReader.Position = 0; // Reset the position back to the start
+        file.waveEvent.Play(); // Play the audio
+        playingFiles.Add( file ); // Add the file back to our list of playing files
     }
 
     /// <summary>
@@ -128,6 +140,7 @@ public static class AudioManager
         // Check every actively playing file...
         for ( int i = 0; i < playingFiles.Count; i++ )
         {
+            // Get the current file
             AudioFile file = playingFiles[i];
 
             // If we encountered a null file...
@@ -144,7 +157,6 @@ public static class AudioManager
                 if ( file.repeats )
                 {
                     RepeatSound( file ); // Do things that will make this file repeat itself
-                    playingFiles[i] = null; // Remove the file from the list
                 }
                 else // Otherwise!
                 {
@@ -158,12 +170,31 @@ public static class AudioManager
     /// Stop a specified <see cref="AudioFile"/>.
     /// </summary>
     /// <param name="file">The <see cref="AudioFile"/> we wish to stop the sound of.</param>
-    public static void StopSound( AudioFile file, bool dispose = true )
+    public static void StopSound( AudioFile file )
     {
         file.waveEvent.Stop(); // Stop the sound
         file.Dispose(); // Call the file's dispose method
 
         playingFiles.Remove( file ); // Remove the file from our list
+    }
+
+    /// <summary>
+    /// Method to stop all currently playing sounds.
+    /// </summary>
+    public static void StopAllSounds()
+    {
+        // For every playing file...
+        for ( int i = 0; i < playingFiles.Count; i++ )
+        {
+            // Get the current file
+            AudioFile file = playingFiles[i];
+
+            // Do the same things as the 
+            file.waveEvent.Stop();
+            file.Dispose();
+        }
+
+        playingFiles.Clear();
     }
 
     /// <summary>
@@ -181,6 +212,19 @@ public static class AudioManager
     public static bool FileIsPlaying( AudioFile file )
     {
         return playingFiles.Contains( file );
+    }
+
+    /// <summary>
+    /// Displays the list of actively playing files.
+    /// </summary>
+    public static void DisplayPlayingFiles()
+    {
+        Log.Info( "Actively playing files:" );
+
+        foreach ( AudioFile file in playingFiles )
+        {
+            Log.Info( $"\t\"{file.filepath}\" - {file.volume} - {(file.repeats ? "Repeats" : "Does not repeat")}" );
+        }
     }
 
     /// <summary>
