@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 using Newtonsoft.Json;
 
-using Veldrid;
-
 namespace Toast.Engine.Resources;
 
 public static class InputManager
@@ -19,19 +17,6 @@ public static class InputManager
     {
         Formatting = Formatting.Indented
     };
-
-    /// <summary>
-    /// Things to do when the Veldrid KeyDown event is invoked.
-    /// </summary>
-    public static void OnKeyDown( KeyEvent ev )
-    {
-        // If our current list of keys down doesn't contain that key...
-        if ( !keysDown.Contains( ev.Key ) )
-        {
-            // Add it to our list of keys down!
-            keysDown.Add( ev.Key );
-        }
-    }
 
     /// <summary>
     /// Adds the argument keybind to the input manager's list of keybinds.
@@ -224,19 +209,6 @@ public static class InputManager
         {
             // Log its information! (Alias and currently bound key)
             Log.Info( $"\t\"{keybind.alias}\" - \"{keybind.key}\"" );
-        }
-    }
-
-    /// <summary>
-    /// Things to do when the Veldrid KeyUp event is invoked.
-    /// </summary>
-    public static void OnKeyUp( KeyEvent ev )
-    {
-        // If our current keys down contains that key...
-        if ( keysDown.Contains( ev.Key ) )
-        {
-            // Remove it from our list of current keys down!
-            keysDown.Remove( ev.Key );
         }
     }
 

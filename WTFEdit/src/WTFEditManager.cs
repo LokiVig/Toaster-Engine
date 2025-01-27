@@ -1,9 +1,5 @@
-﻿using System;
-using System.Threading;
-using System.Diagnostics;
-
+﻿using Toast.Engine;
 using Toast.Engine.Resources;
-using Toast.Engine;
 
 namespace Toast.WTFEdit;
 

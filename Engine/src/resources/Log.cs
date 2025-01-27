@@ -79,7 +79,7 @@ public struct Log
         if ( extraInfo )
         {
             // Add the line of where it was called, the caller, the method that called us, then the message
-            ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: INFO; {message}" );
+            Console.WriteLine( $"(Line {line}) {caller}.{method}: INFO; {message}" );
 
             // Write to the log file
             logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: INFO; {message}" );
@@ -87,7 +87,7 @@ public struct Log
         else // Otherwise...
         {
             // Just write the message
-            ConsoleUI.WriteLine( $"{message}" );
+            Console.WriteLine( $"{message}" );
 
             // Write to the log file
             logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : {message}" );
@@ -115,7 +115,7 @@ public struct Log
         }
 
         // Write to the console what just happened
-        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: SUCCESS; {message}" );
+        Console.WriteLine( $"(Line {line}) {caller}.{method}: SUCCESS; {message}" );
 
         // Write to the log file
         logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: SUCCESS; {message}" );
@@ -142,7 +142,7 @@ public struct Log
         }
 
         // Write to the console what just happened
-        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: WARNING; {message}" );
+        Console.WriteLine( $"(Line {line}) {caller}.{method}: WARNING; {message}" );
 
         // Write to the log file
         logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: WARNING; {message}" );
@@ -169,7 +169,7 @@ public struct Log
         }
 
         // Write to the console what just happened
-        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: ERROR; {message}" );
+        Console.WriteLine( $"(Line {line}) {caller}.{method}: ERROR; {message}" );
 
         // Write to the log file
         logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: ERROR; {message}" );
@@ -209,7 +209,7 @@ public struct Log
         }
 
         // Write to the console what just happened
-        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: ERROR; {message}" );
+        Console.WriteLine( $"(Line {line}) {caller}.{method}: ERROR; {message}" );
 
         // Write to the log file
         logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: ERROR; {message}" );

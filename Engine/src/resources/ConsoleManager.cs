@@ -10,13 +10,14 @@ namespace Toast.Engine.Resources;
 
 public static class ConsoleManager
 {
-    private const string PATH_COMMANDS = "resources/commands.txt";
+    private const string PATH_COMMANDS = "resources/commands.txt"; // Default path to our list of pre-written commands
 
-    private static List<ConsoleCommand> commands = new();
+    private static List<ConsoleCommand> commands = new(); // Our local list of commands
 
+    // Serializer with its own settings
     private static JsonSerializer serializer = new()
     {
-        Formatting = Formatting.Indented,
+        Formatting = Formatting.Indented, // Indent the Json for prettification
     };
 
     /// <summary>
@@ -74,19 +75,25 @@ public static class ConsoleManager
     /// </summary>
     public static bool LoadCommands()
     {
+        // If we don't have a commands file to load from...
         if ( !File.Exists( PATH_COMMANDS ) )
         {
+            // Unsuccessful load!
             return false;
         }
 
         try
         {
+            // Open the file...
             using ( StreamReader sr = new StreamReader( PATH_COMMANDS ) )
             {
+                // Read the file's Json variables...
                 using ( JsonReader reader = new JsonTextReader( sr ) )
                 {
+                    // If we actually found our list...
                     if ( ( commands = serializer.Deserialize<List<ConsoleCommand>>( reader ) ) != null )
                     {
+                        // Interpret each console command's functions
                         Interpreter interpreter = new Interpreter();
                         foreach ( ConsoleCommand command in commands )
                         {
@@ -94,18 +101,19 @@ public static class ConsoleManager
                             command.onArgsCall = interpreter.ParseAsDelegate<Action<List<object>>>( command.onArgsCallAlias );
                         }
 
+                        // Successful load!
                         return true;
                     }
                 }
             }
         }
-        catch ( Exception exc )
+        catch ( Exception exc ) // Catches any unknown exception we get
         {
             Log.Error( "Unmanaged exception caught!", exc );
             return false;
         }
 
-        // Some other error happened
+        // Something else caused an unsuccessful load
         return false;
     }
 

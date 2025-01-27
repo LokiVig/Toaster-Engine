@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 
-using Veldrid;
-
 using Toast.Engine.Resources;
 using Toast.Engine.Rendering;
 
@@ -34,6 +32,8 @@ public static class EngineManager
     private static float lastFrameTime; // Time of the last frame in seconds
 
     private static bool takesInput = true; // Determines whether or not we should take regular input
+
+    private static IntPtr renderer; // The renderer that's acquired at initialization
 
     private static bool consoleOpen; // Used to determine whether or not we should display the console
     private static bool debugOpen; // Used to determine whether or not we should display the debug UI
@@ -77,7 +77,7 @@ public static class EngineManager
         try
         {
             // Initialize the renderer
-            Renderer.Initialize( $"Toaster Engine (v.{ENGINE_VERSION}){( title != null ? $" - {title}" : "" )}" );
+            renderer = Renderer.Initialize( $"Toaster Engine (v.{ENGINE_VERSION}){( title != null ? $" - {title}" : "" )}" );
             Log.Success( "Successfully initialized renderer." );
         }
         catch ( Exception exc ) // Handle any exceptions we encounter!
@@ -86,8 +86,8 @@ public static class EngineManager
         }
 
         // Connect our InputManager's events to the Renderer's events for simplicity's sakes
-        Renderer.window.KeyDown += InputManager.OnKeyDown;
-        Renderer.window.KeyUp += InputManager.OnKeyUp;
+        //Renderer.window.KeyDown += InputManager.OnKeyDown;
+        //Renderer.window.KeyUp += InputManager.OnKeyUp;
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ public static class EngineManager
             alias = "clear",
             description = "Clears the console's logs. (Does NOT clear the log file!)",
 
-            onCall = ConsoleUI.Clear
+            onCall = Console.Clear
         } );
 
         // Console
@@ -255,10 +255,11 @@ public static class EngineManager
     /// </summary>
     public static void Update()
     {
+        // Deltatime calculations
         Stopwatch watch = Stopwatch.StartNew();
 
         // While the renderer isn't shutting down...
-        while ( !Renderer.ShuttingDown() )
+        while ( !Renderer.ShuttingDown(renderer) )
         {
             // Calculate the time elapsed since the last frame
             float currentTime = (float)watch.Elapsed.TotalSeconds;
@@ -283,7 +284,7 @@ public static class EngineManager
             OnUpdate?.Invoke();
 
             // Call the RenderFrame method from the renderer
-            Renderer.RenderFrame( currentScene ?? null );
+            Renderer.Update(renderer);
         }
     }
 
@@ -292,13 +293,13 @@ public static class EngineManager
         // Manage the console
         if ( consoleOpen )
         {
-            ConsoleUI.Display( ref consoleOpen );
+            //ConsoleUI.Display( ref consoleOpen );
         }
 
         // Manage the debug UI
         if ( debugOpen )
         {
-            DebugUI.Display( ref debugOpen );
+            //DebugUI.Display( ref debugOpen );
         }
     }
 
@@ -326,6 +327,6 @@ public static class EngineManager
         Log.CloseLogFile();
 
         // Clear everything from the renderer
-        Renderer.Shutdown();
+        Renderer.Shutdown(renderer);
     }
 }
