@@ -6,4 +6,4 @@ Inspired by Source, Quake and DOOM, I thought to myself "why not make my own eng
 It most likely means the engine won't be as optimized as one made in, e.g. C++ would be, and such an example is the lack of an efficient C# graphics library, resorting me to use C++ for the engine's rendering system.
 
 ## Building
-The provided solution file should be all you need to compile using VS22 or Rider.
+The provided solution file should be all you need to compile using VS22 or Rider. Do take note that the projects are all running on .NET SDK 9.0.
