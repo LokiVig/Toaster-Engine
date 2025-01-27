@@ -94,37 +94,37 @@ public class Renderer
 
         commandList = factory.CreateCommandList();
 
-        // Get which type of shader extensions we should have, depending on the backend
-        shaderExtension = graphicsDevice.BackendType == GraphicsBackend.Direct3D11 ? "hlsl" : "glsl";
+        //// Get which type of shader extensions we should have, depending on the backend
+        //shaderExtension = graphicsDevice.BackendType == GraphicsBackend.Direct3D11 ? "hlsl" : "glsl";
 
-        // Initialize our input layout
-        vertexLayout = new VertexLayoutDescription(
-            new VertexElementDescription( "Position", VertexElementSemantic.Position, VertexElementFormat.Float3 ),
-            new VertexElementDescription( "Normal", VertexElementSemantic.Normal, VertexElementFormat.Float3 ),
-            new VertexElementDescription( "TexCoord", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2 ),
-            new VertexElementDescription( "Color", VertexElementSemantic.Color, VertexElementFormat.Float4 )
-        );
+        //// Initialize our input layout
+        //vertexLayout = new VertexLayoutDescription(
+        //    new VertexElementDescription( "Position", VertexElementSemantic.Position, VertexElementFormat.Float3 ),
+        //    new VertexElementDescription( "Normal", VertexElementSemantic.Normal, VertexElementFormat.Float3 ),
+        //    new VertexElementDescription( "TexCoord", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2 ),
+        //    new VertexElementDescription( "Color", VertexElementSemantic.Color, VertexElementFormat.Float4 )
+        //);
 
-        // Initialize our shaders
-        shaders =
-        [
-            factory.CreateFromSpirv(new ShaderDescription(ShaderStages.Vertex, File.ReadAllBytes($"resources/shaders/brush-vert.{shaderExtension}"), "main" )),
-            factory.CreateFromSpirv(new ShaderDescription(ShaderStages.Fragment, File.ReadAllBytes($"resources/shaders/brush-frag.{shaderExtension}"), "main" ))
-        ];
+        //// Initialize our shaders
+        //shaders =
+        //[
+        //    factory.CreateFromSpirv(new ShaderDescription(ShaderStages.Vertex, File.ReadAllBytes($"resources/shaders/brush-vert.{shaderExtension}"), "main" )),
+        //    factory.CreateFromSpirv(new ShaderDescription(ShaderStages.Fragment, File.ReadAllBytes($"resources/shaders/brush-frag.{shaderExtension}"), "main" ))
+        //];
 
-        // Create our graphics pipeline
-        pipeline = factory.CreateGraphicsPipeline( new GraphicsPipelineDescription(
-            BlendStateDescription.SingleOverrideBlend,
-            DepthStencilStateDescription.DepthOnlyLessEqual,
-            RasterizerStateDescription.Default,
-            PrimitiveTopology.TriangleList,
-            new ShaderSetDescription(
-                [ vertexLayout ],
-                shaders
-            ),
-            Array.Empty<ResourceLayout>(),
-            graphicsDevice.SwapchainFramebuffer.OutputDescription
-            ));
+        //// Create our graphics pipeline
+        //pipeline = factory.CreateGraphicsPipeline( new GraphicsPipelineDescription(
+        //    BlendStateDescription.SingleOverrideBlend,
+        //    DepthStencilStateDescription.DepthOnlyLessEqual,
+        //    RasterizerStateDescription.Default,
+        //    PrimitiveTopology.TriangleList,
+        //    new ShaderSetDescription(
+        //        [ vertexLayout ],
+        //        shaders
+        //    ),
+        //    Array.Empty<ResourceLayout>(),
+        //    graphicsDevice.SwapchainFramebuffer.OutputDescription
+        //    ));
     }
 
     /// <summary>
@@ -307,8 +307,8 @@ public class Renderer
     {
         ResourceFactory factory = graphicsDevice.ResourceFactory;
 
-        DeviceBuffer vBuffer = factory.CreateBuffer( new BufferDescription( (uint)brush.vertices.Length, BufferUsage.VertexBuffer ) );
-        DeviceBuffer iBuffer = factory.CreateBuffer( new BufferDescription( (uint)brush.indices.Length, BufferUsage.IndexBuffer ) );
+        //DeviceBuffer vBuffer = factory.CreateBuffer( new BufferDescription( (uint)brush.vertices.Length, BufferUsage.VertexBuffer ) );
+        //DeviceBuffer iBuffer = factory.CreateBuffer( new BufferDescription( (uint)brush.indices.Length, BufferUsage.IndexBuffer ) );
     }
 
     /// <summary>
