@@ -20,6 +20,7 @@ class Renderer
 public:
 	void Initialize(const char* pszTitle);
 	void Update();
+	void RenderFrame();
 	bool ShuttingDown();
 	void Shutdown();
 
@@ -38,6 +39,8 @@ private:
 	IDXGISwapChain* m_pSwapChain; // Pointer to our swap chain interface
 	ID3D11Device* m_pDev; // Pointer to our Direct3D device interface
 	ID3D11DeviceContext* m_pDevCon; // Pointer to our Direct3D device context
+
+	ID3D11RenderTargetView* m_pBackBuffer;
 };
 
 #endif // _RENDERER_H
