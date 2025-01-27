@@ -49,20 +49,25 @@ void Renderer::Initialize(const char* pszTitle)
 	wc.hInstance = hInstance;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)COLOR_WINDOW;
-	wc.lpszClassName = (LPCSTR)"ToasterEngineWindow";
+	wc.lpszClassName = "ToasterEngineWindow";
 
 	// Register the window class
 	RegisterClassExA(&wc);
+
+	// Initialize and adjust our client window
+	RECT wr = { 0,0, 1280, 720 };
+	AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
 
 	// Create our window
 	m_window = CreateWindowExA
 	(
 		NULL, // No special style
 		"ToasterEngineWindow", // Class name of the window
-		(LPCSTR)pszTitle, // The title viewable on the window
+		pszTitle, // The title viewable on the window
 		WS_OVERLAPPEDWINDOW, // Some sorta style
 		100, 100, // Position 100, 100
-		1280, 720, // 1280x720
+		wr.right - wr.left, // 1280
+		wr.bottom - wr.top, // 720
 		NULL, // No parent
 		NULL, // No menu
 		hInstance, // Our instance
@@ -71,6 +76,14 @@ void Renderer::Initialize(const char* pszTitle)
 
 	// Show the window
 	ShowWindow(m_window, 1);
+
+	// Call the function that initializes Direct3D
+	InitD3D();
+}
+
+void Renderer::InitD3D()
+{
+
 }
 
 void Renderer::Update()
@@ -78,14 +91,20 @@ void Renderer::Update()
 	// This struct holds our messages
 	MSG msg;
 
-	// While we're getting our messages...
-	while (GetMessage(&msg, NULL, 0, 0))
+	// Check to see if any messages are waiting in the queue
+	if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 	{
-		// Translate the message
+		// Translate keystroke messages into the right format
 		TranslateMessage(&msg);
 
-		// Dispatch the message
+		// Send the message to the WindowProc function
 		DispatchMessage(&msg);
+
+		// Check to see if it's time to quit
+		if (msg.message == WM_QUIT)
+		{
+			m_window = NULL;
+		}
 	}
 }
 
@@ -98,8 +117,13 @@ bool Renderer::ShuttingDown()
 
 void Renderer::Shutdown()
 {
-	// Nullify the window
-	m_window = NULL;
+	// Call our function to clean Direct3D values
+	CleanD3D();
+}
+
+void Renderer::CleanD3D()
+{
+
 }
 
 void Renderer::OnKeyDown()

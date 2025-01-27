@@ -39,4 +39,7 @@
 	<ItemGroup>
 	  <Folder Include="src\resources\rendering\fonts\" />
 	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Renderer\Renderer.vcxproj" />
+	</ItemGroup>
 </Project>
