@@ -7,22 +7,25 @@ public class Program
 {
     public static void Main()
     {
-        WTFEditManager wtfe = new WTFEditManager();
-        wtfe.Initialize();
+        HTFManager htf = new HTFManager();
+        htf.Initialize();
     }
 }
 
-public class WTFEditManager
+/// <summary>
+/// The HTF program, dubbed so after the files it edits (Where's The Files?!), acronym for "Here's The Files!"
+/// </summary>
+public class HTFManager
 {
     private WTF currentFile;
 
     /// <summary>
-    /// Initialize the WTFEdit program
+    /// Initialize the HTF program
     /// </summary>
     public void Initialize()
     {
         // Initialize the engine
-        EngineManager.Initialize("WTFEdit");
+        EngineManager.Initialize("HTF");
         EngineManager.OnUpdate += Update;
 
         // !! DEBUG !! \\

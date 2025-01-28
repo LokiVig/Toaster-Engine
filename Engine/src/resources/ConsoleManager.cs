@@ -119,19 +119,24 @@ public static class ConsoleManager
 
     public static void SaveCommands()
     {
+        // Create a new file at our default commands path
         FileStream file = File.Open( PATH_COMMANDS, FileMode.Create );
         file.Close();
 
+        // Open the file...
         using ( StreamWriter sw = new StreamWriter( PATH_COMMANDS ) )
         {
+            // Use a Json writer to allow us to write to the file...
             using ( JsonWriter writer = new JsonTextWriter( sw ) )
             {
+                // Initialize our aliases for our calls
                 foreach ( ConsoleCommand command in commands )
                 {
                     command.onCallAlias = command.onCall.Method.Name;
                     command.onArgsCallAlias = command.onArgsCall.Method.Name;
                 }
 
+                // Write our Json list of commands to our file!
                 serializer.Serialize( writer, commands );
             }
         }
@@ -206,6 +211,22 @@ public static class ConsoleManager
     /// </summary>
     public static void InvalidCommand( List<object> args )
     {
+        // If we only have the command as an argument...
+        if (args.Count == 1)
+        {
+            ConsoleCommand foundCommand; // The command we'll find
+
+            // If we found a command...
+            if ( ( foundCommand = FindCommand( (string)args[0] ) ) != null )
+            {
+                // This should all happen because, if there's only the command that's inputted, chances are that
+                // it was a mistaken spacebar press, spacing it out by accident and ergo defining it as an argument
+                // called command when it wasn't supposed to be, this should remedy that!
+                foundCommand.onCall.Invoke(); // Invoke the command's regular on call action!
+                return; // Exit out of the method, we don't wanna log a warning when we don't need to be
+            }
+        }
+
         Log.Warning( "This command does not support arguments! Please try to run the command again, without any arguments!" );
     }
 

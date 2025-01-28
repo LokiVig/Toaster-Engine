@@ -6,7 +6,7 @@
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		<RootNamespace>Toast.Engine</RootNamespace>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-		<AssemblyName>$(ProjectName)</AssemblyName>
+		<AssemblyName>Toaster.Engine</AssemblyName>
 		<GenerateDocumentationFile>False</GenerateDocumentationFile>
 		<DocumentationFile>$(OutputDir)</DocumentationFile>
 	</PropertyGroup>
@@ -40,6 +40,9 @@
 	  <Folder Include="src\resources\rendering\fonts\" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\Renderer\Renderer.vcxproj" />
+	  <ProjectReference Include="..\Renderer\Renderer.vcxproj">
+	    <Aliases></Aliases>
+	    <Private></Private>
+	  </ProjectReference>
 	</ItemGroup>
 </Project>

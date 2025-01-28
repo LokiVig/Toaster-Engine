@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WTFEdit", "WTFEdit\WTFEdit.csproj", "{CA888BD5-216E-432F-8473-5B0CE1041EB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HTF", "WTFEdit\HTF.csproj", "{CA888BD5-216E-432F-8473-5B0CE1041EB7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{1A168BD9-C41F-44A0-A24B-CCB4E7665200}"
 EndProject

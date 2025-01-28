@@ -41,10 +41,9 @@ private:
 	void InitGraphics(); // Initializes our graphics stuff
 	void CleanD3D(); // Closes Direct3D and releases memory
 
-public:
+private:
 	HWND m_window;
 
-private:
 	IDXGISwapChain* m_pSwapChain; // Pointer to our swap chain interface
 	ID3D11Device* m_pDev; // Pointer to our Direct3D device interface
 	ID3D11DeviceContext* m_pDevCon; // Pointer to our Direct3D device context

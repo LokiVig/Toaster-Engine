@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <BaseOutputPath>$(SolutionDir)build\</BaseOutputPath>
     <StartupObject>Toast.Game.Program</StartupObject>
+    <AssemblyName>Toaster.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>Toast.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>$(SolutionDir)\build\Debug\</OutputPath>

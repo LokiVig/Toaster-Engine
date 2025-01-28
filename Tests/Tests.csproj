@@ -5,10 +5,10 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <BaseOutputPath>$(SolutionDir)build\$(Configuration)\net9.0\tests\</BaseOutputPath>
+    <BaseOutputPath>$(SolutionDir)build\</BaseOutputPath>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
-    <AssemblyName>$(ProjectName)</AssemblyName>
-    <RootNamespace>DoomNET.Tests</RootNamespace>
+    <AssemblyName>Toaster.Tests</AssemblyName>
+    <RootNamespace>Toast.Tests</RootNamespace>
     <OutputType>Library</OutputType>
   </PropertyGroup>
   <ItemGroup>
