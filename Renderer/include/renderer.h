@@ -32,7 +32,7 @@ using namespace Microsoft::WRL;
 #include <directxmath.h>
 
 // D3D12 extension library
-#include <d3dx12.h>
+#include <directx/d3dx12.h>
 
 // STL headers
 #include <algorithm>
@@ -45,19 +45,41 @@ using namespace Microsoft::WRL;
 class Renderer
 {
 public:
+	void Initialize();
+	void Update();
+	void SetFullscreen(bool);
+	void Shutdown();
+
+private:
+	void Render();
+	void Resize(uint32_t, uint32_t);
 
 private:
 	HWND CreateWindow(const wchar_t*, HINSTANCE, const wchar_t*, uint32_t, uint32_t);
 	void RegisterWindowClass(HINSTANCE, const wchar_t*);
+	static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+
+private:
+	void UpdateRenderTargetViews(ComPtr<ID3D12Device2>, ComPtr<IDXGISwapChain4>, ComPtr<ID3D12DescriptorHeap>);
 
 private:
 	ComPtr<IDXGIAdapter4> GetAdapter(bool);
 	ComPtr<ID3D12Device2> CreateDevice(ComPtr<IDXGIAdapter4>);
 	ComPtr<ID3D12CommandQueue> CreateCommandQueue(ComPtr<ID3D12Device2>, D3D12_COMMAND_LIST_TYPE);
 	ComPtr<IDXGISwapChain4> CreateSwapChain(HWND, ComPtr<ID3D12CommandQueue>, uint32_t, uint32_t, uint32_t);
+	ComPtr<ID3D12DescriptorHeap> CreateDescriptorHeap(ComPtr<ID3D12Device2>, D3D12_DESCRIPTOR_HEAP_TYPE, uint32_t);
+	ComPtr<ID3D12CommandAllocator> CreateCommandAllocator(ComPtr<ID3D12Device2>, D3D12_COMMAND_LIST_TYPE);
+	ComPtr<ID3D12GraphicsCommandList> CreateCommandList(ComPtr<ID3D12Device2>, ComPtr<ID3D12CommandAllocator>, D3D12_COMMAND_LIST_TYPE);
+	ComPtr<ID3D12Fence> CreateFence(ComPtr<ID3D12Device2>);
+
+private:
+	HANDLE CreateEventHandle();
+	uint64_t Signal(ComPtr<ID3D12CommandQueue>, ComPtr<ID3D12Fence>, uint64_t&);
+	void WaitForFenceValue(ComPtr<ID3D12Fence>, uint64_t, HANDLE, std::chrono::milliseconds);
 
 private:
 	bool CheckTearingSupport();
+	void Flush(ComPtr<ID3D12CommandQueue>, ComPtr<ID3D12Fence>, uint64_t&, HANDLE);
 
 private:
 	void ParseCommandLineArguments();
