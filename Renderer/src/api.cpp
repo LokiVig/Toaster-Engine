@@ -1,6 +1,6 @@
 #include <cstdio>
 
-#include "include/renderer.h"
+#include <renderer.h>
 
 #define DLLEXPORT extern "C" __declspec(dllexport)
 
@@ -21,7 +21,7 @@ DLLEXPORT void Update(Renderer* pRenderer)
 	}
 
 	// Call the renderer's update method
-	// This should draw everything necessary
+	// This should draw everything necessaryB
 	pRenderer->Update();
 }
 
