@@ -9,6 +9,9 @@ public static class Renderer
     public static extern IntPtr Initialize( string pszTitle );
 
     [DllImport( "Toaster.Renderer", CallingConvention = CallingConvention.Cdecl )]
+    public static extern void SetFullscreen( IntPtr pRenderer, bool fullscreen );
+
+    [DllImport( "Toaster.Renderer", CallingConvention = CallingConvention.Cdecl )]
     public static extern void Update( IntPtr pRenderer );
 
     [DllImport( "Toaster.Renderer", CallingConvention = CallingConvention.Cdecl )]

@@ -16,7 +16,7 @@ DLLEXPORT void Update(Renderer* pRenderer)
 {
 	if (!pRenderer)
 	{
-		printf("(Renderer.dll) Update: ERROR; pRenderer is nullptr!");
+		printf("(Renderer.dll) Update(Renderer*): ERROR; pRenderer is nullptr!");
 		return;
 	}
 
@@ -25,11 +25,19 @@ DLLEXPORT void Update(Renderer* pRenderer)
 	pRenderer->Update();
 }
 
+DLLEXPORT void SetFullscreen(Renderer* pRenderer, bool fullscreen)
+{
+	if (!pRenderer)
+	{
+		printf("(Renderer.dll) SetFullscreen(Renderer*, bool): ERROR; pRenderer is nullptr!");
+	}
+}
+
 DLLEXPORT bool ShuttingDown(Renderer* pRenderer)
 {
 	if (!pRenderer)
 	{
-		printf("(Renderer.dll) ShuttingDown: ERROR; pRenderer is nullptr!");
+		printf("(Renderer.dll) ShuttingDown(Renderer*): ERROR; pRenderer is nullptr!");
 		return true;
 	}
 
@@ -41,7 +49,7 @@ DLLEXPORT void Shutdown(Renderer* pRenderer)
 {
 	if (!pRenderer)
 	{
-		printf("(Renderer.dll) Shutdown: ERROR; pRenderer is nullptr!");
+		printf("(Renderer.dll) Shutdown(Renderer*): ERROR; pRenderer is nullptr!");
 		return;
 	}
 

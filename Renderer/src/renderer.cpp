@@ -257,39 +257,39 @@ HWND Renderer::CreateWindow(const wchar_t* winClassName, HINSTANCE hInstance, co
 void Renderer::RegisterWindowClass(HINSTANCE hInstance, const wchar_t* winClassName)
 {
 	// Register a window class for creating our render window with
-	WNDCLASSW winClass = {};
+	WNDCLASSEXW winClass = {};
 
-	//winClass.cbSize = sizeof(WNDCLASSW);
+	winClass.cbSize = sizeof(WNDCLASSEXW);
 	winClass.style = CS_HREDRAW | CS_VREDRAW;
 	winClass.lpfnWndProc = &WndProc;
 	winClass.cbClsExtra = NULL;
 	winClass.cbWndExtra = NULL;
 	winClass.hInstance = hInstance;
 	winClass.hIcon = LoadIcon(hInstance, NULL);
-	//winClass.hIconSm = LoadIcon(hInstance, NULL);
+	winClass.hIconSm = LoadIcon(hInstance, NULL);
 	winClass.hCursor = LoadCursor(NULL, IDC_ARROW);
 	winClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 	winClass.lpszMenuName = NULL;
 	winClass.lpszClassName = winClassName;
 
-	static ATOM atom = RegisterClass(&winClass);
+	static ATOM atom = RegisterClassEx(&winClass);
 	assert(atom > 0);
 }
 
 // Window callback function
 LRESULT CALLBACK Renderer::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	Renderer* renderer = reinterpret_cast<Renderer*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+	Renderer* pRenderer = reinterpret_cast<Renderer*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 
-	if (renderer)
+	if (pRenderer)
 	{
-		if (renderer->m_isInitialized)
+		if (pRenderer->m_isInitialized)
 		{
 			switch (message)
 			{
 			case WM_PAINT:
-				renderer->Update();
-				renderer->Render();
+				pRenderer->Update();
+				pRenderer->Render();
 				break;
 
 			case WM_SYSKEYDOWN:
@@ -300,7 +300,7 @@ LRESULT CALLBACK Renderer::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 				switch (wParam)
 				{
 				case 'V':
-					renderer->m_vSync = !renderer->m_vSync;
+					pRenderer->m_vSync = !pRenderer->m_vSync;
 					break;
 
 				case VK_ESCAPE:
@@ -311,7 +311,7 @@ LRESULT CALLBACK Renderer::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 					if (alt)
 					{
 				case VK_F11:
-					renderer->SetFullscreen(!renderer->m_fullscreen);
+					pRenderer->SetFullscreen(!pRenderer->m_fullscreen);
 					}
 					break;
 				}
@@ -326,12 +326,12 @@ LRESULT CALLBACK Renderer::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 			case WM_SIZE:
 			{
 				RECT clientRect = {};
-				GetClientRect(renderer->m_windowHandle, &clientRect);
+				GetClientRect(pRenderer->m_windowHandle, &clientRect);
 
 				int width = clientRect.right - clientRect.left;
 				int height = clientRect.bottom - clientRect.top;
 
-				renderer->Resize(width, height);
+				pRenderer->Resize(width, height);
 			} break;
 
 			case WM_DESTROY:

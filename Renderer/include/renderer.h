@@ -31,8 +31,8 @@ using namespace Microsoft::WRL;
 #include <d3dcompiler.h>
 #include <directxmath.h>
 
-// D3D12 extension library
-#include <directx/d3dx12.h>
+// DX12 extension library
+#include <d3dx12.h>
 
 // STL headers
 #include <algorithm>
