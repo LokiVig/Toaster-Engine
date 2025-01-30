@@ -244,7 +244,7 @@ HWND Renderer::CreateWindow(const wchar_t* winClassName, HINSTANCE hInstance, co
 		NULL,
 		NULL,
 		hInstance,
-		NULL
+		this
 	);
 
 	// Make sure we actually made a valid handle...
@@ -279,73 +279,65 @@ void Renderer::RegisterWindowClass(HINSTANCE hInstance, const wchar_t* winClassN
 // Window callback function
 LRESULT CALLBACK Renderer::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	Renderer* pRenderer = reinterpret_cast<Renderer*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
-
-	if (pRenderer)
+	switch (message)
 	{
-		if (pRenderer->m_isInitialized)
+	case WM_CREATE:
+		pRenderer = reinterpret_cast<Renderer*>(lParam);
+		break;
+
+	case WM_PAINT:
+		pRenderer->Update();
+		pRenderer->Render();
+		break;
+
+	case WM_SYSKEYDOWN:
+	case WM_KEYDOWN:
+	{
+		bool alt = (GetAsyncKeyState(VK_MENU) & 0x8000) != 0;
+
+		switch (wParam)
 		{
-			switch (message)
+		case 'V':
+			pRenderer->m_vSync = !pRenderer->m_vSync;
+			break;
+
+		case VK_ESCAPE:
+			PostQuitMessage(0);
+			break;
+
+		case VK_RETURN:
+			if (alt)
 			{
-			case WM_PAINT:
-				pRenderer->Update();
-				pRenderer->Render();
-				break;
-
-			case WM_SYSKEYDOWN:
-			case WM_KEYDOWN:
-			{
-				bool alt = (GetAsyncKeyState(VK_MENU) & 0x8000) != 0;
-
-				switch (wParam)
-				{
-				case 'V':
-					pRenderer->m_vSync = !pRenderer->m_vSync;
-					break;
-
-				case VK_ESCAPE:
-					PostQuitMessage(0);
-					break;
-
-				case VK_RETURN:
-					if (alt)
-					{
-				case VK_F11:
-					pRenderer->SetFullscreen(!pRenderer->m_fullscreen);
-					}
-					break;
-				}
-			} break;
-
-			// The default window procedure will play a system notification
-			// when pressing the Alt+Enter keyboard combination if this message
-			// is not handled
-			case WM_SYSCHAR:
-				break;
-
-			case WM_SIZE:
-			{
-				RECT clientRect = {};
-				GetClientRect(pRenderer->m_windowHandle, &clientRect);
-
-				int width = clientRect.right - clientRect.left;
-				int height = clientRect.bottom - clientRect.top;
-
-				pRenderer->Resize(width, height);
-			} break;
-
-			case WM_DESTROY:
-				PostQuitMessage(0);
-				break;
-
-			default:
-				return DefWindowProcW(hWnd, message, wParam, lParam);
+		case VK_F11:
+			pRenderer->SetFullscreen(!pRenderer->m_fullscreen);
 			}
+			break;
 		}
-		else
-		{
-			return DefWindowProcW(hWnd, message, wParam, lParam);
-		}
+	} break;
+
+	// The default window procedure will play a system notification
+	// when pressing the Alt+Enter keyboard combination if this message
+	// is not handled
+	case WM_SYSCHAR:
+		break;
+
+	case WM_SIZE:
+	{
+		RECT clientRect = {};
+		GetClientRect(pRenderer->m_windowHandle, &clientRect);
+
+		int width = clientRect.right - clientRect.left;
+		int height = clientRect.bottom - clientRect.top;
+
+		pRenderer->Resize(width, height);
+	} break;
+
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+
+	default:
+		return DefWindowProcW(hWnd, message, wParam, lParam);
 	}
 
 	return 0;
