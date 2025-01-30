@@ -275,9 +275,6 @@ public static class EngineManager
             // Update the input manager
             InputManager.Update();
 
-            // Manage UI elements (mainly ImGui related)
-            ManageUI();
-
             // Call the OnUpdate event
             // This makes it so everything subscribed to the event will call their own,
             // subsidiary update method
@@ -285,21 +282,6 @@ public static class EngineManager
 
             // Call the RenderFrame method from the renderer
             Renderer.Update(renderer);
-        }
-    }
-
-    private static void ManageUI()
-    {
-        // Manage the console
-        if ( consoleOpen )
-        {
-            //ConsoleUI.Display( ref consoleOpen );
-        }
-
-        // Manage the debug UI
-        if ( debugOpen )
-        {
-            //DebugUI.Display( ref debugOpen );
         }
     }
 
