@@ -4,8 +4,8 @@ obj/*
 build/*
 .vs/*
 
-# Ignore specific Renderer includes 
-Renderer/include/directx/*
+# Ignore packages, they should be downloaded by the user automatically
+packages/*
 
 # Built files for the projects
 HTF/obj/*
