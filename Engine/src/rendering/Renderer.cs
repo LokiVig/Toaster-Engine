@@ -268,10 +268,7 @@ public class Renderer
     /// <param name="brush">The brush we wish to render.</param>
     private static void DrawBrush( Brush brush )
     {
-        ResourceFactory factory = graphicsDevice.ResourceFactory;
 
-        //DeviceBuffer vBuffer = factory.CreateBuffer( new BufferDescription( (uint)brush.vertices.Length, BufferUsage.VertexBuffer ) );
-        //DeviceBuffer iBuffer = factory.CreateBuffer( new BufferDescription( (uint)brush.indices.Length, BufferUsage.IndexBuffer ) );
     }
 
     /// <summary>

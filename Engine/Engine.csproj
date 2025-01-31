@@ -6,7 +6,7 @@
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		<RootNamespace>Toast.Engine</RootNamespace>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-		<AssemblyName>$(ProjectName)</AssemblyName>
+		<AssemblyName>Toaster.Engine</AssemblyName>
 		<GenerateDocumentationFile>False</GenerateDocumentationFile>
 		<DocumentationFile>$(OutputDir)</DocumentationFile>
 	</PropertyGroup>
@@ -26,10 +26,10 @@
 	</PropertyGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<!-- Rendering -->
-		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)src\resources\rendering\*&quot; &quot;$(OutDir)resources\&quot;" />
+		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)resources\rendering\*&quot; &quot;$(OutDir)resources\&quot;" />
 
 		<!-- Audio -->
-		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)src\resources\audio\*&quot; &quot;$(OutDir)resources\audio\&quot;" />
+		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)resources\audio\*&quot; &quot;$(OutDir)resources\audio\&quot;" />
 	</Target>
 	<ItemGroup>
 		<PackageReference Include="DynamicExpresso.Core" Version="2.17.2" />
@@ -41,6 +41,6 @@
 		<PackageReference Include="Veldrid.SPIRV" Version="1.0.15" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="src\resources\rendering\fonts\" />
+	  <Folder Include="resources\rendering\fonts\" />
 	</ItemGroup>
 </Project>

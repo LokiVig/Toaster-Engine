@@ -43,7 +43,7 @@ public class GameManager
     {
         // Initialize the engine
         EngineManager.Initialize( "Game" ); // Call the engine's initialize function
-        EngineManager.OnUpdate += Update; // After the engine's done updating, this class should update
+        EngineManager.OnUpdate += Update; // After the engine's done updating, the game manager itself (us) should update
                                           // The engine's update function is a lot more focused on, well, engine-wide
                                           // prospects, while this class's should be focused more on the game-specific
                                           // functionalities
