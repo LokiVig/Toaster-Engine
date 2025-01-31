@@ -24,11 +24,6 @@ public class Renderer
     public static GraphicsDevice graphicsDevice;
 
     private static CommandList commandList;
-    private static Shader[] shaders;
-    private static Pipeline pipeline;
-    private static VertexLayoutDescription vertexLayout;
-
-    private static string shaderExtension;
 
     private static ImGuiController controller;
 
@@ -93,38 +88,6 @@ public class Renderer
         ResourceFactory factory = graphicsDevice.ResourceFactory;
 
         commandList = factory.CreateCommandList();
-
-        //// Get which type of shader extensions we should have, depending on the backend
-        //shaderExtension = graphicsDevice.BackendType == GraphicsBackend.Direct3D11 ? "hlsl" : "glsl";
-
-        //// Initialize our input layout
-        //vertexLayout = new VertexLayoutDescription(
-        //    new VertexElementDescription( "Position", VertexElementSemantic.Position, VertexElementFormat.Float3 ),
-        //    new VertexElementDescription( "Normal", VertexElementSemantic.Normal, VertexElementFormat.Float3 ),
-        //    new VertexElementDescription( "TexCoord", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2 ),
-        //    new VertexElementDescription( "Color", VertexElementSemantic.Color, VertexElementFormat.Float4 )
-        //);
-
-        //// Initialize our shaders
-        //shaders =
-        //[
-        //    factory.CreateFromSpirv(new ShaderDescription(ShaderStages.Vertex, File.ReadAllBytes($"resources/shaders/brush-vert.{shaderExtension}"), "main" )),
-        //    factory.CreateFromSpirv(new ShaderDescription(ShaderStages.Fragment, File.ReadAllBytes($"resources/shaders/brush-frag.{shaderExtension}"), "main" ))
-        //];
-
-        //// Create our graphics pipeline
-        //pipeline = factory.CreateGraphicsPipeline( new GraphicsPipelineDescription(
-        //    BlendStateDescription.SingleOverrideBlend,
-        //    DepthStencilStateDescription.DepthOnlyLessEqual,
-        //    RasterizerStateDescription.Default,
-        //    PrimitiveTopology.TriangleList,
-        //    new ShaderSetDescription(
-        //        [ vertexLayout ],
-        //        shaders
-        //    ),
-        //    Array.Empty<ResourceLayout>(),
-        //    graphicsDevice.SwapchainFramebuffer.OutputDescription
-        //    ));
     }
 
     /// <summary>
