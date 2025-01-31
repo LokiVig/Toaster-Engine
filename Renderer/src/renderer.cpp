@@ -1,6 +1,6 @@
 #include <renderer.h>
 
-void Renderer::Initialize()
+void Renderer::Initialize(const char* pszTitle)
 {
 	SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
@@ -16,7 +16,7 @@ void Renderer::Initialize()
 	m_tearingSupported = CheckTearingSupport();
 
 	RegisterWindowClass(hInstance, winClassName);
-	m_windowHandle = CreateWindow(winClassName, hInstance, L"Toaster Engine Rendered Window", m_clientWidth, m_clientHeight);
+	m_windowHandle = CreateWindow(winClassName, hInstance, (wchar_t*)pszTitle, m_clientWidth, m_clientHeight);
 
 	// Initialize the global window rect variable
 	GetWindowRect(m_windowHandle, &m_windowRect);
@@ -54,7 +54,6 @@ void Renderer::Initialize()
 void Renderer::Update()
 {
 	static uint64_t frameCounter = 0;
-	static double elapsedSeconds = 0.0;
 	static std::chrono::high_resolution_clock clock;
 	static auto t0 = clock.now();
 
@@ -62,19 +61,6 @@ void Renderer::Update()
 	auto t1 = clock.now();
 	auto deltaTime = t1 - t0;
 	t0 = t1;
-
-	elapsedSeconds += deltaTime.count() * 1e-9;
-
-	if (elapsedSeconds > 1.0)
-	{
-		char buffer[500];
-		auto fps = frameCounter / elapsedSeconds;
-		sprintf_s(buffer, 500, "FPS: %f\n", fps);
-		OutputDebugString((wchar_t*)buffer);
-
-		frameCounter = 0;
-		elapsedSeconds = 0.0;
-	}
 
 	MSG msg = {};
 
@@ -85,6 +71,11 @@ void Renderer::Update()
 	}
 
 	Render();
+}
+
+bool Renderer::ShuttingDown()
+{
+	return m_isShuttingDown;
 }
 
 void Renderer::SetFullscreen(bool fullscreen)
@@ -201,15 +192,15 @@ void Renderer::Resize(uint32_t width, uint32_t height)
 			// before the swap chain can be resized
 			m_pBackBuffers[i].Reset();
 			m_frameFenceValues[i] = m_frameFenceValues[m_currentBackBufferIndex];
-
-			DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
-			ThrowIfFailed(m_pSwapChain->GetDesc(&swapChainDesc));
-			ThrowIfFailed(m_pSwapChain->ResizeBuffers(m_numFrames, m_clientWidth, m_clientHeight, swapChainDesc.BufferDesc.Format, swapChainDesc.Flags));
-
-			m_currentBackBufferIndex = m_pSwapChain->GetCurrentBackBufferIndex();
-
-			UpdateRenderTargetViews(m_pDevice, m_pSwapChain, m_pRTVDescriptorHeap);
 		}
+
+		DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
+		ThrowIfFailed(m_pSwapChain->GetDesc(&swapChainDesc));
+		ThrowIfFailed(m_pSwapChain->ResizeBuffers(m_numFrames, m_clientWidth, m_clientHeight, swapChainDesc.BufferDesc.Format, swapChainDesc.Flags));
+
+		m_currentBackBufferIndex = m_pSwapChain->GetCurrentBackBufferIndex();
+
+		UpdateRenderTargetViews(m_pDevice, m_pSwapChain, m_pRTVDescriptorHeap);
 	}
 }
 
@@ -244,7 +235,7 @@ HWND Renderer::CreateWindow(const wchar_t* winClassName, HINSTANCE hInstance, co
 		NULL,
 		NULL,
 		hInstance,
-		this
+		(CREATESTRUCT*)this
 	);
 
 	// Make sure we actually made a valid handle...
@@ -276,18 +267,20 @@ void Renderer::RegisterWindowClass(HINSTANCE hInstance, const wchar_t* winClassN
 	assert(atom > 0);
 }
 
+Renderer* pRenderer = nullptr;
+
 // Window callback function
 LRESULT CALLBACK Renderer::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
 	case WM_CREATE:
-		pRenderer = reinterpret_cast<Renderer*>(lParam);
+		pRenderer = (Renderer*)((CREATESTRUCT*)lParam)->lpCreateParams;
 		break;
 
-	case WM_PAINT:
-		pRenderer->Update();
-		pRenderer->Render();
+	case WM_PAINT: // Updating is handled by the engine, rendering handled by the updating
+		//pRenderer->Update();
+		//pRenderer->Render();
 		break;
 
 	case WM_SYSKEYDOWN:
@@ -301,8 +294,13 @@ LRESULT CALLBACK Renderer::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 			pRenderer->m_vSync = !pRenderer->m_vSync;
 			break;
 
+		case VK_F4:
+			if (alt)
+			{
 		case VK_ESCAPE:
+			pRenderer->m_isShuttingDown = true;
 			PostQuitMessage(0);
+			}
 			break;
 
 		case VK_RETURN:
@@ -333,6 +331,7 @@ LRESULT CALLBACK Renderer::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 	} break;
 
 	case WM_DESTROY:
+		pRenderer->m_isShuttingDown = true;
 		PostQuitMessage(0);
 		break;
 

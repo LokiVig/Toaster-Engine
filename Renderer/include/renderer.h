@@ -23,7 +23,6 @@
 
 // Windows Runtime Library, needed for Microsoft::WRL::ComPtr<> template class
 #include <wrl.h>
-using namespace Microsoft::WRL;
 
 // DirectX 12 specific headers
 #include <d3d12.h>
@@ -39,15 +38,24 @@ using namespace Microsoft::WRL;
 #include <cassert>
 #include <chrono>
 
+#include <memory> // For std::enable_shared_from_this
+#include <string> // For std::string
+
 // Helper functions
 #include <helpers.h>
 
-class Renderer
+using namespace Microsoft::WRL;
+using namespace std;
+
+class Window;
+
+class Renderer : public enable_shared_from_this<Renderer>
 {
 public:
-	void Initialize();
+	void Initialize(const char*);
 	void Update();
 	void SetFullscreen(bool);
+	bool ShuttingDown();
 	void Shutdown();
 
 private:
@@ -97,6 +105,9 @@ private:
 
 	// Set to true once the DX12 objects have been initialized
 	bool m_isInitialized = false;
+
+	// Designates whether or not the renderer is shutting down
+	bool m_isShuttingDown = false;
 
 	// Window handle
 	HWND m_windowHandle;

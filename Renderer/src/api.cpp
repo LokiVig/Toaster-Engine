@@ -8,7 +8,7 @@ DLLEXPORT Renderer* Initialize(const char* pszTitle)
 {
 	// Return a new renderer to use
 	Renderer* result = new Renderer();
-	result->Initialize();
+	result->Initialize(pszTitle);
 	return result;
 }
 
@@ -42,7 +42,7 @@ DLLEXPORT bool ShuttingDown(Renderer* pRenderer)
 	}
 
 	// Get the status of the renderer
-	return false /*pRenderer->ShuttingDown()*/;
+	return pRenderer->ShuttingDown();
 }
 
 DLLEXPORT void Shutdown(Renderer* pRenderer)
