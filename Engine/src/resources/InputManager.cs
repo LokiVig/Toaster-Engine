@@ -166,11 +166,15 @@ public static class InputManager
             return;
         }
 
-        // If we can't find a bind from our first argument...
-        if ( ( bindToEdit = FindKeybind( (string)args[1] ) ) == null )
+        // If we're not making a new keybind...
+        if ( argCount < 3 )
         {
-            Log.Warning( $"Couldn't find keybind with the alias of \"{args[1]}\"!" );
-            return;
+            // If we can't find a bind from our first argument...
+            if ( ( bindToEdit = FindKeybind( (string)args[1] ) ) == null )
+            {
+                Log.Warning( $"Couldn't find keybind with the alias of \"{args[1]}\"!" );
+                return;
+            }
         }
 
         // If we didn't successfully find a key from our second argument...
@@ -254,8 +258,8 @@ public static class InputManager
         // For every keybind...
         foreach ( Keybind keybind in keybinds )
         {
-            // Log its information! (Alias and currently bound key)
-            Log.Info( $"\t\"{keybind.alias}\" - \"{keybind.key}\"" );
+            // Log its information! (Alias, currently bound key and associated command)
+            Log.Info( $"\tAlias: \"{keybind.alias}\" - Key: \"{keybind.key}\" - Command: \"{keybind.commandAlias}\"" );
         }
     }
 

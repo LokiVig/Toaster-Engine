@@ -2,13 +2,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WTFEdit", "WTFEdit\WTFEdit.csproj", "{CA888BD5-216E-432F-8473-5B0CE1041EB7}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{1A168BD9-C41F-44A0-A24B-CCB4E7665200}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{653397A6-BBC7-439B-9EFE-B5E54470C74A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game", "Game\Game.csproj", "{71DF6220-2E8F-4504-A647-8A985FFC050E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HTF", "HTF\HTF.csproj", "{C3C3ABA5-8AB3-493A-8D99-60BF3EFF6177}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,10 +16,6 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CA888BD5-216E-432F-8473-5B0CE1041EB7}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{CA888BD5-216E-432F-8473-5B0CE1041EB7}.Debug|x64.Build.0 = Debug|Any CPU
-		{CA888BD5-216E-432F-8473-5B0CE1041EB7}.Release|x64.ActiveCfg = Release|Any CPU
-		{CA888BD5-216E-432F-8473-5B0CE1041EB7}.Release|x64.Build.0 = Release|Any CPU
 		{1A168BD9-C41F-44A0-A24B-CCB4E7665200}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{1A168BD9-C41F-44A0-A24B-CCB4E7665200}.Debug|x64.Build.0 = Debug|Any CPU
 		{1A168BD9-C41F-44A0-A24B-CCB4E7665200}.Release|x64.ActiveCfg = Release|Any CPU
@@ -32,6 +28,10 @@ Global
 		{71DF6220-2E8F-4504-A647-8A985FFC050E}.Debug|x64.Build.0 = Debug|Any CPU
 		{71DF6220-2E8F-4504-A647-8A985FFC050E}.Release|x64.ActiveCfg = Release|Any CPU
 		{71DF6220-2E8F-4504-A647-8A985FFC050E}.Release|x64.Build.0 = Release|Any CPU
+		{C3C3ABA5-8AB3-493A-8D99-60BF3EFF6177}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C3C3ABA5-8AB3-493A-8D99-60BF3EFF6177}.Debug|x64.Build.0 = Debug|Any CPU
+		{C3C3ABA5-8AB3-493A-8D99-60BF3EFF6177}.Release|x64.ActiveCfg = Release|Any CPU
+		{C3C3ABA5-8AB3-493A-8D99-60BF3EFF6177}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
