@@ -8,9 +8,6 @@ using ImGuiNET;
 
 using Toast.Engine.Resources;
 using Toast.Engine.Entities;
-using Veldrid.SPIRV;
-using System.IO;
-using System;
 
 namespace Toast.Engine.Rendering;
 
@@ -36,15 +33,23 @@ public class Renderer
         // Initialize default renderer console commands
         CreateConsoleCommands();
 
+        SDL_DisplayMode mode;
+
+        unsafe
+        {
+            Sdl2Native.SDL_GetCurrentDisplayMode( 0, &mode );
+        }
+
         // Create a window using Veldrid's StartupUtilities
         WindowCreateInfo windowCI = new WindowCreateInfo()
         {
-            X = 100,
-            Y = 100,
             WindowWidth = 1280,
             WindowHeight = 720,
             WindowTitle = title
         };
+
+        windowCI.X = ( windowCI.WindowWidth - mode.w ) / 4;
+        windowCI.Y = ( windowCI.WindowHeight - mode.h ) / 4;
 
         // Create our window
         window = VeldridStartup.CreateWindow( ref windowCI );
@@ -104,7 +109,7 @@ public class Renderer
             onCall = ToggleVSync
         } );
 
-        // R(enderer) WindowState
+        // R(enderer) Window State
         ConsoleManager.AddCommand( new ConsoleCommand
         {
             alias = "r_windowstate",
@@ -113,7 +118,7 @@ public class Renderer
             onArgsCall = ChangeWindowState
         } );
 
-        // R(enderer) WindowResolution
+        // R(enderer) Window Resolution
         ConsoleManager.AddCommand( new ConsoleCommand
         {
             alias = "r_windowresolution",

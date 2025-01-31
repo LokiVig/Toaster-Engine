@@ -7,6 +7,7 @@
 		<BaseOutputPath>$(SolutionDir)build\</BaseOutputPath>
 		<StartupObject>Toast.Game.Program</StartupObject>
 		<ApplicationIcon>default_game_icon_small.ico</ApplicationIcon>
+		<AssemblyName>Toaster.Game</AssemblyName>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
 		<OutputPath>$(SolutionDir)\build\Debug\</OutputPath>
