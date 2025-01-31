@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Diagnostics;
-
-using Toast.Engine.Resources;
+﻿using Toast.Engine.Resources;
 using Toast.Engine;
 
 namespace Toast.WTFEdit;
@@ -11,12 +7,12 @@ public class Program
 {
     public static void Main()
     {
-        WTFEditManager wtfe = new WTFEditManager();
-        wtfe.Initialize();
+        HTFManager htf = new HTFManager();
+        htf.Initialize();
     }
 }
 
-public class WTFEditManager
+public class HTFManager
 {
     private WTF currentFile;
 
@@ -26,7 +22,7 @@ public class WTFEditManager
     public void Initialize()
     {
         // Initialize the engine
-        EngineManager.Initialize("WTFEdit");
+        EngineManager.Initialize("HTF");
         EngineManager.OnUpdate += Update;
 
         // !! DEBUG !! \\

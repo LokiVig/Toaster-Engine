@@ -1,15 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net9.0-windows10.0.26100.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <BaseOutputPath>$(SolutionDir)build\$(Configuration)\net9.0\tests\</BaseOutputPath>
+    <BaseOutputPath>$(SolutionDir)build\</BaseOutputPath>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
-    <AssemblyName>$(ProjectName)</AssemblyName>
-    <RootNamespace>DoomNET.Tests</RootNamespace>
+    <AssemblyName>Toaster.Tests</AssemblyName>
+    <RootNamespace>Toast.Tests</RootNamespace>
     <OutputType>Library</OutputType>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />

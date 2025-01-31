@@ -4,12 +4,8 @@ obj/*
 build/*
 .vs/*
 
-# Ignore Renderer includes
-Renderer/include/*
-Renderer/lib/*
-
 # Built files for the projects
-WTFEdit/obj/*
+HTF/obj/*
 Engine/obj/*
 Tests/obj/*
 Game/obj/*

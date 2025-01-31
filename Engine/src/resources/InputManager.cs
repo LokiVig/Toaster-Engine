@@ -160,9 +160,9 @@ public static class InputManager
         Keybind bindToEdit = null; // The bind we're going to edit
 
         // Make sure we have the right amount of arguments!
-        if ( argCount < 2 || argCount > 2 )
+        if ( argCount < 2 || argCount > 3 )
         {
-            Log.Warning( "Invalid amount of arguments! You need at least, and at most, 2 arguments, one for the alias of the keybind you want to change, and the other for the key you want to change it to!" );
+            Log.Warning( "Invalid amount of arguments! You need at least 2 arguments, and at most 3, one for the alias of the keybind you want to change, and the other for the key you want to change it to!" );
             return;
         }
 
@@ -178,6 +178,38 @@ public static class InputManager
         {
             // Log such!
             Log.Warning( $"\"{args[2]}\" is not a valid Key!" );
+            return;
+        }
+
+        // If we have three arguments...
+        if ( argCount == 3 )
+        {
+            // It means we're making a new keybind! Ensure that its name doesn't override an already existing one
+            foreach ( Keybind keybind in keybinds )
+            {
+                if ( args[1].ToString().ToLower() == keybind.alias )
+                {
+                    Log.Warning( $"There's already a keybind with the name of \"{args[1]}\"!" );
+                    return;
+                }
+            }
+
+            // Make sure the third argument corresponds to an actual command
+            if ( ConsoleManager.FindCommand( (string)args[3] ) == null )
+            {
+                Log.Warning( $"There's no command with the alias of \"{args[3]}\"!" );
+                return;
+            }
+
+            // Make a new keybind
+            Keybind kb = new Keybind();
+            kb.alias = (string)args[1]; // The alias of the keybind should be the first argument
+            kb.key = key; // The key is the second argument
+            kb.commandAlias = (string)args[3]; // The command alias is the third
+
+            // Add the new keybind to our list of keybinds
+            AddKeybind( kb );
+            Log.Info( $"Successfully added new keybind \"{args[1]}\" (key: \"{args[2]}\"), command: \"{args[3]}\"" ); // Log our success
             return;
         }
 
