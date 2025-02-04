@@ -4,6 +4,8 @@ using Veldrid;
 using Veldrid.Sdl2;
 using Veldrid.StartupUtilities;
 
+using Vulkan;
+
 using ImGuiNET;
 
 using Toast.Engine.Resources;
@@ -25,7 +27,7 @@ public class Renderer
     private static ImGuiController controller;
 
     /// <summary>
-    /// Initializes a Direct3D 11 rendered window with a specified title.
+    /// Initializes a DirectX 11 rendered window with a specified title.
     /// </summary>
     /// <param name="title">The title of the window we wish to open.</param>
     public static void Initialize( string title )
@@ -35,6 +37,7 @@ public class Renderer
 
         SDL_DisplayMode mode;
 
+        // Why did they gotta have it be a pointer :(
         unsafe
         {
             Sdl2Native.SDL_GetCurrentDisplayMode( 0, &mode );
@@ -48,13 +51,13 @@ public class Renderer
             WindowTitle = title
         };
 
-        windowCI.X = ( windowCI.WindowWidth - mode.w ) / 4;
-        windowCI.Y = ( windowCI.WindowHeight - mode.h ) / 4;
+        windowCI.X = ( windowCI.WindowWidth - mode.w ) / 2;
+        windowCI.Y = ( windowCI.WindowHeight - mode.h ) / 2;
 
         // Create our window
         window = VeldridStartup.CreateWindow( ref windowCI );
 
-        // Create a graphics device using Direct3D 11
+        // Create a graphics device using DirectX 11
         GraphicsDeviceOptions options = new GraphicsDeviceOptions()
         {
 #if RELEASE
@@ -109,13 +112,31 @@ public class Renderer
             onCall = ToggleVSync
         } );
 
-        // R(enderer) Window State
+        // R(enderer) Windowed
         ConsoleManager.AddCommand( new ConsoleCommand
         {
-            alias = "r_windowstate",
-            description = $"Changes which mode the main window should display in, windowed, fullscreen, or borderless fullscreen.",
+            alias = "r_windowed",
+            description = "Sets the renderer's window to be windowed.",
 
-            onArgsCall = ChangeWindowState
+            onCall = SetWindowStateToWindowed
+        } );
+
+        // R(enderer) Fullscreen
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "r_fullscreen",
+            description = "Sets the renderer's window to be fullscreened.",
+
+            onCall = SetWindowStateToFullscreen
+        } );
+
+        // R(enderer) Borderless
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "r_borderless",
+            description = "Sets the renderer's window to be borderless fullscreened.",
+
+            onCall = SetWindowStateToBorderless
         } );
 
         // R(enderer) Window Resolution
@@ -141,28 +162,27 @@ public class Renderer
     }
 
     /// <summary>
-    /// Changes the window's current state through the console.
+    /// Changes the window's current state to windowed.
     /// </summary>
-    private static void ChangeWindowState( List<object> args )
+    private static void SetWindowStateToWindowed()
     {
-        switch ( args[1].ToString().ToLower() )
-        {
-            case "windowed":
-                window.WindowState = WindowState.Normal;
-                break;
+        window.WindowState = WindowState.Normal;
+    }
 
-            case "fullscreen":
-                window.WindowState = WindowState.FullScreen;
-                break;
+    /// <summary>
+    /// Changes the window's current state to fullscreen.
+    /// </summary>
+    private static void SetWindowStateToFullscreen()
+    {
+        window.WindowState = WindowState.FullScreen;
+    }
 
-            case "borderless":
-                window.WindowState = WindowState.BorderlessFullScreen;
-                break;
-
-            default:
-                Log.Warning( "Invalid input! Argument 1 needs to be either \"windowed\", \"fullscreen\", or \"borderless\"" );
-                break;
-        }
+    /// <summary>
+    /// Changes the window's current state to borderless.
+    /// </summary>
+    private static void SetWindowStateToBorderless()
+    {
+        window.WindowState = WindowState.BorderlessFullScreen;
     }
 
     /// <summary>

@@ -29,6 +29,13 @@ public static class DebugUI
             ImGui.Text( $"Frametime: {1000 / ImGui.GetIO().Framerate:.##}ms" );
             ImGui.Text( $"Framerate: {ImGui.GetIO().Framerate:.#}FPS" );
 
+            ImGui.Separator();
+
+            // Display map information
+            ImGui.Text( $"Active map: \"{EngineManager.currentFile.path}\"" );
+
+            ImGui.Separator();
+
             // Entities \\
             if ( ImGui.TreeNodeEx( "Entities", ImGuiTreeNodeFlags.Framed | ImGuiTreeNodeFlags.DefaultOpen ) )
             {
