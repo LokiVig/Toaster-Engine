@@ -34,11 +34,56 @@ public static class InputManager
     }
 
     /// <summary>
+    /// Things to do when the Veldrid KeyUp event is invoked.
+    /// </summary>
+    public static void OnKeyUp( KeyEvent ev )
+    {
+        // If our current keys down contains that key...
+        if ( keysDown.Contains( ev.Key ) )
+        {
+            // Remove it from our list of current keys down!
+            keysDown.Remove( ev.Key );
+        }
+    }
+
+    /// <summary>
     /// Adds the argument keybind to the input manager's list of keybinds.
     /// </summary>
     public static void AddKeybind( Keybind keybind )
     {
         keybinds.Add( keybind );
+    }
+
+    /// <summary>
+    /// Removes a keybind from our list of keybinds through a console command.
+    /// </summary>
+    public static void RemoveKeybind( List<object> args )
+    {
+        // Get the count of arguments
+        int argCount = args.Count - 1;
+
+        // Make sure we have a correct amount of arguments for this command
+        if ( argCount < 1 || argCount > 1 )
+        {
+            Log.Warning( "Invalid amount of arguments! You need at least, and at most, one argument to specify which keybind you wish to remove!" );
+            return;
+        }
+
+        // For every keybind...
+        for ( int i = 0; i < keybinds.Count; i++ )
+        {
+            // Check if their alias matches our argument...
+            if ( keybinds[i].alias == (string)args[1] )
+            {
+                // Remove the specified keybind!
+                keybinds.RemoveAt( i );
+                Log.Info( $"Successfully removed keybind \"{args[1]}\"!" );
+                return;
+            }
+        }
+
+        // Otherwise, we couldn't find the keybind we wanted
+        Log.Warning( $"Couldn't find a keybind with the alias of \"{args[1]}\"!" );
     }
 
     /// <summary>
@@ -89,7 +134,6 @@ public static class InputManager
         // Create the file we want to write to!
         FileStream file = File.Open( PATH_KEYBINDS, FileMode.Create );
         file.Close();
-
 
         // Try to...
         try
@@ -260,19 +304,6 @@ public static class InputManager
         {
             // Log its information! (Alias, currently bound key and associated command)
             Log.Info( $"\tAlias: \"{keybind.alias}\" - Key: \"{keybind.key}\" - Command: \"{keybind.commandAlias}\"" );
-        }
-    }
-
-    /// <summary>
-    /// Things to do when the Veldrid KeyUp event is invoked.
-    /// </summary>
-    public static void OnKeyUp( KeyEvent ev )
-    {
-        // If our current keys down contains that key...
-        if ( keysDown.Contains( ev.Key ) )
-        {
-            // Remove it from our list of current keys down!
-            keysDown.Remove( ev.Key );
         }
     }
 

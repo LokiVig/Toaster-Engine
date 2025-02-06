@@ -280,7 +280,7 @@ public static class DebugUI
             {
                 if ( ImGui.Button( "Shutdown" ) )
                 {
-                    EngineManager.EnvironmentShutdown();
+                    EngineManager.EngineShutdown();
                 }
 
                 ImGui.TreePop();

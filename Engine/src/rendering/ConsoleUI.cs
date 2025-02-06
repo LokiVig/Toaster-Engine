@@ -46,10 +46,14 @@ public static class ConsoleUI
                 ImGui.EndChild();
             }
 
+            if ( ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows) && !ImGui.IsAnyItemActive() && !ImGui.IsMouseClicked(0) )
+            {
+                ImGui.SetKeyboardFocusHere( 0 );
+            }
+
             // Text input handler
             if ( ImGui.InputText( "##", ref input, 2048, ImGuiInputTextFlags.NoUndoRedo | ImGuiInputTextFlags.EnterReturnsTrue ) )
             {
-
                 TryCommand();
             }
 

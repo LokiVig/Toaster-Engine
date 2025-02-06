@@ -5,6 +5,8 @@ using Veldrid;
 
 using Toast.Engine.Resources;
 using Toast.Engine.Rendering;
+using System.Runtime.InteropServices;
+using ImGuiNET;
 
 namespace Toast.Engine;
 
@@ -14,7 +16,7 @@ public static class EngineManager
     //			    Constants				 //
     //---------------------------------------//
 
-    private const string ENGINE_VERSION = "0.0.1";
+    private const string ENGINE_VERSION = "0.0.2";
 
     //---------------------------------------//
     //               Publics                 //
@@ -50,6 +52,20 @@ public static class EngineManager
     {
         // Initialize file logging
         Log.OpenLogFile();
+
+        // We shouldn't be able to be run on anything but a Windows setting, throw a message box otherwise
+        if ( !RuntimeInformation.IsOSPlatform( OSPlatform.Windows ) )
+        {
+            ImGui.Begin( "ERROR", ImGuiWindowFlags.AlwaysAutoResize );
+            ImGui.Text( "Can't run Toaster Engine on anything other than a Windows application!" );
+
+            if ( ImGui.Button( "OK" ) )
+            {
+                EngineShutdown();
+            }
+
+            ImGui.End();
+        }
 
 #if !DEBUG
         // If we can't load our commands...
@@ -186,6 +202,15 @@ public static class EngineManager
             onArgsCall = InputManager.UnbindKeybind
         } );
 
+        // Remove Bind
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "removebind",
+            description = "Removes a bind outright from our list of binds.",
+
+            onArgsCall = InputManager.RemoveKeybind
+        } );
+
         // Toggle command
         ConsoleManager.AddCommand( new ConsoleCommand
         {
@@ -201,7 +226,7 @@ public static class EngineManager
             alias = "quit",
             description = "Shuts the engine down entirely.",
 
-            onCall = EnvironmentShutdown
+            onCall = EngineShutdown
         } );
     }
 
@@ -305,7 +330,7 @@ public static class EngineManager
     /// <summary>
     /// Used primarily for the "quit" console command, instantly closes the application with the code 0.
     /// </summary>
-    public static void EnvironmentShutdown()
+    public static void EngineShutdown()
     {
         Shutdown(); // Call the regular shutdown function
         Environment.Exit( 0 ); // Exit the environment

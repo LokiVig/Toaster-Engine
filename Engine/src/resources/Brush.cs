@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 
 using Newtonsoft.Json;
 
@@ -17,9 +16,6 @@ public struct Brush
 
     [JsonIgnore]
     public Vertex[] vertices; // The vertices of this brush
-
-    [JsonIgnore]
-    public ushort[] indices;
 
     /// <summary>
     /// Create a brush with specified mins and maxs
@@ -58,21 +54,10 @@ public struct Brush
             new Vertex(new Vector3(bbox.mins.X, bbox.maxs.Y, bbox.maxs.Z), Vector2.One), // Top right    - front, Bottom right - top,    Top left     - right
             new Vertex(new Vector3(bbox.maxs.X, bbox.maxs.Y, bbox.mins.Z), Vector2.One), // Bottom left  - front, Top left     - bottom, Bottom right - left
             new Vertex(new Vector3(bbox.mins.X, bbox.maxs.Y, bbox.mins.Z), Vector2.One), // Bottom right - front, Top right    - bottom, Bottom left  - right
-            new Vertex(new Vector3(bbox.maxs.X, bbox.mins.Y, bbox.maxs.Z), Vector2.One), // Top left     - back, Top left      - top,    Top left     - left
-            new Vertex(new Vector3(bbox.mins.X, bbox.mins.Y, bbox.maxs.Z), Vector2.One), // Top right    - back, Top right     - top,    Top right    - right
-            new Vertex(new Vector3(bbox.maxs.X, bbox.mins.Y, bbox.mins.Z), Vector2.One), // Bottom left  - back, Bottom left   - bottom, Bottom left  - left
-            new Vertex(new Vector3(bbox.mins.X, bbox.mins.Y, bbox.mins.Z), Vector2.One), // Bottom right - back, Bottom right  - bottom, Bottom right - right
-        ];
-
-        // Initialize our array of indices
-        indices =
-        [
-            0, 1, 2, 0, 2, 3,
-            4, 6, 5, 4, 7, 6,
-            8, 9, 10, 8, 10, 11, 
-            12, 14, 13, 12, 15, 14, 
-            16, 17, 18, 16, 18, 19,
-            20, 21, 22, 20, 22, 23
+            new Vertex(new Vector3(bbox.maxs.X, bbox.mins.Y, bbox.maxs.Z), Vector2.One), // Top left     - back,  Top left     - top,    Top left     - left
+            new Vertex(new Vector3(bbox.mins.X, bbox.mins.Y, bbox.maxs.Z), Vector2.One), // Top right    - back,  Top right    - top,    Top right    - right
+            new Vertex(new Vector3(bbox.maxs.X, bbox.mins.Y, bbox.mins.Z), Vector2.One), // Bottom left  - back,  Bottom left  - bottom, Bottom left  - left
+            new Vertex(new Vector3(bbox.mins.X, bbox.mins.Y, bbox.mins.Z), Vector2.One), // Bottom right - back,  Bottom right - bottom, Bottom right - right
         ];
 
 #if DEBUG
@@ -120,8 +105,10 @@ public struct Brush
     /// <summary>
     /// Turn this brush into an entity
     /// </summary>
-    public void TurnIntoEntity<T>( T desiredEntity ) where T : Entity
+    public void TurnIntoEntity<T>( T desiredEntity ) where T : Entity, new()
     {
+        desiredEntity = new T();
+
         desiredEntity.SetBBox( bbox );
         desiredEntity.SetPosition( bbox.GetCenter() );
 

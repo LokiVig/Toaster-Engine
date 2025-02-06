@@ -4,6 +4,10 @@ obj/*
 build/*
 .vs/*
 
+# Ignore specific files
+*.user
+*.pubxml
+
 # Built files for the projects
 HTF/obj/*
 Engine/obj/*

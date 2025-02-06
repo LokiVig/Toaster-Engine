@@ -4,12 +4,10 @@ using Veldrid;
 using Veldrid.Sdl2;
 using Veldrid.StartupUtilities;
 
-using Vulkan;
-
 using ImGuiNET;
 
-using Toast.Engine.Resources;
 using Toast.Engine.Entities;
+using Toast.Engine.Resources;
 
 namespace Toast.Engine.Rendering;
 

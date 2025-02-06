@@ -109,8 +109,8 @@ public class Entity
         // Velocity decreases with time (effectively drag)
         velocity *= ( 1 - 0.25f ) * EngineManager.deltaTime;
 
-        // If the velocity's magnitude <= 0.000001, it's effectively zero, so zero it out for the sake of ease
-        if ( velocity.Length() <= 0.00001f )
+        // If the velocity's magnitude <= 0.01, it's effectively zero, so zero it out for the sake of ease
+        if ( velocity.Length() <= 0.01f )
         {
             velocity = Vector3.Zero;
         }
