@@ -24,9 +24,9 @@ public class Entity
     public Vector4 rotation; // This entity's current rotation
     public BBox bbox; // This entity's bounding box
 
-    public string id { get; set; } // This entity's identifier
+    public string id; // This entity's identifier
     public virtual EntityType type { get; private set; } = EntityType.None; // This entity's type, e.g. player / NPC
-    public virtual float maxHealth { get; set; } // This entity's max health
+    public virtual float maxHealth { get; private set; } // This entity's max health
 
     protected float health; // This entity's health
     protected Vector3 velocity; // This entity's current velocity
@@ -92,6 +92,22 @@ public class Entity
         {
             Log.Error<ArithmeticException>( $"{this}'s bound boxes are mismatched! ({bbox})" );
         }
+    }
+
+    /// <summary>
+    /// Creates entity-specific console commands.
+    /// </summary>
+    protected virtual void CreateCommands()
+    {
+
+    }
+
+    /// <summary>
+    /// Creates entity-specific keybinds.
+    /// </summary>
+    protected virtual void CreateKeybinds()
+    {
+
     }
 
     /// <summary>
@@ -475,7 +491,8 @@ public class Entity
     /// </summary>
     protected virtual void OnSpawn()
     {
-
+        CreateCommands(); // Create our commands
+        CreateKeybinds(); // Create our keybinds
     }
 
     /// <summary>

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Numerics;
 using System.Collections.Generic;
 
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
+
+using Toast.Engine.Entities;
 
 namespace Toast.Engine.Resources;
 
@@ -113,6 +116,33 @@ public static class AudioManager
             Log.Error( $"Exception caught when trying to play sound \"{filepath}\"", exc );
             return null;
         }
+    }
+
+    /// <summary>
+    /// Plays a sound effect from a specified path, in a specified place in the world.<br/>
+    /// The volume of this sound effect diminishes from the distance of a listener.
+    /// </summary>
+    /// <param name="source">The position in worldspace the source is eminating from.</param>
+    /// <param name="filepath">The path to the specific sound we wish to play.</param>
+    /// <param name="volume">Determines the volume of which this sound should play at. (Scale of 0.0f - 1.0f)</param>
+    /// <param name="repeats">Determines whether or not this sound should repeat (loop) or not.</param>
+    public static void PlaySound( Vector3 source, Entity listener, string filepath, float volume = 1.0f, bool repeats = false )
+    {
+        // Make sure we have a valid listener...
+        if ( listener == null )
+        {
+            // If not, exit out of the function and throw an error!
+            Log.Error<NullReferenceException>( $"Error playing sound \"{filepath}\", input listener is null!" );
+            return;
+        }
+
+        // Determine the volume falloff dependant on distance
+        volume -= Vector3.Distance( source, listener.GetPosition() );
+    }
+
+    public static void PlaySound( Entity source, Entity listener, string filepath, float volume = 1.0f, bool repeats = false )
+    {
+
     }
 
     /// <summary>

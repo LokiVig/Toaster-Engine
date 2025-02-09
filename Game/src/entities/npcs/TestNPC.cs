@@ -7,7 +7,7 @@ namespace Toast.Game.Entities.NPC;
 
 public class TestNPC : NPCEntity
 {
-	public override float maxHealth { get; set; } = 100.0f;
+	public override float maxHealth => 100.0f;
 
 	protected override Type[] hateList => [];
 	protected override Type[] adoreList => [typeof(Player)];

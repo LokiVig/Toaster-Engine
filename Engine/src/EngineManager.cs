@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 using Veldrid;
 
+using ImGuiNET;
+
 using Toast.Engine.Resources;
 using Toast.Engine.Rendering;
-using System.Runtime.InteropServices;
-using ImGuiNET;
 
 namespace Toast.Engine;
 
@@ -23,6 +24,8 @@ public static class EngineManager
     //---------------------------------------//
 
     public static event Action OnUpdate; // Whenever we should update things, this event gets called
+
+    public static bool cheatsEnabled; // Determines whether or not cheats are enabled
 
     public static WTF currentFile; // The currently loaded WTF file / map
     public static Scene currentScene; // The currently running scene, initialized from the current file
@@ -137,6 +140,15 @@ public static class EngineManager
 
             onCall = ConsoleManager.DisplayCommands,
             onArgsCall = ConsoleManager.DisplayCommand
+        } );
+
+        // Cheats
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "cheats",
+            description = "Toggles whether or not cheats are enabled.",
+
+            onCall = ToggleCheats
         } );
 
         // Open debug (UI)
@@ -265,6 +277,14 @@ public static class EngineManager
     private static void ToggleDebug()
     {
         debugOpen = !debugOpen;
+    }
+
+    /// <summary>
+    /// Toggles whether or not cheats are enabled. Mainly used with console commands.
+    /// </summary>
+    private static void ToggleCheats()
+    {
+        cheatsEnabled = !cheatsEnabled;
     }
 
     /// <summary>

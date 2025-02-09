@@ -7,9 +7,7 @@ namespace Toast.Engine.Entities;
 public partial class PlayerEntity : Entity
 {
     public override EntityType type => EntityType.Player; // This entity is of type Player
-    public override float maxHealth { get; set; } = 100.0f;
-    
-    protected float armor = 0.0f; // Remove a certain amount of damage taken if armor isn't 0, and decrease the armor value when taking damage
+    public override float maxHealth => 100.0f;
 
     public PlayerEntity()
     {
@@ -32,22 +30,5 @@ public partial class PlayerEntity : Entity
 
         // Handle movements
         ApplyVelocity();
-    }
-
-    public override void TakeDamage( float damage, Entity source = null )
-    {
-        // Take half amount of damage if we have armor
-        if (armor > 0.0f)
-        {
-            armor -= damage;
-            health -= damage / 2;
-        }
-        else if (armor <= 0.0f) // Take regular amount of damage if no armor
-        {
-            health -= damage;
-        }
-
-        // We have taken damage, OnDamage call!
-        OnDamage();
     }
 }

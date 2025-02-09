@@ -2,5 +2,5 @@
 
 public class DamageableBrush : BrushEntity
 {
-	public override float maxHealth { get; set; } = 100.0f;
+	public override float maxHealth => 100.0f;
 }
