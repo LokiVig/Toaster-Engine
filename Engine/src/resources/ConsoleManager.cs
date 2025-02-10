@@ -29,26 +29,6 @@ public static class ConsoleManager
     }
 
     /// <summary>
-    /// Sets the status of a specific command, specified from the argument <paramref name="commandAlias"/>.
-    /// </summary>
-    public static void SetCommandStatus( string commandAlias, bool commandEnabled )
-    {
-        ConsoleCommand foundCommand = FindCommand( commandAlias ); // Find the command we want
-
-        // If the command we tried to find isn't null...
-        if ( foundCommand != null )
-        {
-            foundCommand.enabled = commandEnabled; // Set the command's status
-        }
-        else // Otherwise!
-        {
-            // We can't really do anything with a null command
-            Log.Warning( "foundCommand was null! Can't set status of a null command, dingus." );
-            return;
-        }
-    }
-
-    /// <summary>
     /// Searches through this console manager's list of commands and returns one fitting with the argument <paramref name="commandAlias"/>.
     /// </summary>
     public static ConsoleCommand FindCommand( string commandAlias )
@@ -74,19 +54,25 @@ public static class ConsoleManager
     /// </summary>
     public static bool LoadCommands()
     {
+        // If we don't have a commands file...
         if ( !File.Exists( PATH_COMMANDS ) )
         {
+            // Get outta dodge!
             return false;
         }
 
         try
         {
+            // Open the file...
             using ( StreamReader sr = new StreamReader( PATH_COMMANDS ) )
             {
+                // Read the JSON data...
                 using ( JsonReader reader = new JsonTextReader( sr ) )
                 {
+                    // If we did find our list of commands...
                     if ( ( commands = serializer.Deserialize<List<ConsoleCommand>>( reader ) ) != null )
                     {
+                        // We should interpret the command action that's defined in the file!
                         Interpreter interpreter = new Interpreter();
                         foreach ( ConsoleCommand command in commands )
                         {
@@ -94,12 +80,13 @@ public static class ConsoleManager
                             command.onArgsCall = interpreter.ParseAsDelegate<Action<List<object>>>( command.onArgsCallAlias );
                         }
 
+                        // Successful command loading!
                         return true;
                     }
                 }
             }
         }
-        catch ( Exception exc )
+        catch ( Exception exc ) // Unexpected exception has been caught!
         {
             Log.Error( "Unmanaged exception caught!", exc );
             return false;
@@ -111,19 +98,25 @@ public static class ConsoleManager
 
     public static void SaveCommands()
     {
+        // Create a new file at the default path
         FileStream file = File.Open( PATH_COMMANDS, FileMode.Create );
         file.Close();
 
+        // Open the file...
         using ( StreamWriter sw = new StreamWriter( PATH_COMMANDS ) )
         {
+            // Create a new JSON writer...
             using ( JsonWriter writer = new JsonTextWriter( sw ) )
             {
+                // For every command...
                 foreach ( ConsoleCommand command in commands )
                 {
+                    // Set their command's alias to the name of their connected method
                     command.onCallAlias = command.onCall.Method.Name;
                     command.onArgsCallAlias = command.onArgsCall.Method.Name;
                 }
 
+                // Serialize the JSON data to the file!
                 serializer.Serialize( writer, commands );
             }
         }
@@ -182,6 +175,68 @@ public static class ConsoleManager
 
             // Toggle its state!
             command.enabled = !command.enabled;
+        }
+    }
+
+    /// <summary>
+    /// Try to call the command from our inputs.
+    /// </summary>
+    public static void TryCommand(string input)
+    {
+        // Log the input
+        Log.Info( input );
+
+        // Make sure the input isn't actually empty
+        if ( input != string.Empty )
+        {
+            // All of the collective arguments
+            // Null by default, allows for commands without arguments to be called too
+            object[] args = null;
+
+            // If our input has spaces...
+            if ( input.Contains( " " ) )
+            {
+                // We should split our arguments on these spaces!
+                args = input.Split( " " );
+            }
+
+            // Find our command, either from the first variable of our args list, or directly from our input
+            ConsoleCommand command = FindCommand( args != null ? (string)args[0] : input );
+
+            // Make sure our command actually is found...
+            if ( command == null )
+            {
+                // If not, return!!!
+                return;
+            }
+
+            // If this command is disabled...
+            if ( !command.enabled )
+            {
+                // Log such to the console and get outta here!
+                Log.Info( $"Found command \"{command.alias}\", but the command is disabled, therefore we cannot call it!", true );
+                return;
+            }
+
+            // If the command requires cheats, but cheats are disabled...
+            if ( command.requiresCheats && !EngineManager.cheatsEnabled )
+            {
+                // Log this revelating information to the console, then skedaddle!
+                Log.Info( $"Command \"{command.alias}\" requires cheats, but cheats are disabled!", true );
+                return;
+            }
+
+            // If we have arguments...
+            if ( args != null )
+            {
+                // Call the argumented version of this command's function!
+                command.onArgsCall?.Invoke( new List<object>( args ) );
+            }
+            else // Otherwise!
+            {
+                // Call the command's regular function!
+                command.onCall?.Invoke();
+            }
         }
     }
 

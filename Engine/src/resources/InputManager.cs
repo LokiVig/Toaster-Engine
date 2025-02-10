@@ -12,7 +12,9 @@ public static class InputManager
 {
     private const string PATH_KEYBINDS = "resources/keybinds.txt";
 
-    private static List<Key> keysDown = new();
+    private static Dictionary<Key, bool> keys = new();
+    private static Dictionary<Key, bool> prevKeys = new();
+
     private static List<Keybind> keybinds = new();
 
     private static JsonSerializer serializer = new JsonSerializer
@@ -21,16 +23,30 @@ public static class InputManager
     };
 
     /// <summary>
+    /// Initializes the input manager, effectively just fills the keys dictionaries.
+    /// </summary>
+    public static void Initialize()
+    {
+        // Enumerate over every key and add it to our dictionary of keys
+        // Source:
+        //   - https://stackoverflow.com/questions/105372/how-to-enumerate-an-enum
+        foreach ( Key key in Enum.GetValues( typeof( Key ) ) )
+        {
+            // Make sure we have no duplicate keys...
+            if ( !keys.ContainsKey( key ) )
+            {
+                keys.Add( key, false );
+            }
+        }
+    }
+
+    /// <summary>
     /// Things to do when the Veldrid KeyDown event is invoked.
     /// </summary>
     public static void OnKeyDown( KeyEvent ev )
     {
-        // If our current list of keys down doesn't contain that key...
-        if ( !keysDown.Contains( ev.Key ) )
-        {
-            // Add it to our list of keys down!
-            keysDown.Add( ev.Key );
-        }
+        prevKeys = new Dictionary<Key, bool>( keys );
+        keys[ev.Key] = true;
     }
 
     /// <summary>
@@ -38,12 +54,8 @@ public static class InputManager
     /// </summary>
     public static void OnKeyUp( KeyEvent ev )
     {
-        // If our current keys down contains that key...
-        if ( keysDown.Contains( ev.Key ) )
-        {
-            // Remove it from our list of current keys down!
-            keysDown.Remove( ev.Key );
-        }
+        prevKeys = new Dictionary<Key, bool>( keys );
+        keys[ev.Key] = false;
     }
 
     /// <summary>
@@ -165,11 +177,30 @@ public static class InputManager
             // Check every keybind...
             foreach ( Keybind keybind in keybinds )
             {
-                // If their key is currently pressed down...
-                if ( IsKeyDown( keybind.key ) )
+                // Skip over keys with unknown binds!
+                if ( keybind.key == Key.Unknown )
                 {
-                    // Find the console command appropriate to this keybind, and invoke it
-                    ConsoleManager.FindCommand( keybind.commandAlias ).onCall.Invoke();
+                    continue;
+                }
+
+                // If the keybind supports being held down...
+                if ( keybind.down )
+                {
+                    // Check if the key is actively being pressed down...
+                    if ( IsKeyDown( keybind.key ) )
+                    {
+                        // Find the console command appropriate to this keybind, and invoke it
+                        ConsoleManager.FindCommand( keybind.commandAlias ).onCall.Invoke();
+                    }
+                }
+                else // Otherwise, if the keybind only supports being pressed...
+                {
+                    // Check if the key has just been pressed...
+                    if ( IsKeyPressed( keybind.key ) )
+                    {
+                        // Find the console command appropriate to this keybind, and invoke it
+                        ConsoleManager.FindCommand( keybind.commandAlias ).onCall.Invoke();
+                    }
                 }
             }
         }
@@ -204,9 +235,9 @@ public static class InputManager
         Keybind bindToEdit = null; // The bind we're going to edit
 
         // Make sure we have the right amount of arguments!
-        if ( argCount < 2 || argCount > 3 )
+        if ( argCount < 2 || argCount > 4 )
         {
-            Log.Warning( "Invalid amount of arguments! You need at least 2 arguments, and at most 3, one for the alias of the keybind you want to change, and the other for the key you want to change it to!" );
+            Log.Warning( "Invalid amount of arguments! You need at least 2 arguments, and at most 4, one for the alias of the keybind you want to change, and the other for the key you want to change it to!" );
             return;
         }
 
@@ -229,9 +260,11 @@ public static class InputManager
             return;
         }
 
-        // If we have three arguments...
-        if ( argCount == 3 )
+        // If we have more or equal to 3 arguments...
+        if ( argCount >= 3 )
         {
+            bool down = false; // Default down value
+
             // It means we're making a new keybind! Ensure that its name doesn't override an already existing one
             foreach ( Keybind keybind in keybinds )
             {
@@ -249,11 +282,22 @@ public static class InputManager
                 return;
             }
 
+            // If we have the bool to determine if the keybind can be held...
+            if ( argCount == 4 )
+            {
+                if ( !bool.TryParse( (string)args[4], out down ) )
+                {
+                    Log.Warning( $"Couldn't parse \"{args[4]}\" to bool!" );
+                    return;
+                }
+            }
+
             // Make a new keybind
             Keybind kb = new Keybind();
             kb.alias = (string)args[1]; // The alias of the keybind should be the first argument
             kb.key = key; // The key is the second argument
             kb.commandAlias = (string)args[3]; // The command alias is the third
+            kb.down = down; // Even if we didn't have the 4th argument, we should set our newly made keybind's hold functionality to the default
 
             // Add the new keybind to our list of keybinds
             AddKeybind( kb );
@@ -303,16 +347,43 @@ public static class InputManager
         foreach ( Keybind keybind in keybinds )
         {
             // Log its information! (Alias, currently bound key and associated command)
-            Log.Info( $"\tAlias: \"{keybind.alias}\" - Key: \"{keybind.key}\" - Command: \"{keybind.commandAlias}\"" );
+            Log.Info( $"\tAlias: \"{keybind.alias}\" - Key: \"{keybind.key}\" - Command: \"{keybind.commandAlias}\" - Supports Being Held Down? {keybind.down}" );
         }
     }
 
     /// <summary>
     /// Is the specified key currently pressed?
     /// </summary>
-    /// <returns><see langword="true"/> if the specified key is found in the current list of keys down, <see langword="false"/> otherwise.</returns>
+    /// <returns><see langword="true"/> if the specified key is defined as being down / pressed, <see langword="false"/> otherwise.</returns>
     public static bool IsKeyDown( Key key )
     {
-        return keysDown.Contains( key );
+        return keys[key];
+    }
+
+    /// <summary>
+    /// Checks if the argument key was just pressed.
+    /// </summary>
+    /// <returns><see langword="true"/> if the key was just recently pressed, <see langword="false"/> otherwise.</returns>
+    public static bool IsKeyPressed( Key key )
+    {
+        return keys[key] && !prevKeys[key];
+    }
+
+    /// <summary>
+    /// Is the specified key currently not pressed?
+    /// </summary>
+    /// <returns><see langword="true"/> if the specified key is not defined as being down / pressed, <see langword="false"/> otherwise.</returns>
+    public static bool IsKeyUp( Key key )
+    {
+        return !keys[key];
+    }
+
+    /// <summary>
+    /// Checks if the argument key was just released.
+    /// </summary>
+    /// <returns><see langword="true"/> if the key was just recently released, <see langword="false"/> otherwise.</returns>
+    public static bool IsKeyReleased( Key key )
+    {
+        return !keys[key] && prevKeys[key];
     }
 }

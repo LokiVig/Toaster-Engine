@@ -12,14 +12,14 @@ public class NPCPathfinder
 {
     public NPCEntity parent;
 
-    public NPCPathfinder( NPCEntity _parent )
+    public NPCPathfinder( NPCEntity parent )
     {
-        if ( _parent == null )
+        if ( parent == null )
         {
-            Log.Error<NullReferenceException>( "NPCPathfinder _parent variable is null!" );
+            Log.Error<NullReferenceException>( "NPCPathfinder parent variable is null!" );
         }
 
-        parent = _parent;
+        this.parent = parent;
     }
 
     /// <summary>
@@ -35,7 +35,7 @@ public class NPCPathfinder
 
 public enum PathfindResult
 {
-    Successful,
+    Unknown,
     Failed,
-    Unknown
+    Successful
 }

@@ -2,7 +2,6 @@
 using System.Numerics;
 
 using Toast.Engine.Resources;
-
 using Toast.Engine.Entities.NPC;
 
 namespace Toast.Engine.Entities;
@@ -49,7 +48,7 @@ public class NPCEntity : Entity
 		else // Otherwise...
 		{
             // Trace rays out to try and find entities we hate or adore
-            LookForTarget();
+            //LookForTarget(); // This is computationally expensive! Optimize, fix, whatever the hell
         }
     }
 

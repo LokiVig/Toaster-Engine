@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 
 using Veldrid;
-
-using ImGuiNET;
 
 using Toast.Engine.Resources;
 using Toast.Engine.Rendering;
@@ -25,7 +22,11 @@ public static class EngineManager
 
     public static event Action OnUpdate; // Whenever we should update things, this event gets called
 
-    public static bool cheatsEnabled; // Determines whether or not cheats are enabled
+#if DEBUG // If we're debugging, we should, by default, be cheating
+    public static bool cheatsEnabled = true; // Determines whether or not cheats are enabled
+#else // If we're in release mode, we should, by default, not be cheating
+    public static bool cheatsEnabled = false; // Determines whether or not cheats are enabled
+#endif // DEBUG
 
     public static WTF currentFile; // The currently loaded WTF file / map
     public static Scene currentScene; // The currently running scene, initialized from the current file
@@ -56,19 +57,8 @@ public static class EngineManager
         // Initialize file logging
         Log.OpenLogFile();
 
-        // We shouldn't be able to be run on anything but a Windows setting, throw a message box otherwise
-        if ( !RuntimeInformation.IsOSPlatform( OSPlatform.Windows ) )
-        {
-            ImGui.Begin( "ERROR", ImGuiWindowFlags.AlwaysAutoResize );
-            ImGui.Text( "Can't run Toaster Engine on anything other than a Windows application!" );
-
-            if ( ImGui.Button( "OK" ) )
-            {
-                EngineShutdown();
-            }
-
-            ImGui.End();
-        }
+        // Initialize our input manager
+        InputManager.Initialize();
 
 #if !DEBUG
         // If we can't load our commands...
@@ -129,7 +119,7 @@ public static class EngineManager
             alias = "console",
             description = "Toggles the display of the console.",
 
-            onCall = EnableConsole
+            onCall = ToggleConsole
         } );
 
         // Help
@@ -264,11 +254,11 @@ public static class EngineManager
     }
 
     /// <summary>
-    /// Enables the console. Mainly used with console commands.
+    /// Toggles the console. Mainly used with console commands.
     /// </summary>
-    private static void EnableConsole()
+    private static void ToggleConsole()
     {
-        consoleOpen = true;
+        consoleOpen = !consoleOpen;
     }
 
     /// <summary>
@@ -285,6 +275,7 @@ public static class EngineManager
     private static void ToggleCheats()
     {
         cheatsEnabled = !cheatsEnabled;
+        Log.Info( $"{(cheatsEnabled ? "Enabled" : "Disabled")} cheats!", true );
     }
 
     /// <summary>

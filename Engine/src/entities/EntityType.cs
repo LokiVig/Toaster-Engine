@@ -11,7 +11,7 @@ public enum EntityType
 	// All entities should be one of these types
 	Player, // Self-describing
 	Item, // All items should be of this type
-	Prop, // All static, dynamic, physics, etc. prop should be of this type
+	Prop, // All static, dynamic, physics, etc. props should be of this type
 	NPC, // All Non-Playable-Characters / AI should be of this type (NPC is used as a general term)
 	Tool, // Everything that helps make it easier to make a map should be of this type
 	Brush, // Everything that's a brush entity (Damageable brushes, Trigger brushes, etc.)

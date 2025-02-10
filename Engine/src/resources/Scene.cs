@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Toast.Engine.Entities;
 
@@ -53,13 +52,8 @@ public class Scene
 	/// <param name="id">The ID of the entity we wish to remove.</param>
 	public void RemoveEntity(string id)
 	{
-		foreach (Entity entity in entities.ToList())
-		{
-			if (entity.GetID() == id)
-			{
-				entities.Remove(entity);
-			}
-		}
+		// Remove the entity we find from the specified ID argument
+		entities.Remove( FindEntity( id ) );
 	}
 
 	/// <summary>

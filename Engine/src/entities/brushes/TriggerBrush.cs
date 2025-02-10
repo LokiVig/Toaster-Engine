@@ -15,7 +15,7 @@ public class TriggerBrush : BrushEntity
     private static readonly float FVALUE_DEFAULT = 0.0f;
     private static readonly int BVALUE_DEFAULT = -1;
     private static readonly Vector3 V3VALUE_DEFAULT = Vector3.Zero;
-    private static readonly Vector4 V4VALUE_DEFAULT = Vector4.Zero;
+    private static readonly Quaternion QVALUE_DEFAULT = Quaternion.Identity;
     private static readonly Entity EVALUE_DEFAULT = null;
     private static readonly BBox BBVALUE_DEFAULT = BBox.One;
 
@@ -23,7 +23,7 @@ public class TriggerBrush : BrushEntity
     public float fValue = FVALUE_DEFAULT; // Event float value
     public int bValue = BVALUE_DEFAULT; // Event bool value (<=-1 -> none, =0 -> false, >=1 -> true)
     public Vector3 v3Value = V3VALUE_DEFAULT; // Event Vector3 value
-    public Vector4 v4Value = V4VALUE_DEFAULT; // Event Quaternion value
+    public Quaternion qValue = QVALUE_DEFAULT; // Event Quaternion value
     public Entity eValue = EVALUE_DEFAULT; // Event Entity value
     public BBox bbValue = BBVALUE_DEFAULT; // Event BBox value
 
@@ -229,7 +229,7 @@ public class TriggerBrush : BrushEntity
                           $"\t\tfValue: {fValue}\n" +
                           $"\t\tbValue: {( bValue > BVALUE_DEFAULT ? ( bValue == 0 ? "False" : "True" ) : "N/A" )}\n" +
                           $"\t\tvValue: {v3Value}\n" +
-                          $"\t\tqValue: {v4Value}\n" +
+                          $"\t\tqValue: {qValue}\n" +
                           $"\t\teValue: {( eValue == EVALUE_DEFAULT ? "N/A" : eValue )}\n" +
                           $"\t\tbbValue: {( bbValue )}\n" +
                           $"\tTrigger type: {triggerType}\n" +
@@ -256,9 +256,9 @@ public class TriggerBrush : BrushEntity
             foundTarget.OnEvent( targetEvent, v3Value, this );
         }
 
-        if ( v4Value != V4VALUE_DEFAULT ) // Quaternion value event
+        if ( qValue != QVALUE_DEFAULT ) // Quaternion value event
         {
-            foundTarget.OnEvent( targetEvent, v4Value, this );
+            foundTarget.OnEvent( targetEvent, qValue, this );
         }
 
         if ( eValue != EVALUE_DEFAULT ) // Entity value event

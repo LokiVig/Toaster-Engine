@@ -39,7 +39,7 @@ public static class AudioManager
         if ( argCount >= 2 )
         {
             // Get the volume
-            if ( !float.TryParse( args[2].ToString().Replace(".", ","), out volume ) )
+            if ( !float.TryParse( args[2].ToString().Replace( ".", "," ), out volume ) )
             {
                 Log.Warning( "Second argument is an invalid float!" );
                 return;
@@ -105,7 +105,7 @@ public static class AudioManager
         catch ( Exception exc ) // Problem caught!
         {
             // If we couldn't find the file...
-            if ( exc is FileNotFoundException )
+            if ( exc is FileNotFoundException || exc is DirectoryNotFoundException )
             {
                 // We shouldn't throw the exception, just log a warning that we couldn't find it!
                 Log.Warning( $"Couldn't find file at path \"{filepath}\"!" );
@@ -119,30 +119,16 @@ public static class AudioManager
     }
 
     /// <summary>
-    /// Plays a sound effect from a specified path, in a specified place in the world.<br/>
-    /// The volume of this sound effect diminishes from the distance of a listener.
+    /// Plays a sound from a specified entity, to another specified entity.
     /// </summary>
-    /// <param name="source">The position in worldspace the source is eminating from.</param>
+    /// <param name="source">The source of this audio.</param>
+    /// <param name="listener">A listener to this audio.</param>
     /// <param name="filepath">The path to the specific sound we wish to play.</param>
     /// <param name="volume">Determines the volume of which this sound should play at. (Scale of 0.0f - 1.0f)</param>
     /// <param name="repeats">Determines whether or not this sound should repeat (loop) or not.</param>
-    public static void PlaySound( Vector3 source, Entity listener, string filepath, float volume = 1.0f, bool repeats = false )
+    public static AudioFile PlaySound( Entity source, Entity listener, string filepath, float volume = 1.0f, bool repeats = false )
     {
-        // Make sure we have a valid listener...
-        if ( listener == null )
-        {
-            // If not, exit out of the function and throw an error!
-            Log.Error<NullReferenceException>( $"Error playing sound \"{filepath}\", input listener is null!" );
-            return;
-        }
-
-        // Determine the volume falloff dependant on distance
-        volume -= Vector3.Distance( source, listener.GetPosition() );
-    }
-
-    public static void PlaySound( Entity source, Entity listener, string filepath, float volume = 1.0f, bool repeats = false )
-    {
-
+        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -253,7 +239,7 @@ public static class AudioManager
 
         foreach ( AudioFile file in playingFiles )
         {
-            Log.Info( $"\t\"{file.filepath}\" - {file.volume} - {(file.repeats ? "Repeats" : "Does not repeat")}" );
+            Log.Info( $"\t\"{file.filepath}\" - {file.volume} - {( file.repeats ? "Repeats" : "Does not repeat" )}" );
         }
     }
 

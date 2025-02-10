@@ -1,4 +1,6 @@
-﻿namespace Toast.Engine.Resources;
+﻿using System;
+
+namespace Toast.Engine.Resources;
 
 public class Model
 {
@@ -13,7 +15,7 @@ public class Model
     /// <returns>A new model with all of the information we need to render it.</returns>
     public static Model Load( string path )
     {
-        return null;
+        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -22,6 +24,6 @@ public class Model
     /// <param name="model">The model we wish to remove.</param>
     public static void Remove(Model model)
     {
-
+        throw new NotImplementedException();
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Collections.Generic;
 
 using ImGuiNET;
@@ -34,6 +33,9 @@ public static class DebugUI
             // Display map information
             ImGui.Text( $"Active map: \"{EngineManager.currentFile.path}\"" );
 
+            // Are we CHEATING?!
+            ImGui.Text( $"Cheats enabled? {EngineManager.cheatsEnabled}" );
+
             ImGui.Separator();
 
             // Entities \\
@@ -54,7 +56,7 @@ public static class DebugUI
                         {
                             ImGui.InputFloat3( "Position", ref entities[i].GetPosition() );
                             ImGui.InputFloat3( "Velocity", ref entities[i].GetVelocity() );
-                            ImGui.InputFloat4( "Rotation", ref entities[i].GetRotation() );
+                            //ImGui.InputFloat4( "Rotation", entities[i].GetRotation().AsVector4() );
 
                             ImGui.SeparatorText( "Bounding Box" );
                             {
@@ -243,7 +245,7 @@ public static class DebugUI
                             ImGui.InputFloat( "Float Value", ref trigger.fValue );
                             ImGui.SliderInt( "Bool Value", ref trigger.bValue, -1, 1 );
                             ImGui.InputFloat3( "Vector3 Value", ref trigger.v3Value );
-                            ImGui.InputFloat4( "Vector4 Value", ref trigger.v4Value );
+                            //ImGui.InputFloat4( "Quaternion Value", ref trigger.qValue );
                             ImGui.InputFloat3( "Bounding Box Mins", ref trigger.bbValue.mins );
                             ImGui.InputFloat3( "Bounding Box Maxs", ref trigger.bbValue.maxs );
                             #endregion
@@ -252,7 +254,7 @@ public static class DebugUI
 
                             if ( ImGui.Button( "Trigger" ) )
                             {
-                                trigger.OnTrigger( null );
+                                trigger.OnTrigger( EngineManager.currentScene.GetPlayer() );
                             }
                         }
 

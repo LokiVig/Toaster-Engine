@@ -10,21 +10,24 @@ namespace Toast.Engine.Entities;
 /// <summary>
 /// An entity.<br/>
 /// Something that can, for example, be seen, interacted with, killed, or other, should be defined as an entity.<br/>
-/// e.g.:
-/// <list type="bullet">
-///     <item>Triggers</item>
-///     <item>Player</item>
+/// <br/>
+/// <list type="table">
+///     <listheader>
+///         <term>Example Entities</term>    
+///     </listheader>
+///     
+///     <item>Brush Entities</item>
 ///     <item>NPCs</item>
-///     <item>Misc. Props</item>
 /// </list>
 /// </summary>
 public class Entity
 {
     public Vector3 position; // This entity's current position
-    public Vector4 rotation; // This entity's current rotation
+    public Quaternion rotation; // This entity's current rotation
     public BBox bbox; // This entity's bounding box
 
     public string id; // This entity's identifier
+    public Model model; // This entity's visually pleasing model
     public virtual EntityType type { get; private set; } = EntityType.None; // This entity's type, e.g. player / NPC
     public virtual float maxHealth { get; private set; } // This entity's max health
 
@@ -167,7 +170,7 @@ public class Entity
     /// <summary>
     /// Gets this entity's rotation
     /// </summary>
-    public ref Vector4 GetRotation()
+    public ref Quaternion GetRotation()
     {
         return ref rotation;
     }
@@ -249,10 +252,10 @@ public class Entity
     }
 
     /// <summary>
-    /// Set this entity's rotation from a <see cref="Vector4"/>
+    /// Set this entity's rotation from a <see cref="Quaternion"/>
     /// </summary>
     /// <param name="rotation">The new, desired rotation of this entity</param>
-    public void SetRotation( Vector4 rotation )
+    public void SetRotation( Quaternion rotation )
     {
         this.rotation = rotation;
     }
@@ -438,12 +441,12 @@ public class Entity
     }
 
     /// <summary>
-    /// Call an event that takes a <see cref="Vector4"/> for a value.
+    /// Call an event that takes a <see cref="Quaternion"/> for a value.
     /// </summary>
     /// <param name="eEvent">Desired event to do to this entity.</param>
-    /// <param name="qValue">Value as <see cref="Vector4"/>.</param>
+    /// <param name="qValue">Value as <see cref="Quaternion"/>.</param>
     /// <param name="source">The entity that caused this event.</param>
-    public void OnEvent( EntityEvent eEvent, Vector4 qValue, Entity source = null )
+    public void OnEvent( EntityEvent eEvent, Quaternion qValue, Entity source = null )
     {
         switch ( eEvent )
         {
