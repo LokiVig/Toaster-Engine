@@ -123,6 +123,14 @@ public static class ConsoleManager
     }
 
     /// <summary>
+    /// Gets the total list of console commands.
+    /// </summary>
+    public static List<ConsoleCommand> GetConsoleCommands()
+    {
+        return commands;
+    }
+
+    /// <summary>
     /// Log every available command to the console, and their description
     /// </summary>
     public static void DisplayCommands()

@@ -174,7 +174,7 @@ public static class AudioManager
                 {
                     RepeatSound( file ); // Do things that will make this file repeat itself
                 }
-                else // Otherwise!
+                else // Otherwise...
                 {
                     StopSound( file ); // Just stop the sound as per regular
                 }

@@ -301,7 +301,7 @@ public static class InputManager
 
             // Add the new keybind to our list of keybinds
             AddKeybind( kb );
-            Log.Info( $"Successfully added new keybind \"{args[1]}\" (key: \"{args[2]}\"), command: \"{args[3]}\"" ); // Log our success
+            Log.Info( $"Successfully added new keybind \"{args[1]}\" (key: \"{args[2]}\"), command: \"{args[3]}\", hold: {(argCount < 4 ? "False" : down)}" ); // Log our success
             return;
         }
 
@@ -347,7 +347,7 @@ public static class InputManager
         foreach ( Keybind keybind in keybinds )
         {
             // Log its information! (Alias, currently bound key and associated command)
-            Log.Info( $"\tAlias: \"{keybind.alias}\" - Key: \"{keybind.key}\" - Command: \"{keybind.commandAlias}\" - Supports Being Held Down? {keybind.down}" );
+            Log.Info( $"\tAlias: \"{keybind.alias}\" - Key: {(keybind.key == Key.Unknown ? "Unbound" : $"\"{keybind.key}\"")} - Command: \"{keybind.commandAlias}\" - Supports Being Held Down? {keybind.down}" );
         }
     }
 

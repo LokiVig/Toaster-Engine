@@ -237,8 +237,8 @@ public static class EngineManager
     /// </summary>
     private static void CreateKeybinds()
     {
-        // Open the console when F12 is pressed
-        InputManager.AddKeybind( new Keybind { alias = "console", key = Key.F12, commandAlias = "console" } );
+        // Open the console when '~' is pressed
+        InputManager.AddKeybind( new Keybind { alias = "console", key = Key.Tilde, commandAlias = "console" } );
 
         // Unbound (by default) keybind to shutdown the engine
         InputManager.AddKeybind( new Keybind { alias = "quit", key = Key.Unknown, commandAlias = "quit" } );

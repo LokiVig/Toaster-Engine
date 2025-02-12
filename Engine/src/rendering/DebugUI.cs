@@ -6,6 +6,7 @@ using ImGuiNET;
 using Toast.Engine.Entities;
 using Toast.Engine.Entities.Brushes;
 using Toast.Engine.Entities.Tools;
+using Toast.Engine.Resources;
 
 namespace Toast.Engine.Rendering;
 
@@ -254,7 +255,8 @@ public static class DebugUI
 
                             if ( ImGui.Button( "Trigger" ) )
                             {
-                                trigger.OnTrigger( EngineManager.currentScene.GetPlayer() );
+                                Log.Warning( "TODO: Implementation is to be done!" );
+                                //trigger.OnTrigger( EngineManager.currentScene.GetPlayer() );
                             }
                         }
 

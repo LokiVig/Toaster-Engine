@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using ImGuiNET;
 
 using Toast.Engine.Resources;
+using System.Runtime.InteropServices;
 
 namespace Toast.Engine.Rendering;
 
@@ -46,7 +47,7 @@ public static class ConsoleUI
                 ImGui.EndChild();
             }
 
-            if ( ImGui.IsWindowFocused(ImGuiFocusedFlags.RootAndChildWindows) && !ImGui.IsAnyItemActive() && !ImGui.IsMouseClicked(0) )
+            if ( ImGui.IsWindowFocused( ImGuiFocusedFlags.RootAndChildWindows ) && !ImGui.IsAnyItemActive() && !ImGui.IsMouseClicked( 0 ) )
             {
                 ImGui.SetKeyboardFocusHere( 0 );
             }
@@ -54,7 +55,8 @@ public static class ConsoleUI
             // Text input handler
             if ( ImGui.InputText( "##", ref input, 2048, ImGuiInputTextFlags.NoUndoRedo | ImGuiInputTextFlags.EnterReturnsTrue ) )
             {
-                ConsoleManager.TryCommand(input);
+                ConsoleManager.TryCommand( input );
+
                 input = string.Empty;
             }
 
@@ -63,7 +65,7 @@ public static class ConsoleUI
             // Button to console the current text input
             if ( ImGui.Button( "Input" ) )
             {
-                ConsoleManager.TryCommand(input);
+                ConsoleManager.TryCommand( input );
                 input = string.Empty;
             }
 
