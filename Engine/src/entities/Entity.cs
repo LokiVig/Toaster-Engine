@@ -3,9 +3,7 @@ using System.Numerics;
 using System.Collections.Generic;
 
 using Toast.Engine.Rendering;
-
 using Toast.Engine.Resources;
-
 using Toast.Engine.Entities.Tools;
 
 namespace Toast.Engine.Entities;

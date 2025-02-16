@@ -227,11 +227,11 @@ public class TriggerBrush : BrushEntity
                           $"\tValues:\n" +
                           $"\t\tiValue: {iValue}\n" +
                           $"\t\tfValue: {fValue}\n" +
-                          $"\t\tbValue: {( bValue > BVALUE_DEFAULT ? ( bValue == 0 ? "False" : "True" ) : "N/A" )}\n" +
+                          $"\t\tbValue: {( bValue == BVALUE_DEFAULT ?  "N/A" : ( bValue == 0 ? "False" : "True" ) )}\n" +
                           $"\t\tvValue: {v3Value}\n" +
                           $"\t\tqValue: {qValue}\n" +
                           $"\t\teValue: {( eValue == EVALUE_DEFAULT ? "N/A" : eValue )}\n" +
-                          $"\t\tbbValue: {( bbValue )}\n" +
+                          $"\t\tbbValue: {bbValue}\n" +
                           $"\tTrigger type: {triggerType}\n" +
                           $"\tTrigger by: {triggerBy}\n" +
                           $"\tTrigger on: {triggerOn}" );

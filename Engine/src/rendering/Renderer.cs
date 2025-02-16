@@ -7,7 +7,6 @@ using Veldrid.StartupUtilities;
 using ImGuiNET;
 
 using Toast.Engine.Entities;
-
 using Toast.Engine.Resources;
 using Toast.Engine.Resources.Console;
 

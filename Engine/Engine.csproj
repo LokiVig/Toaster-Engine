@@ -25,8 +25,11 @@
 		<IsTrimmable>True</IsTrimmable>
 	</PropertyGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<!-- Rendering -->
-		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)resources\rendering\*&quot; &quot;$(OutDir)resources\&quot;" />
+		<!-- Shaders -->
+		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)resources\shaders\*&quot; &quot;$(OutDir)resources\&quot;" />
+		
+		<!-- Textures -->
+		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)resources\textures\*&quot; &quot;$(OutDir)resources\&quot;" />
 
 		<!-- Audio -->
 		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)resources\audio\*&quot; &quot;$(OutDir)resources\audio\&quot;" />
@@ -39,8 +42,5 @@
 		<PackageReference Include="Veldrid" Version="4.9.0" />
 		<PackageReference Include="Veldrid.StartupUtilities" Version="4.9.0" />
 		<PackageReference Include="Veldrid.SPIRV" Version="1.0.15" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="resources\rendering\fonts\" />
 	</ItemGroup>
 </Project>

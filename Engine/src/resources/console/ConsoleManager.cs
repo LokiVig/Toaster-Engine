@@ -74,6 +74,7 @@ public static class ConsoleManager
                     {
                         // We should interpret the command action that's defined in the file!
                         Interpreter interpreter = new Interpreter();
+
                         foreach ( ConsoleCommand command in commands )
                         {
                             command.onCall = interpreter.ParseAsDelegate<Action>( command.onCallAlias );
@@ -189,7 +190,7 @@ public static class ConsoleManager
     /// <summary>
     /// Try to call the command from our inputs.
     /// </summary>
-    public static void TryCommand(string input)
+    public static void TryCommand( string input )
     {
         // Log the input
         Log.Info( input );
