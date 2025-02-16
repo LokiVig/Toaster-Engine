@@ -2,7 +2,7 @@
 
 using NAudio.Wave;
 
-namespace Toast.Engine.Resources;
+namespace Toast.Engine.Resources.Audio;
 
 public class AudioFile : IDisposable
 {

@@ -3,6 +3,7 @@
 using Newtonsoft.Json;
 
 using Toast.Engine.Entities;
+using Toast.Engine.Rendering;
 
 namespace Toast.Engine.Resources;
 

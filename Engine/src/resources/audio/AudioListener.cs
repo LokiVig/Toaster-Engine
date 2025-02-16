@@ -1,4 +1,4 @@
-﻿namespace Toast.Engine.Resources;
+﻿namespace Toast.Engine.Resources.Audio;
 
 /// <summary>
 /// Placing this on an entity means that they should be affected by 3D audio calculations.

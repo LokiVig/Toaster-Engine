@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 using DynamicExpresso;
 
-namespace Toast.Engine.Resources;
+namespace Toast.Engine.Resources.Console;
 
 public static class ConsoleManager
 {

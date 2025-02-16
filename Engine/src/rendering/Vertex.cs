@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Toast.Engine.Resources;
+namespace Toast.Engine.Rendering;
 
 public struct Vertex
 {

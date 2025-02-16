@@ -1,6 +1,6 @@
 ﻿using Veldrid;
 
-namespace Toast.Engine.Resources;
+namespace Toast.Engine.Resources.Input;
 
 public class Keybind
 {

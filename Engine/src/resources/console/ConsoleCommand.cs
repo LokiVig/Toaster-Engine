@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Newtonsoft.Json;
 
-namespace Toast.Engine.Resources;
+namespace Toast.Engine.Resources.Console;
 
 /// <summary>
 /// </summary>

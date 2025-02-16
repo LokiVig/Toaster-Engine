@@ -3,8 +3,11 @@ using System.Diagnostics;
 
 using Veldrid;
 
-using Toast.Engine.Resources;
 using Toast.Engine.Rendering;
+using Toast.Engine.Resources;
+using Toast.Engine.Resources.Input;
+using Toast.Engine.Resources.Audio;
+using Toast.Engine.Resources.Console;
 
 namespace Toast.Engine;
 

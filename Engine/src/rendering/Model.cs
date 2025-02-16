@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toast.Engine.Resources;
+namespace Toast.Engine.Rendering;
 
 public class Model
 {

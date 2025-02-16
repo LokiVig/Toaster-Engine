@@ -6,7 +6,9 @@ using Newtonsoft.Json;
 
 using Veldrid;
 
-namespace Toast.Engine.Resources;
+using Toast.Engine.Resources.Console;
+
+namespace Toast.Engine.Resources.Input;
 
 public static class InputManager
 {

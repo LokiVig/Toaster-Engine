@@ -5,6 +5,8 @@ using System.Runtime.CompilerServices;
 
 using Toast.Engine.Rendering;
 
+using Toast.Engine.Resources.Audio;
+
 namespace Toast.Engine.Resources;
 
 public struct Log

@@ -8,7 +8,7 @@ using NAudio.Wave.SampleProviders;
 
 using Toast.Engine.Entities;
 
-namespace Toast.Engine.Resources;
+namespace Toast.Engine.Resources.Audio;
 
 /// <summary>
 /// Class that should manage playing, stopping, and updating all manners of audio files.

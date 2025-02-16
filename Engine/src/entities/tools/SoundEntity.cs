@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 
 using Toast.Engine.Resources;
+using Toast.Engine.Resources.Audio;
 
 namespace Toast.Engine.Entities.Tools;
 
