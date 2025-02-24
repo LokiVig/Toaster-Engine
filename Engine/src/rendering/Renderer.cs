@@ -26,7 +26,7 @@ public class Renderer
     private static ImGuiController controller;
 
     /// <summary>
-    /// Initializes a DirectX 11 rendered window with a specified title.
+    /// Initializes a OpenGL rendered window with a specified title.
     /// </summary>
     /// <param name="title">The title of the window we wish to open.</param>
     public static void Initialize( string title )
@@ -56,7 +56,7 @@ public class Renderer
         // Create our window
         window = VeldridStartup.CreateWindow( ref windowCI );
 
-        // Create a graphics device using DirectX 11
+        // Create a graphics device using OpenGL
         GraphicsDeviceOptions options = new GraphicsDeviceOptions()
         {
 #if RELEASE
@@ -68,7 +68,7 @@ public class Renderer
             SwapchainDepthFormat = PixelFormat.R16_UNorm,
         };
 
-        graphicsDevice = VeldridStartup.CreateGraphicsDevice( window, options, GraphicsBackend.Direct3D11 );
+        graphicsDevice = VeldridStartup.CreateGraphicsDevice( window, options, GraphicsBackend.OpenGL );
 
         // The things to do when the window is resized
         window.Resized += () =>
@@ -141,11 +141,20 @@ public class Renderer
         // R(enderer) Window Resolution
         ConsoleManager.AddCommand( new ConsoleCommand
         {
-            alias = "r_windowresolution",
+            alias = "r_resolution",
             description = "Changes the resolution of which the renderer window is displayed at.",
 
             onArgsCall = ChangeWindowResolution
         } );
+    }
+
+    /// <summary>
+    /// Sets the renderer's window title to <paramref name="newTitle"/>.
+    /// </summary>
+    /// <param name="newTitle">The window's new title.</param>
+    public static void SetWindowTitle( string newTitle )
+    {
+        window.Title = newTitle;
     }
 
     /// <summary>

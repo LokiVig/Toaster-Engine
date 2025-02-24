@@ -1,10 +1,14 @@
 ﻿using System.Numerics;
 
+using Veldrid;
+
 using Toast.Engine;
 using Toast.Engine.Entities;
 using Toast.Engine.Entities.Tools;
 using Toast.Engine.Entities.Brushes;
 using Toast.Engine.Resources;
+using Toast.Engine.Resources.Input;
+using Toast.Engine.Resources.Console;
 
 using Toast.Game.Entities;
 using Toast.Game.Entities.NPC;
@@ -129,10 +133,10 @@ public class GameManager
     private void CreateKeybinds()
     {
         // Add movement keybinds
-        //InputManager.AddKeybind( new Keybind { alias = "move_forward",  key = Key.W, commandAlias = "+move_forward"  } ); // Forwards movement
-        //InputManager.AddKeybind( new Keybind { alias = "move_backward", key = Key.S, commandAlias = "+move_backward" } ); // Backwards movement
-        //InputManager.AddKeybind( new Keybind { alias = "move_left",     key = Key.A, commandAlias = "+move_left"     } ); // Leftwards movement
-        //InputManager.AddKeybind( new Keybind { alias = "move_right",    key = Key.D, commandAlias = "+move_right"    } ); // Rightwards movement
+        InputManager.AddKeybind( new Keybind { alias = "move_forward",  key = Key.W, commandAlias = "+move_forward",  down = true } ); // Forwards movement
+        InputManager.AddKeybind( new Keybind { alias = "move_backward", key = Key.S, commandAlias = "+move_backward", down = true } ); // Backwards movement
+        InputManager.AddKeybind( new Keybind { alias = "move_left",     key = Key.A, commandAlias = "+move_left",     down = true } ); // Leftwards movement
+        InputManager.AddKeybind( new Keybind { alias = "move_right",    key = Key.D, commandAlias = "+move_right",    down = true } ); // Rightwards movement
     }
 
     /// <summary>
@@ -140,45 +144,45 @@ public class GameManager
     /// </summary>
     private void CreateCommands()
     {
-        //// Move Forward
-        //ConsoleManager.AddCommand( new ConsoleCommand
-        //{
-        //    alias = "+move_forward",
-        //    description = "Moves the main player entity forward.",
+        // Move Forward
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "+move_forward",
+            description = "Moves the main player entity forward.",
 
-        //    onCall = () => { mainPlayer.AddForce( new Vector3( 0, 255, 0 ) ); },
-        //    onArgsCall = (List<object> args) => { mainPlayer.AddForce( new Vector3( 0, 255, 0 ) ); }
-        //} );
+            onCall = () => { mainPlayer.AddForce( new Vector3( 0, 255, 0 ) ); },
+            onArgsCall = (List<object> args) => { mainPlayer.AddForce( new Vector3( 0, 255, 0 ) ); }
+        } );
 
-        //// Move Backward
-        //ConsoleManager.AddCommand( new ConsoleCommand
-        //{
-        //    alias = "+move_backward",
-        //    description = "Moves the main player entity backward.",
+        // Move Backward
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "+move_backward",
+            description = "Moves the main player entity backward.",
 
-        //    onCall = () => { mainPlayer.AddForce( new Vector3( 0, -255, 0 ) ); },
-        //    onArgsCall = (List<object> args) => { mainPlayer.AddForce( new Vector3( 0, -255, 0 ) ); }
-        //} );
+            onCall = () => { mainPlayer.AddForce( new Vector3( 0, -255, 0 ) ); },
+            onArgsCall = (List<object> args) => { mainPlayer.AddForce( new Vector3( 0, -255, 0 ) ); }
+        } );
 
-        //// Move Left
-        //ConsoleManager.AddCommand( new ConsoleCommand
-        //{
-        //    alias = "+move_left",
-        //    description = "Moves the main player entity left.",
+        // Move Left
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "+move_left",
+            description = "Moves the main player entity left.",
 
-        //    onCall = () => { mainPlayer.AddForce( new Vector3( -255, 0, 0 ) ); },
-        //    onArgsCall = ( List<object> args ) => { mainPlayer.AddForce( new Vector3( -255, 0, 0 ) ); }
-        //} );
+            onCall = () => { mainPlayer.AddForce( new Vector3( -255, 0, 0 ) ); },
+            onArgsCall = ( List<object> args ) => { mainPlayer.AddForce( new Vector3( -255, 0, 0 ) ); }
+        } );
 
-        //// Move Right
-        //ConsoleManager.AddCommand( new ConsoleCommand
-        //{
-        //    alias = "+move_right",
-        //    description = "Moves the main player entity right.",
+        // Move Right
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "+move_right",
+            description = "Moves the main player entity right.",
 
-        //    onCall = () => { mainPlayer.AddForce( new Vector3( 255, 0, 0 ) ); },
-        //    onArgsCall = ( List<object> args ) => { mainPlayer.AddForce( new Vector3( 255, 0, 0 ) ); }
-        //} );
+            onCall = () => { mainPlayer.AddForce( new Vector3( 255, 0, 0 ) ); },
+            onArgsCall = ( List<object> args ) => { mainPlayer.AddForce( new Vector3( 255, 0, 0 ) ); }
+        } );
     }
 
     /// <summary>

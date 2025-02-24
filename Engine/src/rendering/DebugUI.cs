@@ -99,6 +99,10 @@ public static class DebugUI
                         {
                             ImGui.SeparatorText( "Trigger Brush Variables" );
 
+                            ImGui.Text( $"Last trigger entity: {trigger.previousTriggerEntity}" );
+
+                            ImGui.Separator();
+
                             ImGui.InputText( "Target Entity", ref trigger.targetEntity, 2048 );
 
                             if ( ImGui.BeginCombo( "Trigger Type", $"{trigger.triggerType}", ImGuiComboFlags.WidthFitPreview ) )

@@ -1,5 +1,6 @@
 ﻿using Toast.Engine.Resources;
 using Toast.Engine;
+using Toast.Engine.Rendering;
 
 namespace Toast.WTFEdit;
 
@@ -15,6 +16,7 @@ public class Program
 public class HTFManager
 {
     private WTF currentFile;
+    private bool isDirty;
 
     /// <summary>
     /// Initialize the WTFEdit program
@@ -46,6 +48,8 @@ public class HTFManager
     private void LoadMap(string path)
     {
         currentFile = WTF.LoadFile(path);
+
+        Renderer.SetWindowTitle( $"HTF - \"{currentFile.path}\"{(isDirty ? "*" : "")}" );
     }
 
     private void SaveMap()

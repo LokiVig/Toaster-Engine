@@ -35,9 +35,10 @@ public class TriggerBrush : BrushEntity
     public TriggerBy triggerBy; // What should this trigger, trigger from?
     public int triggerCount; // The max amount of times this trigger should be triggered
 
+    public Entity previousTriggerEntity; // The entity who last interacted with this trigger
+
     private int triggeredCount; // The amount of times this trigger has been triggered
     private bool hasTriggered; // Determines whether this trigger has already been triggered
-    private Entity previousTriggerEntity; // The entity who last interacted with this trigger
 
     public TriggerBrush()
     {
@@ -88,6 +89,15 @@ public class TriggerBrush : BrushEntity
 
                 // Otherwise, we've surely successfully been triggered, break out of the loop
                 break;
+            }
+            else
+            {
+                // Otherwise, if we're not interesecting with an entity, and it was our previous trigger entity...
+                if ( entity == previousTriggerEntity )
+                {
+                    // Clear the previous trigger entity!
+                    previousTriggerEntity = null;
+                }
             }
         }
     }

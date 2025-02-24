@@ -10,6 +10,6 @@ public class ToolEntity : Entity
 {
 	public override EntityType type => EntityType.Tool;
 	
-	public ToolEntity() {}
+	public ToolEntity() : base() {}
 	public ToolEntity(Vector3 position) : base(position) {}
 }

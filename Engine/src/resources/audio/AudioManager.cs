@@ -57,6 +57,7 @@ public static class AudioManager
             }
         }
 
+        // Call the regular play sound method with our parsed arguments
         PlaySound( filepath, volume, repeats );
     }
 
@@ -137,7 +138,7 @@ public static class AudioManager
     private static void RepeatSound( AudioFile file )
     {
         //
-        // Do things that will effectively make the file repeat
+        // Do things that will effectively make the file repeat.
         //
 
         file.waveEvent.Pause(); // Pause the playback
