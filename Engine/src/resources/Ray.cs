@@ -21,7 +21,7 @@ public struct Ray
         if ( ( rayIgnore & RayIgnore.Entities ) == 0 )
         {
             // Check every entity
-            foreach ( Entity entity in EngineManager.currentScene?.GetEntities()! )
+            foreach ( Entity entity in EngineManager.currentScene?.GetEntities() )
             {
                 //
                 // Automatically ignored entities
@@ -108,10 +108,10 @@ public struct Ray
         }
 
         // If we're not ignoring brushes
-        if ( !rayIgnore.HasFlag( RayIgnore.Brushes ) )
+        if ( ( rayIgnore & RayIgnore.Brushes ) == 0 )
         {
             // Check every brush
-            foreach ( Brush brush in EngineManager.currentScene?.GetBrushes()! )
+            foreach ( Brush brush in EngineManager.currentScene?.GetBrushes() )
             {
                 // Are we intersecting with this brush's bounding box?
                 if ( brush.GetBBox().RayIntersects( rayStart, rayEnd, rayLength ) )
@@ -194,7 +194,7 @@ public struct Ray
     public static bool Trace( Entity entStart, Vector3 rayDirection, out object hitObject, RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, bool logInfo = true, float rayLength = 5000 )
     {
         // Return the default trace with the position of our specified start entity, and the specified direction in Vector3'ness
-        return Trace( entStart.GetPosition(), rayDirection, out hitObject, rayIgnore, ignoredObjects, logInfo, rayLength );    
+        return Trace( entStart.GetPosition(), rayDirection, out hitObject, rayIgnore, ignoredObjects, logInfo, rayLength );
     }
 
     /// <summary>

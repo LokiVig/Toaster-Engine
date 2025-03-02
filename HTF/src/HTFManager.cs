@@ -42,14 +42,17 @@ public class HTFManager
     /// </summary>
     private void Update()
     {
-
+        Renderer.SetWindowTitle( $"HTF{(currentFile == null ? "" : $" - \"{currentFile.path}\"{( isDirty ? "*" : "" )}" )}" );
     }
 
     private void LoadMap(string path)
     {
         currentFile = WTF.LoadFile(path);
+    }
 
-        Renderer.SetWindowTitle( $"HTF - \"{currentFile.path}\"{(isDirty ? "*" : "")}" );
+    private void UnloadMap()
+    {
+        currentFile = null;
     }
 
     private void SaveMap()

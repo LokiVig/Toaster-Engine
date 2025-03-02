@@ -33,7 +33,15 @@ public struct Log
 
         // Write to the log file
         logWriter = File.AppendText( PATH_LOG );
-        logWriter.Write( "Start of engine log file.\n" );
+        
+        // First write the date
+        logWriter.WriteLine( $"{DateTime.Now:yyyy/MM/dd} {DateTime.Now:HH:mm:ss}" );
+
+        // Show information about the user's computer
+        logWriter.WriteLine( $"CPU: {Environment.ProcessorCount}" );
+
+        // Then notify that this is is the start of the logging file
+        logWriter.WriteLine( "Start of engine log file." );
         logWriter.WriteLine( "-----------------------------------------------\n" );
 
         // Start our runtime clock
@@ -51,7 +59,7 @@ public struct Log
         // Write infomatically filled messages to show that this is the end of the file
         logWriter.WriteLine( "\n-----------------------------------------------" );
         logWriter.WriteLine( "End of engine log file." );
-        logWriter.WriteLine( $"Total engine runtime was: {runtime.Elapsed.ToString()}" );
+        logWriter.WriteLine( $"Total engine runtime was: {runtime.Elapsed}" );
 
         // Clean the log writer of its resources
         logWriter.Dispose();
