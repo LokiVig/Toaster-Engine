@@ -15,8 +15,8 @@ public struct Brush
     public string id; // The id of this brush, can be set by the mapper
     public BBox bbox = BBox.One; // The extents of this brush
 
-    [JsonIgnore]
-    public Vertex[] vertices; // The vertices of this brush
+    [JsonIgnore] public Vertex[] vertices; // The vertices of this brush
+    [JsonIgnore] public uint[] indices; // The indices of this brush
 
     /// <summary>
     /// Create a brush with specified mins and maxs
@@ -59,6 +59,17 @@ public struct Brush
             new Vertex(new Vector3(bbox.mins.X, bbox.mins.Y, bbox.maxs.Z), Vector2.One), // Top right    - back,  Top right    - top,    Top right    - right
             new Vertex(new Vector3(bbox.maxs.X, bbox.mins.Y, bbox.mins.Z), Vector2.One), // Bottom left  - back,  Bottom left  - bottom, Bottom left  - left
             new Vertex(new Vector3(bbox.mins.X, bbox.mins.Y, bbox.mins.Z), Vector2.One), // Bottom right - back,  Bottom right - bottom, Bottom right - right
+        ];
+
+        // Initialize this brush's indices
+        indices =
+        [
+            0, 1, 3, 3, 1, 2,
+            1, 5, 2, 2, 5, 6,
+            5, 4, 6, 6, 4, 7,
+            4, 0, 7, 7, 0, 3,
+            3, 2, 7, 7, 2, 6,
+            4, 5, 0, 0, 5, 1,
         ];
 
 #if DEBUG

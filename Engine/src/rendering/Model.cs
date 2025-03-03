@@ -5,7 +5,7 @@ namespace Toast.Engine.Rendering;
 public class Model
 {
     public string path; // The direct path to the model's file
-    public ushort[] indices; // The amount of indices from this model
+    public uint[] indices; // The indices of this model
     public Vertex[] vertices; // The vertices from the model
 
     /// <summary>
