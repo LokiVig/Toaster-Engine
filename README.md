@@ -10,4 +10,4 @@ It most likely means the engine won't be as optimized as one made in, e.g. C++ w
 The provided solution file should be all you need to compile using VS22 or Rider. Do take note that the projects are all running on .NET SDK 9.0.
 
 ## Runtime
-During runtime you can press F12 on the window, then type "help" as a command to see the list of console commands that are accessible to you.
+During runtime you can press "~" on the window, then type "help" as a command to see the list of console commands that are accessible to you.
