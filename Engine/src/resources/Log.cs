@@ -46,7 +46,8 @@ public struct Log
         // Show information about the user's computer
         logWriter.WriteLine( "System Information" );
         logWriter.WriteLine( $"OS: {Environment.OSVersion} - \"{Environment.UserName}\" (\"{Environment.MachineName}\")" );
-        logWriter.WriteLine( $"CPU Cores: {Environment.ProcessorCount}" );
+        logWriter.WriteLine( $"CPU: {$"\"{Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER")}\"" ?? "Unknown"} - Cores: {Environment.ProcessorCount}" );
+        logWriter.WriteLine( $"RAM: {(int)Math.Ceiling(GC.GetGCMemoryInfo().TotalAvailableMemoryBytes / (1024f * 1024f * 1024f))} GB" );
         logWriter.WriteLine( $"C# Version: {Environment.Version}" );
 
         // Separator

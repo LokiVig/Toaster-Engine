@@ -10,7 +10,7 @@ using Toast.Engine.Entities;
 namespace Toast.Engine.Resources;
 
 /// <summary>
-/// A WTF, acronym for World Tracking File, describes all the entities and brushes of a map
+/// A WTF, acronym for Where's The Files?!, describes all the entities and brushes of a map
 /// </summary>
 public class WTF
 {

@@ -17,7 +17,7 @@ public static class EngineManager
     //			    Constants				 //
     //---------------------------------------//
 
-    private const string ENGINE_VERSION = "0.0.2";
+    public const string VERSION = "0.0.2";
 
     //---------------------------------------//
     //               Publics                 //
@@ -89,7 +89,7 @@ public static class EngineManager
         try
         {
             // Initialize the renderer
-            Renderer.Initialize( $"Toaster Engine (v.{ENGINE_VERSION}){( title != null ? $" - {title}" : "" )}" );
+            Renderer.Initialize( $"Toaster Engine (v.{VERSION}){( title != null ? $" - {title}" : "" )}" );
             Log.Success( "Successfully initialized renderer." );
         }
         catch ( Exception exc ) // Handle any exceptions we encounter!

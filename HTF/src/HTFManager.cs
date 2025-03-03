@@ -1,6 +1,9 @@
 ﻿using Toast.Engine.Resources;
 using Toast.Engine;
 using Toast.Engine.Rendering;
+using Toast.Engine.Resources.Console;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Toast.WTFEdit;
 
@@ -24,11 +27,15 @@ public class HTFManager
     public void Initialize()
     {
         // Initialize the engine
-        EngineManager.Initialize("HTF");
+        EngineManager.Initialize();
         EngineManager.OnUpdate += Update;
 
+        // Create HTF commands
+        CreateCommands();
+
         // !! DEBUG !! \\
-        SaveMap(new WTF("maps/test.wtf"));
+        SaveMap( new WTF( "maps/test.wtf" ) );
+        LoadMap( "maps/test.wtf" );
 
         // Start the engine's update function
         EngineManager.Update();
@@ -37,19 +44,85 @@ public class HTFManager
         EngineManager.Shutdown();
     }
 
+    private void CreateCommands()
+    {
+        // HTF Load Map
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "htf_loadmap",
+            description = "Loads a map from a specified path (e.g. \"maps/test.wtf\")",
+
+            onArgsCall = LoadMap
+        } );
+
+        // HTF Save Map
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "htf_savemap",
+            description = "Saves the currently loaded map.",
+
+            onCall = SaveMap,
+            onArgsCall = SaveMap
+        } );
+    }
+
     /// <summary>
     /// Things to do every frame
     /// </summary>
     private void Update()
     {
-        Renderer.SetWindowTitle( $"HTF{(currentFile == null ? "" : $" - \"{currentFile.path}\"{( isDirty ? "*" : "" )}" )}" );
+        Renderer.SetWindowTitle( $"HTF{( currentFile == null ? "" : $" - \"{currentFile.path}\"{( isDirty ? "*" : "" )}" )}" );
     }
 
-    private void LoadMap(string path)
+    /// <summary>
+    /// Loads a map through the console.
+    /// </summary>
+    /// <param name="args"></param>
+    private void LoadMap( List<object> args )
     {
-        currentFile = WTF.LoadFile(path);
+        // Get the current argument count
+        int argCount = args.Count - 1;
+
+        // Make sure we have the right argument count
+        if ( argCount > 1 || argCount < 1 )
+        {
+            Log.Error( "Invalid argument count! You need at least and at most 1 argument specifying the path to the map you want to load." );
+            return;
+        }
+
+        // If we say we're switching to map "null"...
+        if ( args[1].ToString() == "null" )
+        {
+            // Unload the map
+            UnloadMap();
+            return;
+        }
+
+        // If the specified file doesn't exist...
+        if ( !File.Exists( args[1].ToString() ) || !Path.Exists( args[1].ToString() ) )
+        {
+            // We've encountered an error!
+            Log.Error( $"File \"{args[1]}\" not found!" );
+            return;
+        }
+
+        // Load the map with the specified path
+        LoadMap( args[1].ToString() );
     }
 
+    /// <summary>
+    /// Loads a map from a specified path.
+    /// </summary>
+    /// <param name="path">The path to the map we wish to load.</param>
+    private void LoadMap( string path )
+    {
+        currentFile = WTF.LoadFile( path );
+        Log.Info( $"Successfully loaded map \"{path}\"!", true );
+    }
+
+    /// <summary>
+    /// Unloads the currently loaded map.
+    /// </summary>
     private void UnloadMap()
     {
         currentFile = null;
@@ -57,17 +130,42 @@ public class HTFManager
 
     private void SaveMap()
     {
-        if (currentFile == null)
+        if ( currentFile == null )
         {
-            Log.Error("Can't save map, because no map is loaded!");
+            Log.Error( "Can't save map, because no map is loaded!" );
             return;
         }
-        
-        WTF.SaveFile(currentFile?.path, currentFile);
+
+        WTF.SaveFile( currentFile?.path, currentFile );
+        Log.Info( $"Successfully saved map \"{currentFile.path}\"!", true );
     }
 
-    private void SaveMap(WTF inFile)
+    /// <summary>
+    /// Saves the current map to a specified path.
+    /// </summary>
+    private void SaveMap(List<object> args)
     {
-        WTF.SaveFile(inFile.path, inFile);
+        int argCount = args.Count - 1;
+
+        if ( argCount > 1 || argCount < 1 )
+        {
+            Log.Error( "Invalid argument count! You need at least one and at most 1 argument specifying the path to which you want to save the map to." );
+            return;
+        }
+
+        if ( currentFile == null )
+        {
+            Log.Error( "Can't save map, because no map is loaded!" );
+            return;
+        }
+
+        WTF.SaveFile( args[1].ToString(), currentFile );
+        Log.Info( $"Successfully saved map \"{currentFile.path}\"!", true );
+    }
+
+    private void SaveMap( WTF inFile )
+    {
+        WTF.SaveFile( inFile.path, inFile );
+        Log.Info( $"Successfully saved map \"{inFile.path}\"!", true );
     }
 }

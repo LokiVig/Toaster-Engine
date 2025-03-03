@@ -8,6 +8,10 @@ namespace Toast.Engine.Resources;
 
 public struct Ray
 {
+    public Vector3 start;
+    public Vector3 direction;
+    public object hit;
+
     /// <summary>
     /// Trace a ray from a specified starting position (<see cref="Vector3"/>) to a direction (<see cref="Vector3"/>), 
     /// with <see cref="RayIgnore"/> flags, specific <see langword="object"/>(s) to ignore, and lengths (<see langword="float"/>) 
@@ -165,6 +169,25 @@ public struct Ray
     }
 
     /// <summary>
+    /// Trace a ray from a specified starting position (<see cref="Vector3"/>) to a direction (<see cref="Vector3"/>),
+    /// with <see cref="RayIgnore"/> flags, specific <see langword="object"/>(s) to ignore, and lengths (<see langword="float"/>)
+    /// </summary>
+    /// <returns>A new ray with the specified start and direction, and potentially with the hit object, if hit.</returns>
+    public static Ray Trace( Vector3 rayStart, Vector3 rayDirection, RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, bool logInfo = true, float rayLength = 5000 )
+    {
+        Ray result = new Ray()
+        {
+            start = rayStart,
+            direction = rayDirection
+        };
+
+        Trace( rayStart, rayDirection, out object hitObject, rayIgnore, ignoredObjects, logInfo, rayLength );
+        result.hit = hitObject;
+
+        return result;
+    }
+
+    /// <summary>
     /// Trace a ray from a specified starting position (<see cref="Entity"/>) to a direction (<see cref="Entity"/>), 
     /// with <see cref="RayIgnore"/> flags, specific <see langword="object"/>(s) to ignore, and lengths (<see langword="float"/>) 
     /// </summary>
@@ -173,6 +196,16 @@ public struct Ray
     {
         // Return the default trace with the positions of the specified entities
         return Trace( entStart.GetPosition(), entDirection.GetPosition(), out hitObject, rayIgnore, ignoredObjects, logInfo, rayLength );
+    }
+
+    /// <summary>
+    /// Trace a ray from a specified starting position (<see cref="Entity"/>) to a direction (<see cref="Entity"/>), 
+    /// with <see cref="RayIgnore"/> flags, specific <see langword="object"/>(s) to ignore, and lengths (<see langword="float"/>) 
+    /// </summary>
+    /// <returns>A new ray with the specified start and direction, and potentially with the hit object, if hit.</returns>
+    public static Ray Trace( Entity entStart, Entity entDirection, RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, bool logInfo = true, float length = 5000 )
+    {
+        return Trace( entStart.GetPosition(), entDirection.GetPosition(), rayIgnore, ignoredObjects, logInfo, length );
     }
 
     /// <summary>
@@ -185,6 +218,15 @@ public struct Ray
         // Return the default trace with our rayStart argument, and the position of our entity we're aiming towards
         return Trace( rayStart, entDirection.GetPosition(), out hitObject, rayIgnore, ignoredObjects, logInfo, rayLength );
     }
+    /// <summary>
+    /// Trace a ray from a specified starting position (<see cref="Vector3"/>) to a direction (<see cref="Entity"/>), 
+    /// with <see cref="RayIgnore"/> flags, specific <see langword="object"/>(s) to ignore, and lengths (<see langword="float"/>) 
+    /// </summary>
+    /// <returns>A new ray with the specified start and direction, and potentially with the hit object, if hit.</returns>
+    public static Ray Trace( Vector3 rayStart, Entity entDirection, RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, bool logInfo = true, float rayLength = 5000 )
+    {
+        return Trace( rayStart, entDirection.GetPosition(), rayIgnore, ignoredObjects, logInfo, rayLength );
+    }
 
     /// <summary>
     /// Trace a ray from a specified starting position (<see cref="Entity"/>) to a direction (<see cref="Vector3"/>), 
@@ -195,6 +237,16 @@ public struct Ray
     {
         // Return the default trace with the position of our specified start entity, and the specified direction in Vector3'ness
         return Trace( entStart.GetPosition(), rayDirection, out hitObject, rayIgnore, ignoredObjects, logInfo, rayLength );
+    }
+
+    /// <summary>
+    /// Trace a ray from a specified starting position (<see cref="Entity"/>) to a direction (<see cref="Vector3"/>), 
+    /// with <see cref="RayIgnore"/> flags, specific <see langword="object"/>(s) to ignore, and lengths (<see langword="float"/>) 
+    /// </summary>
+    /// <returns>A new ray with the specified start and direction, and potentially with the hit object, if hit.</returns>
+    public static Ray Trace( Entity entStart, Vector3 rayDirection, RayIgnore rayIgnore = RayIgnore.None, object[] ignoredObjects = null, bool logInfo = true, float rayLength = 5000 )
+    {
+        return Trace( entStart.GetPosition(), rayDirection, rayIgnore, ignoredObjects, logInfo, rayLength );
     }
 
     /// <summary>

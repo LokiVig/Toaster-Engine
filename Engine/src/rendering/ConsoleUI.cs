@@ -46,8 +46,10 @@ public static class ConsoleUI
                 ImGui.EndChild();
             }
 
+            // If the window's focused...
             if ( ImGui.IsWindowFocused( ImGuiFocusedFlags.RootAndChildWindows ) && !ImGui.IsAnyItemActive() && !ImGui.IsMouseClicked( 0 ) )
             {
+                // Set they keyboard focus on our input
                 ImGui.SetKeyboardFocusHere( 0 );
             }
 
@@ -55,7 +57,6 @@ public static class ConsoleUI
             if ( ImGui.InputText( "##", ref input, 2048, ImGuiInputTextFlags.NoUndoRedo | ImGuiInputTextFlags.EnterReturnsTrue ) )
             {
                 ConsoleManager.TryCommand( input );
-
                 input = string.Empty;
             }
 
@@ -87,7 +88,6 @@ public static class ConsoleUI
     public static void WriteLine( string message )
     {
         // Add the argument message to our list of logs
-        logs.Add( $"({DateTime.Now.ToLongTimeString()}) : {message}\n" ); // TODO: Implement some way to determine if this
-                                                                          // log is from the engine, game, otherwise
+        logs.Add( $"({DateTime.Now.ToLongTimeString()}) : {message}\n" );
     }
 }

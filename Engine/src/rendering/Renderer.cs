@@ -154,7 +154,7 @@ public class Renderer
     /// <param name="newTitle">The window's new title.</param>
     public static void SetWindowTitle( string newTitle )
     {
-        window.Title = newTitle;
+        window.Title = $"Toaster Engine ({EngineManager.VERSION}) - {newTitle}";
     }
 
     /// <summary>
