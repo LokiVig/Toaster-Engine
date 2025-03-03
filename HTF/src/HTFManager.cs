@@ -1,11 +1,11 @@
-﻿using Toast.Engine.Resources;
+﻿using System.IO;
+using System.Collections.Generic;
+
 using Toast.Engine;
 using Toast.Engine.Rendering;
-using Toast.Engine.Resources.Console;
-using System.Collections.Generic;
-using System.IO;
+using Toast.Engine.Resources;
 using Toast.Engine.Resources.Input;
-using NativeFileDialogSharp;
+using Toast.Engine.Resources.Console;
 
 namespace Toast.WTFEdit;
 
@@ -147,15 +147,7 @@ public class HTFManager
     /// </summary>
     private void LoadMapThroughDialog()
     {
-        DialogResult result = Dialog.FileOpen( ".wtf", "maps/" );
-        
-        if ( !result.IsOk )
-        {
-            Log.Error($"Error loading map through dialog! \"{result.ErrorMessage}\"");
-            return;
-        }
 
-        LoadMap( result.Path );
     }
 
     /// <summary>
