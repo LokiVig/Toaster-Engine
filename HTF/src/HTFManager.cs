@@ -4,6 +4,8 @@ using Toast.Engine.Rendering;
 using Toast.Engine.Resources.Console;
 using System.Collections.Generic;
 using System.IO;
+using Toast.Engine.Resources.Input;
+using NativeFileDialogSharp;
 
 namespace Toast.WTFEdit;
 
@@ -49,20 +51,40 @@ public class HTFManager
         // HTF Load Map
         ConsoleManager.AddCommand( new ConsoleCommand
         {
-            alias = "htf_loadmap",
+            alias = "htf_load_map",
             description = "Loads a map from a specified path (e.g. \"maps/test.wtf\")",
 
             onArgsCall = LoadMap
         } );
 
+        // HTF Load Map (File Dialog)
+        ConsoleManager.AddCommand( new ConsoleCommand
+        {
+            alias = "htf_load_map_dialog",
+            description = "Loads a map from a specified path given from an opened file dialog.",
+
+            onCall = LoadMapThroughDialog
+        } );
+
         // HTF Save Map
         ConsoleManager.AddCommand( new ConsoleCommand
         {
-            alias = "htf_savemap",
+            alias = "htf_save_map",
             description = "Saves the currently loaded map.",
 
             onCall = SaveMap,
             onArgsCall = SaveMap
+        } );
+    }
+
+    private void CreateKeybinds()
+    {
+        // File browser for opening map files
+        InputManager.AddKeybind( new Keybind
+        {
+            alias = "open_file",
+            key = Veldrid.Key.AltLeft | Veldrid.Key.O,
+            commandAlias = "htf_load_map_dialog"
         } );
     }
 
@@ -118,6 +140,22 @@ public class HTFManager
     {
         currentFile = WTF.LoadFile( path );
         Log.Info( $"Successfully loaded map \"{path}\"!", true );
+    }
+
+    /// <summary>
+    /// Opens a file dialog to let the user specify the path to a map to load.
+    /// </summary>
+    private void LoadMapThroughDialog()
+    {
+        DialogResult result = Dialog.FileOpen( ".wtf", "maps/" );
+        
+        if ( !result.IsOk )
+        {
+            Log.Error($"Error loading map through dialog! \"{result.ErrorMessage}\"");
+            return;
+        }
+
+        LoadMap( result.Path );
     }
 
     /// <summary>
