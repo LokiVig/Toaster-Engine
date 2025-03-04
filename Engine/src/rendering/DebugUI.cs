@@ -32,7 +32,7 @@ public static class DebugUI
             ImGui.Separator();
 
             // Display map information
-            ImGui.Text( $"Active map: \"{EngineManager.currentFile.path}\"" );
+            ImGui.Text( $"Active map: \"{EngineManager.currentFile?.path ?? "N/A"}\"" );
 
             // Are we CHEATING?!
             ImGui.Text( $"Cheats enabled? {EngineManager.cheatsEnabled}" );

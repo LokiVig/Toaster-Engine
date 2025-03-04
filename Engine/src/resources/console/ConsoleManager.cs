@@ -31,7 +31,7 @@ public static class ConsoleManager
     /// <summary>
     /// Searches through this console manager's list of commands and returns one fitting with the argument <paramref name="commandAlias"/>.
     /// </summary>
-    public static ConsoleCommand FindCommand( string commandAlias )
+    public static ConsoleCommand GetCommand( string commandAlias )
     {
         // Check every command...
         foreach ( ConsoleCommand command in commands )
@@ -47,6 +47,17 @@ public static class ConsoleManager
         // We couldn't find one, log a warning and return null
         Log.Warning( $"Couldn't find command with the alias of \"{commandAlias}\"!" );
         return null;
+    }
+
+    /// <summary>
+    /// Searches through this console manager's list of commands to try and find a console command with the alias from <paramref name="commandAlias"/>.
+    /// </summary>
+    /// <param name="commandAlias">The alias of the command we wish to find.</param>
+    /// <param name="command">The resulting command.</param>
+    /// <returns><see langword="true"/> if we found a command, <see langword="false"/> otherwise.</returns>
+    public static bool TryGetCommand( string commandAlias, out ConsoleCommand command )
+    {
+        return ( command = GetCommand( commandAlias ) ) != null;
     }
 
     /// <summary>
@@ -153,7 +164,7 @@ public static class ConsoleManager
     public static void DisplayCommand( List<object> args )
     {
         // Find the command
-        ConsoleCommand command = FindCommand( (string)args[1] );
+        ConsoleCommand command = GetCommand( (string)args[1] );
 
         // If we have found command...
         if ( command != null )
@@ -169,7 +180,7 @@ public static class ConsoleManager
     public static void ToggleCommand( List<object> args )
     {
         // Find the command
-        ConsoleCommand command = FindCommand( (string)args[1] );
+        ConsoleCommand command = GetCommand( (string)args[1] );
 
         // If we did actually find a command...
         if ( command != null )
@@ -210,7 +221,7 @@ public static class ConsoleManager
             }
 
             // Find our command, either from the first variable of our args list, or directly from our input
-            ConsoleCommand command = FindCommand( args != null ? (string)args[0] : input );
+            ConsoleCommand command = GetCommand( args != null ? (string)args[0] : input );
 
             // Make sure our command actually is found...
             if ( command == null )

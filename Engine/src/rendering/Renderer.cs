@@ -29,7 +29,7 @@ public class Renderer
     /// Initializes a OpenGL rendered window with a specified title.
     /// </summary>
     /// <param name="title">The title of the window we wish to open.</param>
-    public static void Initialize( string title )
+    public static void Initialize( string title, WindowState initialWindowState = WindowState.Normal )
     {
         // Initialize default renderer console commands
         CreateConsoleCommands();
@@ -47,7 +47,8 @@ public class Renderer
         {
             WindowWidth = 1280,
             WindowHeight = 720,
-            WindowTitle = title
+            WindowTitle = title,
+            WindowInitialState = initialWindowState
         };
 
         windowCI.X = ( windowCI.WindowWidth - mode.w ) / 2;
@@ -154,7 +155,7 @@ public class Renderer
     /// <param name="newTitle">The window's new title.</param>
     public static void SetWindowTitle( string newTitle )
     {
-        window.Title = $"Toaster Engine (v. {EngineManager.VERSION}) - {newTitle}";
+        window.Title = $"Toaster Engine (v.{EngineManager.VERSION}) - {newTitle}";
     }
 
     /// <summary>

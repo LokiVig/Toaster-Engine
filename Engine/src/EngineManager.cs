@@ -55,7 +55,7 @@ public static class EngineManager
     /// Initialize a new Toaster Engine instance with an optional <paramref name="title"/> argument.
     /// </summary>
     /// <param name="title">The title this instance of Toaster Engine should run.</param>
-    public static void Initialize( string title = null )
+    public static void Initialize( string title = null, WindowState initialWindowState = WindowState.Normal )
     {
         // Initialize file logging
         Log.OpenLogFile();
@@ -89,7 +89,7 @@ public static class EngineManager
         try
         {
             // Initialize the renderer
-            Renderer.Initialize( $"Toaster Engine (v.{VERSION}){( title != null ? $" - {title}" : "" )}" );
+            Renderer.Initialize( $"Toaster Engine (v.{VERSION}){( title != null ? $" - {title}" : "" )}", initialWindowState );
             Log.Success( "Successfully initialized renderer." );
         }
         catch ( Exception exc ) // Handle any exceptions we encounter!

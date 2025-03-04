@@ -189,19 +189,19 @@ public static class InputManager
                 if ( keybind.down )
                 {
                     // Check if the key is actively being pressed down...
-                    if ( IsKeyDown( keybind.key ) )
+                    if ( IsKeyDown( keybind.key ) && ( keybind.comboKey != Key.Unknown ? IsKeyDown( keybind.comboKey ) : true ) )
                     {
                         // Find the console command appropriate to this keybind, and invoke it
-                        ConsoleManager.FindCommand( keybind.commandAlias ).onCall.Invoke();
+                        ConsoleManager.GetCommand( keybind.commandAlias )?.onCall.Invoke();
                     }
                 }
                 else // Otherwise, if the keybind only supports being pressed...
                 {
                     // Check if the key has just been pressed...
-                    if ( IsKeyPressed( keybind.key ) )
+                    if ( IsKeyPressed( keybind.key ) && ( keybind.comboKey != Key.Unknown ? IsKeyDown( keybind.comboKey ) : true ) )
                     {
                         // Find the console command appropriate to this keybind, and invoke it
-                        ConsoleManager.FindCommand( keybind.commandAlias ).onCall.Invoke();
+                        ConsoleManager.GetCommand( keybind.commandAlias )?.onCall.Invoke();
                     }
                 }
             }
@@ -211,7 +211,9 @@ public static class InputManager
     /// <summary>
     /// Finds a keybind from a specified alias.
     /// </summary>
-    public static Keybind FindKeybind( string alias )
+    /// <param name="alias">The alias of the keybind we want to find.</param>
+    /// <returns>Returns the found keybind, or <see langword="null"/> if no keybind was found.</returns>
+    public static Keybind GetKeybind( string alias )
     {
         // Check every keybind...
         foreach ( Keybind keybind in keybinds )
@@ -229,6 +231,17 @@ public static class InputManager
     }
 
     /// <summary>
+    /// Tries to find a keybind from a specified alias.
+    /// </summary>
+    /// <param name="alias">The alias of the keybind we want to find.</param>
+    /// <param name="keybind">The resulting keybind.</param>
+    /// <returns><see langword="true"/> if the keybind was found, <see langword="false"/> otherwise.</returns>
+    public static bool TryGetKeybind( string alias, out Keybind keybind )
+    {
+        return ( keybind = GetKeybind( alias ) ) != null;
+    }
+
+    /// <summary>
     /// Changes a keybind through the console.
     /// </summary>
     public static void EditKeybind( List<object> args )
@@ -236,34 +249,59 @@ public static class InputManager
         int argCount = args.Count - 1; // The amount of provided arguments (-1 because the first argument is the command itself in this case)
         Keybind bindToEdit = null; // The bind we're going to edit
 
+        Key key = Key.Unknown; // The forced, base key we should press to trigger this keybind
+        Key comboKey = Key.Unknown; // The optional, additional key we should bind this keybind with
+
         // Make sure we have the right amount of arguments!
-        if ( argCount < 2 || argCount > 4 )
+        if ( argCount < 2 || argCount > 5 )
         {
-            Log.Warning( "Invalid amount of arguments! You need at least 2 arguments, and at most 4, one for the alias of the keybind you want to change, and the other for the key you want to change it to!" );
+            Log.Warning( "Invalid amount of arguments! You need at least 2 arguments, and at most 5, one for the alias of the keybind you want to change, and the other for the key you want to change it to!" );
             return;
         }
 
         // If we're not making a new keybind...
-        if ( argCount < 3 )
+        if ( argCount < 4 )
         {
             // If we can't find a bind from our first argument...
-            if ( ( bindToEdit = FindKeybind( (string)args[1] ) ) == null )
+            if ( !TryGetKeybind( (string)args[1], out bindToEdit ) )
             {
                 Log.Warning( $"Couldn't find keybind with the alias of \"{args[1]}\"!" );
                 return;
             }
         }
 
-        // If we didn't successfully find a key from our second argument...
-        if ( !Enum.TryParse( (string)args[2], true, out Key key ) )
+        // If we're featuring a comboKey argument...
+        if ( argCount >= 3 )
         {
-            // Log such!
-            Log.Warning( $"\"{args[2]}\" is not a valid Key!" );
-            return;
+            // If we didn't successfully find a key from our second argument (comboKey)...
+            if ( !Enum.TryParse( (string)args[2], true, out comboKey ) )
+            {
+                // Log such!
+                Log.Warning( $"\"{args[2]}\" is not a valid Key!" );
+                return;
+            }
+
+            // If we didn't successfully find a key from our third argument (key)...
+            if ( !Enum.TryParse( (string)args[3], true, out key ) )
+            {
+                // Log such!
+                Log.Warning( $"\"{args[3]}\" is not a valid Key!" );
+                return;
+            }
+        }
+        else // Otherwise...
+        {
+            // If we didn't successfully find a key from our second argument...
+            if ( !Enum.TryParse( (string)args[2], true, out key ) )
+            {
+                // Log such!
+                Log.Warning( $"\"{args[2]}\" is not a valid Key!" );
+                return;
+            }
         }
 
-        // If we have more or equal to 3 arguments...
-        if ( argCount >= 3 )
+        // If we have 4 or more arguments...
+        if ( argCount >= 4 )
         {
             bool down = false; // Default down value
 
@@ -278,18 +316,18 @@ public static class InputManager
             }
 
             // Make sure the third argument corresponds to an actual command
-            if ( ConsoleManager.FindCommand( (string)args[3] ) == null )
+            if ( !ConsoleManager.TryGetCommand( (string)args[4], out _ ) )
             {
-                Log.Warning( $"There's no command with the alias of \"{args[3]}\"!" );
+                Log.Warning( $"There's no command with the alias of \"{args[4]}\"!" );
                 return;
             }
 
             // If we have the bool to determine if the keybind can be held...
-            if ( argCount == 4 )
+            if ( argCount == 5 )
             {
-                if ( !bool.TryParse( (string)args[4], out down ) )
+                if ( !bool.TryParse( (string)args[5], out down ) )
                 {
-                    Log.Warning( $"Couldn't parse \"{args[4]}\" to bool!" );
+                    Log.Warning( $"Couldn't parse \"{args[5]}\" to bool!" );
                     return;
                 }
             }
@@ -297,18 +335,20 @@ public static class InputManager
             // Make a new keybind
             Keybind kb = new Keybind();
             kb.alias = (string)args[1]; // The alias of the keybind should be the first argument
-            kb.key = key; // The key is the second argument
+            kb.key = key; // The base key
+            kb.comboKey = comboKey; // The optional, combo key
             kb.commandAlias = (string)args[3]; // The command alias is the third
             kb.down = down; // Even if we didn't have the 4th argument, we should set our newly made keybind's hold functionality to the default
 
             // Add the new keybind to our list of keybinds
             AddKeybind( kb );
-            Log.Info( $"Successfully added new keybind \"{args[1]}\" (key: \"{args[2]}\"), command: \"{args[3]}\", hold: {(argCount < 4 ? "False" : down)}" ); // Log our success
+            Log.Info( $"Successfully added new keybind \"{args[1]}\" (key: \"{( comboKey == Key.Unknown ? key : $"{comboKey}+{key}" )}\"), command: \"{args[3]}\", hold: {( argCount < 5 ? "False" : down )}" ); // Log our success
             return;
         }
 
-        bindToEdit.key = key; // Change the bind's key!
-        Log.Info( $"Successfully bound action \"{args[1]}\" to key \"{args[2]}\"!", true ); // Log our success
+        bindToEdit.key = key; // Change the bind's key
+        bindToEdit.comboKey = comboKey; // Change the bind's combo key, too
+        Log.Info( $"Successfully bound action \"{args[1]}\" to key \"{( comboKey == Key.Unknown ? key : $"{comboKey}+{key}" )}\"!", true ); // Log our success
     }
 
     /// <summary>
@@ -327,7 +367,7 @@ public static class InputManager
         }
 
         // If we can't find a keybind from our fist argument...
-        if ( ( bindToEdit = FindKeybind( (string)args[1] ) ) == null )
+        if ( !TryGetKeybind( (string)args[1], out bindToEdit ) )
         {
             Log.Warning( $"Couldn't find keybind with the alias of \"{args[1]}\"!" );
             return;
@@ -349,7 +389,7 @@ public static class InputManager
         foreach ( Keybind keybind in keybinds )
         {
             // Log its information! (Alias, currently bound key and associated command)
-            Log.Info( $"\tAlias: \"{keybind.alias}\" - Key: {(keybind.key == Key.Unknown ? "Unbound" : $"\"{keybind.key}\"")} - Command: \"{keybind.commandAlias}\" - Supports Being Held Down? {keybind.down}" );
+            Log.Info( $"\tAlias: \"{keybind.alias}\" - Key: {( keybind.key == Key.Unknown ? "Unbound" : $"\"{( keybind.comboKey == Key.Unknown ? keybind.key : $"{keybind.comboKey}+{keybind.key}" )}\"" )} - Command: \"{keybind.commandAlias}\" - Supports Being Held Down? {keybind.down}" );
         }
     }
 

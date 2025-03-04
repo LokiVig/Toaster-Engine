@@ -6,6 +6,7 @@ using Toast.Engine.Rendering;
 using Toast.Engine.Resources;
 using Toast.Engine.Resources.Input;
 using Toast.Engine.Resources.Console;
+using System;
 
 namespace Toast.WTFEdit;
 
@@ -34,6 +35,9 @@ public class HTFManager
 
         // Create HTF commands
         CreateCommands();
+
+        // Create HTF keybinds
+        CreateKeybinds();
 
         // !! DEBUG !! \\
         SaveMap( new WTF( "maps/test.wtf" ) );
@@ -83,8 +87,17 @@ public class HTFManager
         InputManager.AddKeybind( new Keybind
         {
             alias = "open_file",
-            key = Veldrid.Key.AltLeft | Veldrid.Key.O,
+            key = Veldrid.Key.O,
+            comboKey = Veldrid.Key.ControlLeft,
             commandAlias = "htf_load_map_dialog"
+        } );
+
+        InputManager.AddKeybind( new Keybind
+        {
+            alias = "save_file",
+            key = Veldrid.Key.S,
+            comboKey = Veldrid.Key.ControlLeft,
+            commandAlias = "htf_save_map"
         } );
     }
 
@@ -147,7 +160,7 @@ public class HTFManager
     /// </summary>
     private void LoadMapThroughDialog()
     {
-
+        Log.Error( "This feature is not yet implemented! Go fuck yourself!" );
     }
 
     /// <summary>
