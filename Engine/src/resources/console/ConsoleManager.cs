@@ -1,13 +1,14 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Collections.Generic;
 
 using Newtonsoft.Json;
 
 using DynamicExpresso;
-using System.Linq;
-using Toast.Engine.Resources.Attributes;
-using System.Reflection;
+
+using Toast.Engine.Attributes;
 
 namespace Toast.Engine.Resources.Console;
 
@@ -259,6 +260,7 @@ public static class ConsoleManager
     /// <summary>
     /// Toggles a command through the console.
     /// </summary>
+    [ConsoleCommand("togglecommand", "Disables or enables a specific console command." )]
     public static void ToggleCommand( List<object> args )
     {
         // Find the command

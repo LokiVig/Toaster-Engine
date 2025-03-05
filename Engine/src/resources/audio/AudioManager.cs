@@ -6,6 +6,7 @@ using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 
 using Toast.Engine.Entities;
+using Toast.Engine.Attributes;
 
 namespace Toast.Engine.Resources.Audio;
 
@@ -25,6 +26,7 @@ public static class AudioManager
     /// <summary>
     /// Plays a sound from the console.
     /// </summary>
+    [ConsoleCommand( "playsound", "Plays a sound from a specified path (should be something like \"resources/audio/engine/error.mp3\".)" )]
     public static void PlaySound( List<object> args )
     {
         // The amount of arguments (-1 cause the first one is always the command itself)
@@ -197,6 +199,7 @@ public static class AudioManager
     /// <summary>
     /// Method to stop all currently playing sounds.
     /// </summary>
+    [ConsoleCommand( "stopsound", "Stops all actively playing sounds." )]
     public static void StopAllSounds()
     {
         // For every playing file...
@@ -233,6 +236,7 @@ public static class AudioManager
     /// <summary>
     /// Displays the list of actively playing files.
     /// </summary>
+    [ConsoleCommand( "displaysounds", "Displays all currently playing audio files." )]
     public static void DisplayPlayingFiles()
     {
         Log.Info( "Actively playing files:" );

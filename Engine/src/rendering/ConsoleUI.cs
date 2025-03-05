@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 using ImGuiNET;
 
+using Toast.Engine.Attributes;
 using Toast.Engine.Resources.Console;
-using Toast.Engine.Resources.Attributes;
 
 namespace Toast.Engine.Rendering;
 

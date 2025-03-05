@@ -5,10 +5,10 @@ using Veldrid;
 
 using Toast.Engine.Rendering;
 using Toast.Engine.Resources;
+using Toast.Engine.Attributes;
 using Toast.Engine.Resources.Input;
 using Toast.Engine.Resources.Audio;
 using Toast.Engine.Resources.Console;
-using Toast.Engine.Resources.Attributes;
 
 namespace Toast.Engine;
 
@@ -104,130 +104,6 @@ public static class EngineManager
     }
 
     /// <summary>
-    /// Initializes the most basic of console commands.
-    /// </summary>
-    private static void CreateConsoleCommands()
-    {
-        // Console
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "console",
-            description = "",
-
-            onCall = ToggleConsole
-        } );
-
-        // Help
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "help",
-            description = "",
-
-            onCall = ConsoleManager.DisplayCommands,
-            onArgsCall = ConsoleManager.DisplayCommand
-        } );
-
-        // Cheats
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "cheats",
-            description = "",
-
-            onCall = ToggleCheats
-        } );
-
-        // Open debug (UI)
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "debug",
-            description = "",
-
-            onCall = ToggleDebug
-        } );
-
-        // Play sound
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "playsound",
-            description = "Plays a sound from a specified path (should be something like \"resources/audio/engine/error.mp3\".)",
-
-            onArgsCall = AudioManager.PlaySound
-        } );
-
-        // Display sounds
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "displaysounds",
-            description = "Displays all currently playing audio files.",
-
-            onCall = AudioManager.DisplayPlayingFiles
-        } );
-
-        // Stop sound(s)
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "stopsound",
-            description = "Stops all actively playing sounds.",
-
-            onCall = AudioManager.StopAllSounds
-        } );
-
-        // Bind
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "bind",
-            description = "Binds a key to an action defined by an alias.",
-
-            onArgsCall = InputManager.EditKeybind
-        } );
-
-        // Display binds
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "displaybinds",
-            description = "Displays all bindings.",
-
-            onCall = InputManager.DisplayKeybinds
-        } );
-
-        // Unbind
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "unbind",
-            description = "Unbinds a key from an action. (Effectively just sets its key value to \"Unknown\".)",
-
-            onArgsCall = InputManager.UnbindKeybind
-        } );
-
-        // Remove Bind
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "removebind",
-            description = "Removes a bind outright from our list of binds.",
-
-            onArgsCall = InputManager.RemoveKeybind
-        } );
-
-        // Toggle command
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "togglecommand",
-            description = "Disables or enables a specific console command.",
-
-            onArgsCall = ConsoleManager.ToggleCommand
-        } );
-
-        // Quit
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "quit",
-            description = "Shuts the engine down entirely.",
-
-            onCall = EngineShutdown
-        } );
-    }
-
-    /// <summary>
     /// Initializes engine-wide keybinds.
     /// </summary>
     private static void CreateKeybinds()
@@ -260,7 +136,7 @@ public static class EngineManager
     /// <summary>
     /// Toggles the debug UI. Mainly used with console commands.
     /// </summary>
-    [ConsoleCommand("debug", "Toggles the debug UI menu, displaying specific engine and game information.", CommandConditions.Cheats )]
+    [ConsoleCommand( "debug", "Toggles the debug UI menu, displaying specific engine and game information.", CommandConditions.Cheats )]
     private static void ToggleDebug()
     {
         debugOpen = !debugOpen;
@@ -269,7 +145,7 @@ public static class EngineManager
     /// <summary>
     /// Toggles whether or not cheats are enabled. Mainly used with console commands.
     /// </summary>
-    [ConsoleCommand("cheats", "Toggles whether or not cheats are enabled." )]
+    [ConsoleCommand( "cheats", "Toggles whether or not cheats are enabled." )]
     private static void ToggleCheats()
     {
         cheatsEnabled = !cheatsEnabled;
@@ -339,6 +215,7 @@ public static class EngineManager
     /// <summary>
     /// Used primarily for the "quit" console command, instantly closes the application with the code 0.
     /// </summary>
+    [ConsoleCommand( "quit", "Shuts the engine down entirely." )]
     public static void EngineShutdown()
     {
         Shutdown(); // Call the regular shutdown function

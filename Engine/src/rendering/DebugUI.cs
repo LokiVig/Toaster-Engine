@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using ImGuiNET;
 
 using Toast.Engine.Entities;
+using Toast.Engine.Resources;
 using Toast.Engine.Entities.Brushes;
 using Toast.Engine.Entities.Tools;
-using Toast.Engine.Resources;
+using System;
 
 namespace Toast.Engine.Rendering;
 
@@ -118,19 +119,14 @@ public static class DebugUI
 
                             if ( ImGui.BeginCombo( "Trigger Type", $"{trigger.triggerType}", ImGuiComboFlags.WidthFitPreview ) )
                             {
-                                if ( ImGui.Selectable( $"{TriggerType.Once}" ) )
-                                {
-                                    trigger.triggerType = TriggerType.Once;
-                                }
+                                TriggerType[] triggerTypes = Enum.GetValues<TriggerType>();
 
-                                if ( ImGui.Selectable( $"{TriggerType.Multiple}" ) )
+                                for ( int j = 0; j < triggerTypes.Length; j++ )
                                 {
-                                    trigger.triggerType = TriggerType.Multiple;
-                                }
-
-                                if ( ImGui.Selectable( $"{TriggerType.Count}" ) )
-                                {
-                                    trigger.triggerType = TriggerType.Count;
+                                    if ( ImGui.Selectable( triggerTypes[j].ToString() ) )
+                                    {
+                                        trigger.triggerType = triggerTypes[j];
+                                    }
                                 }
 
                                 ImGui.EndCombo();
@@ -138,19 +134,14 @@ public static class DebugUI
 
                             if ( ImGui.BeginCombo( "Trigger By", $"{trigger.triggerBy}", ImGuiComboFlags.WidthFitPreview ) )
                             {
-                                if ( ImGui.Selectable( $"{TriggerBy.All}" ) )
-                                {
-                                    trigger.triggerBy = TriggerBy.All;
-                                }
+                                TriggerBy[] triggerBys = Enum.GetValues<TriggerBy>();
 
-                                if ( ImGui.Selectable( $"{TriggerBy.Player}" ) )
+                                for ( int j = 0; j < triggerBys.Length; j++ )
                                 {
-                                    trigger.triggerBy = TriggerBy.Player;
-                                }
-
-                                if ( ImGui.Selectable( $"{TriggerBy.NPC}" ) )
-                                {
-                                    trigger.triggerBy = TriggerBy.NPC;
+                                    if ( ImGui.Selectable( triggerBys[j].ToString() ) )
+                                    {
+                                        trigger.triggerBy = triggerBys[j];
+                                    }
                                 }
 
                                 ImGui.EndCombo();
@@ -158,19 +149,14 @@ public static class DebugUI
 
                             if ( ImGui.BeginCombo( "Trigger On", $"{trigger.triggerOn}", ImGuiComboFlags.WidthFitPreview ) )
                             {
-                                if ( ImGui.Selectable( $"{TriggerOn.Trigger}" ) )
-                                {
-                                    trigger.triggerOn = TriggerOn.Trigger;
-                                }
+                                TriggerOn[] triggerOns = Enum.GetValues<TriggerOn>();
 
-                                if ( ImGui.Selectable( $"{TriggerOn.Enter}" ) )
+                                for ( int j = 0; j < triggerOns.Length; j++ )
                                 {
-                                    trigger.triggerOn = TriggerOn.Enter;
-                                }
-
-                                if ( ImGui.Selectable( $"{TriggerOn.Exit}" ) )
-                                {
-                                    trigger.triggerOn = TriggerOn.Exit;
+                                    if ( ImGui.Selectable( triggerOns[j].ToString() ) )
+                                    {
+                                        trigger.triggerOn = triggerOns[j];
+                                    }
                                 }
 
                                 ImGui.EndCombo();
@@ -192,67 +178,20 @@ public static class DebugUI
 
                             ImGui.Separator();
 
-                            #region ENTITY_EVENTS
                             if ( ImGui.BeginCombo( "Entity Event", $"{trigger.targetEvent}", ImGuiComboFlags.WidthFitPreview ) )
                             {
-                                if ( ImGui.Selectable( $"{EntityEvent.None}" ) )
-                                {
-                                    trigger.targetEvent = EntityEvent.None;
-                                }
+                                EntityEvent[] entityEvents = Enum.GetValues<EntityEvent>();
 
-                                if ( ImGui.Selectable( $"{EntityEvent.Kill}" ) )
+                                for ( int j = 0; j < entityEvents.Length; j++ )
                                 {
-                                    trigger.targetEvent = EntityEvent.Kill;
-                                }
-
-                                if ( ImGui.Selectable( $"{EntityEvent.Delete}" ) )
-                                {
-                                    trigger.targetEvent = EntityEvent.Delete;
-                                }
-
-                                if ( ImGui.Selectable( $"{EntityEvent.SetHealth}" ) )
-                                {
-                                    trigger.targetEvent = EntityEvent.SetHealth;
-                                }
-
-                                if ( ImGui.Selectable( $"{EntityEvent.TakeDamage}" ) )
-                                {
-                                    trigger.targetEvent = EntityEvent.TakeDamage;
-                                }
-
-                                if ( ImGui.Selectable( $"{EntityEvent.SetPosition}" ) )
-                                {
-                                    trigger.targetEvent = EntityEvent.SetPosition;
-                                }
-
-                                if ( ImGui.Selectable( $"{EntityEvent.SetBBox}" ) )
-                                {
-                                    trigger.targetEvent = EntityEvent.SetBBox;
-                                }
-
-                                if ( ImGui.Selectable( $"{EntityEvent.SpawnEntity}" ) )
-                                {
-                                    trigger.targetEvent = EntityEvent.SpawnEntity;
-                                }
-
-                                if ( ImGui.Selectable( $"{EntityEvent.SetRotation}" ) )
-                                {
-                                    trigger.targetEvent = EntityEvent.SetRotation;
-                                }
-
-                                if ( ImGui.Selectable( $"{EntityEvent.PlaySound}" ) )
-                                {
-                                    trigger.targetEvent = EntityEvent.PlaySound;
-                                }
-
-                                if ( ImGui.Selectable( $"{EntityEvent.StopSound}" ) )
-                                {
-                                    trigger.targetEvent = EntityEvent.StopSound;
+                                    if ( ImGui.Selectable( entityEvents[j].ToString() ) )
+                                    {
+                                        trigger.targetEvent = entityEvents[j];
+                                    }
                                 }
 
                                 ImGui.EndCombo();
                             }
-                            #endregion
 
                             #region TRIGGER_VALUES
                             ImGui.Separator();

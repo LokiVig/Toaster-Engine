@@ -2,7 +2,7 @@
 
 using Toast.Engine.Resources.Console;
 
-namespace Toast.Engine.Resources.Attributes;
+namespace Toast.Engine.Attributes;
 
 /// <summary>
 /// Marks this method as a console command usable in the engine through the console.

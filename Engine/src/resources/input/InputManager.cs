@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 
 using Veldrid;
 
+using Toast.Engine.Attributes;
 using Toast.Engine.Resources.Console;
 
 namespace Toast.Engine.Resources.Input;
@@ -71,6 +72,7 @@ public static class InputManager
     /// <summary>
     /// Removes a keybind from our list of keybinds through a console command.
     /// </summary>
+    [ConsoleCommand("removebind", "Removes a bind outright from our list of binds." )]
     public static void RemoveKeybind( List<object> args )
     {
         // Get the count of arguments
@@ -244,6 +246,7 @@ public static class InputManager
     /// <summary>
     /// Changes a keybind through the console.
     /// </summary>
+    [ConsoleCommand("bind", "Binds a key to an action defined by an alias." )]
     public static void EditKeybind( List<object> args )
     {
         int argCount = args.Count - 1; // The amount of provided arguments (-1 because the first argument is the command itself in this case)
@@ -354,6 +357,7 @@ public static class InputManager
     /// <summary>
     /// Unbinds a keybind through the console.
     /// </summary>
+    [ConsoleCommand("unbind", "Unbinds a key from an action. (Effectively just sets its key value to \"Unknown\".)" )]
     public static void UnbindKeybind( List<object> args )
     {
         int argCount = args.Count - 1; // The amount of provided arguments (-1 because the first argument is the command itself in this case)
@@ -380,6 +384,7 @@ public static class InputManager
     /// <summary>
     /// Logs all keybinds to the console.
     /// </summary>
+    [ConsoleCommand("displaybinds", "Displays all bindings." )]
     public static void DisplayKeybinds()
     {
         // Introductory log

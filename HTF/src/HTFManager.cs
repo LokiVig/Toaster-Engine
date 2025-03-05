@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using Toast.Engine;
 using Toast.Engine.Rendering;
 using Toast.Engine.Resources;
+using Toast.Engine.Attributes;
 using Toast.Engine.Resources.Input;
 using Toast.Engine.Resources.Console;
-using System;
-using Toast.Engine.Resources.Attributes;
 
 namespace Toast.WTFEdit;
 

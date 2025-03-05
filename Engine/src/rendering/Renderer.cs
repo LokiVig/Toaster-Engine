@@ -9,7 +9,7 @@ using ImGuiNET;
 using Toast.Engine.Entities;
 using Toast.Engine.Resources;
 using Toast.Engine.Resources.Console;
-using Toast.Engine.Resources.Attributes;
+using Toast.Engine.Attributes;
 
 namespace Toast.Engine.Rendering;
 
@@ -98,9 +98,9 @@ public class Renderer
     }
 
     /// <summary>
-    /// Sets the renderer's window title to <paramref name="newTitle"/>.
+    /// Sets the renderer's window title to <paramref name="args"/>.
     /// </summary>
-    /// <param name="newTitle">The window's new title.</param>
+    /// <param name="args">The window's new title.</param>
     [ConsoleCommand( "r_setwindowtitle", "Sets the renderer's window's title to the argument string.", CommandConditions.Cheats )]
     public static void SetWindowTitle( List<object> args )
     {
@@ -113,6 +113,15 @@ public class Renderer
         }
 
         window.Title = $"Toaster Engine (v.{EngineManager.VERSION}) - {args[1]}";
+    }
+
+    /// <summary>
+    /// Sets the renderer's window title to <paramref name="newTitle"/>.
+    /// </summary>
+    /// <param name="newTitle">The window's new title.</param>
+    public static void SetWindowTitle( string newTitle )
+    {
+        window.Title = $"Toaster Engine (v.{EngineManager.VERSION}) - {newTitle}";
     }
 
     /// <summary>
