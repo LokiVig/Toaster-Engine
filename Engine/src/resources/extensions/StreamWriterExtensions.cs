@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Toast.Engine.Resources;
+namespace Toast.Engine.Resources.Extensions;
 
 public static class StreamWriterExtensions
 {

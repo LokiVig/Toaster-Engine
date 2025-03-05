@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using ImGuiNET;
 
 using Toast.Engine.Resources.Console;
+using Toast.Engine.Resources.Attributes;
 
 namespace Toast.Engine.Rendering;
 
@@ -76,6 +77,7 @@ public static class ConsoleUI
     /// <summary>
     /// Clear the console of all logs
     /// </summary>
+    [ConsoleCommand("clear", "Clears the console's logs. (Does NOT clear the log file!)")]
     public static void Clear()
     {
         // Simply call the log list's clear function

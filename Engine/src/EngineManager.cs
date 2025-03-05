@@ -8,6 +8,7 @@ using Toast.Engine.Resources;
 using Toast.Engine.Resources.Input;
 using Toast.Engine.Resources.Audio;
 using Toast.Engine.Resources.Console;
+using Toast.Engine.Resources.Attributes;
 
 namespace Toast.Engine;
 
@@ -68,7 +69,7 @@ public static class EngineManager
         if ( !ConsoleManager.LoadCommands() )
         {
             // Create default console commands
-            CreateConsoleCommands();
+            ConsoleManager.RegisterCommands();
         }
 
         // If we couldn't load our keybinds file...
@@ -78,8 +79,8 @@ public static class EngineManager
             CreateKeybinds();
         }
 #else
-        // Create default console commands
-        CreateConsoleCommands();
+        // Register the default console commands
+        ConsoleManager.RegisterCommands();
 
         // Create default keybinds
         CreateKeybinds();
@@ -107,20 +108,11 @@ public static class EngineManager
     /// </summary>
     private static void CreateConsoleCommands()
     {
-        // Clear
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "clear",
-            description = "Clears the console's logs. (Does NOT clear the log file!)",
-
-            onCall = ConsoleUI.Clear
-        } );
-
         // Console
         ConsoleManager.AddCommand( new ConsoleCommand
         {
             alias = "console",
-            description = "Toggles the display of the console.",
+            description = "",
 
             onCall = ToggleConsole
         } );
@@ -129,7 +121,7 @@ public static class EngineManager
         ConsoleManager.AddCommand( new ConsoleCommand
         {
             alias = "help",
-            description = "Displays information about a command, or the list of available commands.",
+            description = "",
 
             onCall = ConsoleManager.DisplayCommands,
             onArgsCall = ConsoleManager.DisplayCommand
@@ -139,7 +131,7 @@ public static class EngineManager
         ConsoleManager.AddCommand( new ConsoleCommand
         {
             alias = "cheats",
-            description = "Toggles whether or not cheats are enabled.",
+            description = "",
 
             onCall = ToggleCheats
         } );
@@ -148,7 +140,7 @@ public static class EngineManager
         ConsoleManager.AddCommand( new ConsoleCommand
         {
             alias = "debug",
-            description = "Toggles the debug UI menu, displaying specific engine and game information.",
+            description = "",
 
             onCall = ToggleDebug
         } );
@@ -259,6 +251,7 @@ public static class EngineManager
     /// <summary>
     /// Toggles the console. Mainly used with console commands.
     /// </summary>
+    [ConsoleCommand( "console", "Toggles the display of the console." )]
     private static void ToggleConsole()
     {
         consoleOpen = !consoleOpen;
@@ -267,6 +260,7 @@ public static class EngineManager
     /// <summary>
     /// Toggles the debug UI. Mainly used with console commands.
     /// </summary>
+    [ConsoleCommand("debug", "Toggles the debug UI menu, displaying specific engine and game information.", true )]
     private static void ToggleDebug()
     {
         debugOpen = !debugOpen;
@@ -275,10 +269,11 @@ public static class EngineManager
     /// <summary>
     /// Toggles whether or not cheats are enabled. Mainly used with console commands.
     /// </summary>
+    [ConsoleCommand("cheats", "Toggles whether or not cheats are enabled." )]
     private static void ToggleCheats()
     {
         cheatsEnabled = !cheatsEnabled;
-        Log.Info( $"{(cheatsEnabled ? "Enabled" : "Disabled")} cheats!", true );
+        Log.Info( $"{( cheatsEnabled ? "Enabled" : "Disabled" )} cheats!", true );
     }
 
     /// <summary>

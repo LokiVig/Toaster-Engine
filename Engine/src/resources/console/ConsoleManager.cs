@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 
 using DynamicExpresso;
+using System.Linq;
+using Toast.Engine.Resources.Attributes;
+using System.Reflection;
 
 namespace Toast.Engine.Resources.Console;
 
@@ -24,6 +27,28 @@ public static class ConsoleManager
     /// </summary>
     public static void AddCommand( ConsoleCommand command )
     {
+        // Check every command...
+        for ( int i = 0; i < commands.Count; i++ )
+        {
+            // If we already feature this command (found from the alias)...
+            if ( commands[i].alias == command.alias )
+            {
+                // If we have an onCall command...
+                if ( command.onCall != InvalidCommand )
+                {
+                    // Apply the onCall!
+                    commands[i].onCall = command.onCall;
+                    return;
+                }
+                else if ( command.onArgsCall != InvalidCommand ) // Otherwise, if we have an argument call...
+                {
+                    // Apply the onArgsCall!
+                    commands[i].onArgsCall = command.onArgsCall;
+                    return;
+                }
+            }
+        }
+
         // Simply add the argument command to the list
         commands.Add( command );
     }
@@ -108,6 +133,9 @@ public static class ConsoleManager
         return false;
     }
 
+    /// <summary>
+    /// Saves our commands to the default commands dictionary file.
+    /// </summary>
     public static void SaveCommands()
     {
         // Create a new file at the default path
@@ -135,6 +163,43 @@ public static class ConsoleManager
     }
 
     /// <summary>
+    /// Registers every single console command that features <see cref="ConsoleCommandAttribute"/>.
+    /// </summary>
+    public static void RegisterCommands()
+    {
+        // Get the list of methods using the console command attribute
+        IEnumerable<MethodInfo> methods = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany( assembly => assembly.GetTypes() )
+                .SelectMany( type => type.GetMethods( BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic ) )
+                .Where( method => method.GetCustomAttribute<ConsoleCommandAttribute>() != null );
+
+        // For every method...
+        foreach ( MethodInfo method in methods )
+        {
+            // Get the attribute
+            ConsoleCommandAttribute attribute = method.GetCustomAttribute<ConsoleCommandAttribute>();
+
+            // Get the action and argumented method
+            Action onCall = (Action)Delegate.CreateDelegate( typeof( Action ), method );
+            Action<List<object>> onArgsCall = onCall == null ? (Action<List<object>>)Delegate.CreateDelegate( typeof( Action<List<object>> ), method ) : InvalidCommand ;
+
+            // Make a new console command
+            ConsoleCommand command = new ConsoleCommand
+            {
+                alias = attribute.alias, // The alias of the console command
+                description = attribute.description, // The description of the console command
+                requiresCheats = attribute.requiresCheats, // Determines whether or not this command requires cheats to be called
+
+                onCall = onCall, // Regular call method
+                onArgsCall = onArgsCall, // Argumented call method
+            };
+
+            // Add the command
+            AddCommand( command );
+        }
+    }
+
+    /// <summary>
     /// Gets the total list of console commands.
     /// </summary>
     public static List<ConsoleCommand> GetConsoleCommands()
@@ -145,6 +210,7 @@ public static class ConsoleManager
     /// <summary>
     /// Log every available command to the console, and their description
     /// </summary>
+    [ConsoleCommand("help", "Displays information about a command, or the list of available commands." )]
     public static void DisplayCommands()
     {
         // Display a header / introduction to what we just did
@@ -161,13 +227,22 @@ public static class ConsoleManager
     /// <summary>
     /// Log the information about a specific command.
     /// </summary>
+    [ConsoleCommand("help", "Displays information about a command, or the list of available commands." )]
     public static void DisplayCommand( List<object> args )
     {
-        // Find the command
-        ConsoleCommand command = GetCommand( (string)args[1] );
+        // Amount of arguments
+        int argCount = args.Count - 1;
+
+        // If we have more than the allowed amount of arguments...
+        if ( argCount > 1 )
+        {
+            // Log the error!
+            Log.Error( "Error displaying command, more than one argument given! Please specify at most one argument, defining the alias of the keybind." );
+            return;
+        }
 
         // If we have found command...
-        if ( command != null )
+        if ( TryGetCommand( (string)args[1], out ConsoleCommand command ) )
         {
             // Display its info!
             Log.Info( $"\t{args[1]} - {command.description} {( command.enabled ? "" : "(*DISABLED*)" )}" );

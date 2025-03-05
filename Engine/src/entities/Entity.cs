@@ -29,6 +29,7 @@ public class Entity
 
     public string id; // This entity's identifier
     public Model model; // This entity's visually pleasing model
+
     public virtual EntityType type { get; private set; } = EntityType.None; // This entity's type, e.g. player / NPC
     public virtual float maxHealth { get; private set; } // This entity's max health
 
@@ -365,11 +366,11 @@ public class Entity
                 Remove(); // Removes us from everything
                 break;
 
-            case EntityEvent.PlaySound: // As an AudioPlayer entity, play our audio
+            case EntityEvent.PlaySound: // As a SoundEntity entity, play our audio
                 ( this as SoundEntity )?.PlaySound();
                 break;
 
-            case EntityEvent.StopSound: // As an AudioPlayer entity, stop our audio
+            case EntityEvent.StopSound: // As a SoundEntity entity, stop our audio
                 ( this as SoundEntity )?.StopSound();
                 break;
 
@@ -563,6 +564,6 @@ public class Entity
 
     public override string ToString()
     {
-        return $"{GetType()} (\"{GetID() ?? "N/A"}\")";
+        return $"{GetType().Name} (\"{GetID() ?? "N/A"}\")";
     }
 }

@@ -61,7 +61,7 @@ public class EntitySpawner<T> : ToolEntity where T : Entity, new()
 
     public override string ToString()
     {
-        return $"EntitySpawner<{typeof( T )}> (\"{GetID()}\")";
+        return $"EntitySpawner<{typeof( T ).Name}> (\"{GetID()}\")";
     }
 }
 

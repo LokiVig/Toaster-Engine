@@ -72,25 +72,36 @@ public static class DebugUI
                         // Show different things depending on different entity types
                         //
 
+                        // Entity spawner
+                        if ( entities[i] is EntitySpawner<Entity> spawner)
+                        {
+                            ImGui.SeparatorText( "Entity Spawner Variables" );
+
+                            if ( ImGui.Button( "Spawn Entity" ) )
+                            {
+                                spawner.SpawnEntity();
+                            }
+                        }
+
                         // Sound entity
-                        if ( entities[i] is SoundEntity soundEntity )
+                        if ( entities[i] is SoundEntity sound )
                         {
                             ImGui.SeparatorText( "Sound Entity Variables" );
 
-                            ImGui.InputText( "Sound Path", ref soundEntity.audioPath, 2048 );
-                            ImGui.SliderFloat( "Sound Volume", ref soundEntity.audioVolume, 0.0f, 1.0f );
-                            ImGui.Checkbox( "Sound Repeats", ref soundEntity.audioRepeats );
+                            ImGui.InputText( "Sound Path", ref sound.audioPath, 2048 );
+                            ImGui.SliderFloat( "Sound Volume", ref sound.audioVolume, 0.0f, 1.0f );
+                            ImGui.Checkbox( "Sound Repeats", ref sound.audioRepeats );
 
                             ImGui.Separator();
 
                             if ( ImGui.Button( "Play Sound" ) )
                             {
-                                soundEntity.PlaySound();
+                                sound.PlaySound();
                             }
 
                             if ( ImGui.Button( "Stop Sound" ) )
                             {
-                                soundEntity.StopSound();
+                                sound.StopSound();
                             }
                         }
 

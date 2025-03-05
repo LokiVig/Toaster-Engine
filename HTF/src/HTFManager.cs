@@ -7,6 +7,7 @@ using Toast.Engine.Resources;
 using Toast.Engine.Resources.Input;
 using Toast.Engine.Resources.Console;
 using System;
+using Toast.Engine.Resources.Attributes;
 
 namespace Toast.WTFEdit;
 
@@ -68,16 +69,6 @@ public class HTFManager
             description = "Loads a map from a specified path given from an opened file dialog.",
 
             onCall = LoadMapThroughDialog
-        } );
-
-        // HTF Save Map
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "htf_save_map",
-            description = "Saves the currently loaded map.",
-
-            onCall = SaveMap,
-            onArgsCall = SaveMap
         } );
     }
 
@@ -171,6 +162,7 @@ public class HTFManager
         currentFile = null;
     }
 
+    [ConsoleCommand("htf_save_map", "Saves the currently loaded map.")]
     private void SaveMap()
     {
         if ( currentFile == null )
