@@ -180,19 +180,26 @@ public static class ConsoleManager
             ConsoleCommandAttribute attribute = method.GetCustomAttribute<ConsoleCommandAttribute>();
 
             // Get the action and argumented method
-            Action onCall = (Action)Delegate.CreateDelegate( typeof( Action ), method );
-            Action<List<object>> onArgsCall = onCall == null ? (Action<List<object>>)Delegate.CreateDelegate( typeof( Action<List<object>> ), method ) : InvalidCommand ;
+            Action onCall;
+            Action<List<object>> onArgsCall = InvalidCommand;
+
+            if ( ( onCall = (Action)Delegate.CreateDelegate( typeof( Action ), method, false ) ) == null )
+            {
+                onArgsCall = (Action<List<object>>)Delegate.CreateDelegate( typeof( Action<List<object>> ), method );
+                onCall = InvalidCommand;
+            }
 
             // Make a new console command
             ConsoleCommand command = new ConsoleCommand
             {
                 alias = attribute.alias, // The alias of the console command
                 description = attribute.description, // The description of the console command
-                requiresCheats = attribute.requiresCheats, // Determines whether or not this command requires cheats to be called
+                conditions = attribute.conditions, // Determines whether or not this command requires cheats to be called
 
                 onCall = onCall, // Regular call method
                 onArgsCall = onArgsCall, // Argumented call method
             };
+
 
             // Add the command
             AddCommand( command );
@@ -210,7 +217,7 @@ public static class ConsoleManager
     /// <summary>
     /// Log every available command to the console, and their description
     /// </summary>
-    [ConsoleCommand("help", "Displays information about a command, or the list of available commands." )]
+    [ConsoleCommand( "help", "Displays information about a command, or the list of available commands." )]
     public static void DisplayCommands()
     {
         // Display a header / introduction to what we just did
@@ -227,7 +234,7 @@ public static class ConsoleManager
     /// <summary>
     /// Log the information about a specific command.
     /// </summary>
-    [ConsoleCommand("help", "Displays information about a command, or the list of available commands." )]
+    [ConsoleCommand( "help", "Displays information about a command, or the list of available commands." )]
     public static void DisplayCommand( List<object> args )
     {
         // Amount of arguments
@@ -313,19 +320,33 @@ public static class ConsoleManager
                 return;
             }
 
-            // If the command requires cheats, but cheats are disabled...
-            if ( command.requiresCheats && !EngineManager.cheatsEnabled )
+            // Check against which conditions this command has
+            switch ( command.conditions )
             {
-                // Log this revelating information to the console, then skedaddle!
-                Log.Info( $"Command \"{command.alias}\" requires cheats, but cheats are disabled!", true );
-                return;
+                // No special conditions / default:
+                case CommandConditions.None:
+                default:
+                    break; // Continue as intended
+
+                // Requires cheats to be enabled:
+                case CommandConditions.Cheats:
+                    // If we don't have cheats enabled...
+                    if ( !EngineManager.cheatsEnabled )
+                    {
+                        // Log this revelating information to the console, then skedaddle!
+                        Log.Info( $"Command \"{command.alias}\" requires cheats, but cheats are disabled!", true );
+                        return;
+                    }
+
+                    // Otherwise, continue as intended
+                    break;
             }
 
             // If we have arguments...
             if ( args != null )
             {
                 // Call the argumented version of this command's function!
-                command.onArgsCall?.Invoke( new List<object>( args ) );
+                command.onArgsCall?.Invoke( [.. args] );
             }
             else // Otherwise!
             {

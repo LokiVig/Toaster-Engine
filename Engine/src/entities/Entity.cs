@@ -275,7 +275,7 @@ public class Entity
     /// Face the current entity towards another, e.g. the player
     /// </summary>
     /// <param name="entity">The desired entity we wish to look at</param>
-    public void LookAtEntity( Entity entity = null )
+    public void LookAtEntity( Entity entity )
     {
         // Do math
     }

@@ -19,5 +19,14 @@ public class ConsoleCommand
     public string onArgsCallAlias; // Auto-generated alias for this command's onArgsCall action!
 
     public bool enabled = true; // Decides whether or not this command is currently active, ergo callable
-    public bool requiresCheats = false; // Decides whether or not this command requires cheats to be enabled
+    public CommandConditions conditions = CommandConditions.None; // Decides which conditions this command requires to be called
+}
+
+/// <summary>
+/// Determines when this console command can be called
+/// </summary>
+public enum CommandConditions
+{
+    None, // No special conditions are needed
+    Cheats // Cheats need to be enabled
 }

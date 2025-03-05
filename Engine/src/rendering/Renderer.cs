@@ -9,6 +9,7 @@ using ImGuiNET;
 using Toast.Engine.Entities;
 using Toast.Engine.Resources;
 using Toast.Engine.Resources.Console;
+using Toast.Engine.Resources.Attributes;
 
 namespace Toast.Engine.Rendering;
 
@@ -31,9 +32,7 @@ public class Renderer
     /// <param name="title">The title of the window we wish to open.</param>
     public static void Initialize( string title, WindowState initialWindowState = WindowState.Normal )
     {
-        // Initialize default renderer console commands
-        CreateConsoleCommands();
-
+        // The window info
         SDL_DisplayMode mode;
 
         // Why did they gotta have it be a pointer :(
@@ -99,68 +98,27 @@ public class Renderer
     }
 
     /// <summary>
-    /// A quick method to define and initialize console commands related to the renderer.
-    /// </summary>
-    private static void CreateConsoleCommands()
-    {
-        // R(enderer) VSync
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "r_vsync",
-            description = "Toggles VSync on the renderer.",
-
-            onCall = ToggleVSync
-        } );
-
-        // R(enderer) Windowed
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "r_windowed",
-            description = "Sets the renderer's window to be windowed.",
-
-            onCall = SetWindowStateToWindowed
-        } );
-
-        // R(enderer) Fullscreen
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "r_fullscreen",
-            description = "Sets the renderer's window to be fullscreened.",
-
-            onCall = SetWindowStateToFullscreen
-        } );
-
-        // R(enderer) Borderless
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "r_borderless",
-            description = "Sets the renderer's window to be borderless fullscreened.",
-
-            onCall = SetWindowStateToBorderless
-        } );
-
-        // R(enderer) Window Resolution
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "r_resolution",
-            description = "Changes the resolution of which the renderer window is displayed at.",
-
-            onArgsCall = ChangeWindowResolution
-        } );
-    }
-
-    /// <summary>
     /// Sets the renderer's window title to <paramref name="newTitle"/>.
     /// </summary>
     /// <param name="newTitle">The window's new title.</param>
-    public static void SetWindowTitle( string newTitle )
+    [ConsoleCommand( "r_setwindowtitle", "Sets the renderer's window's title to the argument string.", CommandConditions.Cheats )]
+    public static void SetWindowTitle( List<object> args )
     {
-        window.Title = $"Toaster Engine (v.{EngineManager.VERSION}) - {newTitle}";
+        int argCount = args.Count - 1;
+
+        if ( argCount < 1 || argCount > 1 )
+        {
+            Log.Error( "FUCKED UP" );
+            return;
+        }
+
+        window.Title = $"Toaster Engine (v.{EngineManager.VERSION}) - {args[1]}";
     }
 
     /// <summary>
     /// Toggles VSync through the console
     /// </summary>
+    [ConsoleCommand( "r_vsync", "Toggles VSync on the renderer." )]
     private static void ToggleVSync()
     {
         // Toggle the VSync option
@@ -173,6 +131,7 @@ public class Renderer
     /// <summary>
     /// Changes the window's current state to windowed.
     /// </summary>
+    [ConsoleCommand( "r_windowed", "Sets the renderer's window to be windowed." )]
     private static void SetWindowStateToWindowed()
     {
         window.WindowState = WindowState.Normal;
@@ -181,6 +140,7 @@ public class Renderer
     /// <summary>
     /// Changes the window's current state to fullscreen.
     /// </summary>
+    [ConsoleCommand( "r_fullscreen", "Sets the renderer's window to be fullscreened." )]
     private static void SetWindowStateToFullscreen()
     {
         window.WindowState = WindowState.FullScreen;
@@ -189,6 +149,7 @@ public class Renderer
     /// <summary>
     /// Changes the window's current state to borderless.
     /// </summary>
+    [ConsoleCommand( "r_borderless", "Sets the renderer's window to be borderless fullscreened." )]
     private static void SetWindowStateToBorderless()
     {
         window.WindowState = WindowState.BorderlessFullScreen;
@@ -197,6 +158,7 @@ public class Renderer
     /// <summary>
     /// Changes the window's current resolution through the console.
     /// </summary>
+    [ConsoleCommand( "r_resolution", "Changes the resolution of which the renderer window is displayed at." )]
     private static void ChangeWindowResolution( List<object> args )
     {
         // If we have more than 2 arguments...

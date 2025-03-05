@@ -260,7 +260,7 @@ public static class EngineManager
     /// <summary>
     /// Toggles the debug UI. Mainly used with console commands.
     /// </summary>
-    [ConsoleCommand("debug", "Toggles the debug UI menu, displaying specific engine and game information.", true )]
+    [ConsoleCommand("debug", "Toggles the debug UI menu, displaying specific engine and game information.", CommandConditions.Cheats )]
     private static void ToggleDebug()
     {
         debugOpen = !debugOpen;
