@@ -169,13 +169,13 @@ public class Entity
     public List<Entity> GetChildren()
     {
         // Create a new list of children entities
-        List<Entity> childrenEnts = new List<Entity>();
+        List<Entity> childrenEnts = new List<Entity>(children.Count);
 
         // For every child ID...
-        for ( int i = 0; i < children.Count; i++ )
+        foreach ( string child in children )
         {
             // Find the corresponding entity in the scene and apply it to the list of entity children
-            childrenEnts[i] = EngineManager.currentScene.FindEntity( children[i] );
+            childrenEnts.Add( EngineManager.currentScene.FindEntity( child ) );
         }
 
         // Return the list of children as entities
@@ -288,6 +288,13 @@ public class Entity
 
         this.parent = parent;
         parentEntity.AddChild( GetID() );
+    }
+
+    /// <inheritdoc cref="SetParent(string)"/>
+    public void SetParent( Entity parent )
+    {
+        this.parent = parent.GetID();
+        parent.AddChild( GetID() );
     }
 
     /// <summary>

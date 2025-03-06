@@ -50,6 +50,9 @@ public class EntitySpawner<T> : ToolEntity where T : Entity, new()
         // Set the entity's position to our position
         entityToSpawn.SetPosition( position );
 
+        // Set the entity's parent to this
+        entityToSpawn.SetParent( this );
+
         Log.Info( $"Spawned entity {entityToSpawn}.\n" +
                           $"\tSource: {this}\n" +
                           $"\tPosition: {entityToSpawn.GetPosition()}\n" +
