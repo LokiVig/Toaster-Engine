@@ -128,10 +128,11 @@ public class TriggerBrush : BrushEntity
     /// <param name="triggerEntity">The entity that triggered this trigger.</param>
     public bool OnTrigger( Entity triggerEntity )
     {
+        // Depending on when we should be triggered...
         switch ( triggerOn )
         {
             case TriggerOn.Enter: // Trigger only when first entered
-                                  // If the previous trigger entity is not the new one, or the previous one was just null, someone has just entered the trigger
+                // If the previous trigger entity is not the new one, or the previous one was just null, someone has just entered the trigger
                 if ( previousTriggerEntity != triggerEntity || previousTriggerEntity == null )
                 {
                     break;
@@ -141,7 +142,7 @@ public class TriggerBrush : BrushEntity
                 return false;
 
             case TriggerOn.Exit: // Trigger only when an entity has just exited
-                                 // When the currently triggering entity is null, but the previous one isn't, someone has just left the trigger
+                // When the currently triggering entity is null, but the previous one isn't, someone has just left the trigger
                 if ( triggerEntity == null && previousTriggerEntity != null )
                 {
                     break;
@@ -151,10 +152,11 @@ public class TriggerBrush : BrushEntity
                 return false;
 
             case TriggerOn.Trigger: // Trigger no matter what happens
-            default:
+            default: // Also the default
                 break;
         }
 
+        // Depending on which trigger type we are...
         switch ( triggerType )
         {
             case TriggerType.Once: // Only trigger once
@@ -192,10 +194,11 @@ public class TriggerBrush : BrushEntity
             return false;
         }
 
+        // Depending on what we should be triggered by...
         switch ( triggerBy )
         {
             case TriggerBy.All: // Any entity should be able to trigger this trigger
-            default: // If there has been nothing set, anything should still trigger this
+            default: // Also the default
                 break;
 
             case TriggerBy.Player: // Only players should be able to trigger this

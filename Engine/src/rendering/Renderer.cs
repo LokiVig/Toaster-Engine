@@ -101,18 +101,22 @@ public class Renderer
     /// Sets the renderer's window title to <paramref name="args"/>.
     /// </summary>
     /// <param name="args">The window's new title.</param>
-    [ConsoleCommand( "r_setwindowtitle", "Sets the renderer's window's title to the argument string.", CommandConditions.Cheats )]
+    [ConsoleCommand( "r_setwindowtitle", "Sets the renderer's window's title to the argument string. For spaces, place underscores.", CommandConditions.Cheats )]
     public static void SetWindowTitle( List<object> args )
     {
+        // Get the count of arguments
         int argCount = args.Count - 1;
 
+        // Make sure we have the right amount of arguments...
         if ( argCount < 1 || argCount > 1 )
         {
-            Log.Error( "FUCKED UP" );
+            Log.Error( "Invalid amount of arguments! You need at least, and at most, 1 argument specifying the title you wish to switch to. If you're trying to use spaces, replace those spaces with underscores!" );
             return;
         }
 
-        window.Title = $"Toaster Engine (v.{EngineManager.VERSION}) - {args[1]}";
+        // Set the window's title to the argument
+        window.Title = $"Toaster Engine (v.{EngineManager.VERSION}) - {args[1].ToString().Replace( "_", " " )}";
+        Log.Info( $"Set the window's title to \"{args[1].ToString().Replace( "_", " " )}\"!", true );
     }
 
     /// <summary>
@@ -170,24 +174,27 @@ public class Renderer
     [ConsoleCommand( "r_resolution", "Changes the resolution of which the renderer window is displayed at." )]
     private static void ChangeWindowResolution( List<object> args )
     {
+        // The amount of arguments
+        int argCount = args.Count - 1;
+
         // If we have more than 2 arguments...
-        if ( ( args.Count - 1 ) > 2 || ( args.Count - 1 ) < 2 )
+        if ( argCount > 2 || argCount < 2 )
         {
-            Log.Warning( "Invalid amount of arguments! You need at least, and at most, 2 arguments, one for the height value and one for the width value!" );
+            Log.Error( "Invalid amount of arguments! You need at least, and at most, 2 arguments, one for the height value and one for the width value!" );
             return;
         }
 
         // Get the width...
         if ( !int.TryParse( (string)args[1], out int width ) )
         {
-            Log.Warning( "First argument was an invalid integer value!" );
+            Log.Error( "First argument was an invalid integer value!" );
             return;
         }
 
         // Get the height...
         if ( !int.TryParse( (string)args[2], out int height ) )
         {
-            Log.Warning( "Second argument was an invalid integer value!" );
+            Log.Error( "Second argument was an invalid integer value!" );
             return;
         }
 

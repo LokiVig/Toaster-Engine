@@ -21,11 +21,8 @@ public static class DebugUI
     {
         open = true;
 
-        if ( ImGui.Begin( "- Debug Menu -", ref open, ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoDocking ) )
+        if ( ImGui.Begin( "- Debug Menu -", ref open, ImGuiWindowFlags.NoSavedSettings ) )
         {
-            // Set the default window size
-            ImGui.SetWindowSize( new Vector2( 750, 500 ) );
-
             // Display framerate / frametime
             ImGui.Text( $"Frametime: {1000 / ImGui.GetIO().Framerate:.##}ms" );
             ImGui.Text( $"Framerate: {ImGui.GetIO().Framerate:.#}FPS" );
@@ -69,12 +66,38 @@ public static class DebugUI
                             ImGui.TreePop();
                         }
 
+                        // If this entity either has children or a parent...
+                        if ( entities[i].HasChildren() || entities[i].HasParent() )
+                        {
+                            // Display a separator
+                            ImGui.Separator();
+                        }
+
+                        // Display the parent
+                        if ( entities[i].HasParent() )
+                        {
+                            ImGui.Text( $"Parent: \"{entities[i].GetParentID()}\"." );
+                        }
+
+                        // Display the children
+                        if ( entities[i].HasChildren() )
+                        {
+                            ImGui.TreeNodeEx( "Children", ImGuiTreeNodeFlags.Framed );
+
+                            foreach ( string child in entities[i].GetChildrenIDs() )
+                            {
+                                ImGui.Text( $"Child: \"{child}\"" );
+                            }
+
+                            ImGui.TreePop();
+                        }
+
                         //
                         // Show different things depending on different entity types
                         //
 
                         // Entity spawner
-                        if ( entities[i] is EntitySpawner<Entity> spawner)
+                        if ( entities[i] is EntitySpawner<Entity> spawner )
                         {
                             ImGui.SeparatorText( "Entity Spawner Variables" );
 

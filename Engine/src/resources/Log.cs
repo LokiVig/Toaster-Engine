@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 using Toast.Engine.Rendering;
-
 using Toast.Engine.Resources.Audio;
 using Toast.Engine.Resources.Extensions;
 
@@ -118,7 +117,7 @@ public struct Log
     /// Log a successful operation, with an optional <paramref name="message"/>.<br/>
     /// Features a success sound effect.
     /// </summary>
-    /// <param name="message">The specific success message used to detail what happened to cause a warning.</param>
+    /// <param name="message">The specific success message used to detail what happened to cause a success.</param>
     public static void Success( string message, [CallerLineNumber] int line = 0, [CallerFilePath] string src = "", [CallerMemberName] string method = "" )
     {
         // Play the engine's default success sound

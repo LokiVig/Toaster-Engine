@@ -4,13 +4,17 @@ namespace Toast.Engine.Entities;
 
 public class BrushEntity : Entity
 {
-	public override EntityType type => EntityType.Brush;
+    public override EntityType type => EntityType.Brush;
 
-	public BrushEntity()
-	{
-	}
+    public BrushEntity() { }
 
-	public BrushEntity(Vector3 position) : base(position)
-	{
-	}
+    public BrushEntity( Vector3 position ) : base( position ) { }
+
+    public BrushEntity( Entity parent ) : base( parent ) { }
+
+    public BrushEntity( string parent ) : base( parent ) { }
+
+    public BrushEntity( Entity parent, Vector3 position ) : base( parent, position ) { }
+
+    public BrushEntity( string parent, Vector3 position ) : base( parent, position ) { }
 }

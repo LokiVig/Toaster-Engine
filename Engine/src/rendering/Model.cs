@@ -9,10 +9,11 @@ public class Model
     public Vertex[] vertices; // The vertices from the model
 
     /// <summary>
-    /// Loads a <see cref="Model"/> from a specified path.
+    /// Loads and returns a <see cref="Model"/> from a specified path.
     /// </summary>
     /// <param name="path">The path to the model we wish to load.</param>
-    public void Load( string path )
+    /// <returns>A new model with all of the information we need to render it.</returns>
+    public static Model Load( string path )
     {
         throw new NotImplementedException();
     }
@@ -21,22 +22,14 @@ public class Model
     /// Loads and returns a <see cref="Model"/> from a specified path.
     /// </summary>
     /// <param name="path">The path to the model we wish to load.</param>
-    /// <returns>A new model with all of the information we need to render it.</returns>
+    /// <param name="model">The resulting model we've loaded.</param>
     public static void Load( string path, out Model model )
     {
         throw new NotImplementedException();
     }
 
     /// <summary>
-    /// Deletes this model from the parent object.
-    /// </summary>
-    public void Delete()
-    {
-        throw new NotImplementedException();
-    }
-
-    /// <summary>
-    /// Removes a specified model from another object.
+    /// Removes a specified model.
     /// </summary>
     /// <param name="model">The model we wish to remove.</param>
     public static void Remove( Model model )

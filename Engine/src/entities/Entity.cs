@@ -23,33 +23,74 @@ namespace Toast.Engine.Entities;
 /// </summary>
 public class Entity
 {
+    public virtual EntityType type { get; private set; } = EntityType.None; // This entity's type, e.g. player / NPC
+    public virtual float maxHealth { get; private set; } // This entity's max health
+
     public Vector3 position; // This entity's current position
     public Quaternion rotation; // This entity's current rotation
     public BBox bbox; // This entity's bounding box
-
     public string id; // This entity's identifier
-    public Model model; // This entity's visually pleasing model
-
-    public virtual EntityType type { get; private set; } = EntityType.None; // This entity's type, e.g. player / NPC
-    public virtual float maxHealth { get; private set; } // This entity's max health
+    public string modelPath; // The path to this entity's visually pleasing model
+    public string parent; // The possible parent of this entity
+    public List<string> children = new List<string>(); // Any and all children this entity has
 
     protected float health; // This entity's health
     protected Vector3 velocity; // This entity's current velocity
     protected bool alive; // Is this entity alive?
     protected Entity target; // The entity this entity's targeting
     protected Entity lastAttacker; // The last entity to attack this entity
+    protected Model model; // This entity's visually pleasing model
 
     private const float MAX_VELOCITY = 225; // TODO: Calculate this (mass, therefore terminal velocity) from the entity's BBox! Bad constant!
 
+    /// <summary>
+    /// Creates a new entity.
+    /// </summary>
     public Entity()
     {
         ErrorCheck(); // Check for errors
     }
 
-    public Entity( Vector3 position )
+    /// <summary>
+    /// Creates a new entity at a specified <paramref name="position"/>.
+    /// </summary>
+    /// <param name="position">The position we should be created at.</param>
+    public Entity( Vector3 position ) : this()
     {
         SetPosition( position ); // Set our position
-        ErrorCheck(); // Check for errors
+    }
+
+    /// <summary>
+    /// Creates a new entity with a specified <paramref name="parent"/>.
+    /// </summary>
+    /// <param name="parent">The parent we should be a child of.</param>
+    public Entity( string parent ) : this()
+    {
+        SetParent( parent ); // Set our parent
+    }
+
+    /// <inheritdoc cref="Entity(string)"/>
+    public Entity( Entity parent ) : this()
+    {
+        SetParent( parent.GetID() ); // Set our parent
+    }
+
+    /// <summary>
+    /// Creates a new entity with a specified <paramref name="parent"/> and <paramref name="position"/>.
+    /// </summary>
+    /// <param name="parent">The parent we should be a child of.</param>
+    /// <param name="position">The position we should be created at.</param>
+    public Entity( string parent, Vector3 position ) : this()
+    {
+        SetParent( parent ); // Set our parent
+        SetPosition( position ); // Set our position
+    }
+
+    /// <inheritdoc cref="Entity(string, Vector3)"/>
+    public Entity( Entity parent, Vector3 position ) : this()
+    {
+        SetParent( parent.GetID() );
+        SetPosition( position );
     }
 
     /// <summary>
@@ -100,28 +141,12 @@ public class Entity
     }
 
     /// <summary>
-    /// Creates entity-specific console commands.
-    /// </summary>
-    protected virtual void CreateCommands()
-    {
-
-    }
-
-    /// <summary>
-    /// Creates entity-specific keybinds.
-    /// </summary>
-    protected virtual void CreateKeybinds()
-    {
-
-    }
-
-    /// <summary>
     /// Applies velocity to this entity.
     /// </summary>
     protected void ApplyVelocity()
     {
         // Clamp velocity between the min and max values, and normalize it
-        velocity = Vector3.Clamp( velocity, new Vector3(-MAX_VELOCITY), new Vector3(MAX_VELOCITY) );
+        velocity = Vector3.Clamp( velocity, new Vector3( -MAX_VELOCITY ), new Vector3( MAX_VELOCITY ) );
         Vector3.Normalize( velocity );
 
         // Position is affected by velocity
@@ -138,51 +163,32 @@ public class Entity
     }
 
     /// <summary>
-    /// Get the current health of this entity
+    /// Gets this entity's list of children.
     /// </summary>
-    public ref float GetHealth()
+    /// <returns>This entity's children as a list of <see cref="Entity"/>'s.</returns>
+    public List<Entity> GetChildren()
     {
-        return ref health;
+        // Create a new list of children entities
+        List<Entity> childrenEnts = new List<Entity>();
+
+        // For every child ID...
+        for ( int i = 0; i < children.Count; i++ )
+        {
+            // Find the corresponding entity in the scene and apply it to the list of entity children
+            childrenEnts[i] = EngineManager.currentScene.FindEntity( children[i] );
+        }
+
+        // Return the list of children as entities
+        return childrenEnts;
     }
 
     /// <summary>
-    /// Get the ID of this entity
+    /// Gets this entity's list of children IDs.
     /// </summary>
-    public string GetID()
+    /// <returns>This entity's children as a list of IDs.</returns>
+    public List<string> GetChildrenIDs()
     {
-        return id;
-    }
-
-    /// <summary>
-    /// Gets this entity's position
-    /// </summary>
-    public ref Vector3 GetPosition()
-    {
-        return ref position;
-    }
-
-    /// <summary>
-    /// Gets this entity's velocity
-    /// </summary>
-    public ref Vector3 GetVelocity()
-    {
-        return ref velocity;
-    }
-
-    /// <summary>
-    /// Gets this entity's rotation
-    /// </summary>
-    public ref Quaternion GetRotation()
-    {
-        return ref rotation;
-    }
-
-    /// <summary>
-    /// Gets this entity's bounding box
-    /// </summary>
-    public ref BBox GetBBox()
-    {
-        return ref bbox;
+        return children;
     }
 
     /// <summary>
@@ -195,99 +201,12 @@ public class Entity
     }
 
     /// <summary>
-    /// Sets this entity's ID
-    /// </summary>
-    public void SetID( string id )
-    {
-        this.id = id;
-    }
-
-    /// <summary>
-    /// Set the target of this entity, e.g. an enemy should target the <see cref="PlayerEntity"/>
-    /// </summary>
-    /// <param name="target">The specific entity we wish to target, 0 should always be the <see cref="PlayerEntity"/></param>
-    public void SetTarget( Entity target )
-    {
-        // We can't check if a null entity is dead or not, 
-        // so we're handling a null target before such
-        if ( target == null )
-        {
-            this.target = null;
-            return;
-        }
-
-        // Can't target a dead entity
-        if ( !target.IsAlive() )
-        {
-            this.target = null;
-            return;
-        }
-
-        this.target = target;
-    }
-
-    /// <summary>
-    /// Set the target of this entity by an ID, e.g. an enemy should target the <see cref="PlayerEntity"/>
-    /// </summary>
-    /// <param name="targetID">The ID of the entity we wish to target, "player" should always be a <see cref="PlayerEntity"/></param>
-    public void SetTarget( string targetID )
-    {
-        target = EngineManager.currentScene?.FindEntity( targetID );
-    }
-
-    /// <summary>
-    /// Set this entity's position by a <see cref="Vector3"/>
-    /// </summary>
-    /// <param name="position">The new, desired position of this entity</param>
-    public void SetPosition( Vector3 position )
-    {
-        this.position = position;
-    }
-
-    /// <summary>
-    /// Set this entity's velocity by a <see cref="Vector3"/>
-    /// </summary>
-    /// <param name="velocity">The new, desired velocity of this entity</param>
-    public void SetVelocity( Vector3 velocity )
-    {
-        this.velocity = velocity;
-    }
-
-    /// <summary>
-    /// Set this entity's rotation from a <see cref="Quaternion"/>
-    /// </summary>
-    /// <param name="rotation">The new, desired rotation of this entity</param>
-    public void SetRotation( Quaternion rotation )
-    {
-        this.rotation = rotation;
-    }
-
-    /// <summary>
-    /// Main use for this is for when a brush is turned into an entity
-    /// </summary>
-    /// <param name="bbox">The new bounding box of this entity</param>
-    public void SetBBox( BBox bbox )
-    {
-        this.bbox = bbox;
-    }
-
-    /// <summary>
     /// Face the current entity towards another, e.g. the player
     /// </summary>
     /// <param name="entity">The desired entity we wish to look at</param>
     public void LookAtEntity( Entity entity )
     {
         // Do math
-    }
-
-    /// <summary>
-    /// Adds the argument <see cref="Vector3"/> value to the velocity.
-    /// </summary>
-    /// <param name="force">The amount of force to add to this entity's velocity.</param>
-    /// <param name="multiplier">Multiplies the input vector by this value.</param>
-    public void AddForce( Vector3 force, float multiplier = 5 )
-    {
-        velocity += force * multiplier;
     }
 
     /// <summary>
@@ -343,6 +262,142 @@ public class Entity
                 SetID( $"entity {i}" );
             }
         }
+    }
+
+    /// <summary>
+    /// Adds the argument <see cref="Vector3"/> value to the velocity.
+    /// </summary>
+    /// <param name="force">The amount of force to add to this entity's velocity.</param>
+    /// <param name="multiplier">Multiplies the input vector by this value.</param>
+    public void AddForce( Vector3 force, float multiplier = 5 )
+    {
+        velocity += force * multiplier;
+    }
+
+    /// <summary>
+    /// Sets this entity's parent to the argument parent.
+    /// </summary>
+    /// <param name="parent">The new parent of this entity.</param>
+    public void SetParent( string parent )
+    {
+        if ( !EngineManager.currentScene.TryFindEntity( parent, out Entity parentEntity ) )
+        {
+            Log.Warning( $"Couldn't find entity by ID \"{parent}\"!" );
+            return;
+        }
+
+        this.parent = parent;
+        parentEntity.AddChild( GetID() );
+    }
+
+    /// <summary>
+    /// Adds another entity as a child of this entity.
+    /// </summary>
+    /// <param name="child">The child entity we wish to add.s</param>
+    public void AddChild( string child )
+    {
+        if ( !EngineManager.currentScene.TryFindEntity( child, out _ ) )
+        {
+            Log.Warning( $"Couldn't find entity by ID \"{child}\"!" );
+            return;
+        }
+
+        // Add the entity
+        children.Add( child );
+    }
+
+    /// <summary>
+    /// Removes a specified child from this entity.
+    /// </summary>
+    /// <param name="child">The ID of the child entity we wish to remove.</param>
+    public void RemoveChild( string child )
+    {
+        // If we don't find the entity by its ID...
+        if ( !EngineManager.currentScene.TryFindEntity( child, out _ ) )
+        {
+            Log.Warning( $"Couldn't find entity by ID \"{child}\"!" );
+            return;
+        }
+
+        // Remove the found child
+        children.Remove( child );
+    }
+
+    /// <summary>
+    /// Removes all children from this entities.
+    /// </summary>
+    public void RemoveAllChildren()
+    {
+        // Clear the children list
+        children.Clear();
+    }
+
+    /// <summary>
+    /// Determines whether or not this entity has children.
+    /// </summary>
+    /// <returns><see langword="true"/> if it does, <see langword="false"/> otherwise.</returns>
+    public bool HasChildren()
+    {
+        return children.Count != 0;
+    }
+
+    /// <summary>
+    /// Determines whether or not this entity has a parent.
+    /// </summary>
+    /// <returns><see langword="true"/> if it does, <see langword="false"/> otherwise.</returns>
+    public bool HasParent()
+    {
+        return parent != null;
+    }
+
+    /// <summary>
+    /// Per entity definition of what to do when they've spawned
+    /// </summary>
+    protected virtual void OnSpawn()
+    {
+        GenerateID(); // Generate this entity's ID
+    }
+
+    /// <summary>
+    /// Things to do when this entity takes damage
+    /// </summary>
+    protected virtual void OnDamage()
+    {
+        if ( health <= 0 ) // Is this entity now considered dead?
+        {
+            // Call the OnDeath event
+            OnDeath();
+        }
+        else if ( health <= -25.0f ) // Should they gib?
+        {
+            // Call the OnXDeath event
+            OnXDeath();
+        }
+    }
+
+    /// <summary>
+    /// Things to do when this entity dies
+    /// </summary>
+    protected virtual void OnDeath()
+    {
+        // This entity is no longer alive
+        alive = false;
+
+        // Remove this entity from the update list
+        EngineManager.OnUpdate -= Update;
+
+        // Log to the console that this entity has died!
+        Log.Info( $"Entity {this} has died.\n" +
+                          $"\tLast attacker: {( lastAttacker != null ? lastAttacker : "N/A" )}" );
+    }
+
+    /// <summary>
+    /// Things to do when this entity dies a gory death
+    /// </summary>
+    protected virtual void OnXDeath()
+    {
+        // Also trigger OnDeath, but replace their model with a gory version
+        OnDeath();
     }
 
     #region ONEVENTS
@@ -492,64 +547,25 @@ public class Entity
     #endregion // ONEVENTS
 
     /// <summary>
-    /// Per entity definition of what to do when they've spawned
-    /// </summary>
-    protected virtual void OnSpawn()
-    {
-        CreateCommands(); // Create our commands
-        CreateKeybinds(); // Create our keybinds
-    }
-
-    /// <summary>
-    /// Things to do when this entity takes damage
-    /// </summary>
-    protected virtual void OnDamage()
-    {
-        if ( health <= 0 ) // Is this entity now considered dead?
-        {
-            // Call the OnDeath event
-            OnDeath();
-        }
-        else if ( health <= -25.0f ) // Should they gib?
-        {
-            // Call the OnXDeath event
-            OnXDeath();
-        }
-    }
-
-    /// <summary>
-    /// Things to do when this entity dies
-    /// </summary>
-    protected virtual void OnDeath()
-    {
-        // This entity is no longer alive
-        alive = false;
-
-        // Remove this entity from the update list
-        EngineManager.OnUpdate -= Update;
-
-        // Log to the console that this entity has died!
-        Log.Info( $"Entity {this} has died.\n" +
-                          $"\tLast attacker: {(lastAttacker != null ? lastAttacker : "N/A")}" );
-    }
-
-    /// <summary>
-    /// Things to do when this entity dies a gory death
-    /// </summary>
-    protected virtual void OnXDeath()
-    {
-        // Also trigger OnDeath, but replace their sprite with a gory version
-        OnDeath();
-    }
-
-    /// <summary>
     /// Deletes a specified entity from the scene and from existence.
     /// </summary>
     /// <param name="ent">The entity we wish to delete.</param>
     public static void Delete( Entity ent )
     {
-        EngineManager.OnUpdate -= ent.Update;
-        EngineManager.currentScene?.RemoveEntity( ent );
+        EngineManager.OnUpdate -= ent.Update; // Unsubscribe the entity from the update function
+        EngineManager.currentScene?.RemoveEntity( ent ); // Remove the entity from the scene
+
+        // If the entity has children...
+        if ( ent.HasChildren() )
+        {
+            // Delete every child
+            foreach ( Entity child in ent.GetChildren() )
+            {
+                child.Remove();
+            }
+        }
+
+        // Nullify the entity
         ent = null;
     }
 
@@ -560,6 +576,167 @@ public class Entity
     public void Remove()
     {
         Delete( this );
+    }
+
+    /// <summary>
+    /// Sets this entity's ID
+    /// </summary>
+    public void SetID( string id )
+    {
+        this.id = id;
+    }
+
+    /// <summary>
+    /// Set the target of this entity, e.g. an enemy should target the <see cref="PlayerEntity"/>
+    /// </summary>
+    /// <param name="target">The specific entity we wish to target, 0 should always be the <see cref="PlayerEntity"/></param>
+    public void SetTarget( Entity target )
+    {
+        // We can't check if a null entity is dead or not, 
+        // so we're handling a null target before such
+        if ( target == null )
+        {
+            this.target = null;
+            return;
+        }
+
+        // Can't target a dead entity
+        if ( !target.IsAlive() )
+        {
+            this.target = null;
+            return;
+        }
+
+        this.target = target;
+    }
+
+    /// <summary>
+    /// Set the target of this entity by an ID, e.g. an enemy should target the <see cref="PlayerEntity"/>
+    /// </summary>
+    /// <param name="targetID">The ID of the entity we wish to target, "player" should always be a <see cref="PlayerEntity"/></param>
+    public void SetTarget( string targetID )
+    {
+        SetTarget( EngineManager.currentScene?.FindEntity( targetID ) );
+    }
+
+    /// <summary>
+    /// Set this entity's position by a <see cref="Vector3"/>
+    /// </summary>
+    /// <param name="position">The new, desired position of this entity</param>
+    public void SetPosition( Vector3 position )
+    {
+        this.position = position;
+    }
+
+    /// <summary>
+    /// Set this entity's velocity by a <see cref="Vector3"/>
+    /// </summary>
+    /// <param name="velocity">The new, desired velocity of this entity</param>
+    public void SetVelocity( Vector3 velocity )
+    {
+        this.velocity = velocity;
+    }
+
+    /// <summary>
+    /// Set this entity's rotation from a <see cref="Quaternion"/>
+    /// </summary>
+    /// <param name="rotation">The new, desired rotation of this entity</param>
+    public void SetRotation( Quaternion rotation )
+    {
+        this.rotation = rotation;
+    }
+
+    /// <summary>
+    /// Main use for this is for when a brush is turned into an entity
+    /// </summary>
+    /// <param name="bbox">The new bounding box of this entity</param>
+    public void SetBBox( BBox bbox )
+    {
+        this.bbox = bbox;
+    }
+
+    /// <summary>
+    /// Loads a model for this entity from a specified path.
+    /// </summary>
+    /// <param name="modelPath">The path to the model we wish to load.</param>
+    public void SetModel( string modelPath )
+    {
+        model = Model.Load( modelPath );
+    }
+
+    /// <summary>
+    /// Get the current health of this entity
+    /// </summary>
+    public ref float GetHealth()
+    {
+        return ref health;
+    }
+
+    /// <summary>
+    /// Get the ID of this entity
+    /// </summary>
+    public string GetID()
+    {
+        return id;
+    }
+
+    /// <summary>
+    /// Gets this entity's position
+    /// </summary>
+    public ref Vector3 GetPosition()
+    {
+        return ref position;
+    }
+
+    /// <summary>
+    /// Gets this entity's velocity
+    /// </summary>
+    public ref Vector3 GetVelocity()
+    {
+        return ref velocity;
+    }
+
+    /// <summary>
+    /// Gets this entity's rotation
+    /// </summary>
+    public ref Quaternion GetRotation()
+    {
+        return ref rotation;
+    }
+
+    /// <summary>
+    /// Gets this entity's bounding box
+    /// </summary>
+    public ref BBox GetBBox()
+    {
+        return ref bbox;
+    }
+
+    /// <summary>
+    /// Gets this entity's parent as an <see cref="Entity"/>.
+    /// </summary>
+    /// <returns>This entity's parent.</returns>
+    public Entity GetParent()
+    {
+        return EngineManager.currentScene?.FindEntity( parent );
+    }
+
+    /// <summary>
+    /// Gets this entity's parent's ID.
+    /// </summary>
+    /// <returns>The ID of this entity's parent.</returns>
+    public string GetParentID()
+    {
+        return parent;
+    }
+
+    /// <summary>
+    /// Gets this entity's model.
+    /// </summary>
+    /// <returns>This entity's model.</returns>
+    public Model GetModel()
+    {
+        return model;
     }
 
     public override string ToString()

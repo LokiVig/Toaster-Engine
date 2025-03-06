@@ -201,7 +201,6 @@ public static class ConsoleManager
                 onArgsCall = onArgsCall, // Argumented call method
             };
 
-
             // Add the command
             AddCommand( command );
         }

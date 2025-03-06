@@ -8,8 +8,17 @@ namespace Toast.Engine.Entities;
 /// </summary>
 public class ToolEntity : Entity
 {
-	public override EntityType type => EntityType.Tool;
-	
-	public ToolEntity() : base() {}
-	public ToolEntity(Vector3 position) : base(position) {}
+    public override EntityType type => EntityType.Tool;
+
+    public ToolEntity() : base() { }
+
+    public ToolEntity( Vector3 position ) : base( position ) { }
+
+    public ToolEntity( Entity parent ) : base( parent ) { }
+
+    public ToolEntity( string parent ) : base( parent ) { }
+
+    public ToolEntity( Entity parent, Vector3 position ) : base( parent, position ) { }
+
+    public ToolEntity( string parent, Vector3 position ) : base( parent, position ) { }
 }
