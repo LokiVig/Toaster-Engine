@@ -24,7 +24,7 @@ public static class DebugUI
         if ( ImGui.Begin( "- Debug Menu -", ref open, ImGuiWindowFlags.NoSavedSettings ) )
         {
             // Display framerate / frametime
-            ImGui.Text( $"Frametime: {1000 / ImGui.GetIO().Framerate:.##}ms" );
+            ImGui.Text( $"Frametime: {1000f / ImGui.GetIO().Framerate:.##}ms" );
             ImGui.Text( $"Framerate: {ImGui.GetIO().Framerate:.#}FPS" );
 
             ImGui.Separator();
@@ -34,6 +34,14 @@ public static class DebugUI
 
             // Are we CHEATING?!
             ImGui.Text( $"Cheats enabled? {EngineManager.cheatsEnabled}" );
+
+            ImGui.Separator();
+
+            // Display the local server's information
+            ImGui.Text( $"Local server: {(EngineManager.server.IsOpen() ? $"Open on {EngineManager.server.addr}:{EngineManager.server.port}" : "Closed")}" );
+
+            // Display the server our local client's connected to, if any
+            ImGui.Text( $"Connected server: {( EngineManager.client.IsConnected() ? $"{EngineManager.client.connectedAddr}:{EngineManager.client.connectedPort}" : "N/A" )}" );
 
             ImGui.Separator();
 
@@ -82,14 +90,15 @@ public static class DebugUI
                         // Display the children
                         if ( entities[i].HasChildren() )
                         {
-                            ImGui.TreeNodeEx( "Children", ImGuiTreeNodeFlags.Framed );
-
-                            foreach ( string child in entities[i].GetChildrenIDs() )
+                            if ( ImGui.TreeNodeEx( "Children", ImGuiTreeNodeFlags.Framed ) )
                             {
-                                ImGui.Text( $"Child: \"{child}\"" );
-                            }
+                                foreach ( string child in entities[i].GetChildrenIDs() )
+                                {
+                                    ImGui.Text( $"ID: \"{child}\"" );
+                                }
 
-                            ImGui.TreePop();
+                                ImGui.TreePop();
+                            }
                         }
 
                         //

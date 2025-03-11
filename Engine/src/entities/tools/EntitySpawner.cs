@@ -44,14 +44,14 @@ public class EntitySpawner<T> : ToolEntity where T : Entity, new()
         // Generate the entity's ID
         entityToSpawn.GenerateID();
 
-        // The entity should spawn!
-        entityToSpawn.Spawn();
-
         // Set the entity's position to our position
         entityToSpawn.SetPosition( position );
 
         // Set the entity's parent to this
         entityToSpawn.SetParent( this );
+
+        // The entity should spawn!
+        entityToSpawn.Spawn();
 
         Log.Info( $"Spawned entity {entityToSpawn}.\n" +
                           $"\tSource: {this}\n" +

@@ -9,6 +9,7 @@ using Toast.Engine.Attributes;
 using Toast.Engine.Resources.Input;
 using Toast.Engine.Resources.Audio;
 using Toast.Engine.Resources.Console;
+using Toast.Engine.Network;
 
 namespace Toast.Engine;
 
@@ -34,6 +35,9 @@ public static class EngineManager
 
     public static WTF currentFile; // The currently loaded WTF file / map
     public static Scene currentScene; // The currently running scene, initialized from the current file
+
+    public static Client client; // This engine instance's local client
+    public static Server server; // This engine instance's local server
 
     public static float deltaTime; // Helps stopping you from using FPS-dependant calculations
 
@@ -64,27 +68,11 @@ public static class EngineManager
         // Initialize our input manager
         InputManager.Initialize();
 
-#if !DEBUG
-        // If we can't load our commands...
-        if ( !ConsoleManager.LoadCommands() )
-        {
-            // Create default console commands
-            ConsoleManager.RegisterCommands();
-        }
-
-        // If we couldn't load our keybinds file...
-        if ( !InputManager.LoadKeybinds() )
-        {
-            // Create default keybinds
-            CreateKeybinds();
-        }
-#else
         // Register the default console commands
         ConsoleManager.RegisterCommands();
 
         // Create default keybinds
         CreateKeybinds();
-#endif // !DEBUG
 
         // Try to...
         try
@@ -96,6 +84,23 @@ public static class EngineManager
         catch ( Exception exc ) // Handle any exceptions we encounter!
         {
             Log.Error( $"Exception caught while initializing renderer!", exc );
+        }
+
+        // Create our local client
+        client = new Client();
+
+        // If we can't connect to a localhost already...
+        if ( !client.TryConnectTo( Server.LocalHost ) )
+        {
+            // Create a local server and connect to it
+            server = Server.CreateLocalServer();
+            client.ConnectTo( server );
+        }
+        else
+        {
+            // The server is actually a localhost, but not on this instance
+            // Thanks to TryConnectTo, we've also already connected to it!
+            server = Server.LocalHost;
         }
 
         // Connect our InputManager's events to the Renderer's events for simplicity's sakes
@@ -232,6 +237,10 @@ public static class EngineManager
 
         // Save our commands
         ConsoleManager.SaveCommands();
+
+        // Shut down the server and dispose of the client
+        client.Dispose();
+        server.Dispose();
 
         // End file logging
         Log.CloseLogFile();

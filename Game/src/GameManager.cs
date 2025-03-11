@@ -52,18 +52,9 @@ public class GameManager
                                           // The engine's update function is a lot more focused on, well, engine-wide
                                           // prospects, while this class's should be focused more on the game-specific
                                           // functionalities
-
-#if !DEBUG
-        // If we couldn't load our keybinds...
-        if ( !InputManager.LoadKeybinds() )
-        {
-            // Create our default keybinds
-            CreateKeybinds();
-        }
-#else
+        
         // Create our default keybinds
         CreateKeybinds();
-#endif // !DEBUG
 
         // Initialize everything necessary before the game is actually run
         // DEBUG: Setting up a basic scene to test out certain aspects of what's done
@@ -116,30 +107,6 @@ public class GameManager
         // After of which, we should call the engine shutdown function
         EngineManager.OnUpdate -= Update; // Unsubscribe ourselves from the engine update function
         EngineManager.Shutdown(); // Actually call the engine shutdown function
-    }
-
-    [ConsoleCommand( "+move_forward" )]
-    private void MoveForward()
-    {
-        mainPlayer.AddForce( new Vector3( 0, 255, 0 ) );
-    }
-
-    [ConsoleCommand( "+move_backward" )]
-    private void MoveBackward()
-    {
-        mainPlayer.AddForce( new Vector3( 0, -255, 0 ) );
-    }
-
-    [ConsoleCommand( "+move_left" )]
-    private void MoveLeft()
-    {
-        mainPlayer.AddForce( new Vector3( -255, 0, 0 ) );
-    }
-
-    [ConsoleCommand( "+move_right" )]
-    private void MoveRight()
-    {
-        mainPlayer.AddForce( new Vector3( 255, 0, 0 ) );
     }
 
     /// <summary>

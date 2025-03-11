@@ -199,7 +199,7 @@ public static class AudioManager
     /// <summary>
     /// Method to stop all currently playing sounds.
     /// </summary>
-    [ConsoleCommand( "stopsound", "Stops all actively playing sounds." )]
+    [ConsoleCommand( "stopsounds", "Stops all actively playing sounds." )]
     public static void StopAllSounds()
     {
         // For every playing file...
@@ -228,6 +228,7 @@ public static class AudioManager
     /// Checks whether or not the argument file is in our list of playing files,<br/>
     /// therefore is playing.
     /// </summary>
+    /// <returns><see langword="true"/> if <see cref="playingFiles"/> contains the given file, <see langword="false"/> otherwise.</returns>
     public static bool FileIsPlaying( AudioFile file )
     {
         return playingFiles.Contains( file );

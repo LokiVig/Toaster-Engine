@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Veldrid;
 using Veldrid.Sdl2;
@@ -50,8 +51,10 @@ public class Renderer
             WindowInitialState = initialWindowState
         };
 
-        windowCI.X = ( windowCI.WindowWidth - mode.w ) / 2;
-        windowCI.Y = ( windowCI.WindowHeight - mode.h ) / 2;
+        // Places the window in the middle of the screen, dependant on width and height
+        // Clamped to 0 for top-left corner, just incase
+        windowCI.X = Math.Max( 0, ( windowCI.WindowWidth - mode.w ) / 2 );
+        windowCI.Y = Math.Max( 0, ( windowCI.WindowHeight - mode.h ) / 2 );
 
         // Create our window
         window = VeldridStartup.CreateWindow( ref windowCI );
@@ -68,6 +71,7 @@ public class Renderer
             SwapchainDepthFormat = PixelFormat.R16_UNorm,
         };
 
+        // Create our graphics device
         graphicsDevice = VeldridStartup.CreateGraphicsDevice( window, options, GraphicsBackend.OpenGL );
 
         // The things to do when the window is resized

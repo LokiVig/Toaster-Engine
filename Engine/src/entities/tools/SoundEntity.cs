@@ -10,9 +10,9 @@ public class SoundEntity : ToolEntity
     public string audioPath = "resources/audio/engine/error.mp3"; // The actual audio we should play
     public float audioVolume = 1.0f; // The volume of this audio, this should be a range between 0.0<->1.0!
     public bool audioRepeats; // Toggles whether or not this audio should repeat
-    public AudioFile localAudioFile; // Our local audio file, generated when we play our sound
 
-    private bool playing; // Determines whether or not this entity's already playing an audio
+    private AudioFile localAudioFile; // Our local audio file, generated when we play our sound
+    private bool playing; // Determines whether or not this entity's already playing audio
 
     public SoundEntity()
     {
@@ -47,6 +47,7 @@ public class SoundEntity : ToolEntity
     {
         base.Update();
 
+        // If the AudioManager is playing our file, our playing variable is set to true
         playing = AudioManager.FileIsPlaying( localAudioFile );
     }
 
