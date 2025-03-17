@@ -38,7 +38,7 @@ public struct Log
         logWriter.WriteLine( "Start of engine log file." );
 
         // Then write the date
-        logWriter.WriteLine( $"{DateTime.Now:yyyy/MM/dd} {DateTime.Now:HH:mm:ss}" );
+        logWriter.WriteLine( $"{DateTime.Now:yyyy/MM/dd} @ {DateTime.Now:HH:mm:ss}" );
 
         // Separator
         logWriter.WriteSeparator();

@@ -146,7 +146,7 @@ public class Entity
     protected void ApplyVelocity()
     {
         // Clamp velocity between the min and max values, and normalize it
-        velocity = Vector3.Clamp( velocity, new Vector3( -MAX_VELOCITY ), new Vector3( MAX_VELOCITY ) );
+        //velocity = Vector3.Clamp( velocity, new Vector3( -MAX_VELOCITY ), new Vector3( MAX_VELOCITY ) );
         Vector3.Normalize( velocity );
 
         // Position is affected by velocity
@@ -559,8 +559,12 @@ public class Entity
     /// <param name="ent">The entity we wish to delete.</param>
     public static void Delete( Entity ent )
     {
-        EngineManager.OnUpdate -= ent.Update; // Unsubscribe the entity from the update function
-        EngineManager.currentScene?.RemoveEntity( ent ); // Remove the entity from the scene
+        // If the entity has a parent...
+        if ( ent.GetParent() != null )
+        {
+            // Remove this entity from its parent
+            ent.GetParent().RemoveChild( ent.GetID() );
+        }
 
         // If the entity has children...
         if ( ent.HasChildren() )
@@ -568,9 +572,12 @@ public class Entity
             // Delete every child
             foreach ( Entity child in ent.GetChildren() )
             {
-                child.Remove();
+                child?.Remove();
             }
         }
+
+        EngineManager.OnUpdate -= ent.Update; // Unsubscribe the entity from the update function
+        EngineManager.currentScene?.RemoveEntity( ent ); // Remove the entity from the scene
 
         // Nullify the entity
         ent = null;

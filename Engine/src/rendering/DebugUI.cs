@@ -37,11 +37,16 @@ public static class DebugUI
 
             ImGui.Separator();
 
+            // Show if we're connected to Steam
+            ImGui.Text( $"Connected to steam? {SteamManager.IsInitialized()}" );
+
+            ImGui.Separator();
+
             // Display the local server's information
             ImGui.Text( $"Local server: {(EngineManager.server.IsOpen() ? $"Open on {EngineManager.server.addr}:{EngineManager.server.port}" : "Closed")}" );
 
             // Display the server our local client's connected to, if any
-            ImGui.Text( $"Connected server: {( EngineManager.client.IsConnected() ? $"{EngineManager.client.connectedAddr}:{EngineManager.client.connectedPort}" : "N/A" )}" );
+            ImGui.Text( $"Client connected to: {( EngineManager.client.IsConnected() ? $"{EngineManager.client.connectedAddr}:{EngineManager.client.connectedPort}" : "N/A" )}" );
 
             ImGui.Separator();
 
@@ -90,7 +95,7 @@ public static class DebugUI
                         // Display the children
                         if ( entities[i].HasChildren() )
                         {
-                            if ( ImGui.TreeNodeEx( "Children", ImGuiTreeNodeFlags.Framed ) )
+                            if ( ImGui.TreeNodeEx( "Children", ImGuiTreeNodeFlags.Framed | ImGuiTreeNodeFlags.DefaultOpen ) )
                             {
                                 foreach ( string child in entities[i].GetChildrenIDs() )
                                 {

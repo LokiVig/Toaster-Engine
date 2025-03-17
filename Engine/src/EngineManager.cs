@@ -3,6 +3,8 @@ using System.Diagnostics;
 
 using Veldrid;
 
+using Steamworks;
+
 using Toast.Engine.Rendering;
 using Toast.Engine.Resources;
 using Toast.Engine.Attributes;
@@ -74,6 +76,9 @@ public static class EngineManager
         // Create default keybinds
         CreateKeybinds();
 
+        // Initialize steamworks
+        SteamManager.Initialize();
+
         // Try to...
         try
         {
@@ -92,9 +97,8 @@ public static class EngineManager
         // If we can't connect to a localhost already...
         if ( !client.TryConnectTo( Server.LocalHost ) )
         {
-            // Create a local server and connect to it
+            // Create a local server
             server = Server.CreateLocalServer();
-            client.ConnectTo( server );
         }
         else
         {
@@ -241,6 +245,9 @@ public static class EngineManager
         // Shut down the server and dispose of the client
         client.Dispose();
         server.Dispose();
+
+        // Shutdown steamworks
+        SteamManager.Shutdown();
 
         // End file logging
         Log.CloseLogFile();

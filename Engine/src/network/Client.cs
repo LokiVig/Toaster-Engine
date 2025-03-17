@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Net;
+using System.Text;
 using System.Net.Sockets;
 using System.Collections.Generic;
 
 using Toast.Engine.Resources;
 using Toast.Engine.Attributes;
-using System.Text;
 
 namespace Toast.Engine.Network;
 
@@ -18,6 +18,9 @@ public class Client : IDisposable
     public IPAddress connectedAddr; // The string representation of the IP address we're currently connected to
     public ushort connectedPort; // The port of the server we're currently connected to
 
+    private IPEndPoint localEndpoint;
+    private IPEndPoint remoteEndpoint;
+
     /// <summary>
     /// Creates a new network client object.
     /// </summary>
@@ -25,6 +28,23 @@ public class Client : IDisposable
     {
         // Initialize our TCP client
         tcpClient = new TcpClient();
+
+        // Set our endpoints
+        localEndpoint = tcpClient.Client.LocalEndPoint as IPEndPoint;
+        remoteEndpoint = tcpClient.Client.RemoteEndPoint as IPEndPoint;
+    }
+
+    /// <summary>
+    /// Creates a new network client object with a specified TCP client.
+    /// </summary>
+    /// <param name="client">The specified TCP client.</param>
+    public Client( TcpClient client )
+    {
+        tcpClient = client;
+
+        // Set our endpoints
+        localEndpoint = tcpClient.Client.LocalEndPoint as IPEndPoint;
+        remoteEndpoint = tcpClient.Client.RemoteEndPoint as IPEndPoint;
     }
 
     /// <summary>
@@ -76,9 +96,6 @@ public class Client : IDisposable
             Log.Info( $"Successfully connected to {addr}:{port}!", true );
             connectedAddr = addr;
             connectedPort = port;
-
-            // Do certain things upon connecting
-            OnConnect();
         }
         else // Otherwise...
         {
@@ -114,27 +131,43 @@ public class Client : IDisposable
     /// </summary>
     /// <param name="args">The arguments given to the console command.</param>
     [ConsoleCommand( "connect", "Connects the engine's local client to a specified server (IP - port)." )]
-    public static void ConnectTo_Command( List<object> args )
+    public static void ConnectTo( List<object> args )
     {
         // Get the amount of arguments
         int argCount = args.Count - 1;
 
         // If we have an invalid amount of arguments...
-        if ( argCount < 2 || argCount > 2 )
+        if ( argCount < 1 || argCount > 2 )
         {
-            Log.Error( "Invalid amount of arguments! You need to specify at least, and at most, 2 arguments, one for the IP address of the server you wish to connect to, and the other for the port." );
+            Log.Error( "Invalid amount of arguments! You need to specify at least 1 argument and at most 2 arguments, one for the IP address of the server you wish to connect to, and the other for the port, or just one specifying localhost." );
             return;
         }
 
-        // Try to call the default ConnectTo command with the input arguments...
-        try
+        // If we have more than one argument...
+        if ( argCount > 1 )
         {
-            EngineManager.client.ConnectTo( (string)args[1], ushort.Parse( (string)args[2] ) );
+            // Try to call the default TryConnectTo command with the input arguments...
+            if ( !EngineManager.client.TryConnectTo( (string)args[1], ushort.Parse( (string)args[2] ) ) )
+            {
+                Log.Error( $"Failed to connect to {args[1]}:{args[2]}!" );
+            }
         }
-        catch ( Exception exc ) // If an exception is caught...
+        else
         {
-            // Log it!
-            Log.Error( $"Error caught when trying to connect to {args[1]}:{args[2]}! {exc.Message}" );
+            // If we've typed localhost...
+            if ( args[1].ToString().ToLower() == "localhost" )
+            {
+                // Try to connect to localhost!
+                if ( !EngineManager.client.TryConnectTo( Server.LocalHost ) )
+                {
+                    Log.Error( "Failed to connect to localhost!" );
+                    return;
+                }
+            }
+            else
+            {
+                Log.Error( $"Failed to connect to \"{args[1]}\"!" );
+            }
         }
     }
 
@@ -169,7 +202,7 @@ public class Client : IDisposable
             {
                 // Host a local server and connect to it!
                 EngineManager.server = Server.CreateLocalServer();
-                ConnectTo( IPAddress.Parse( Server.LOCALHOST_ADDR ), Server.LOCALHOST_PORT );
+                ConnectTo( Server.LocalHost );
             }
 
             // We shouldn't do anything more
@@ -182,8 +215,6 @@ public class Client : IDisposable
             Log.Info( $"Successfully connected to {addr}:{port}!", true );
             connectedAddr = addr;
             connectedPort = port;
-
-            OnConnect();
         }
         else // Otherwise...
         {
@@ -200,12 +231,6 @@ public class Client : IDisposable
     /// <returns><see langword="true"/> if we successfully connect to the desired server, <see langword="false"/> otherwise.</returns>
     public bool TryConnectTo( IPAddress addr, ushort port )
     {
-        // We want to disconnect before trying to connect anywhere, so if connecting to the new server fails,
-        // we should return to the last server we were connected to
-        // If even that fails however, we should just connect back to localhost
-        IPAddress prevAddr = connectedAddr;
-        ushort prevPort = connectedPort;
-
         // Disconnect from the current server
         Disconnect();
 
@@ -217,7 +242,7 @@ public class Client : IDisposable
         catch ( Exception exc ) // If we got an exception...
         {
             // Log our failure!
-            Log.Error( $"Error connecting to {addr}:{port}!\n{exc.Message}" );
+            Log.Error( $"Error connecting to {addr}:{port}! {exc.Message}" );
 
             // We shouldn't do anything more
             return false;
@@ -229,8 +254,6 @@ public class Client : IDisposable
             Log.Info( $"Successfully connected to {addr}:{port}!", true );
             connectedAddr = addr;
             connectedPort = port;
-
-            OnConnect();
 
             return true;
         }
@@ -249,7 +272,7 @@ public class Client : IDisposable
     }
 
     /// <inheritdoc cref="TryConnectTo(IPAddress, ushort)"/>
-    /// <param name="server">The specific server we wish to try to connect to</param>
+    /// <param name="server">The specific server we wish to try to connect to.</param>
     public bool TryConnectTo( Server server )
     {
         return TryConnectTo( server.addr, server.port );
@@ -286,19 +309,23 @@ public class Client : IDisposable
         tcpClient = new TcpClient();
     }
 
+    /// <summary>
+    /// Console command equivalent of <see cref="Disconnect"/>.
+    /// </summary>
     [ConsoleCommand( "disconnect", "Disconnects the current local client from the server they're connected to." )]
-    public static void Disconnect_Command()
+    public static void DisconnectCmd()
     {
-        Client cl = EngineManager.client;
-        cl.Disconnect();
+        // Simply calls the engine instance's client's disconnect method
+        EngineManager.client.Disconnect();
     }
 
     /// <summary>
-    /// Things to do when this client's connected
+    /// Gets the address of this client.
     /// </summary>
-    private void OnConnect()
+    /// <returns>The address of this client.</returns>
+    public string GetAddress()
     {
-        tcpClient.GetStream().Write(Encoding.ASCII.GetBytes("Client Connected"));
+        return $"{localEndpoint.Address}:{localEndpoint.Port}";
     }
 
     /// <summary>

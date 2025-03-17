@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 using Toast.Engine.Resources;
 using Toast.Engine.Attributes;
+using System.Threading.Tasks;
+using Steamworks;
 
 namespace Toast.Engine.Network;
 
@@ -29,10 +31,68 @@ public class Server : IDisposable
     public Server( string addr, ushort port, AddressFamily family = AddressFamily.Unspecified )
     {
         this.addr = addr; // Set our address
+
+        // Make sure the IP is actually valid...
+        if ( !IPAddress.TryParse( addr, out ipAddr ) )
+        {
+            // Log the error
+            Log.Error( $"{addr} is not a valid IP address!" );
+
+            // Dispose of ourselves
+            Dispose();
+
+            // Skip doing anything more
+            return;
+        }
+
         this.port = port; // Set our port
         this.family = family; // Set our address family
 
+
         connectedClients = new List<Client>(); // Initialize our client list
+
+        // The server should also update!
+        EngineManager.OnUpdate += Update;
+    }
+
+    /// <summary>
+    /// Things to do every frame.<br/>
+    /// In this case, we should most likely send and receive packets every frame we can.
+    /// </summary>
+    private void Update()
+    {
+        // Make sure we're actively open
+        if ( !IsOpen() )
+        {
+            return;
+        }
+
+        // If we have any pending connections...
+        if ( listener.Pending() )
+        {
+            // Accept the pending connection and add the client to our list
+            TcpClient tcp = listener.AcceptTcpClient();
+            Client client = new Client( tcp );
+            connectedClients.Add( client );
+
+            Log.Info( $"Accepted connection from {client.GetAddress()}!", true );
+        }
+
+        // For every connected client...
+        foreach ( Client client in connectedClients )
+        {
+            // If the client is still connected...
+            if ( client.IsConnected() )
+            {
+                
+            }
+            else // Otherwise, the client has disconnected...
+            {
+                Log.Info( $"{client.GetAddress()} has disconnected!", true );
+                client.Dispose();
+                connectedClients.Remove( client );
+            }
+        }
     }
 
     /// <summary>
@@ -45,7 +105,7 @@ public class Server : IDisposable
         Server server = new Server( LOCALHOST_ADDR, LOCALHOST_PORT );
 
         // Tell the server to start hosting locally
-        server.HostLocal();
+        server.Host();
 
         // Return the newly made and hosted server
         return server;
@@ -54,7 +114,8 @@ public class Server : IDisposable
     /// <summary>
     /// Hosts an online-accessible server.
     /// </summary>
-    public void Host()
+    /// <param name="fetchIP">Determines whether or not we should fetch an IP automatically.</param>
+    public void Host( bool fetchIP = false )
     {
         // Make sure we have a valid address family
         if ( family == AddressFamily.Unknown )
@@ -63,90 +124,110 @@ public class Server : IDisposable
             return;
         }
 
-        // Gets the system's public IP address
-        // Source:
-        //  - https://stackoverflow.com/a/6803109
-        IPHostEntry host = Dns.GetHostEntry( Dns.GetHostName() );
-
-        foreach ( IPAddress ip in host.AddressList )
+        // If we should fetch an IP address...
+        if ( fetchIP )
         {
-            if ( ip.AddressFamily == AddressFamily.InterNetwork )
+            // Gets the system's public IP address
+            // Source:
+            //  - https://stackoverflow.com/a/6803109
+            IPHostEntry host = Dns.GetHostEntry( Dns.GetHostName() );
+
+            foreach ( IPAddress ip in host.AddressList )
             {
-                ipAddr = ip;
-                addr = ip.ToString();
+                if ( ip.AddressFamily == AddressFamily.InterNetwork )
+                {
+                    ipAddr = ip;
+                    addr = ip.ToString();
+                }
+            }
+        }
+        else // Otherwise...
+        {
+            // Try and parse our string address to an IP address
+            ipAddr = IPAddress.Parse( addr );
+        }
+
+        // If the engine instance's server isn't null...
+        if ( EngineManager.server != null )
+        {
+            // If this engine's instance's server is actively open...
+            if ( EngineManager.server.IsOpen() )
+            {
+                // Close it! We can't have one server host in multiple places
+                EngineManager.server.Close();
             }
         }
 
-        // If this engine's instance's server is actively open...
-        if ( EngineManager.server.IsOpen() )
+        try
         {
-            // Close it! We can't have one server host in multiple places
-            EngineManager.server.Close();
+            // Create our TCP listener
+            listener = new TcpListener( ipAddr, port );
+            listener.Start();
         }
-
-        // Create our TCP listener
-        listener = new TcpListener( ipAddr, port );
-        listener.Start();
-
-        Log.Info( $"Hosting on {addr}:{port}...", true );
-    }
-
-    /// <summary>
-    /// Hosts this server locally.
-    /// </summary>
-    public void HostLocal()
-    {
-        // If we're actively open...
-        if ( IsOpen() )
+        catch (Exception exc)
         {
-            // Close ourselvess! We can't have one server host in multiple places
-            Close();
-        }
-
-        // Set the address and port to localhost
-        addr = LOCALHOST_ADDR;
-        port = LOCALHOST_PORT;
-
-        // Get the actual IP address
-        if ( !IPAddress.TryParse( addr, out ipAddr ) )
-        {
-            Log.Error( "Error parsing address to a valid IP address!" );
+            Log.Error( $"Error hosting on {ipAddr}:{port}! {exc.Message}" );
             return;
         }
 
-        // Initialize our listener and start accepting connections
-        listener = new TcpListener( ipAddr, port );
-        listener.Start();
+        // Try to connect with our local client too
+        if ( !EngineManager.client.TryConnectTo( this ) )
+        {
+            Log.Error( $"Failed connecting to newly hosted server at {addr}:{port}!" );
 
-        Log.Info( $"Started hosting on localhost ({addr}:{port})...", true );
+            Close(); // Close the server
+
+            // Start hosting locally again
+            addr = LOCALHOST_ADDR;
+            port = LOCALHOST_PORT;
+            Host();
+
+            return;
+        }
+
+        Log.Info( $"Hosting on {addr}:{port}...", true );
     }
 
     /// <summary>
     /// Console command letting the user host on this computer's valid IP address and select port.
     /// </summary>
     /// <param name="args">The input arguments from </param>
-    [ConsoleCommand( "host", "Hosts a server from this computer's IPv4 address with a specified port." )]
-    public static void Host_Command( List<object> args )
+    [ConsoleCommand( "host", "Hosts a server from either a specified address and port, localhost, or just a specified port (IP chosen automatically)." )]
+    public static void Host( List<object> args )
     {
         int argCount = args.Count - 1;
 
-        if ( argCount < 1 || argCount > 1 )
+        if ( argCount < 1 || argCount > 2 )
         {
-            Log.Error( "Invalid argument count! You need at least, and at most, 1 argument specifying the port of which you want to host from." );
+            Log.Error( "Invalid argument count! You need at least 1 argument and at most 2 arguments, one specifying the IP you want to host off, and one for the port of which you want to host from. Typing localhost will host a server on localhost." );
             return;
         }
 
-        // Set the EngineManager's server's port
-        EngineManager.server.port = ushort.Parse( (string)args[1] );
-
-        // Start hosting!
-        EngineManager.server.Host();
-    }
-
-    [ConsoleCommand( "host_local", "Hosts a local server." )]
-    public static void HostLocal_Command()
-    {
-        EngineManager.server.HostLocal();
+        // If we have more than one argument...
+        if ( argCount > 1 )
+        {
+            // Host on the specified IP address and port
+            EngineManager.server.addr = (string)args[1];
+            EngineManager.server.port = ushort.Parse( (string)args[2] );
+            EngineManager.server.Host();
+        }
+        else // Otherwise we just want to host on a port, or localhost
+        {
+            // If we're specifying localhost...
+            if ( args[1].ToString().ToLower() == "localhost" )
+            {
+                // Start hosting on localhost!
+                EngineManager.server.addr = LOCALHOST_ADDR;
+                EngineManager.server.port = LOCALHOST_PORT;
+                EngineManager.server.Host();
+            }
+            else // Otherwise, we're specifying a port...
+            {
+                // Set the port and start hosting from there
+                EngineManager.server.port = ushort.Parse( (string)args[1] );
+                EngineManager.server.Host( true );
+            }
+        }
     }
 
     /// <summary>
@@ -162,6 +243,24 @@ public class Server : IDisposable
         }
 
         return listener.Server.IsBound;
+    }
+
+    [ConsoleCommand("displayconnections", "Shows all connected clients to the server." )]
+    public static void ShowConnections()
+    {
+        // Header for connected clients
+        Log.Info( $"Connected clients:" );
+
+        // For every connected client...
+        foreach ( Client client in EngineManager.server.connectedClients )
+        {
+            // If they're connected...
+            if ( client.IsConnected() )
+            {
+                // Log their existence!
+                Log.Info( $"\tAddress: {client.GetAddress()}" );
+            }
+        }
     }
 
     /// <summary>
@@ -190,6 +289,9 @@ public class Server : IDisposable
         // Close the server and dispose the listener
         Close();
         listener.Dispose();
+
+        // Stop subscribing to the update event
+        EngineManager.OnUpdate -= Update;
     }
 
     /// <summary>
@@ -205,7 +307,7 @@ public class Server : IDisposable
             return rhs is null;
         }
 
-        return Equals( lhs, rhs ); // Check port against port
+        return Equals( lhs, rhs );
     }
 
     /// <summary>
