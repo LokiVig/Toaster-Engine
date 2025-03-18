@@ -259,7 +259,7 @@ public static class ConsoleManager
     /// <summary>
     /// Toggles a command through the console.
     /// </summary>
-    [ConsoleCommand("togglecommand", "Disables or enables a specific console command." )]
+    [ConsoleCommand( "togglecommand", "Disables or enables a specific console command." )]
     public static void ToggleCommand( List<object> args )
     {
         // Find the command

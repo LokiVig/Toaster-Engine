@@ -4,14 +4,15 @@ using System.Diagnostics;
 using Veldrid;
 
 using Steamworks;
+using Steamworks.Data;
 
+using Toast.Engine.Network;
 using Toast.Engine.Rendering;
 using Toast.Engine.Resources;
 using Toast.Engine.Attributes;
 using Toast.Engine.Resources.Input;
 using Toast.Engine.Resources.Audio;
 using Toast.Engine.Resources.Console;
-using Toast.Engine.Network;
 
 namespace Toast.Engine;
 
@@ -41,6 +42,9 @@ public static class EngineManager
     public static Client client; // This engine instance's local client
     public static Server server; // This engine instance's local server
 
+    public static SocketManager serverManager; // The actual manager for the server
+    public static ConnectionManager clientManager; // The actual manager for the client
+
     public static float deltaTime; // Helps stopping you from using FPS-dependant calculations
 
     //---------------------------------------//
@@ -61,7 +65,8 @@ public static class EngineManager
     /// <summary>
     /// Initialize a new Toaster Engine instance with an optional <paramref name="title"/> argument.
     /// </summary>
-    /// <param name="title">The title this instance of Toaster Engine should run.</param>
+    /// <param name="title">The title this Toaster Engine instance should have.</param>
+    /// <param name="initialWindowState">The initial window state the instance should run from.</param>
     public static void Initialize( string title = null, WindowState initialWindowState = WindowState.Normal )
     {
         // Initialize file logging
@@ -76,36 +81,26 @@ public static class EngineManager
         // Create default keybinds
         CreateKeybinds();
 
-        // Initialize steamworks
-        SteamManager.Initialize();
-
         // Try to...
         try
         {
             // Initialize the renderer
             Renderer.Initialize( $"Toaster Engine (v.{VERSION}){( title != null ? $" - {title}" : "" )}", initialWindowState );
             Log.Success( "Successfully initialized renderer." );
+
+            // Initialize Steam
+            SteamClient.Init( 480 );
         }
         catch ( Exception exc ) // Handle any exceptions we encounter!
         {
-            Log.Error( $"Exception caught while initializing renderer!", exc );
+            Log.Error( $"Exception caught while initializing!", exc );
         }
 
-        // Create our local client
-        client = new Client();
+        // Open a new server on localhost
+        serverManager = SteamNetworkingSockets.CreateNormalSocket( NetAddress.LocalHost( 3001 ), server );
 
-        // If we can't connect to a localhost already...
-        if ( !client.TryConnectTo( Server.LocalHost ) )
-        {
-            // Create a local server
-            server = Server.CreateLocalServer();
-        }
-        else
-        {
-            // The server is actually a localhost, but not on this instance
-            // Thanks to TryConnectTo, we've also already connected to it!
-            server = Server.LocalHost;
-        }
+        // Connect our local client to it
+        clientManager = SteamNetworkingSockets.ConnectNormal<ConnectionManager>( NetAddress.LocalHost( 3001 ) );
 
         // Connect our InputManager's events to the Renderer's events for simplicity's sakes
         Renderer.window.KeyDown += InputManager.OnKeyDown;
@@ -203,6 +198,9 @@ public static class EngineManager
 
             // Call the RenderFrame method from the renderer
             Renderer.RenderFrame( currentScene ?? null );
+
+            // Run Steam callback functions
+            SteamClient.RunCallbacks();
         }
     }
 
@@ -242,15 +240,17 @@ public static class EngineManager
         // Save our commands
         ConsoleManager.SaveCommands();
 
-        // Shut down the server and dispose of the client
-        client.Dispose();
-        server.Dispose();
+        // Shutdown any open server we might have
+        serverManager.Close();
 
-        // Shutdown steamworks
-        SteamManager.Shutdown();
+        // Shutdown the client
+        clientManager.Close();
 
         // End file logging
         Log.CloseLogFile();
+
+        // Shutdown the connection to Steam
+        SteamClient.Shutdown();
 
         // Clear everything from the renderer
         Renderer.Shutdown();

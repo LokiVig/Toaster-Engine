@@ -25,9 +25,9 @@
 		<IsTrimmable>True</IsTrimmable>
 	</PropertyGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<!-- APIs -->
-		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)resources\api\*&quot; &quot;$(OutDir)&quot;" />
-		
+		<!-- Facepunch.Steamworks -->
+		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)resources\api\Facepunch.Steamworks\*&quot; &quot;$(OutDir)&quot;" />
+
 		<!-- Shaders -->
 		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)resources\shaders\*&quot; &quot;$(OutDir)resources\shaders\&quot;" />
 		
@@ -42,9 +42,16 @@
 		<PackageReference Include="ImGui.NET" Version="1.91.6.1" />
 		<PackageReference Include="NAudio" Version="2.2.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="Steamworks.NET" Version="2024.8.0" />
 		<PackageReference Include="Veldrid" Version="4.9.0" />
 		<PackageReference Include="Veldrid.StartupUtilities" Version="4.9.0" />
 		<PackageReference Include="Veldrid.SPIRV" Version="1.0.15" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="resources\api\Facepunch.Steamworks\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="Facepunch.Steamworks.Win64">
+	    <HintPath>resources\api\Facepunch.Steamworks\Facepunch.Steamworks.Win64.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 </Project>

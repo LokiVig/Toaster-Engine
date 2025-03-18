@@ -8,6 +8,7 @@ using Toast.Engine.Resources;
 using Toast.Engine.Entities.Brushes;
 using Toast.Engine.Entities.Tools;
 using System;
+using Steamworks;
 
 namespace Toast.Engine.Rendering;
 
@@ -37,16 +38,15 @@ public static class DebugUI
 
             ImGui.Separator();
 
-            // Show if we're connected to Steam
-            ImGui.Text( $"Connected to steam? {SteamManager.IsInitialized()}" );
+            ImGui.Text( $"Connected to Steam? {SteamClient.IsLoggedOn}" );
 
             ImGui.Separator();
 
             // Display the local server's information
-            ImGui.Text( $"Local server: {(EngineManager.server.IsOpen() ? $"Open on {EngineManager.server.addr}:{EngineManager.server.port}" : "Closed")}" );
+            ImGui.Text( $"Local server: {(!EngineManager.serverManager.Equals(null) ? "Open" : "Closed")}" );
 
             // Display the server our local client's connected to, if any
-            ImGui.Text( $"Client connected to: {( EngineManager.client.IsConnected() ? $"{EngineManager.client.connectedAddr}:{EngineManager.client.connectedPort}" : "N/A" )}" );
+            ImGui.Text( $"Client connected to: {( EngineManager.clientManager.Connected ? $"{EngineManager.clientManager.ConnectionInfo.Address}" : "N/A" )}" );
 
             ImGui.Separator();
 

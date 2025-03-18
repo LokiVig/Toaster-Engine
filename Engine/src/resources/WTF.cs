@@ -225,11 +225,10 @@ public class WTF
     }
 
     /// <summary>
-    /// Find a WTF by a specific path
+    /// Find a WTF by a specific path.
     /// </summary>
-    /// <param name="directory">The specified path to the WTF</param>
-    /// <param name="outFile">An output file, for external uses</param>
-    /// <exception cref="FileNotFoundException"></exception>
+    /// <param name="directory">The specified path to the WTF.</param>
+    /// <param name="outFile">The resulting file we've loaded.</param>
     public static void LoadFile( string directory, out WTF outFile )
     {
         // Couldn't find file from the input path! Throw an exception
