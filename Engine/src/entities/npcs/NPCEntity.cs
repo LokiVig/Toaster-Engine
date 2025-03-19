@@ -21,11 +21,7 @@ public class NPCEntity : Entity
 
     public NPCEntity( Entity parent ) : base( parent ) { }
 
-    public NPCEntity( string parent ) : base( parent ) { }
-
     public NPCEntity( Entity parent, Vector3 position ) : base( parent, position ) { }
-
-    public NPCEntity( string parent, Vector3 position ) : base( parent, position ) { }
 
     protected override void OnSpawn()
     {

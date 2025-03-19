@@ -17,12 +17,6 @@ public class Camera : ToolEntity
         rotation = Quaternion.Identity;
     }
 
-    public Camera( string parent, Vector3 offset ) : base( parent )
-    {
-        this.offset = offset;
-        rotation = Quaternion.Identity;
-    }
-
     public Camera( Entity parent, Vector3 offset, Quaternion rotation ) : this( parent, offset )
     {
         this.rotation = rotation;

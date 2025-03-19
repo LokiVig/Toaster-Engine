@@ -64,12 +64,6 @@ public class Entity
     /// Creates a new entity with a specified <paramref name="parent"/>.
     /// </summary>
     /// <param name="parent">The parent we should be a child of.</param>
-    public Entity( string parent ) : this()
-    {
-        SetParent( parent ); // Set our parent
-    }
-
-    /// <inheritdoc cref="Entity(string)"/>
     public Entity( Entity parent ) : this()
     {
         SetParent( parent.GetID() ); // Set our parent
@@ -80,13 +74,6 @@ public class Entity
     /// </summary>
     /// <param name="parent">The parent we should be a child of.</param>
     /// <param name="position">The position we should be created at.</param>
-    public Entity( string parent, Vector3 position ) : this()
-    {
-        SetParent( parent ); // Set our parent
-        SetPosition( position ); // Set our position
-    }
-
-    /// <inheritdoc cref="Entity(string, Vector3)"/>
     public Entity( Entity parent, Vector3 position ) : this()
     {
         SetParent( parent.GetID() );
