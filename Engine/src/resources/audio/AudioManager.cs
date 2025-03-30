@@ -2,8 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 
-using NAudio.Wave;
-using NAudio.Wave.SampleProviders;
+
 
 using Toast.Engine.Entities;
 using Toast.Engine.Attributes;
@@ -70,56 +69,7 @@ public static class AudioManager
     /// <param name="repeats">Determines whether or not this sound should repeat (loop) or not.</param>
     public static AudioFile PlaySound( string filepath, float volume = 1.0f, bool repeats = false )
     {
-        // Try to...
-        try
-        {
-            // Read the file
-            AudioFileReader fileReader = new AudioFileReader( filepath );
-
-            // Create a volume provider for independent volume control
-            VolumeSampleProvider volumeProvider = new VolumeSampleProvider( fileReader.ToSampleProvider() )
-            {
-                Volume = volume // Set the volume
-            };
-
-            // Initialize a WaveOutEvent
-            WaveOutEvent waveEvent = new WaveOutEvent();
-
-            // Make a new file with these variables
-            AudioFile file = new AudioFile()
-            {
-                filepath = filepath,
-                volume = volume,
-                repeats = repeats,
-
-                fileReader = fileReader,
-                waveEvent = waveEvent
-            };
-
-            // Actually play the sound
-            file.waveEvent.Init( volumeProvider );
-            file.waveEvent.Play();
-
-            // Add the new file to our list of playing files
-            playingFiles.Add( file );
-
-            // Return our newly made file
-            return file;
-        }
-        catch ( Exception exc ) // Problem caught!
-        {
-            // If we couldn't find the file...
-            if ( exc is FileNotFoundException || exc is DirectoryNotFoundException )
-            {
-                // We shouldn't throw the exception, just log a warning that we couldn't find it!
-                Log.Warning( $"Couldn't find file at path \"{filepath}\"!" );
-                return null;
-            }
-
-            // Log the error and throw the provided exception
-            Log.Error( $"Exception caught when trying to play sound \"{filepath}\"", exc );
-            return null;
-        }
+        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -144,12 +94,6 @@ public static class AudioManager
         // Do things that will effectively make the file repeat.
         //
 
-        file.waveEvent.Pause(); // Pause the playback
-        playingFiles.Remove( file ); // Remove the file from our list of playing files
-
-        file.fileReader.Position = 0; // Reset the position back to the start
-        file.waveEvent.Play(); // Play the audio
-        playingFiles.Add( file ); // Add the file back to our list of playing files
     }
 
     /// <summary>
@@ -170,19 +114,7 @@ public static class AudioManager
                 continue; // Continue to the next file
             }
 
-            // If its status is stopped...
-            if ( file.waveEvent.PlaybackState == PlaybackState.Stopped )
-            {
-                // If the file should repeat...
-                if ( file.repeats )
-                {
-                    RepeatSound( file ); // Do things that will make this file repeat itself
-                }
-                else // Otherwise...
-                {
-                    StopSound( file ); // Just stop the sound as per regular
-                }
-            }
+
         }
     }
 
@@ -192,7 +124,6 @@ public static class AudioManager
     /// <param name="file">The <see cref="AudioFile"/> we wish to stop the sound of.</param>
     public static void StopSound( AudioFile file )
     {
-        file.waveEvent.Stop(); // Stop the sound
         file.Dispose(); // Call the file's dispose method
 
         playingFiles.Remove( file ); // Remove the file from our list
@@ -210,8 +141,6 @@ public static class AudioManager
             // Get the current file
             AudioFile file = playingFiles[i];
 
-            // Do the same things as the 
-            file.waveEvent.Stop();
             file.Dispose();
         }
 

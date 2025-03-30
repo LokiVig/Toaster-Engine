@@ -1,7 +1,5 @@
 ﻿using System;
 
-using NAudio.Wave;
-
 namespace Toast.Engine.Resources.Audio;
 
 public class AudioFile : IDisposable
@@ -10,13 +8,8 @@ public class AudioFile : IDisposable
     public float volume;
     public bool repeats;
 
-    public AudioFileReader fileReader;
-    public WaveOutEvent waveEvent;
-
     public void Dispose()
     {
-        // Dispose of everything...
-        fileReader.Dispose();
-        waveEvent.Dispose();
+
     }
 }
