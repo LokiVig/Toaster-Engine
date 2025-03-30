@@ -3,10 +3,6 @@ using System.Diagnostics;
 
 using Veldrid;
 
-using Steamworks;
-using Steamworks.Data;
-
-using Toast.Engine.Network;
 using Toast.Engine.Rendering;
 using Toast.Engine.Resources;
 using Toast.Engine.Attributes;
@@ -38,12 +34,6 @@ public static class EngineManager
 
     public static WTF currentFile; // The currently loaded WTF file / map
     public static Scene currentScene; // The currently running scene, initialized from the current file
-
-    public static Client client; // This engine instance's local client
-    public static Server server; // This engine instance's local server
-
-    public static SocketManager serverManager; // The actual manager for the server
-    public static ConnectionManager clientManager; // The actual manager for the client
 
     public static float deltaTime; // Helps stopping you from using FPS-dependant calculations
 
@@ -87,20 +77,11 @@ public static class EngineManager
             // Initialize the renderer
             Renderer.Initialize( $"Toaster Engine [V.{VERSION}]{( title != null ? $" - {title}" : "" )}", initialWindowState );
             Log.Success( "Successfully initialized renderer." );
-
-            // Initialize Steam
-            SteamClient.Init( 480 );
         }
         catch ( Exception exc ) // Handle any exceptions we encounter!
         {
             Log.Error( $"Exception caught while initializing!", exc );
         }
-
-        // Open a new server on localhost
-        serverManager = SteamNetworkingSockets.CreateNormalSocket( NetAddress.LocalHost( 3001 ), server );
-
-        // Connect our local client to it
-        clientManager = SteamNetworkingSockets.ConnectNormal<ConnectionManager>( NetAddress.LocalHost( 3001 ) );
 
         // Connect our InputManager's events to the Renderer's events for simplicity's sakes
         Renderer.window.KeyDown += InputManager.OnKeyDown;
@@ -198,9 +179,6 @@ public static class EngineManager
 
             // Call the RenderFrame method from the renderer
             Renderer.RenderFrame( currentScene ?? null );
-
-            // Run Steam callback functions
-            SteamClient.RunCallbacks();
         }
     }
 
@@ -240,17 +218,8 @@ public static class EngineManager
         // Save our commands
         ConsoleManager.SaveCommands();
 
-        // Shutdown any open server we might have
-        serverManager.Close();
-
-        // Shutdown the client
-        clientManager.Close();
-
         // End file logging
         Log.CloseLogFile();
-
-        // Shutdown the connection to Steam
-        SteamClient.Shutdown();
 
         // Clear everything from the renderer
         Renderer.Shutdown();

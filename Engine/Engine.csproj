@@ -25,9 +25,6 @@
 		<IsTrimmable>True</IsTrimmable>
 	</PropertyGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<!-- Facepunch.Steamworks -->
-		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)resources\api\Facepunch.Steamworks\*&quot; &quot;$(OutDir)&quot;" />
-
 		<!-- Shaders -->
 		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)resources\shaders\*&quot; &quot;$(OutDir)resources\shaders\&quot;" />
 		
@@ -45,13 +42,5 @@
 		<PackageReference Include="Veldrid" Version="4.9.0" />
 		<PackageReference Include="Veldrid.StartupUtilities" Version="4.9.0" />
 		<PackageReference Include="Veldrid.SPIRV" Version="1.0.15" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="resources\api\Facepunch.Steamworks\" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Reference Include="Facepunch.Steamworks.Win64">
-	    <HintPath>resources\api\Facepunch.Steamworks\Facepunch.Steamworks.Win64.dll</HintPath>
-	  </Reference>
 	</ItemGroup>
 </Project>

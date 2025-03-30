@@ -8,8 +8,6 @@ using Toast.Engine.Resources;
 using Toast.Engine.Entities.Brushes;
 using Toast.Engine.Entities.Tools;
 using System;
-using Steamworks;
-using Toast.Engine.Resources.Audio;
 
 namespace Toast.Engine.Rendering;
 
@@ -34,18 +32,6 @@ public static class DebugUI
 
             // Are we CHEATING?!
             ImGui.Text( $"Cheats enabled? {EngineManager.cheatsEnabled}" );
-
-            ImGui.Separator();
-
-            ImGui.Text( $"Connected to Steam? {SteamClient.IsLoggedOn}" );
-
-            ImGui.Separator();
-
-            // Display the local server's information
-            ImGui.Text( $"Local server: {(EngineManager.serverManager != null ? "Open" : "Closed")}" );
-
-            // Display the server our local client's connected to, if any
-            ImGui.Text( $"Client connected to: {( EngineManager.clientManager.Connected ? $"{EngineManager.clientManager.ConnectionInfo.Address}" : "N/A" )}" );
 
             ImGui.Separator();
 
