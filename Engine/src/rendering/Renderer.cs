@@ -112,14 +112,17 @@ public class Renderer
         int argCount = args.Count - 1;
 
         // Make sure we have the right amount of arguments...
-        if ( argCount < 1 || argCount > 1 )
+        if ( argCount < 1 || argCount > 2 )
         {
-            Log.Error( "Invalid amount of arguments! You need at least, and at most, 1 argument specifying the title you wish to switch to. If you're trying to use spaces, replace those spaces with underscores!" );
+            Log.Error( "Invalid amount of arguments! You need at least 1, and at most 2 arguments specifying the title you wish to switch to, and if it should suffix the standard engine title. If you're trying to use spaces, replace those spaces with underscores!" );
             return;
         }
 
         // Set the window's title to the argument
-        window.Title = $"Toaster Engine (v.{EngineManager.VERSION}) - {args[1].ToString().Replace( "_", " " )}";
+        window.Title = argCount > 1 && bool.Parse( (string)args[2] )
+            ? $"Toaster Engine [v.{EngineManager.VERSION}] - {args[1].ToString().Replace( "_", " " )}" 
+            : $"{args[1].ToString().Replace("_", " ")}";
+
         Log.Info( $"Set the window's title to \"{args[1].ToString().Replace( "_", " " )}\"!", true );
     }
 

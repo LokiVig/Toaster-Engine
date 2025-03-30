@@ -2,7 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 
-
+using Silk.NET.OpenAL;
 
 using Toast.Engine.Entities;
 using Toast.Engine.Attributes;
@@ -69,7 +69,8 @@ public static class AudioManager
     /// <param name="repeats">Determines whether or not this sound should repeat (loop) or not.</param>
     public static AudioFile PlaySound( string filepath, float volume = 1.0f, bool repeats = false )
     {
-        throw new NotImplementedException();
+        Log.Info("PlaySound has not yet been properly implemented with the OpenAL backend!");
+        return null;
     }
 
     /// <summary>
@@ -91,7 +92,7 @@ public static class AudioManager
     private static void RepeatSound( AudioFile file )
     {
         //
-        // Do things that will effectively make the file repeat.
+        // Do things that will effectively make the file repeat playback.
         //
 
     }

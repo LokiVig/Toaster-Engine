@@ -35,10 +35,9 @@
 		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)resources\audio\*&quot; &quot;$(OutDir)resources\audio\&quot;" />
 	</Target>
 	<ItemGroup>
-		<PackageReference Include="DynamicExpresso.Core" Version="2.17.2" />
 		<PackageReference Include="ImGui.NET" Version="1.91.6.1" />
-		<PackageReference Include="NAudio" Version="2.2.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Silk.NET.OpenAL" Version="2.22.0" />
 		<PackageReference Include="Veldrid" Version="4.9.0" />
 		<PackageReference Include="Veldrid.StartupUtilities" Version="4.9.0" />
 		<PackageReference Include="Veldrid.SPIRV" Version="1.0.15" />
