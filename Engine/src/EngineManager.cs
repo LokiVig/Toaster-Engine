@@ -85,7 +85,7 @@ public static class EngineManager
         try
         {
             // Initialize the renderer
-            Renderer.Initialize( $"Toaster Engine (v.{VERSION}){( title != null ? $" - {title}" : "" )}", initialWindowState );
+            Renderer.Initialize( $"Toaster Engine [V.{VERSION}]{( title != null ? $" - {title}" : "" )}", initialWindowState );
             Log.Success( "Successfully initialized renderer." );
 
             // Initialize Steam

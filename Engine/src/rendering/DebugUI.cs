@@ -9,6 +9,7 @@ using Toast.Engine.Entities.Brushes;
 using Toast.Engine.Entities.Tools;
 using System;
 using Steamworks;
+using Toast.Engine.Resources.Audio;
 
 namespace Toast.Engine.Rendering;
 
@@ -20,8 +21,6 @@ public static class DebugUI
 {
     public static void Display( ref bool open )
     {
-        open = true;
-
         if ( ImGui.Begin( "- Debug Menu -", ref open, ImGuiWindowFlags.NoSavedSettings ) )
         {
             // Display framerate / frametime
@@ -43,7 +42,7 @@ public static class DebugUI
             ImGui.Separator();
 
             // Display the local server's information
-            ImGui.Text( $"Local server: {(!EngineManager.serverManager.Equals(null) ? "Open" : "Closed")}" );
+            ImGui.Text( $"Local server: {(EngineManager.serverManager != null ? "Open" : "Closed")}" );
 
             // Display the server our local client's connected to, if any
             ImGui.Text( $"Client connected to: {( EngineManager.clientManager.Connected ? $"{EngineManager.clientManager.ConnectionInfo.Address}" : "N/A" )}" );

@@ -11,15 +11,6 @@ namespace Toast.Engine.Entities;
 /// <summary>
 /// An entity.<br/>
 /// Something that can, for example, be seen, interacted with, killed, or other, should be defined as an entity.<br/>
-/// <br/>
-/// <list type="table">
-///     <listheader>
-///         <term>Example Entities</term>    
-///     </listheader>
-///     
-///     <item>Brush Entities</item>
-///     <item>NPCs</item>
-/// </list>
 /// </summary>
 public class Entity
 {
@@ -66,7 +57,7 @@ public class Entity
     /// <param name="parent">The parent we should be a child of.</param>
     public Entity( Entity parent ) : this()
     {
-        SetParent( parent.GetID() ); // Set our parent
+        SetParent( parent ); // Set our parent
     }
 
     /// <summary>
@@ -76,7 +67,7 @@ public class Entity
     /// <param name="position">The position we should be created at.</param>
     public Entity( Entity parent, Vector3 position ) : this()
     {
-        SetParent( parent.GetID() );
+        SetParent( parent );
         SetPosition( position );
     }
 
@@ -162,7 +153,7 @@ public class Entity
         foreach ( string child in children )
         {
             // Find the corresponding entity in the scene and apply it to the list of entity children
-            childrenEnts.Add( EngineManager.currentScene.FindEntity( child ) );
+            childrenEnts.Add( EngineManager.currentScene?.FindEntity( child ) );
         }
 
         // Return the list of children as entities
@@ -259,89 +250,6 @@ public class Entity
     public void AddForce( Vector3 force, float multiplier = 5 )
     {
         velocity += force * multiplier;
-    }
-
-    /// <summary>
-    /// Sets this entity's parent to the argument parent.
-    /// </summary>
-    /// <param name="parent">The new parent of this entity.</param>
-    public void SetParent( string parent )
-    {
-        if ( !EngineManager.currentScene.TryFindEntity( parent, out Entity parentEntity ) )
-        {
-            Log.Warning( $"Couldn't find entity by ID \"{parent}\"!" );
-            return;
-        }
-
-        this.parent = parent;
-        parentEntity.AddChild( GetID() );
-    }
-
-    /// <inheritdoc cref="SetParent(string)"/>
-    public void SetParent( Entity parent )
-    {
-        this.parent = parent.GetID();
-        parent.AddChild( GetID() );
-    }
-
-    /// <summary>
-    /// Adds another entity as a child of this entity.
-    /// </summary>
-    /// <param name="child">The child entity we wish to add.s</param>
-    public void AddChild( string child )
-    {
-        if ( !EngineManager.currentScene.TryFindEntity( child, out _ ) )
-        {
-            Log.Warning( $"Couldn't find entity by ID \"{child}\"!" );
-            return;
-        }
-
-        // Add the entity
-        children.Add( child );
-    }
-
-    /// <summary>
-    /// Removes a specified child from this entity.
-    /// </summary>
-    /// <param name="child">The ID of the child entity we wish to remove.</param>
-    public void RemoveChild( string child )
-    {
-        // If we don't find the entity by its ID...
-        if ( !EngineManager.currentScene.TryFindEntity( child, out _ ) )
-        {
-            Log.Warning( $"Couldn't find entity by ID \"{child}\"!" );
-            return;
-        }
-
-        // Remove the found child
-        children.Remove( child );
-    }
-
-    /// <summary>
-    /// Removes all children from this entities.
-    /// </summary>
-    public void RemoveAllChildren()
-    {
-        // Clear the children list
-        children.Clear();
-    }
-
-    /// <summary>
-    /// Determines whether or not this entity has children.
-    /// </summary>
-    /// <returns><see langword="true"/> if it does, <see langword="false"/> otherwise.</returns>
-    public bool HasChildren()
-    {
-        return children.Count != 0;
-    }
-
-    /// <summary>
-    /// Determines whether or not this entity has a parent.
-    /// </summary>
-    /// <returns><see langword="true"/> if it does, <see langword="false"/> otherwise.</returns>
-    public bool HasParent()
-    {
-        return parent != null;
     }
 
     /// <summary>
@@ -547,10 +455,10 @@ public class Entity
     public static void Delete( Entity ent )
     {
         // If the entity has a parent...
-        if ( ent.GetParent() != null )
+        if ( ent.HasParent() )
         {
             // Remove this entity from its parent
-            ent.GetParent().RemoveChild( ent.GetID() );
+            ent.GetParent().RemoveChild( ent );
         }
 
         // If the entity has children...
@@ -738,6 +646,69 @@ public class Entity
     public Model GetModel()
     {
         return model;
+    }
+
+    /// <summary>
+    /// Sets this entity's parent to the argument entity.
+    /// </summary>
+    /// <param name="parent">The new parent of this entity.</param>
+    public void SetParent( Entity parent )
+    {
+        this.parent = parent.GetID();
+        parent.AddChild( GetID() );
+    }
+
+    /// <summary>
+    /// Adds another entity as a child of this entity.
+    /// </summary>
+    /// <param name="child">The child entity we wish to add.s</param>
+    public void AddChild( string child )
+    {
+        if ( !EngineManager.currentScene.TryFindEntity( child, out _ ) )
+        {
+            Log.Warning( $"Couldn't find entity by ID \"{child}\"!" );
+            return;
+        }
+
+        // Add the entity
+        children.Add( child );
+    }
+
+    /// <summary>
+    /// Removes a specified child from this entity.
+    /// </summary>
+    /// <param name="child">The child entity we wish to remove.</param>
+    public void RemoveChild( Entity child )
+    {
+        // Remove the found child
+        children.Remove( child.GetID() );
+    }
+
+    /// <summary>
+    /// Removes all children from this entities.
+    /// </summary>
+    public void RemoveAllChildren()
+    {
+        // Clear the children list
+        children.Clear();
+    }
+
+    /// <summary>
+    /// Determines whether or not this entity has children.
+    /// </summary>
+    /// <returns><see langword="true"/> if it does, <see langword="false"/> otherwise.</returns>
+    public bool HasChildren()
+    {
+        return children.Count != 0;
+    }
+
+    /// <summary>
+    /// Determines whether or not this entity has a parent.
+    /// </summary>
+    /// <returns><see langword="true"/> if it does, <see langword="false"/> otherwise.</returns>
+    public bool HasParent()
+    {
+        return parent != null;
     }
 
     public override string ToString()

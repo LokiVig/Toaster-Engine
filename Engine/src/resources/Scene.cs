@@ -52,8 +52,16 @@ public class Scene
     /// <param name="id">The ID of the entity we wish to remove.</param>
     public void RemoveEntity( string id )
     {
-        // Remove the entity we find from the specified ID argument
-        entities.Remove( FindEntity( id ) );
+        // If we don't successfully find the entity we're looking for...
+        if ( !TryFindEntity( id, out Entity ent ) )
+        {
+            // Error!
+            Log.Warning( $"Couldn't find entity with ID \"{id}\"!" );
+            return;
+        }
+
+        // Remove the found entity
+        entities.Remove( ent );
     }
 
     /// <summary>

@@ -24,13 +24,6 @@ public class WTF
     };
 
     /// <summary>
-    /// WTF file definition without parameters.
-    /// </summary>
-    public WTF()
-    {
-    }
-
-    /// <summary>
     /// WTF file creation with a specific path.
     /// </summary>
     /// <param name="path">The path (mainly filename) of the WTF file.</param>
@@ -278,8 +271,7 @@ public class WTF
         if ( !path.Contains( "maps/" ) )
         {
             path = Path.Combine( "maps/", path ); // Add the maps prefix, we should only ever save maps
-                                                  // in the maps/ folder
-        }
+        }                                         // in the maps/ folder
 
         // If we already have a file open, set the path to the current file
         if ( EngineManager.currentFile != null && !string.IsNullOrEmpty( EngineManager.currentFile.path ) )
