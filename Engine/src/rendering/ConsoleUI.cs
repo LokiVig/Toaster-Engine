@@ -23,8 +23,7 @@ public static class ConsoleUI
     public static void Display( ref bool open )
     {
         // The main console window
-        if ( ImGui.Begin( "Console", ref open,
-             ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDocking | ImGuiWindowFlags.NoResize ) )
+        if ( ImGui.Begin( "Console", ref open, ImGuiWindowFlags.NoSavedSettings | ImGuiWindowFlags.NoDocking | ImGuiWindowFlags.NoResize ) )
         {
             // We should only take inputs when the console isn't focused
             EngineManager.ToggleInput( !ImGui.IsWindowFocused() );
@@ -33,9 +32,7 @@ public static class ConsoleUI
             ImGui.SetWindowSize( new Vector2( 800f, 600f ) );
 
             // The actual logs!
-            if ( ImGui.BeginChild( "Logs", new Vector2( 782.5f, 542.5f ),
-                 ImGuiChildFlags.Borders | ImGuiChildFlags.AlwaysUseWindowPadding,
-                 ImGuiWindowFlags.ChildWindow ) )
+            if ( ImGui.BeginChild( "Logs", new Vector2( 782.5f, 542.5f ), ImGuiChildFlags.Borders | ImGuiChildFlags.AlwaysUseWindowPadding, ImGuiWindowFlags.ChildWindow ) )
             {
                 // Make a wrapped text for every log
                 for ( int i = 0; i < logs.Count; i++ )
@@ -85,7 +82,7 @@ public static class ConsoleUI
     }
 
     /// <summary>
-    /// Writes a string to the console, with a newline character affixed to it.
+    /// Writes a string to the console, with a newline character suffixed to it.
     /// </summary>
     public static void WriteLine( string message )
     {

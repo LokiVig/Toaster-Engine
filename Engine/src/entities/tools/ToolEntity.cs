@@ -16,9 +16,5 @@ public class ToolEntity : Entity
 
     public ToolEntity( Entity parent ) : base( parent ) { }
 
-    public ToolEntity( string parent ) : base( parent ) { }
-
     public ToolEntity( Entity parent, Vector3 position ) : base( parent, position ) { }
-
-    public ToolEntity( string parent, Vector3 position ) : base( parent, position ) { }
 }

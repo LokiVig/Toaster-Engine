@@ -18,10 +18,5 @@ public class AudioFile : IDisposable
         // Dispose of everything...
         fileReader.Dispose();
         waveEvent.Dispose();
-
-        // Nullify everything...
-        filepath = null;
-        fileReader = null;
-        waveEvent = null;
     }
 }

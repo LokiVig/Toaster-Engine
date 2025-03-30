@@ -27,6 +27,7 @@ public struct Brush
     {
         bbox.mins = mins;
         bbox.maxs = maxs;
+
         InitializeVertices();
     }
 

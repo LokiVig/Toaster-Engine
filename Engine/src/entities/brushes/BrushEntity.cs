@@ -12,9 +12,5 @@ public class BrushEntity : Entity
 
     public BrushEntity( Entity parent ) : base( parent ) { }
 
-    public BrushEntity( string parent ) : base( parent ) { }
-
     public BrushEntity( Entity parent, Vector3 position ) : base( parent, position ) { }
-
-    public BrushEntity( string parent, Vector3 position ) : base( parent, position ) { }
 }

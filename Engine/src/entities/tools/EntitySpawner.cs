@@ -23,6 +23,16 @@ public class EntitySpawner<T> : ToolEntity where T : Entity, new()
         SetBBox( new BBox( new Vector3( -8 ), new Vector3( 8 ) ) );
     }
 
+    public EntitySpawner( Entity parent ) : base( parent )
+    {
+        SetBBox( new BBox( new Vector3( -8 ), new Vector3( 8 ) ) );
+    }
+
+    public EntitySpawner( Entity parent, Vector3 position ) : base( parent, position )
+    {
+        SetBBox( new BBox( new Vector3( -8 ), new Vector3( 8 ) ) );
+    }
+
     /// <summary>
     /// Spawn an entity, based on the given argument.
     /// </summary>

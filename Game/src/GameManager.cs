@@ -8,8 +8,6 @@ using Toast.Engine.Entities.Tools;
 using Toast.Engine.Entities.Brushes;
 using Toast.Engine.Resources;
 using Toast.Engine.Resources.Input;
-using Toast.Engine.Resources.Console;
-using Toast.Engine.Attributes;
 
 using Toast.Game.Entities;
 using Toast.Game.Entities.NPC;

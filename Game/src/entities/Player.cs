@@ -18,7 +18,7 @@ public class Player : PlayerEntity
 
         // Our camera is a new entity with the player as the parent
         // The camera also has an offset position of 72 "units" in the air
-        camera = new Camera( this, new Vector3( 0, 0, 72 ) );
+        camera = new Camera( this, new Vector3( 0, 0, 72 ), GetRotation() );
     }
 
     public override void TakeDamage( float damage, Entity? source = null )

@@ -9,7 +9,6 @@ using Toast.Engine.Attributes;
 using Toast.Engine.Resources.Input;
 using Toast.Engine.Resources.Audio;
 using Toast.Engine.Resources.Console;
-using Toast.Engine.Network;
 
 namespace Toast.Engine;
 
@@ -36,9 +35,6 @@ public static class EngineManager
     public static WTF currentFile; // The currently loaded WTF file / map
     public static Scene currentScene; // The currently running scene, initialized from the current file
 
-    public static Client client; // This engine instance's local client
-    public static Server server; // This engine instance's local server
-
     public static float deltaTime; // Helps stopping you from using FPS-dependant calculations
 
     //---------------------------------------//
@@ -59,7 +55,8 @@ public static class EngineManager
     /// <summary>
     /// Initialize a new Toaster Engine instance with an optional <paramref name="title"/> argument.
     /// </summary>
-    /// <param name="title">The title this instance of Toaster Engine should run.</param>
+    /// <param name="title">The title this Toaster Engine instance should have.</param>
+    /// <param name="initialWindowState">The initial window state the instance should run from.</param>
     public static void Initialize( string title = null, WindowState initialWindowState = WindowState.Normal )
     {
         // Initialize file logging
@@ -78,29 +75,12 @@ public static class EngineManager
         try
         {
             // Initialize the renderer
-            Renderer.Initialize( $"Toaster Engine (v.{VERSION}){( title != null ? $" - {title}" : "" )}", initialWindowState );
+            Renderer.Initialize( $"Toaster Engine [V.{VERSION}]{( title != null ? $" - {title}" : "" )}", initialWindowState );
             Log.Success( "Successfully initialized renderer." );
         }
         catch ( Exception exc ) // Handle any exceptions we encounter!
         {
-            Log.Error( $"Exception caught while initializing renderer!", exc );
-        }
-
-        // Create our local client
-        client = new Client();
-
-        // If we can't connect to a localhost already...
-        if ( !client.TryConnectTo( Server.LocalHost ) )
-        {
-            // Create a local server and connect to it
-            server = Server.CreateLocalServer();
-            client.ConnectTo( server );
-        }
-        else
-        {
-            // The server is actually a localhost, but not on this instance
-            // Thanks to TryConnectTo, we've also already connected to it!
-            server = Server.LocalHost;
+            Log.Error( $"Exception caught while initializing!", exc );
         }
 
         // Connect our InputManager's events to the Renderer's events for simplicity's sakes
@@ -237,10 +217,6 @@ public static class EngineManager
 
         // Save our commands
         ConsoleManager.SaveCommands();
-
-        // Shut down the server and dispose of the client
-        client.Dispose();
-        server.Dispose();
 
         // End file logging
         Log.CloseLogFile();

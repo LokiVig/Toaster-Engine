@@ -8,7 +8,7 @@ using Toast.Engine.Attributes;
 using Toast.Engine.Resources.Input;
 using Toast.Engine.Resources.Console;
 
-namespace Toast.WTFEdit;
+namespace Toast.HTF;
 
 public class Program
 {
@@ -21,7 +21,7 @@ public class Program
 
 public class HTFManager
 {
-    private WTF currentFile;
+    private static WTF currentFile;
     private bool isDirty;
 
     /// <summary>
@@ -30,45 +30,17 @@ public class HTFManager
     public void Initialize()
     {
         // Initialize the engine
-        EngineManager.Initialize();
+        EngineManager.Initialize( "HTF" );
         EngineManager.OnUpdate += Update;
-
-        // Create HTF commands
-        CreateCommands();
 
         // Create HTF keybinds
         CreateKeybinds();
-
-        // !! DEBUG !! \\
-        SaveMap( new WTF( "maps/test.wtf" ) );
-        LoadMap( "maps/test.wtf" );
 
         // Start the engine's update function
         EngineManager.Update();
 
         // After having run the update for however many times, shut down the engine
         EngineManager.Shutdown();
-    }
-
-    private void CreateCommands()
-    {
-        // HTF Load Map
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "htf_load_map",
-            description = "Loads a map from a specified path (e.g. \"maps/test.wtf\")",
-
-            onArgsCall = LoadMap
-        } );
-
-        // HTF Load Map (File Dialog)
-        ConsoleManager.AddCommand( new ConsoleCommand
-        {
-            alias = "htf_load_map_dialog",
-            description = "Loads a map from a specified path given from an opened file dialog.",
-
-            onCall = LoadMapThroughDialog
-        } );
     }
 
     private void CreateKeybinds()
@@ -103,7 +75,8 @@ public class HTFManager
     /// Loads a map through the console.
     /// </summary>
     /// <param name="args"></param>
-    private void LoadMap( List<object> args )
+    [ConsoleCommand( "htf_load_map", "Loads a map from a specified path (e.g. \"maps/test.wtf\")." )]
+    private static void LoadMap( List<object> args )
     {
         // Get the current argument count
         int argCount = args.Count - 1;
@@ -139,7 +112,7 @@ public class HTFManager
     /// Loads a map from a specified path.
     /// </summary>
     /// <param name="path">The path to the map we wish to load.</param>
-    private void LoadMap( string path )
+    private static void LoadMap( string path )
     {
         currentFile = WTF.LoadFile( path );
         Log.Info( $"Successfully loaded map \"{path}\"!", true );
@@ -148,7 +121,8 @@ public class HTFManager
     /// <summary>
     /// Opens a file dialog to let the user specify the path to a map to load.
     /// </summary>
-    private void LoadMapThroughDialog()
+    [ConsoleCommand( "htf_load_map_dialog", "Loads a map from a specified path given from an opened file dialog." )]
+    private static void LoadMapThroughDialog()
     {
         Log.Error( "This feature is not yet implemented! Go fuck yourself!" );
     }
@@ -156,13 +130,13 @@ public class HTFManager
     /// <summary>
     /// Unloads the currently loaded map.
     /// </summary>
-    private void UnloadMap()
+    private static void UnloadMap()
     {
         currentFile = null;
     }
 
-    [ConsoleCommand("htf_save_map", "Saves the currently loaded map.")]
-    private void SaveMap()
+    [ConsoleCommand( "htf_save_map", "Saves the currently loaded map." )]
+    private static void SaveMap()
     {
         if ( currentFile == null )
         {
@@ -177,7 +151,8 @@ public class HTFManager
     /// <summary>
     /// Saves the current map to a specified path.
     /// </summary>
-    private void SaveMap(List<object> args)
+    [ConsoleCommand( "htf_save_map", "Saves the currently loaded map." )]
+    private static void SaveMap( List<object> args )
     {
         int argCount = args.Count - 1;
 
@@ -193,7 +168,7 @@ public class HTFManager
             return;
         }
 
-        WTF.SaveFile( args[1].ToString(), currentFile );
+        WTF.SaveFile( (string)args[1], currentFile );
         Log.Info( $"Successfully saved map \"{currentFile.path}\"!", true );
     }
 

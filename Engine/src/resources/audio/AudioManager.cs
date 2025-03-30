@@ -77,8 +77,10 @@ public static class AudioManager
             AudioFileReader fileReader = new AudioFileReader( filepath );
 
             // Create a volume provider for independent volume control
-            VolumeSampleProvider volumeProvider = new VolumeSampleProvider( fileReader.ToSampleProvider() );
-            volumeProvider.Volume = volume; // Actually set the volume
+            VolumeSampleProvider volumeProvider = new VolumeSampleProvider( fileReader.ToSampleProvider() )
+            {
+                Volume = volume // Set the volume
+            };
 
             // Initialize a WaveOutEvent
             WaveOutEvent waveEvent = new WaveOutEvent();

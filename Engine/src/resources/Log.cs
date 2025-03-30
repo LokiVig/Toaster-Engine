@@ -38,7 +38,7 @@ public struct Log
         logWriter.WriteLine( "Start of engine log file." );
 
         // Then write the date
-        logWriter.WriteLine( $"{DateTime.Now:yyyy/MM/dd} {DateTime.Now:HH:mm:ss}" );
+        logWriter.WriteLine( $"{DateTime.Now:yyyy/MM/dd} @ {DateTime.Now:HH:mm:ss}" );
 
         // Separator
         logWriter.WriteSeparator();
@@ -172,7 +172,8 @@ public struct Log
     /// Features an error sound effect.
     /// </summary>
     /// <param name="message">The specific error message used to detail what happened to cause an error.</param>
-    public static void Error<T>( string message, [CallerLineNumber] int line = 0, [CallerFilePath] string src = "", [CallerMemberName] string method = "" ) where T : Exception, new()
+    public static void Error<T>( string message, [CallerLineNumber] int line = 0, [CallerFilePath] string src = "", [CallerMemberName] string method = "" ) 
+        where T : Exception, new()
     {
         // Play the engine's default error sound
         AudioManager.PlayError();
