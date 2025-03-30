@@ -6,8 +6,6 @@ using System.Collections.Generic;
 
 using Newtonsoft.Json;
 
-using DynamicExpresso;
-
 using Toast.Engine.Attributes;
 
 namespace Toast.Engine.Resources.Console;
@@ -109,14 +107,7 @@ public static class ConsoleManager
                     // If we did find our list of commands...
                     if ( ( commands = serializer.Deserialize<List<ConsoleCommand>>( reader ) ) != null )
                     {
-                        // We should interpret the command action that's defined in the file!
-                        Interpreter interpreter = new Interpreter();
 
-                        foreach ( ConsoleCommand command in commands )
-                        {
-                            command.onCall = interpreter.ParseAsDelegate<Action>( command.onCallAlias );
-                            command.onArgsCall = interpreter.ParseAsDelegate<Action<List<object>>>( command.onArgsCallAlias );
-                        }
 
                         // Successful command loading!
                         return true;

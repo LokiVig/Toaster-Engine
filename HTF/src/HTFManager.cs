@@ -112,7 +112,7 @@ public class HTFManager
     /// Loads a map from a specified path.
     /// </summary>
     /// <param name="path">The path to the map we wish to load.</param>
-    private static void LoadMap( string path )
+    public static void LoadMap( string path )
     {
         currentFile = WTF.LoadFile( path );
         Log.Info( $"Successfully loaded map \"{path}\"!", true );
@@ -130,13 +130,13 @@ public class HTFManager
     /// <summary>
     /// Unloads the currently loaded map.
     /// </summary>
-    private static void UnloadMap()
+    public static void UnloadMap()
     {
         currentFile = null;
     }
 
     [ConsoleCommand( "htf_save_map", "Saves the currently loaded map." )]
-    private static void SaveMap()
+    public static void SaveMap()
     {
         if ( currentFile == null )
         {
@@ -170,11 +170,5 @@ public class HTFManager
 
         WTF.SaveFile( (string)args[1], currentFile );
         Log.Info( $"Successfully saved map \"{currentFile.path}\"!", true );
-    }
-
-    private void SaveMap( WTF inFile )
-    {
-        WTF.SaveFile( inFile.path, inFile );
-        Log.Info( $"Successfully saved map \"{inFile.path}\"!", true );
     }
 }
