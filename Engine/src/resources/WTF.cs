@@ -160,17 +160,18 @@ public class WTF
     /// </summary>
     public PlayerEntity GetPlayer()
     {
-        // Check every entity in our entities list
+        // Check every entity in our entities list...
         foreach ( Entity ent in entities )
         {
+            // If the entity is a player entity...
             if ( ent is PlayerEntity )
             {
+                // Return that entity, for it must be our player!
                 return ent as PlayerEntity;
             }
         }
 
         // If there is no player
-        // Should this really be possible?
         return null;
     }
 

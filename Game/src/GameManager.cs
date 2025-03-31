@@ -62,7 +62,7 @@ public class GameManager
         EntitySpawner<Player> playerSpawner = new( Vector3.Zero );
 
         SoundEntity audioPlayer = new SoundEntity( new Vector3( 0, 0, 15.0f ) );
-        audioPlayer.audioPath = "resources/audio/music/debugmusic.mp3";
+        audioPlayer.audioPath = "resources/audio/music/debugmusic.wav";
         audioPlayer.audioVolume = 0.25f;
         audioPlayer.audioRepeats = true;
 
