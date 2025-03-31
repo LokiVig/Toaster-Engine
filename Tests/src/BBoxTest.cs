@@ -43,7 +43,7 @@ public class BBoxTest
 	public void WithinBoundingBox()
 	{
 		int errorCount = 0;
-		List<(BBox value1, BBox value2, bool result, bool expected)> errorList = new();
+		List<(BoundingBox value1, BoundingBox value2, bool result, bool expected)> errorList = new();
 
 		Console.WriteLine("Testing within (bounding box)...");
 
@@ -70,8 +70,8 @@ public class BBoxTest
 			Vector3 maxs2 = new Vector3(maxs2_x, maxs2_y, maxs2_z);
 			Vector3 mins2 = new Vector3(mins2_x, mins2_y, mins2_z);
 
-			BBox value1 = new BBox(mins1, maxs1);
-			BBox value2 = new BBox(mins2, maxs2);
+			BoundingBox value1 = new BoundingBox(mins1, maxs1);
+			BoundingBox value2 = new BoundingBox(mins2, maxs2);
 
 			bool expected = mins1_x <= maxs2_x && maxs1_x >= mins2_x &&
 			                mins1_y <= maxs2_y && maxs1_y >= mins2_y &&
@@ -106,7 +106,7 @@ public class BBoxTest
 	public void WithinPoint()
 	{
 		int errorCount = 0;
-		List<(BBox value1, Vector3 value2, bool result, bool expected)> errorList = new();
+		List<(BoundingBox value1, Vector3 value2, bool result, bool expected)> errorList = new();
 
 		Console.WriteLine("Testing within (bounding box)...");
 
@@ -128,7 +128,7 @@ public class BBoxTest
 			Vector3 maxs1 = new Vector3(maxs1_x, maxs1_y, maxs1_z);
 			Vector3 mins1 = new Vector3(mins1_x, mins1_y, mins1_z);
 
-			BBox value1 = new BBox(mins1, maxs1);
+			BoundingBox value1 = new BoundingBox(mins1, maxs1);
 			Vector3 value2 = new Vector3(maxs2_x, maxs2_y, maxs2_z);
 
 			bool expected = value2.X >= mins1.X && value2.X <= maxs1.X &&

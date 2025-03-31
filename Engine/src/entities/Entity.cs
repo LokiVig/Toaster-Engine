@@ -17,19 +17,21 @@ public class Entity
     public virtual EntityType type { get; private set; } = EntityType.None; // This entity's type, e.g. player / NPC
     public virtual float maxHealth { get; private set; } // This entity's max health
 
-    public Vector3 position; // This entity's current position
-    public Quaternion rotation; // This entity's current rotation
-    public BBox bbox; // This entity's bounding box
+    public Transform transform; // The position, rotation and bounding box of this entity
+
     public string id; // This entity's identifier
     public string modelPath; // The path to this entity's visually pleasing model
     public string parent; // The possible parent of this entity
-    public List<string> children = new List<string>(); // Any and all children this entity has
+
+    public List<Entity> children = new List<Entity>(); // Any and all children this entity has
 
     protected float health; // This entity's health
-    protected Vector3 velocity; // This entity's current velocity
+
     protected bool alive; // Is this entity alive?
+
     protected Entity target; // The entity this entity's targeting
     protected Entity lastAttacker; // The last entity to attack this entity
+
     protected Model model; // This entity's visually pleasing model
 
     private const float MAX_VELOCITY = 225; // TODO: Calculate this (mass, therefore terminal velocity) from the entity's BBox! Bad constant!
@@ -39,6 +41,9 @@ public class Entity
     /// </summary>
     public Entity()
     {
+        // Initialize our transform
+        transform = new Transform();
+
         ErrorCheck(); // Check for errors
     }
 
@@ -89,7 +94,7 @@ public class Entity
     public void Spawn()
     {
         // Null the velocity
-        velocity = Vector3.Zero;
+        transform.velocity = Vector3.Zero;
 
         // Set our health to our maxHealth variable
         health = maxHealth;
@@ -110,12 +115,14 @@ public class Entity
     protected virtual void Update()
     {
         // Can't have bounding boxes where the maxs have a less value than mins, or vice versa
-        if ( bbox.mins.X >= bbox.maxs.X ||
-             bbox.mins.Y >= bbox.maxs.Y ||
-             bbox.mins.Z >= bbox.maxs.Z )
+        if ( transform.boundingBox.mins.X >= transform.boundingBox.maxs.X ||
+             transform.boundingBox.mins.Y >= transform.boundingBox.maxs.Y ||
+             transform.boundingBox.mins.Z >= transform.boundingBox.maxs.Z )
         {
-            Log.Error<ArithmeticException>( $"{this}'s bound boxes are mismatched! ({bbox})" );
+            Log.Error<ArithmeticException>( $"{this}'s bound boxes are mismatched! ({transform.boundingBox})" );
         }
+
+
     }
 
     /// <summary>
@@ -125,18 +132,18 @@ public class Entity
     {
         // Clamp velocity between the min and max values, and normalize it
         //velocity = Vector3.Clamp( velocity, new Vector3( -MAX_VELOCITY ), new Vector3( MAX_VELOCITY ) );
-        Vector3.Normalize( velocity );
+        Vector3.Normalize( transform.velocity );
 
         // Position is affected by velocity
-        position += velocity * EngineManager.deltaTime;
+        transform.worldPosition += transform.velocity * EngineManager.deltaTime;
 
         // Velocity decreases with time (effectively drag)
-        velocity *= ( 1 - 0.25f ) * EngineManager.deltaTime;
+        transform.velocity *= ( 1 - 0.25f ) * EngineManager.deltaTime;
 
         // If the velocity's magnitude <= 0.01, it's effectively zero, so zero it out for the sake of ease
-        if ( velocity.Length() <= 0.01f )
+        if ( transform.velocity.Length() <= 0.01f )
         {
-            velocity = Vector3.Zero;
+            transform.velocity = Vector3.Zero;
         }
     }
 
@@ -146,18 +153,7 @@ public class Entity
     /// <returns>This entity's children as a list of <see cref="Entity"/>'s.</returns>
     public List<Entity> GetChildren()
     {
-        // Create a new list of children entities
-        List<Entity> childrenEnts = new List<Entity>(children.Count);
-
-        // For every child ID...
-        foreach ( string child in children )
-        {
-            // Find the corresponding entity in the scene and apply it to the list of entity children
-            childrenEnts.Add( EngineManager.currentScene?.FindEntity( child ) );
-        }
-
-        // Return the list of children as entities
-        return childrenEnts;
+        return children;
     }
 
     /// <summary>
@@ -166,7 +162,18 @@ public class Entity
     /// <returns>This entity's children as a list of IDs.</returns>
     public List<string> GetChildrenIDs()
     {
-        return children;
+        // The list that should contain all IDs
+        List<string> childIds = new List<string>();
+
+        // For every child...
+        foreach ( Entity child in children )
+        {
+            // Add its ID to the list of IDs
+            childIds.Add( child.GetID() );
+        }
+
+        // Return the list of IDs
+        return childIds;
     }
 
     /// <summary>
@@ -249,7 +256,7 @@ public class Entity
     /// <param name="multiplier">Multiplies the input vector by this value.</param>
     public void AddForce( Vector3 force, float multiplier = 5 )
     {
-        velocity += force * multiplier;
+        transform.velocity += force * multiplier;
     }
 
     /// <summary>
@@ -432,17 +439,17 @@ public class Entity
     }
 
     /// <summary>
-    /// Call an event that takes a <see cref="BBox"/> for a value.
+    /// Call an event that takes a <see cref="BoundingBox"/> for a value.
     /// </summary>
     /// <param name="eEvent">Desired event to do to this entity.</param>
-    /// <param name="bbValue">Value as <see cref="BBox"/>.</param>
+    /// <param name="bbValue">Value as <see cref="BoundingBox"/>.</param>
     /// <param name="source">The entity that caused this event.</param>
-    public void OnEvent( EntityEvent eEvent, BBox bbValue, Entity source = null )
+    public void OnEvent( EntityEvent eEvent, BoundingBox bbValue, Entity source = null )
     {
         switch ( eEvent )
         {
             case EntityEvent.SetBBox: // Set this entity's BBox according to bValue
-                SetBBox( bbValue );
+                SetBoundingBox( bbValue );
                 break;
         }
     }
@@ -534,7 +541,7 @@ public class Entity
     /// <param name="position">The new, desired position of this entity</param>
     public void SetPosition( Vector3 position )
     {
-        this.position = position;
+        transform.worldPosition = position;
     }
 
     /// <summary>
@@ -543,7 +550,7 @@ public class Entity
     /// <param name="velocity">The new, desired velocity of this entity</param>
     public void SetVelocity( Vector3 velocity )
     {
-        this.velocity = velocity;
+        transform.velocity = velocity;
     }
 
     /// <summary>
@@ -552,16 +559,16 @@ public class Entity
     /// <param name="rotation">The new, desired rotation of this entity</param>
     public void SetRotation( Quaternion rotation )
     {
-        this.rotation = rotation;
+        transform.worldRotation = rotation;
     }
 
     /// <summary>
     /// Main use for this is for when a brush is turned into an entity
     /// </summary>
-    /// <param name="bbox">The new bounding box of this entity</param>
-    public void SetBBox( BBox bbox )
+    /// <param name="boundingBox">The new bounding box of this entity</param>
+    public void SetBoundingBox( BoundingBox boundingBox )
     {
-        this.bbox = bbox;
+        transform.boundingBox = boundingBox;
     }
 
     /// <summary>
@@ -594,7 +601,7 @@ public class Entity
     /// </summary>
     public ref Vector3 GetPosition()
     {
-        return ref position;
+        return ref transform.worldPosition;
     }
 
     /// <summary>
@@ -602,7 +609,7 @@ public class Entity
     /// </summary>
     public ref Vector3 GetVelocity()
     {
-        return ref velocity;
+        return ref transform.velocity;
     }
 
     /// <summary>
@@ -610,15 +617,15 @@ public class Entity
     /// </summary>
     public ref Quaternion GetRotation()
     {
-        return ref rotation;
+        return ref transform.worldRotation;
     }
 
     /// <summary>
     /// Gets this entity's bounding box
     /// </summary>
-    public ref BBox GetBBox()
+    public ref BoundingBox GetBoundingBox()
     {
-        return ref bbox;
+        return ref transform.boundingBox;
     }
 
     /// <summary>
@@ -655,21 +662,15 @@ public class Entity
     public void SetParent( Entity parent )
     {
         this.parent = parent.GetID();
-        parent.AddChild( GetID() );
+        parent.AddChild( this );
     }
 
     /// <summary>
     /// Adds another entity as a child of this entity.
     /// </summary>
     /// <param name="child">The child entity we wish to add.s</param>
-    public void AddChild( string child )
+    public void AddChild( Entity child )
     {
-        if ( !EngineManager.currentScene.TryFindEntity( child, out _ ) )
-        {
-            Log.Warning( $"Couldn't find entity by ID \"{child}\"!" );
-            return;
-        }
-
         // Add the entity
         children.Add( child );
     }
@@ -681,7 +682,7 @@ public class Entity
     public void RemoveChild( Entity child )
     {
         // Remove the found child
-        children.Remove( child.GetID() );
+        children.Remove( child );
     }
 
     /// <summary>

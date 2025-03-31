@@ -13,7 +13,7 @@ namespace Toast.Engine.Resources;
 public struct Brush
 {
     public string id; // The id of this brush, can be set by the mapper
-    public BBox bbox = BBox.One; // The extents of this brush
+    public BoundingBox bbox = BoundingBox.One; // The extents of this brush
 
     [JsonIgnore] public Vertex[] vertices; // The vertices of this brush
     [JsonIgnore] public uint[] indices; // The indices of this brush
@@ -32,9 +32,9 @@ public struct Brush
     }
 
     /// <summary>
-    /// Create a brush with a specified <see cref="BBox"/>
+    /// Create a brush with a specified <see cref="BoundingBox"/>
     /// </summary>
-    public Brush( BBox bbox )
+    public Brush( BoundingBox bbox )
     {
         this.bbox = bbox;
         InitializeVertices();
@@ -94,7 +94,7 @@ public struct Brush
     /// <summary>
     /// Set the BBox of this brush
     /// </summary>
-    public void SetBBox( BBox bbox )
+    public void SetBBox( BoundingBox bbox )
     {
         this.bbox = bbox;
     }
@@ -110,7 +110,7 @@ public struct Brush
     /// <summary>
     /// Get the BBox of this brush
     /// </summary>
-    public BBox GetBBox()
+    public BoundingBox GetBBox()
     {
         return bbox;
     }
@@ -122,7 +122,7 @@ public struct Brush
     {
         desiredEntity = new T();
 
-        desiredEntity.SetBBox( bbox );
+        desiredEntity.SetBoundingBox( bbox );
         desiredEntity.SetPosition( bbox.GetCenter() );
 
         EngineManager.currentFile.RemoveBrush( this );

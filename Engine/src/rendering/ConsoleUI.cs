@@ -14,8 +14,9 @@ namespace Toast.Engine.Rendering;
 /// </summary>
 public static class ConsoleUI
 {
-    private static List<string> logs = new(); // This console's log of messages
+    private static List<(string msg, Vector4 color)> logs = new(); // This console's log of messages with a specified color
     private static string input = string.Empty; // The current user input, used for console commands, etc.
+    private static bool scrollToBottom; // Determines whether or not the logs should be scrolled to the bottom
 
     /// <summary>
     /// Displays the console.
@@ -37,8 +38,22 @@ public static class ConsoleUI
                 // Make a wrapped text for every log
                 for ( int i = 0; i < logs.Count; i++ )
                 {
-                    ImGui.TextWrapped( logs[i] );
+                    if ( logs[i].color != default )
+                    {
+                        ImGui.PushStyleColor( ImGuiCol.Text, logs[i].color );
+                        ImGui.TextWrapped( logs[i].msg );
+                        ImGui.PopStyleColor();
+                    }
+                    else
+                    {
+                        ImGui.TextWrapped( logs[i].msg );
+                    }
+                }
+
+                if ( scrollToBottom )
+                {
                     ImGui.SetScrollY( ImGui.GetScrollMaxY() );
+                    scrollToBottom = false;
                 }
 
                 ImGui.EndChild();
@@ -74,7 +89,7 @@ public static class ConsoleUI
     /// <summary>
     /// Clear the console of all logs
     /// </summary>
-    [ConsoleCommand("clear", "Clears the console's logs. (Does NOT clear the log file!)")]
+    [ConsoleCommand( "clear", "Clears the console's logs. (Does NOT clear the log file!)" )]
     public static void Clear()
     {
         // Simply call the log list's clear function
@@ -84,9 +99,10 @@ public static class ConsoleUI
     /// <summary>
     /// Writes a string to the console, with a newline character suffixed to it.
     /// </summary>
-    public static void WriteLine( string message )
+    public static void WriteLine( string message, Vector4 color = default )
     {
-        // Add the argument message to our list of logs
-        logs.Add( $"({DateTime.Now.ToLongTimeString()}) : {message}\n" );
+        // Add the argument message and color to our list of logs
+        logs.Add( ($"({DateTime.Now.ToLongTimeString()}) : {message}\n", color) );
+        scrollToBottom = true; // We should scroll to the bottom
     }
 }

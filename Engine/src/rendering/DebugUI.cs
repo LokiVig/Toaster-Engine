@@ -57,8 +57,8 @@ public static class DebugUI
 
                             ImGui.SeparatorText( "Bounding Box" );
                             {
-                                ImGui.InputFloat3( "Mins", ref entities[i].GetBBox().mins );
-                                ImGui.InputFloat3( "Maxs", ref entities[i].GetBBox().maxs );
+                                ImGui.InputFloat3( "Mins", ref entities[i].GetBoundingBox().mins );
+                                ImGui.InputFloat3( "Maxs", ref entities[i].GetBoundingBox().maxs );
                             }
 
                             ImGui.TreePop();
@@ -96,9 +96,11 @@ public static class DebugUI
                         //
 
                         // Entity spawner
-                        if ( entities[i] is EntitySpawner<Entity> spawner )
+                        if ( entities[i] is EntitySpawner spawner )
                         {
                             ImGui.SeparatorText( "Entity Spawner Variables" );
+
+                            ImGui.Text( $"To spawn: {spawner.toSpawn}" );
 
                             if ( ImGui.Button( "Spawn Entity" ) )
                             {

@@ -14,14 +14,14 @@ public class SoundEntity : ToolEntity
     private AudioFile localAudioFile; // Our local audio file, generated when we play our sound
     private bool playing; // Determines whether or not this entity's already playing audio
 
-    public SoundEntity()
+    public SoundEntity() : base()
     {
-        SetBBox( new BBox( new Vector3( -8 ), new Vector3( 8 ) ) );
+        SetBoundingBox( BoundingBox.SmallTool );
     }
 
     public SoundEntity( Vector3 position ) : base( position )
     {
-        SetBBox( new BBox( new Vector3( -8 ), new Vector3( 8 ) ) );
+        SetBoundingBox( BoundingBox.SmallTool );
     }
 
     /// <summary>

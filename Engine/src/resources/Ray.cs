@@ -75,7 +75,7 @@ public struct Ray
                 }
 
                 // Are we intersecting with this entity's bounding box?
-                if ( entity.GetBBox().RayIntersects( rayStart, rayEnd, rayLength ) )
+                if ( entity.GetBoundingBox().RayIntersects( rayStart, rayEnd, rayLength ) )
                 {
                     // We've hit this entity!
                     // The hitObject is now this entity, and we're returning true

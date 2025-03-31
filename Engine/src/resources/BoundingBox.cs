@@ -6,14 +6,22 @@ namespace Toast.Engine.Resources;
 /// <summary>
 /// A bounding box, defining the height, width and depth of an object
 /// </summary>
-public class BBox
+public class BoundingBox
 {
 	public Vector3 mins; // The minimum extents of this BBox
 	public Vector3 maxs; // The maximum extents of this BBox
 
-	public static readonly BBox One = new BBox(-Vector3.One, Vector3.One);
+	public static readonly BoundingBox One = new BoundingBox( -Vector3.One, Vector3.One );
 
-	public BBox(Vector3 mins, Vector3 maxs)
+	public static readonly BoundingBox SmallTool = new BoundingBox( new Vector3( -8 ), new Vector3( 8 ) );
+	public static readonly BoundingBox MediumTool = new BoundingBox( new Vector3( -16 ), new Vector3( 16 ) );
+	public static readonly BoundingBox LargeTool = new BoundingBox( new Vector3( -32 ), new Vector3( 32 ) );
+
+	public static readonly BoundingBox SmallEntity = new BoundingBox( new Vector3( -8, -8, 0 ), new Vector3( 8, 8, 16 ) );
+	public static readonly BoundingBox MediumEntity = new BoundingBox( new Vector3( -16, -16, 0 ), new Vector3( 16, 16, 32 ) );
+	public static readonly BoundingBox LargeEntity = new BoundingBox( new Vector3( -32, -32, 0 ), new Vector3( 32, 32, 64 ) );
+
+	public BoundingBox(Vector3 mins, Vector3 maxs)
 	{
 		this.mins = mins;
 		this.maxs = maxs;
@@ -24,7 +32,7 @@ public class BBox
 	/// </summary>
 	/// <param name="other">The other BBox to check for intersections with</param>
 	/// <returns><see langword="true"/> if intersecting with <paramref name="other"/>, <see langword="false"/> if not</returns>
-	public bool IntersectingWith(BBox other)
+	public bool IntersectingWith(BoundingBox other)
 	{
 		// We shouldn't be trying to intersect with ourself!
 		if (other == this)

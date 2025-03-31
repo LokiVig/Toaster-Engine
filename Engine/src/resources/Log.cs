@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Numerics;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
@@ -14,6 +15,11 @@ public struct Log
     // The path to the engine's logging file
     // This should just be our root dir, saved in a file called "engine.log"
     private const string PATH_LOG = "engine.log";
+
+    // The different colors that logs can have in the console
+    private static Vector4 colSuc = new Vector4( 0, 1, 0, 1 ); // Log.Success
+    private static Vector4 colWrn = new Vector4( 1, 0.25f, 0.2f, 1 ); // Log.Warning
+    private static Vector4 colErr = new Vector4( 1, 0, 0, 1 ); // Log.Error
 
     // The filestream that'll let us actually write our loggings to the log file
     private static StreamWriter logWriter;
@@ -46,8 +52,6 @@ public struct Log
         // Show information about the user's computer
         logWriter.WriteLine( "System Information" );
         logWriter.WriteLine( $"OS: {Environment.OSVersion} - \"{Environment.UserName}\" (\"{Environment.MachineName}\")" );
-        logWriter.WriteLine( $"CPU: {$"\"{Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER")}\"" ?? "Unknown"} - Cores: {Environment.ProcessorCount/2}, Threads: {Environment.ProcessorCount}" );
-        logWriter.WriteLine( $"RAM: {(int)Math.Ceiling(GC.GetGCMemoryInfo().TotalAvailableMemoryBytes / (1024f * 1024f * 1024f))} GB" );
         logWriter.WriteLine( $"C# Version: {Environment.Version}" );
 
         // Separator
@@ -98,10 +102,10 @@ public struct Log
         if ( extraInfo )
         {
             // Add the line of where it was called, the caller, the method that called us, then the message
-            ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: INFO; {message}" );
+            ConsoleUI.WriteLine( $"[INFO] (Line {line}) {caller}.{method}; {message}" );
 
             // Write to the log file
-            logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: INFO; {message}" );
+            logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : [INFO] (Line {line}) {caller}.{method}; {message}" );
         }
         else // Otherwise...
         {
@@ -134,10 +138,10 @@ public struct Log
         }
 
         // Write to the console what just happened
-        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: SUCCESS; {message}" );
+        ConsoleUI.WriteLine( $"[SUCCESS] (Line {line}) {caller}.{method}; {message}", colSuc );
 
         // Write to the log file
-        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: SUCCESS; {message}" );
+        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : [SUCCESS] (Line {line}) {caller}.{method}; {message}" );
     }
 
     /// <summary>
@@ -161,10 +165,10 @@ public struct Log
         }
 
         // Write to the console what just happened
-        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: WARNING; {message}" );
+        ConsoleUI.WriteLine( $"[WARNING] (Line {line}) {caller}.{method}; {message}", colWrn );
 
         // Write to the log file
-        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: WARNING; {message}" );
+        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : [WARNING] (Line {line}) {caller}.{method}; {message}" );
     }
 
     /// <summary>
@@ -172,7 +176,7 @@ public struct Log
     /// Features an error sound effect.
     /// </summary>
     /// <param name="message">The specific error message used to detail what happened to cause an error.</param>
-    public static void Error<T>( string message, [CallerLineNumber] int line = 0, [CallerFilePath] string src = "", [CallerMemberName] string method = "" ) 
+    public static void Error<T>( string message, [CallerLineNumber] int line = 0, [CallerFilePath] string src = "", [CallerMemberName] string method = "" )
         where T : Exception, new()
     {
         // Play the engine's default error sound
@@ -189,10 +193,10 @@ public struct Log
         }
 
         // Write to the console what just happened
-        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: ERROR; {message}" );
+        ConsoleUI.WriteLine( $"[ERROR] (Line {line}) {caller}.{method}; {message}" );
 
         // Write to the log file
-        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: ERROR; {message}" );
+        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : [ERROR] (Line {line}) {caller}.{method}; {message}", colErr );
 
         // Create an exception from the type designated by the caller
         T exception = new T();
@@ -229,10 +233,10 @@ public struct Log
         }
 
         // Write to the console what just happened
-        ConsoleUI.WriteLine( $"(Line {line}) {caller}.{method}: ERROR; {message}" );
+        ConsoleUI.WriteLine( $"[ERROR] (Line {line}) {caller}.{method}; {message}" );
 
         // Write to the log file
-        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : (Line {line}) {caller}.{method}: ERROR; {message}" );
+        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : [ERROR] (Line {line}) {caller}.{method}; {message}", colErr );
 
         // If we have an exception...
         if ( exception != null )

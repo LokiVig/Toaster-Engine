@@ -37,7 +37,7 @@ public class GameManager
 {
     public static GameState currentState = GameState.Active; // The state the game currently is in
 
-    private PlayerEntity mainPlayer;
+    private Player mainPlayer;
 
     /// <summary>
     /// Initialize the game
@@ -50,7 +50,7 @@ public class GameManager
                                           // The engine's update function is a lot more focused on, well, engine-wide
                                           // prospects, while this class's should be focused more on the game-specific
                                           // functionalities
-        
+
         // Create our default keybinds
         CreateKeybinds();
 
@@ -58,8 +58,12 @@ public class GameManager
         // DEBUG: Setting up a basic scene to test out certain aspects of what's done
         EngineManager.currentFile = new WTF( "test.wtf" );
 
-        EntitySpawner<TestNPC> npcSpawner = new( new Vector3( 0, 5.0f, 0 ) );
-        EntitySpawner<Player> playerSpawner = new( Vector3.Zero );
+        // References to the player and NPC entity
+        TestNPC npc = new TestNPC();
+        Player player = new Player();
+
+        EntitySpawner npcSpawner = new( npc, new Vector3( 0, 5.0f, 0 ) );
+        EntitySpawner playerSpawner = new( player, Vector3.Zero );
 
         SoundEntity audioPlayer = new SoundEntity( new Vector3( 0, 0, 15.0f ) );
         audioPlayer.audioPath = "resources/audio/music/debugmusic.mp3";
@@ -67,7 +71,7 @@ public class GameManager
         audioPlayer.audioRepeats = true;
 
         TriggerBrush trigger = new TriggerBrush();
-        trigger.SetBBox( new BBox( new Vector3( -15 ), new Vector3( 15 ) ) );
+        trigger.SetBoundingBox( new BoundingBox( new Vector3( -15 ), new Vector3( 15 ) ) );
         trigger.triggerBy = TriggerBy.Player;
         trigger.triggerOn = TriggerOn.Trigger;
         trigger.triggerType = TriggerType.Once;
@@ -93,8 +97,8 @@ public class GameManager
         trigger.Spawn();
         audioPlayer.Spawn();
 
-        mainPlayer = playerSpawner.SpawnEntity();
-        TestNPC npc = npcSpawner.SpawnEntity();
+        player = mainPlayer = (Player)playerSpawner.SpawnEntity();
+        npc = (TestNPC)npcSpawner.SpawnEntity();
 
         Ray.Trace( mainPlayer, npc, out object hitObject, RayIgnore.Brushes | RayIgnore.BrushEntities );
         ( hitObject as Entity )?.TakeDamage( 25, mainPlayer );
@@ -113,10 +117,10 @@ public class GameManager
     private void CreateKeybinds()
     {
         // Add movement keybinds
-        InputManager.AddKeybind( new Keybind { alias = "move_forward",  key = Key.W, commandAlias = "+move_forward",  down = true } ); // Forwards movement
+        InputManager.AddKeybind( new Keybind { alias = "move_forward", key = Key.W, commandAlias = "+move_forward", down = true } ); // Forwards movement
         InputManager.AddKeybind( new Keybind { alias = "move_backward", key = Key.S, commandAlias = "+move_backward", down = true } ); // Backwards movement
-        InputManager.AddKeybind( new Keybind { alias = "move_left",     key = Key.A, commandAlias = "+move_left",     down = true } ); // Leftwards movement
-        InputManager.AddKeybind( new Keybind { alias = "move_right",    key = Key.D, commandAlias = "+move_right",    down = true } ); // Rightwards movement
+        InputManager.AddKeybind( new Keybind { alias = "move_left", key = Key.A, commandAlias = "+move_left", down = true } ); // Leftwards movement
+        InputManager.AddKeybind( new Keybind { alias = "move_right", key = Key.D, commandAlias = "+move_right", down = true } ); // Rightwards movement
     }
 
     /// <summary>
