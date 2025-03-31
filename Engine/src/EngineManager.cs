@@ -59,21 +59,25 @@ public static class EngineManager
     /// <param name="initialWindowState">The initial window state the instance should run from.</param>
     public static void Initialize( string title = null, WindowState initialWindowState = WindowState.Normal )
     {
-        // Initialize file logging
-        Log.OpenLogFile();
-
-        // Initialize our input manager
-        InputManager.Initialize();
-
-        // Register the default console commands
-        ConsoleManager.RegisterCommands();
-
-        // Create default keybinds
-        CreateKeybinds();
 
         // Try to...
         try
         {
+            // Initialize file logging
+            Log.OpenLogFile();
+            Log.Success( "Successfully initialized logging system!" );
+
+            // Initialize our input manager
+            InputManager.Initialize();
+            Log.Success( "Successfully initialized input manager!" );
+
+            // Register the default console commands
+            ConsoleManager.RegisterCommands();
+            Log.Success( "Successfully registered all console commands!" );
+            
+            // Create default keybinds
+            CreateKeybinds();
+
             // Initialize the renderer
             Renderer.Initialize( $"Toaster Engine [V.{VERSION}]{( title != null ? $" - {title}" : "" )}", initialWindowState );
             Log.Success( "Successfully initialized renderer." );

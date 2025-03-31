@@ -262,9 +262,6 @@ public static class AudioManager
                         {
                             al.BufferData( buf, format, pData, size, sampleRate );
                         }
-
-                        // Log the reading of data
-                        Log.Info( $"Read {size} bytes data.", true );
                     }
                     else if ( identifier == "JUNK" ) // If this section is junk...
                     {
@@ -277,19 +274,13 @@ public static class AudioManager
                         ReadOnlySpan<byte> v = file.Slice( fileIndex, size );
                         string str = Encoding.ASCII.GetString( v );
 
-                        // Log the XML information
-                        Log.Info( $"iXML chunk: {str}", true );
                         fileIndex += size;
                     }
                     else // Otherwise we've encountered an unknown section...
                     {
-                        // Log the unknown section and skip over it!
-                        Log.Info( $"Unknown section: {identifier}", true );
+                        // Skip over it!
                         fileIndex += size;
                     }
-
-                    // Log the successful loading of the file
-                    Log.Info( "Detected RIFF-WAVE audio file, PCM encoding.", true );
 
                     // Create a new audio file with our specifications
                     audio = new AudioFile( numChannels, sampleRate, byteRate, blockAlign, bitsPerSample, format );
