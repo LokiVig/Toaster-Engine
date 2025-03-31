@@ -119,7 +119,7 @@ public class Renderer
         }
 
         // Set the window's title to the argument
-        window.Title = $"Toaster Engine (v.{EngineManager.VERSION}) - {args[1].ToString().Replace( "_", " " )}";
+        window.Title = $"{EngineManager.EngineTitle} - {args[1].ToString().Replace( "_", " " )}";
         Log.Info( $"Set the window's title to \"{args[1].ToString().Replace( "_", " " )}\"!", true );
     }
 
@@ -129,7 +129,7 @@ public class Renderer
     /// <param name="newTitle">The window's new title.</param>
     public static void SetWindowTitle( string newTitle )
     {
-        window.Title = $"Toaster Engine (v.{EngineManager.VERSION}) - {newTitle}";
+        window.Title = $"{EngineManager.EngineTitle} - {newTitle}";
     }
 
     /// <summary>

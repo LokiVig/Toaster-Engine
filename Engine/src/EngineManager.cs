@@ -24,6 +24,8 @@ public static class EngineManager
     //               Publics                 //
     //---------------------------------------//
 
+    public static readonly string EngineTitle = $"Toaster Engine [V.{VERSION}]";
+
     public static event Action OnUpdate; // Whenever we should update things, this event gets called
 
 #if DEBUG // If we're debugging, we should, by default, be cheating
@@ -75,7 +77,7 @@ public static class EngineManager
         try
         {
             // Initialize the renderer
-            Renderer.Initialize( $"Toaster Engine [V.{VERSION}]{( title != null ? $" - {title}" : "" )}", initialWindowState );
+            Renderer.Initialize( $"{EngineTitle}{( title != null ? $" - {title}" : "" )}", initialWindowState );
             Log.Success( "Successfully initialized renderer." );
         }
         catch ( Exception exc ) // Handle any exceptions we encounter!
