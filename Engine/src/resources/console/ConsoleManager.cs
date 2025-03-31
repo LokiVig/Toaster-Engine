@@ -10,10 +10,16 @@ using Toast.Engine.Attributes;
 
 namespace Toast.Engine.Resources.Console;
 
+/// <summary>
+/// The console manager handles all console commands within the engine.<br/>
+/// It can find, call and manage console commands to some extent.
+/// </summary>
 public static class ConsoleManager
 {
+    // The default path to the saved commands
     private const string PATH_COMMANDS = "resources/commands.txt";
 
+    // All of the found commands
     private static List<ConsoleCommand> commands = new();
 
     private static JsonSerializer serializer = new()
@@ -107,8 +113,6 @@ public static class ConsoleManager
                     // If we did find our list of commands...
                     if ( ( commands = serializer.Deserialize<List<ConsoleCommand>>( reader ) ) != null )
                     {
-
-
                         // Successful command loading!
                         return true;
                     }
