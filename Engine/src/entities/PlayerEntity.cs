@@ -9,19 +9,14 @@ public partial class PlayerEntity : Entity
     public override EntityType type => EntityType.Player; // This entity is of type Player
     public override float maxHealth => 100.0f;
 
-    public PlayerEntity()
+    public PlayerEntity() : base()
     {
-        SetBBox(new BBox(new Vector3(-32, -32, 0), new Vector3(32, 32, 64)));
+        SetBoundingBox( BoundingBox.LargeEntity );
     }
 
-    public PlayerEntity(Vector3 position) : base(position)
+    public PlayerEntity( Vector3 position ) : base( position )
     {
-        SetBBox(new BBox(new Vector3(-32, -32, 0), new Vector3(32, 32, 64)));
-    }
-
-    protected override void OnSpawn()
-    {
-        base.OnSpawn();
+        SetBoundingBox( BoundingBox.LargeEntity );
     }
 
     protected override void Update()

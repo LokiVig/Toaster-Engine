@@ -17,7 +17,7 @@ public class TriggerBrush : BrushEntity
     private static readonly Vector3 V3VALUE_DEFAULT = Vector3.Zero;
     private static readonly Quaternion QVALUE_DEFAULT = Quaternion.Identity;
     private static readonly Entity EVALUE_DEFAULT = null;
-    private static readonly BBox BBVALUE_DEFAULT = BBox.One;
+    private static readonly BoundingBox BBVALUE_DEFAULT = BoundingBox.One;
 
     public int iValue = IVALUE_DEFAULT; // Event int value
     public float fValue = FVALUE_DEFAULT; // Event float value
@@ -25,7 +25,7 @@ public class TriggerBrush : BrushEntity
     public Vector3 v3Value = V3VALUE_DEFAULT; // Event Vector3 value
     public Quaternion qValue = QVALUE_DEFAULT; // Event Quaternion value
     public Entity eValue = EVALUE_DEFAULT; // Event Entity value
-    public BBox bbValue = BBVALUE_DEFAULT; // Event BBox value
+    public BoundingBox bbValue = BBVALUE_DEFAULT; // Event BBox value
 
     public string targetEntity; // The entity we wish to target (decided by an entity's ID)
     public EntityEvent targetEvent; // The desired event
@@ -78,7 +78,7 @@ public class TriggerBrush : BrushEntity
             }
 
             // Do the actual intersection math
-            if ( bbox.IntersectingWith( entity.GetBBox() ) )
+            if ( transform.boundingBox.IntersectingWith( entity.GetBoundingBox() ) )
             {
                 // If we do intersect, but the trigger fails for some reason...
                 if ( !OnTrigger( entity ) )

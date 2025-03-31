@@ -7,34 +7,34 @@ namespace Toast.Game.Entities.NPC;
 
 public class TestNPC : NPCEntity
 {
-	public override float maxHealth => 100.0f;
+    public override float maxHealth => 100.0f;
 
-	protected override Type[] hateList => [];
-	protected override Type[] adoreList => [typeof(Player)];
+    protected override Type[] hateList => [];
+    protected override Type[] adoreList => [typeof( Player )];
 
     public TestNPC()
-	{
-		SetBBox(new BBox(new Vector3(-32, -32, 0), new Vector3(32, 32, 64)));
-	}
+    {
+        SetBoundingBox( BoundingBox.LargeEntity );
+    }
 
-	public TestNPC(Vector3 position) : base(position)
-	{
-		SetBBox(new BBox(new Vector3(-32, -32, 0), new Vector3(32, 32, 64)));
-	}
+    public TestNPC( Vector3 position ) : base( position )
+    {
+        SetBoundingBox( BoundingBox.LargeEntity );
+    }
 
-	protected override void Update()
-	{
-		base.Update();
+    protected override void Update()
+    {
+        base.Update();
 
-		// Handle movements
-		ApplyVelocity();
-	}
+        // Handle movements
+        ApplyVelocity();
+    }
 
-	protected override void OnDamage()
-	{
-		base.OnDamage();
-		
-		// We should target the thing that last attacked us!
-		SetTarget(lastAttacker);
-	}
+    protected override void OnDamage()
+    {
+        base.OnDamage();
+
+        // We should target the thing that last attacked us!
+        SetTarget( lastAttacker );
+    }
 }

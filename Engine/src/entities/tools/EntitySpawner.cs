@@ -7,91 +7,66 @@ namespace Toast.Engine.Entities.Tools;
 /// <summary>
 /// Tool entity which allows the spawning of another entity in the current scene.
 /// </summary>
-/// <typeparam name="T">The <see cref="Entity"/> we wish to spawn.</typeparam>
-public class EntitySpawner<T> : ToolEntity where T : Entity, new()
+public class EntitySpawner : ToolEntity
 {
-    // TODO: This results in inefficient encoding when writing to WTF file! Find some way around this!
-    public T entityToSpawn { get; private set; } = new T();
+    public Entity toSpawn;
 
-    public EntitySpawner()
+    public EntitySpawner() : base()
     {
-        SetBBox( new BBox( new Vector3( -8 ), new Vector3( 8 ) ) );
+        SetBoundingBox( BoundingBox.SmallTool );
+    }
+
+    public EntitySpawner( Entity toSpawn ) : base()
+    {
+        this.toSpawn = toSpawn;
+
+        SetBoundingBox( BoundingBox.SmallTool );
     }
 
     public EntitySpawner( Vector3 position ) : base( position )
     {
-        SetBBox( new BBox( new Vector3( -8 ), new Vector3( 8 ) ) );
+        SetBoundingBox( BoundingBox.SmallTool );
     }
 
-    public EntitySpawner( Entity parent ) : base( parent )
+    public EntitySpawner( Entity toSpawn, Vector3 position ) : base( position )
     {
-        SetBBox( new BBox( new Vector3( -8 ), new Vector3( 8 ) ) );
-    }
+        this.toSpawn = toSpawn;
 
-    public EntitySpawner( Entity parent, Vector3 position ) : base( parent, position )
-    {
-        SetBBox( new BBox( new Vector3( -8 ), new Vector3( 8 ) ) );
+        SetBoundingBox( BoundingBox.SmallTool );
     }
 
     /// <summary>
-    /// Spawn an entity, based on the given argument.
+    /// Spawns an entity specified by a parameter.
     /// </summary>
-    /// <returns>The recently spawned entity.</returns>
-    public T SpawnEntity()
+    /// <returns>The recently spawned entity</returns>
+    public Entity SpawnEntity()
     {
-        entityToSpawn = new T();
-
-        // Make sure the desired entity is not a tool entity!
-        if ( entityToSpawn is ToolEntity )
+        // Make sure the entity is not a tool entity!
+        if ( toSpawn is ToolEntity )
         {
-            Log.Error( "Can't spawn tool entity!" );
+            Log.Error( "Can't spawn a tool entity" );
             return null;
         }
 
-        // Add the newly spawned entity to the current scene
-        EngineManager.currentScene?.AddEntity( entityToSpawn );
-
-        // Generate the entity's ID
-        entityToSpawn.GenerateID();
+        // The entity should spawn!
+        toSpawn.Spawn();
 
         // Set the entity's position to our position
-        entityToSpawn.SetPosition( position );
+        toSpawn.SetPosition( transform.worldPosition );
 
-        // Set the entity's parent to this
-        entityToSpawn.SetParent( this );
+        // Generate the entity's ID
+        toSpawn.GenerateID();
 
-        // The entity should spawn!
-        entityToSpawn.Spawn();
+        // Add the newly spawned entity to the current scene
+        EngineManager.currentScene?.AddEntity( toSpawn );
 
-        Log.Info( $"Spawned entity {entityToSpawn}.\n" +
+        Log.Info( $"Spawned entity {toSpawn}.\n" +
                           $"\tSource: {this}\n" +
-                          $"\tPosition: {entityToSpawn.GetPosition()}\n" +
-                          $"\tRotation: {entityToSpawn.GetRotation()}\n" +
-                          $"\tBBox: {entityToSpawn.GetBBox()}" );
+                          $"\tPosition: {toSpawn.GetPosition()}\n" +
+                          $"\tRotation: {toSpawn.GetRotation()}\n" +
+                          $"\tBBox: {toSpawn.GetBoundingBox()}" );
 
-        // And return the entity we just spawned
-        return entityToSpawn;
-    }
-
-    public override string ToString()
-    {
-        return $"EntitySpawner<{typeof( T ).Name}> (\"{GetID()}\")";
-    }
-}
-
-/// <summary>
-/// <inheritdoc cref="EntitySpawner{T}"/>
-/// </summary>
-public class EntitySpawner : ToolEntity
-{
-    public EntitySpawner()
-    {
-        SetBBox( new BBox( new Vector3( -8 ), new Vector3( 8 ) ) );
-    }
-
-    public EntitySpawner( Vector3 position ) : base( position )
-    {
-        SetBBox( new BBox( new Vector3( -8 ), new Vector3( 8 ) ) );
+        return toSpawn;
     }
 
     /// <summary>
@@ -104,14 +79,14 @@ public class EntitySpawner : ToolEntity
         // Make sure the desired entity is not a tool entity!
         if ( ent is ToolEntity )
         {
-            Log.Error( "Can't spawn tool entity!" );
+            Log.Error( "Can't spawn a tool entity!" );
             return null;
         }
 
         // The entity should spawn!
         ent.Spawn();
         // Set the entity's position to our position
-        ent.SetPosition( position );
+        ent.SetPosition( transform.worldPosition );
         // Generate the entity's ID
         ent.GenerateID();
 
@@ -122,7 +97,7 @@ public class EntitySpawner : ToolEntity
                           $"\tSource: {this}\n" +
                           $"\tPosition: {ent.GetPosition()}\n" +
                           $"\tRotation: {ent.GetRotation()}\n" +
-                          $"\tBBox: {ent.GetBBox()}" );
+                          $"\tBBox: {ent.GetBoundingBox()}" );
 
         // And return the entity we just spawned
         return ent;

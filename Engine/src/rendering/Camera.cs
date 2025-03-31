@@ -14,11 +14,11 @@ public class Camera : ToolEntity
     public Camera( Entity parent, Vector3 offset ) : base( parent )
     {
         this.offset = offset;
-        rotation = Quaternion.Identity;
+        transform.worldRotation = Quaternion.Identity;
     }
 
     public Camera( Entity parent, Vector3 offset, Quaternion rotation ) : this( parent, offset )
     {
-        this.rotation = rotation;
+        transform.worldRotation = rotation;
     }
 }
