@@ -121,7 +121,7 @@ public static class AudioManager
                 AL al = AL.GetApi();
 
                 // Get the device
-                Device* device = alc.OpenDevice( $"sound{playingFiles.Count + 1}" );
+                Device* device = alc.OpenDevice( $"" );
 
                 // Make sure the device isn't null
                 if ( device == null )
