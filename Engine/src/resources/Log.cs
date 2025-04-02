@@ -5,8 +5,8 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 using Toast.Engine.Rendering;
+using Toast.Engine.Extensions;
 using Toast.Engine.Resources.Audio;
-using Toast.Engine.Resources.Extensions;
 
 namespace Toast.Engine.Resources;
 
