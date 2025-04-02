@@ -9,16 +9,21 @@ namespace Toast.Engine.Rendering;
 /// </summary>
 public class Camera : ToolEntity
 {
-    public Vector3 offset;
-
     public Camera( Entity parent, Vector3 offset ) : base( parent )
     {
-        this.offset = offset;
+        transform.localPosition = offset;
         transform.worldRotation = Quaternion.Identity;
     }
 
     public Camera( Entity parent, Vector3 offset, Quaternion rotation ) : this( parent, offset )
     {
         transform.worldRotation = rotation;
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        transform.localPosition += transform.worldPosition;
     }
 }

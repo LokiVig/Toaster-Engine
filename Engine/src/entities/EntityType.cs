@@ -13,6 +13,6 @@ public enum EntityType
 	Item, // All items should be of this type
 	Prop, // All static, dynamic, physics, etc. props should be of this type
 	NPC, // All Non-Playable-Characters / AI should be of this type (NPC is used as a general term)
-	Tool, // Everything that helps make it easier to make a map should be of this type
-	Brush, // Everything that's a brush entity (Damageable brushes, Trigger brushes, etc.)
+	Tool, // All tool entities that are used when making a map should be of this type (sound entities, entity spawners, etc.)
+	Brush, // Everything that's a brush entity should be of this type (damageable brushes, trigger brushes, etc.)
 }

@@ -43,4 +43,14 @@ public class Transform
         float res = DistanceTo( other ); // Get the original distance
         return res * res; // Return the square distance
     }
+
+    /// <summary>
+    /// Updates positions, rotations, etc. every frame.<br/>
+    /// Mainly this is to update the local positions / rotations to let them act as an offset from their world position.
+    /// </summary>
+    public void Update()
+    {
+        localPosition += worldPosition;
+        localRotation += worldRotation;
+    }
 }
