@@ -34,8 +34,6 @@ public class Entity
 
     protected Model model; // This entity's visually pleasing model
 
-    private const float MAX_VELOCITY = 225; // TODO: Calculate this (mass, therefore terminal velocity) from the entity's BBox! Bad constant!
-
     /// <summary>
     /// Creates a new entity.
     /// </summary>

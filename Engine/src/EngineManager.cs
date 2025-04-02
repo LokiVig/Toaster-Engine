@@ -18,24 +18,50 @@ public static class EngineManager
     //			    Constants				 //
     //---------------------------------------//
 
+    /// <summary>
+    /// Defines which version of the engine we're on as a string.<br/>
+    /// Primarily to be used on the window's title.
+    /// </summary>
     public const string VERSION = "0.0.2";
 
     //---------------------------------------//
     //               Publics                 //
     //---------------------------------------//
 
-    public static event Action OnUpdate; // Whenever we should update things, this event gets called
+    /// <summary>
+    /// Whenever we should update things, this event gets called.
+    /// </summary>
+    public static event Action OnUpdate;
+
+    public static readonly string EngineTitle = $"Toaster Engine [V.{VERSION}]";
 
 #if DEBUG // If we're debugging, we should, by default, be cheating
-    public static bool cheatsEnabled = true; // Determines whether or not cheats are enabled
+    /// <summary>
+    /// Determines whether or not cheats are enabled.
+    /// </summary>
+    public static bool cheatsEnabled = true;
 #else // If we're in release mode, we should, by default, not be cheating
-    public static bool cheatsEnabled = false; // Determines whether or not cheats are enabled
+    /// <summary>
+    /// Determines whether or not cheats are enabled.
+    /// </summary>    
+    public static bool cheatsEnabled = false;
 #endif // DEBUG
 
-    public static WTF currentFile; // The currently loaded WTF file / map
-    public static Scene currentScene; // The currently running scene, initialized from the current file
+    /// <summary>
+    /// The currently loaded WTF file (map).
+    /// </summary>
+    public static WTF currentFile;
 
-    public static float deltaTime; // Helps stopping you from using FPS-dependant calculations
+    /// <summary>
+    /// The currently running scene, should be initialized from the current file.
+    /// </summary>
+    public static Scene currentScene;
+
+    /// <summary>
+    /// Helps stopping you from using FPS-dependant calculations.<br/>
+    /// Should be used for things that pass through time, e.g. physics.
+    /// </summary>
+    public static float deltaTime;
 
     //---------------------------------------//
     //				 Privates                //
@@ -79,7 +105,7 @@ public static class EngineManager
             CreateKeybinds();
 
             // Initialize the renderer
-            Renderer.Initialize( $"Toaster Engine [V.{VERSION}]{( title != null ? $" - {title}" : "" )}", initialWindowState );
+            Renderer.Initialize( $"{EngineTitle}{( title != null ? $" - {title}" : "" )}", initialWindowState );
             Log.Success( "Successfully initialized renderer." );
         }
         catch ( Exception exc ) // Handle any exceptions we encounter!

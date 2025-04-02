@@ -11,21 +11,21 @@ namespace Toast.Engine.Entities.Brushes;
 public class TriggerBrush : BrushEntity
 {
     // List of value constants
-    private static readonly int IVALUE_DEFAULT = 0;
-    private static readonly float FVALUE_DEFAULT = 0.0f;
-    private static readonly int BVALUE_DEFAULT = -1;
-    private static readonly Vector3 V3VALUE_DEFAULT = Vector3.Zero;
-    private static readonly Quaternion QVALUE_DEFAULT = Quaternion.Identity;
-    private static readonly Entity EVALUE_DEFAULT = null;
-    private static readonly BoundingBox BBVALUE_DEFAULT = BoundingBox.One;
+    private static readonly int DefaultIValue = 0;
+    private static readonly float DefaultFValue = 0.0f;
+    private static readonly int DefaultBValue = -1;
+    private static readonly Vector3 DefaultV3Value = Vector3.Zero;
+    private static readonly Quaternion DefaultQValue = Quaternion.Identity;
+    private static readonly Entity DefaultEValue = null;
+    private static readonly BoundingBox DefaultBBValue = BoundingBox.One;
 
-    public int iValue = IVALUE_DEFAULT; // Event int value
-    public float fValue = FVALUE_DEFAULT; // Event float value
-    public int bValue = BVALUE_DEFAULT; // Event bool value (<=-1 -> none, =0 -> false, >=1 -> true)
-    public Vector3 v3Value = V3VALUE_DEFAULT; // Event Vector3 value
-    public Quaternion qValue = QVALUE_DEFAULT; // Event Quaternion value
-    public Entity eValue = EVALUE_DEFAULT; // Event Entity value
-    public BoundingBox bbValue = BBVALUE_DEFAULT; // Event BBox value
+    public int iValue = DefaultIValue; // Event int value
+    public float fValue = DefaultFValue; // Event float value
+    public int bValue = DefaultBValue; // Event bool value (<=-1 -> none, =0 -> false, >=1 -> true)
+    public Vector3 v3Value = DefaultV3Value; // Event Vector3 value
+    public Quaternion qValue = DefaultQValue; // Event Quaternion value
+    public Entity eValue = DefaultEValue; // Event Entity value
+    public BoundingBox bbValue = DefaultBBValue; // Event BBox value
 
     public string targetEntity; // The entity we wish to target (decided by an entity's ID)
     public EntityEvent targetEvent; // The desired event
@@ -40,11 +40,19 @@ public class TriggerBrush : BrushEntity
     private int triggeredCount; // The amount of times this trigger has been triggered
     private bool hasTriggered; // Determines whether this trigger has already been triggered
 
-    public TriggerBrush()
+    public TriggerBrush() : base()
     {
     }
 
     public TriggerBrush( Vector3 position ) : base( position )
+    {
+    }
+
+    public TriggerBrush( Entity parent ) : base( parent )
+    {
+    }
+
+    public TriggerBrush( Entity parent, Vector3 position ) : base( parent, position )
     {
     }
 
@@ -223,7 +231,7 @@ public class TriggerBrush : BrushEntity
         }
 
         // Get the entity we're supposed to effect
-        Entity foundTarget = EngineManager.currentScene.FindEntity(targetEntity);
+        Entity foundTarget = EngineManager.currentScene.FindEntity( targetEntity );
 
         // Make sure our found target isn't null
         if ( foundTarget == null )
@@ -240,46 +248,46 @@ public class TriggerBrush : BrushEntity
                           $"\tValues:\n" +
                           $"\t\tiValue: {iValue}\n" +
                           $"\t\tfValue: {fValue}\n" +
-                          $"\t\tbValue: {( bValue == BVALUE_DEFAULT ?  "N/A" : ( bValue == 0 ? "False" : "True" ) )}\n" +
+                          $"\t\tbValue: {( bValue == DefaultBValue ? "N/A" : ( bValue >= 1 ? "False" : "True" ) )}\n" +
                           $"\t\tvValue: {v3Value}\n" +
                           $"\t\tqValue: {qValue}\n" +
-                          $"\t\teValue: {( eValue == EVALUE_DEFAULT ? "N/A" : eValue )}\n" +
+                          $"\t\teValue: {( eValue == DefaultEValue ? "N/A" : eValue )}\n" +
                           $"\t\tbbValue: {bbValue}\n" +
                           $"\tTrigger type: {triggerType}\n" +
                           $"\tTrigger by: {triggerBy}\n" +
                           $"\tTrigger on: {triggerOn}" );
 
-        if ( iValue != IVALUE_DEFAULT ) // Int value event
+        if ( iValue != DefaultIValue ) // Int value event
         {
             foundTarget.OnEvent( targetEvent, iValue, this );
         }
 
-        if ( fValue != FVALUE_DEFAULT ) // Float value event
+        if ( fValue != DefaultFValue ) // Float value event
         {
             foundTarget.OnEvent( targetEvent, fValue, this );
         }
 
-        if ( bValue != BVALUE_DEFAULT ) // Bool value event
+        if ( bValue != DefaultBValue ) // Bool value event
         {
-            foundTarget.OnEvent( targetEvent, bValue == 1, this );
+            foundTarget.OnEvent( targetEvent, bValue >= 1, this );
         }
 
-        if ( v3Value != V3VALUE_DEFAULT ) // Vector3 value event
+        if ( v3Value != DefaultV3Value ) // Vector3 value event
         {
             foundTarget.OnEvent( targetEvent, v3Value, this );
         }
 
-        if ( qValue != QVALUE_DEFAULT ) // Quaternion value event
+        if ( qValue != DefaultQValue ) // Quaternion value event
         {
             foundTarget.OnEvent( targetEvent, qValue, this );
         }
 
-        if ( eValue != EVALUE_DEFAULT ) // Entity value event
+        if ( eValue != DefaultEValue ) // Entity value event
         {
             foundTarget.OnEvent( targetEvent, eValue, this );
         }
 
-        if ( bbValue != BBVALUE_DEFAULT ) // BBox value event
+        if ( bbValue != DefaultBBValue ) // BBox value event
         {
             foundTarget.OnEvent( targetEvent, bbValue, this );
         }
@@ -292,11 +300,21 @@ public class TriggerBrush : BrushEntity
         hasTriggered = true; // We have triggered
         previousTriggerEntity = triggerEntity; // Previous trigger entity is set to the one who last interacted with us
 
+        // If we're only supposed to trigger once...
+        if ( triggerType == TriggerType.Once )
+        {
+            // We should delete ourself after a triggering!
+            Remove();
+        }
+
         // Return true, we've successfully been triggered!
         return true;
     }
 }
 
+/// <summary>
+/// Determines when a trigger should be triggered.
+/// </summary>
 public enum TriggerOn
 {
     Trigger, // Either on enter or exit
@@ -304,6 +322,9 @@ public enum TriggerOn
     Exit // Only when an entity has left
 }
 
+/// <summary>
+/// Determines what this trigger can be triggered by.
+/// </summary>
 public enum TriggerBy
 {
     All, // Trigger by all things
@@ -311,6 +332,9 @@ public enum TriggerBy
     NPC, // Trigger only by NPCs
 }
 
+/// <summary>
+/// Effectively determines how many times this trigger can be triggered.
+/// </summary>
 public enum TriggerType
 {
     Once, // Triggers once, then removes itself
