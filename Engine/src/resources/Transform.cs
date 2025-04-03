@@ -16,7 +16,7 @@ public class Transform
     public Quaternion worldRotation = Quaternion.Identity; // The world rotation of this transform
     public Quaternion localRotation = Quaternion.Identity; // The local rotation of this transform
 
-    public BoundingBox boundingBox; // The bounding box of this transform
+    public BoundingBox boundingBox = BoundingBox.One; // The bounding box of this transform
 
     /// <summary>
     /// Distance to another <see cref="Transform"/>.

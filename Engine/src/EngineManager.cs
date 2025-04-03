@@ -12,6 +12,9 @@ using Toast.Engine.Resources.Console;
 
 namespace Toast.Engine;
 
+/// <summary>
+/// The engine instance itself.
+/// </summary>
 public static class EngineManager
 {
     //---------------------------------------//
@@ -87,10 +90,6 @@ public static class EngineManager
     private static bool consoleOpen; // Used to determine whether or not we should display the console
     private static bool debugOpen; // Used to determine whether or not we should display the debug UI
 
-    //---------------------------------------//
-    //				Functions				 //
-    //---------------------------------------//
-
     /// <summary>
     /// Initialize a new Toaster Engine instance with an optional <paramref name="title"/> argument.
     /// </summary>
@@ -117,7 +116,6 @@ public static class EngineManager
 
             // Initialize the renderer
             Renderer.Initialize( $"{EngineTitle}{( title != null ? $" - {title}" : "" )}" );
-            Log.Success( "Successfully initialized renderer." );
         }
         catch ( Exception exc ) // Handle any exceptions we encounter!
         {
@@ -153,9 +151,6 @@ public static class EngineManager
             // Update the input manager
             InputManager.Update();
 
-            // Manage UI elements (mainly ImGui related)
-            UIUpdate();
-
             // Call the OnUpdate event
             // This makes it so everything subscribed to the event will call their own,
             // subsidiary update method
@@ -163,6 +158,9 @@ public static class EngineManager
 
             // Call the RenderFrame method from the renderer
             Renderer.RenderFrame( currentScene ?? null );
+
+            // Update UI elements
+            UIUpdate();
         }
     }
 

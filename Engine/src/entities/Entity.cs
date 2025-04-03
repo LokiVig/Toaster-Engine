@@ -10,7 +10,7 @@ namespace Toast.Engine.Entities;
 
 /// <summary>
 /// An entity.<br/>
-/// Something that can, for example, be seen, interacted with, killed, or other, should be defined as an entity.<br/>
+/// Anything that can, for example, be seen, interacted with, killed, or other, should be defined as an entity.<br/>
 /// </summary>
 public class Entity
 {
@@ -21,7 +21,8 @@ public class Entity
 
     public string id; // This entity's identifier
     public string modelPath; // The path to this entity's visually pleasing model
-    public string parent; // The possible parent of this entity
+
+    public Entity parent; // The possible parent of this entity
 
     public List<Entity> children = new List<Entity>(); // Any and all children this entity has
 
@@ -227,6 +228,14 @@ public class Entity
         // Easier to use variable for the list of entities in the current scene
         List<Entity> entities = EngineManager.currentScene?.GetEntities();
 
+        // If the list of entities doesn't contain us...
+        if ( !entities.Contains( this ) )
+        {
+            // Log an error with a befitting exception!
+            Log.Error<NullReferenceException>( $"Can't generate ID for {this}, as we don't exist in the current scene's entity list!" );
+            return;
+        }
+
         // For every entity...
         for ( int i = 0; i < entities?.Count; i++ )
         {
@@ -392,14 +401,14 @@ public class Entity
     /// Call an event that takes a <see cref="Vector3"/> for a value.
     /// </summary>
     /// <param name="eEvent">Desired event to do to this entity.</param>
-    /// <param name="vValue">Value as <see cref="Vector3"/>.</param>
+    /// <param name="v3Value">Value as <see cref="Vector3"/>.</param>
     /// <param name="source">The entity that caused this event.</param>
-    public void OnEvent( EntityEvent eEvent, Vector3 vValue, Entity source = null )
+    public void OnEvent( EntityEvent eEvent, Vector3 v3Value, Entity source = null )
     {
         switch ( eEvent )
         {
             case EntityEvent.SetPosition: // Set this entity's position according to vValue
-                SetPosition( vValue );
+                SetPosition( v3Value );
                 break;
         }
     }
@@ -446,7 +455,7 @@ public class Entity
     {
         switch ( eEvent )
         {
-            case EntityEvent.SetBBox: // Set this entity's BBox according to bValue
+            case EntityEvent.SetBoundingBox: // Set this entity's BBox according to bValue
                 SetBoundingBox( bbValue );
                 break;
         }
@@ -456,31 +465,34 @@ public class Entity
     /// <summary>
     /// Deletes a specified entity from the scene and from existence.
     /// </summary>
-    /// <param name="ent">The entity we wish to delete.</param>
-    public static void Delete( Entity ent )
+    /// <param name="entity">The entity we wish to delete.</param>
+    public static void Delete( Entity entity )
     {
+        // If the entity has children...
+        if ( entity.HasChildren() )
+        {
+            // Get the count of children
+            int childCount = entity.GetChildren().Count - 1;
+
+            do
+            {
+                // Delete every child
+                entity.GetChildren()[childCount]?.Remove();
+            } while ( --childCount >= 0 );
+        }
+
         // If the entity has a parent...
-        if ( ent.HasParent() )
+        if ( entity.HasParent() )
         {
             // Remove this entity from its parent
-            ent.GetParent().RemoveChild( ent );
+            entity.GetParent().RemoveChild( entity );
         }
 
-        // If the entity has children...
-        if ( ent.HasChildren() )
-        {
-            // Delete every child
-            foreach ( Entity child in ent.GetChildren() )
-            {
-                child?.Remove();
-            }
-        }
-
-        EngineManager.OnUpdate -= ent.Update; // Unsubscribe the entity from the update function
-        EngineManager.currentScene?.RemoveEntity( ent ); // Remove the entity from the scene
+        EngineManager.OnUpdate -= entity.Update; // Unsubscribe the entity from the update function
+        EngineManager.currentScene?.RemoveEntity( entity ); // Remove the entity from the scene
 
         // Nullify the entity
-        ent = null;
+        entity = null;
     }
 
     /// <summary>
@@ -632,7 +644,7 @@ public class Entity
     /// <returns>This entity's parent.</returns>
     public Entity GetParent()
     {
-        return EngineManager.currentScene?.FindEntity( parent );
+        return parent;
     }
 
     /// <summary>
@@ -641,7 +653,7 @@ public class Entity
     /// <returns>The ID of this entity's parent.</returns>
     public string GetParentID()
     {
-        return parent;
+        return parent.GetID();
     }
 
     /// <summary>
@@ -659,7 +671,7 @@ public class Entity
     /// <param name="parent">The new parent of this entity.</param>
     public void SetParent( Entity parent )
     {
-        this.parent = parent.GetID();
+        this.parent = parent;
         parent.AddChild( this );
     }
 

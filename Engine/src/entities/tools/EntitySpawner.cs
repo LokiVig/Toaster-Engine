@@ -48,6 +48,9 @@ public class EntitySpawner : ToolEntity
             return null;
         }
 
+        // Add the entity to the scene!
+        EngineManager.currentScene?.AddEntity( toSpawn );
+
         // The entity should spawn!
         toSpawn.Spawn();
 
@@ -55,14 +58,9 @@ public class EntitySpawner : ToolEntity
         toSpawn.SetParent( this );
 
         // Set the entity's position to our position
-        toSpawn.SetPosition( transform.worldPosition );
+        toSpawn.SetPosition( GetPosition() );
 
-        // Generate the entity's ID
-        toSpawn.GenerateID();
-
-        // Add the newly spawned entity to the current scene
-        EngineManager.currentScene?.AddEntity( toSpawn );
-
+        // Log the successfully spawned entity
         Log.Info( $"Spawned entity {toSpawn}.\n" +
                           $"\tSource: {this}\n" +
                           $"\tPosition: {toSpawn.GetPosition()}\n" +

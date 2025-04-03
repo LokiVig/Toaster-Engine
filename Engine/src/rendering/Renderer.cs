@@ -105,6 +105,9 @@ public class Renderer
         SetVSync( EngineManager.settings.VSyncEnabled );
         SetWindowWidth( EngineManager.settings.WindowResolution.width );
         SetWindowHeight( EngineManager.settings.WindowResolution.height );
+        
+        // Log our successful initialization!
+        Log.Success( "Successfully initialized renderer!" );
     }
 
     /// <summary>

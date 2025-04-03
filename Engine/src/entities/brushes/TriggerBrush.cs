@@ -243,6 +243,7 @@ public class TriggerBrush : BrushEntity
         }
 
         Log.Info( $"TriggerBrush {this} has been triggered.\n" +
+                          $"\tTriggerer: {triggerEntity}\n" +
                           $"\tTarget: {foundTarget}\n" +
                           $"\tEvent: {targetEvent}\n" +
                           $"\tValues:\n" +
@@ -304,7 +305,7 @@ public class TriggerBrush : BrushEntity
         if ( triggerType == TriggerType.Once )
         {
             // We should delete ourself after a triggering!
-            Remove();
+            //Remove();
         }
 
         // Return true, we've successfully been triggered!

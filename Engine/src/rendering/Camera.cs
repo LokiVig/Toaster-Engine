@@ -11,19 +11,15 @@ public class Camera : ToolEntity
 {
     public Camera( Entity parent, Vector3 offset ) : base( parent )
     {
+        // Set our local position to be our offset
         transform.localPosition = offset;
-        transform.worldRotation = Quaternion.Identity;
+
+        // Add ourselves to the list of entities in the current scene
+        EngineManager.currentScene?.AddEntity( this );
     }
 
     public Camera( Entity parent, Vector3 offset, Quaternion rotation ) : this( parent, offset )
     {
         transform.worldRotation = rotation;
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-
-        transform.localPosition += transform.worldPosition;
     }
 }

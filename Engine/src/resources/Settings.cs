@@ -99,7 +99,7 @@ public class Settings
         try
         {
             // Return value
-            Settings settings = new Settings();
+            Settings settings = null;
 
             // Load the settings from our JSON file
             using ( StreamReader sr = new StreamReader( PATH_SETTINGS ) )

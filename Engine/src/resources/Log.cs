@@ -105,18 +105,18 @@ public struct Log
         if ( extraInfo )
         {
             // Add the line of where it was called, the caller, the method that called us, then the message
-            ConsoleUI.WriteLine( $"[INFO] (Line {line}) {caller}.{method}; {message}" );
+            ConsoleUI.WriteLine( $"[INFO] ({DateTime.Now.ToLongTimeString()}) :  (Line {line}) {caller}.{method}; {message}" );
 
             // Write to the log file
-            logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : [INFO] (Line {line}) {caller}.{method}; {message}" );
+            logWriter.WriteLine( $"[INFO] ({DateTime.Now.ToLongTimeString()}) : (Line {line}) {caller}.{method}; {message}" );
         }
         else // Otherwise...
         {
             // Just write the message
-            ConsoleUI.WriteLine( $"{message}" );
+            ConsoleUI.WriteLine( $"[INFO] ({DateTime.Now.ToLongTimeString()}) : {message}" );
 
             // Write to the log file
-            logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : {message}" );
+            logWriter.WriteLine( $"[INFO] ({DateTime.Now.ToLongTimeString()}) : {message}" );
         }
     }
 
@@ -141,10 +141,10 @@ public struct Log
         }
 
         // Write to the console what just happened
-        ConsoleUI.WriteLine( $"[SUCCESS] (Line {line}) {caller}.{method}; {message}", colSuc );
+        ConsoleUI.WriteLine( $"[SUCCESS] ({DateTime.Now.ToLongTimeString()}) : (Line {line}) {caller}.{method}; {message}", colSuc );
 
         // Write to the log file
-        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : [SUCCESS] (Line {line}) {caller}.{method}; {message}" );
+        logWriter.WriteLine( $"[SUCCESS] ({DateTime.Now.ToLongTimeString()}) : (Line {line}) {caller}.{method}; {message}" );
     }
 
     /// <summary>
@@ -168,10 +168,10 @@ public struct Log
         }
 
         // Write to the console what just happened
-        ConsoleUI.WriteLine( $"[WARNING] (Line {line}) {caller}.{method}; {message}", colWrn );
+        ConsoleUI.WriteLine( $"[WARNING] ({DateTime.Now.ToLongTimeString()}) : (Line {line}) {caller}.{method}; {message}", colWrn );
 
         // Write to the log file
-        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : [WARNING] (Line {line}) {caller}.{method}; {message}" );
+        logWriter.WriteLine( $"[WARNING] ({DateTime.Now.ToLongTimeString()}) : (Line {line}) {caller}.{method}; {message}" );
     }
 
     /// <summary>
@@ -196,10 +196,10 @@ public struct Log
         }
 
         // Write to the console what just happened
-        ConsoleUI.WriteLine( $"[ERROR] (Line {line}) {caller}.{method}; {message}", colErr );
+        ConsoleUI.WriteLine( $"[ERROR] ({DateTime.Now.ToLongTimeString()}) : (Line {line}) {caller}.{method}; {message}", colErr );
 
         // Write to the log file
-        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : [ERROR] (Line {line}) {caller}.{method}; {message}" );
+        logWriter.WriteLine( $"[ERROR] ({DateTime.Now.ToLongTimeString()}) : (Line {line}) {caller}.{method}; {message}" );
 
         // Create an exception from the type designated by the caller
         T exception = new T();
@@ -236,10 +236,10 @@ public struct Log
         }
 
         // Write to the console what just happened
-        ConsoleUI.WriteLine( $"[ERROR] (Line {line}) {caller}.{method}; {message}", colErr );
+        ConsoleUI.WriteLine( $"[ERROR] ({DateTime.Now.ToLongTimeString()}) : (Line {line}) {caller}.{method}; {message}", colErr );
 
         // Write to the log file
-        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : [ERROR] (Line {line}) {caller}.{method}; {message}" );
+        logWriter.WriteLine( $"[ERROR] ({DateTime.Now.ToLongTimeString()}) : (Line {line}) {caller}.{method}; {message}" );
 
         // If we have an exception...
         if ( exception != null )

@@ -179,8 +179,10 @@ public static class ConsoleManager
             Action onCall;
             Action<List<object>> onArgsCall = InvalidCommand;
 
+            // If we couldn't find an argument-less function...
             if ( ( onCall = (Action)Delegate.CreateDelegate( typeof( Action ), method, false ) ) == null )
             {
+                // Set the argumented call correctly and the regular call to InvalidCommand
                 onArgsCall = (Action<List<object>>)Delegate.CreateDelegate( typeof( Action<List<object>> ), method );
                 onCall = InvalidCommand;
             }

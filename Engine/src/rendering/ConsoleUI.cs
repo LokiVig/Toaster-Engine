@@ -102,7 +102,7 @@ public static class ConsoleUI
     public static void WriteLine( string message, Vector4 color = default )
     {
         // Add the argument message and color to our list of logs
-        logs.Add( ($"({DateTime.Now.ToLongTimeString()}) : {message}\n", color) );
+        logs.Add( ($"{message}\n", color) );
         scrollToBottom = true; // We should scroll to the bottom
     }
 }

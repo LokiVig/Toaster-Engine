@@ -8,7 +8,7 @@ public enum EntityEvent
     SetHealth, // Set the health of the entity
     TakeDamage, // Make this entity take damage
     SetPosition, // Set this entity's position (Vector3)
-    SetBBox, // Set this entity's BBox
+    SetBoundingBox, // Set this entity's BBox
     SpawnEntity, // Tell an EntitySpawner to spawn their entity
     SetRotation, // Set this entity's rotation (Quaternion)
     PlaySound, // Plays an AudioEntity's audio
