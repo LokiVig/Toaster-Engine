@@ -165,9 +165,10 @@ public static class AudioManager
             file.alApi.GetSourceProperty( file.src, GetSourceInteger.SourceState, out int state );
 
             // If the file is stopped...
-            if ( state == (int)SourceState.Stopped )
+            if ( state == (int)SourceState.Stopped || state == 0 )
             {
                 // Remove the file!
+                file.Dispose();
                 playingFiles.Remove( file );
                 continue;
             }
@@ -260,21 +261,21 @@ public static class AudioManager
 
         // Read the file
         ReadOnlySpan<byte> file = File.ReadAllBytes( filepath );
-        int fileIndex = 0;
+        int index = 0;
 
         // Check if the file is of RIFF format...
-        if ( file[fileIndex++] != 'R' || file[fileIndex++] != 'I' || file[fileIndex++] != 'F' || file[fileIndex++] != 'F' )
+        if ( file[index++] != 'R' || file[index++] != 'I' || file[index++] != 'F' || file[index++] != 'F' )
         {
             Log.Info( "File is not in RIFF format!", true );
             return null;
         }
 
         // Go back to the start to read other formats
-        int chunkSize = BinaryPrimitives.ReadInt32LittleEndian( file.Slice( fileIndex, 4 ) );
-        fileIndex += 4;
+        int chunkSize = BinaryPrimitives.ReadInt32LittleEndian( file.Slice( index, 4 ) );
+        index += 4;
 
         // Check if the file is of WAVE format...
-        if ( file[fileIndex++] != 'W' || file[fileIndex++] != 'A' || file[fileIndex++] != 'V' || file[fileIndex++] != 'E' )
+        if ( file[index++] != 'W' || file[index++] != 'A' || file[index++] != 'V' || file[index++] != 'E' )
         {
             Log.Info( "File is not in WAVE format!", true );
             return null;
@@ -316,20 +317,13 @@ public static class AudioManager
             uint src = al.GenSource();
             uint buf = al.GenBuffer();
 
-            // If the sound should repeat...
-            if ( repeats )
-            {
-                // Set its property to reflect that
-                al.SetSourceProperty( src, SourceBoolean.Looping, true );
-            }
-
             // Read the file
-            while ( fileIndex + 4 < file.Length )
+            while ( index + 4 < file.Length )
             {
                 // Read the section identifier
-                string identifier = "" + (char)file[fileIndex++] + (char)file[fileIndex++] + (char)file[fileIndex++] + (char)file[fileIndex++];
-                int size = BinaryPrimitives.ReadInt32LittleEndian( file.Slice( fileIndex, 4 ) );
-                fileIndex += 4;
+                string identifier = "" + (char)file[index++] + (char)file[index++] + (char)file[index++] + (char)file[index++];
+                int size = BinaryPrimitives.ReadInt32LittleEndian( file.Slice( index, 4 ) );
+                index += 4;
 
                 // If we're reading the format section of the file...
                 if ( identifier == "fmt " )
@@ -344,8 +338,8 @@ public static class AudioManager
                     else // Otherwise, if we have a perfectly fine sized file...
                     {
                         // Get the audio format of the file...
-                        short audioFormat = BinaryPrimitives.ReadInt16LittleEndian( file.Slice( fileIndex, 2 ) );
-                        fileIndex += 2;
+                        short audioFormat = BinaryPrimitives.ReadInt16LittleEndian( file.Slice( index, 2 ) );
+                        index += 2;
 
                         // If we have a faulty audio format...
                         if ( audioFormat != 1 )
@@ -358,24 +352,24 @@ public static class AudioManager
                         {
                             // Get information about the audio...
                             // Get the number of channels
-                            numChannels = BinaryPrimitives.ReadInt16LittleEndian( file.Slice( fileIndex, 2 ) );
-                            fileIndex += 2;
+                            numChannels = BinaryPrimitives.ReadInt16LittleEndian( file.Slice( index, 2 ) );
+                            index += 2;
 
                             // Get the sample rate
-                            sampleRate = BinaryPrimitives.ReadInt32LittleEndian( file.Slice( fileIndex, 4 ) );
-                            fileIndex += 4;
+                            sampleRate = BinaryPrimitives.ReadInt32LittleEndian( file.Slice( index, 4 ) );
+                            index += 4;
 
                             // Get the byte rate
-                            byteRate = BinaryPrimitives.ReadInt32LittleEndian( file.Slice( fileIndex, 4 ) );
-                            fileIndex += 4;
+                            byteRate = BinaryPrimitives.ReadInt32LittleEndian( file.Slice( index, 4 ) );
+                            index += 4;
 
                             // Get the block align
-                            blockAlign = BinaryPrimitives.ReadInt16LittleEndian( file.Slice( fileIndex, 2 ) );
-                            fileIndex += 2;
+                            blockAlign = BinaryPrimitives.ReadInt16LittleEndian( file.Slice( index, 2 ) );
+                            index += 2;
 
                             // Get the bits per sample
-                            bitsPerSample = BinaryPrimitives.ReadInt16LittleEndian( file.Slice( fileIndex, 2 ) );
-                            fileIndex += 2;
+                            bitsPerSample = BinaryPrimitives.ReadInt16LittleEndian( file.Slice( index, 2 ) );
+                            index += 2;
 
                             // If we have mono sound...
                             if ( numChannels == 1 )
@@ -430,8 +424,8 @@ public static class AudioManager
                 else if ( identifier == "data" ) // If this section contains general data...
                 {
                     // Read the data
-                    ReadOnlySpan<byte> data = file.Slice( fileIndex, size );
-                    fileIndex += size;
+                    ReadOnlySpan<byte> data = file.Slice( index, size );
+                    index += size;
 
                     // Buffer the data to the AL API
                     fixed ( byte* pData = data )
@@ -442,36 +436,42 @@ public static class AudioManager
                 else if ( identifier == "JUNK" ) // If this section is junk...
                 {
                     // This exists to align things
-                    fileIndex += size;
+                    index += size;
                 }
                 else if ( identifier == "iXML" ) // If this section is XML content..
                 {
                     // Read the section
-                    ReadOnlySpan<byte> v = file.Slice( fileIndex, size );
+                    ReadOnlySpan<byte> v = file.Slice( index, size );
                     string str = Encoding.ASCII.GetString( v );
 
-                    fileIndex += size;
+                    index += size;
                 }
                 else // Otherwise we've encountered an unknown section...
                 {
                     // Skip over it!
-                    fileIndex += size;
+                    index += size;
                 }
-
-                // Create a new audio file and fill some of its variables
-                audio = new AudioFile();
-                audio.alContext = alc; // Set the ALContext
-                audio.alApi = al; // Set the AL API
-                audio.alDevice = device; // Set its device
-                audio.ctx = ctx; // Set its local context
-
-                audio.src = src; // Set its source
-                audio.buf = buf; // Set its buffer
-
-                // Set the properties of the audio
-                audio.alApi.SetSourceProperty( audio.src, SourceFloat.Gain, volume );
-                audio.alApi.SetSourceProperty( audio.src, SourceInteger.Buffer, audio.buf );
             }
+
+            // Create a new audio file and fill some of its variables
+            audio = new AudioFile();
+            audio.alContext = alc; // Set the ALContext
+            audio.alApi = al; // Set the AL API
+            audio.alDevice = device; // Set its device
+            audio.alCtx = ctx; // Set its local context
+
+            audio.src = src; // Set its source
+            audio.buf = buf; // Set its buffer
+
+            // Set the regular values of the audio file
+            audio.filepath = filepath;
+            audio.volume = volume;
+            audio.repeats = repeats;
+
+            // Set the properties of the audio
+            audio.alApi.SetSourceProperty( audio.src, SourceFloat.Gain, volume );
+            audio.alApi.SetSourceProperty( audio.src, SourceInteger.Buffer, audio.buf );
+            audio.alApi.SetSourceProperty( audio.src, SourceBoolean.Looping, audio.repeats );
 
             // Return the newly made file!
             return audio;

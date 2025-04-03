@@ -17,6 +17,9 @@ namespace Toast.Engine.Rendering;
 /// </summary>
 public static class DebugUI
 {
+    // Used for trigger variables
+    private static bool bValue;
+
     public static void Display( ref bool open )
     {
         if ( ImGui.Begin( "- Debug Menu -", ref open, ImGuiWindowFlags.NoSavedSettings ) )
@@ -222,7 +225,12 @@ public static class DebugUI
 
                             ImGui.InputInt( "Int Value", ref trigger.iValue );
                             ImGui.InputFloat( "Float Value", ref trigger.fValue );
-                            ImGui.SliderInt( "Bool Value", ref trigger.bValue, -1, 1 );
+
+                            if ( ImGui.Checkbox( "Bool Value", ref bValue ) )
+                            {
+                                trigger.bValue = bValue ? 1 : 0;
+                            }
+
                             ImGui.InputFloat3( "Vector3 Value", ref trigger.v3Value );
                             //ImGui.InputFloat4( "Quaternion Value", ref trigger.qValue );
                             ImGui.InputFloat3( "Bounding Box Mins", ref trigger.bbValue.mins );

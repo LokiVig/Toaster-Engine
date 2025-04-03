@@ -9,11 +9,15 @@ using ImGuiNET;
 
 using Toast.Engine.Entities;
 using Toast.Engine.Resources;
-using Toast.Engine.Resources.Console;
 using Toast.Engine.Attributes;
+using Toast.Engine.Resources.Console;
 
 namespace Toast.Engine.Rendering;
 
+/// <summary>
+/// The main renderer for the engine.<br/>
+/// Here a window is created and objects are drawn onto.
+/// </summary>
 public class Renderer
 {
     // A window should not be able to be less than these two values!
@@ -39,16 +43,18 @@ public class Renderer
         // Why did they gotta have it be a pointer :(
         unsafe
         {
+            // Used to get information about the user's main display
             Sdl2Native.SDL_GetCurrentDisplayMode( 0, &mode );
         }
 
         // Create a window using Veldrid's StartupUtilities
+        // These are the default values a window should be created with
         WindowCreateInfo windowCI = new WindowCreateInfo()
         {
-            WindowWidth = 1280,
-            WindowHeight = 720,
-            WindowTitle = title,
-            WindowInitialState = WindowState.Normal
+            WindowWidth = 1280, // 1280p
+            WindowHeight = 720, // 1280p
+            WindowTitle = title, // Set the title to what's desired
+            WindowInitialState = WindowState.Normal // Should be windowed!
         };
 
         // Places the window in the middle of the screen, dependant on width and height
@@ -74,19 +80,24 @@ public class Renderer
         // Create our graphics device
         graphicsDevice = VeldridStartup.CreateGraphicsDevice( window, options, GraphicsBackend.OpenGL );
 
-        // The things to do when the window is resized
+        // The things to do when the window is resized...
         window.Resized += () =>
         {
+            // Call methods that will update important variables within the rendering
             graphicsDevice.MainSwapchain.Resize( (uint)window.Width, (uint)window.Height );
             controller.WindowResized( window.Width, window.Height );
 
+            // If the desired width is less than what's allowed...
             if ( window.Width < WINDOW_MIN_WIDTH )
             {
+                // Clamp it!
                 window.Width = WINDOW_MIN_WIDTH;
             }
 
+            // If the desired height is less than what's allowed...
             if ( window.Height < WINDOW_MIN_HEIGHT )
             {
+                // Clamp it!
                 window.Height = WINDOW_MIN_HEIGHT;
             }
         };
@@ -138,8 +149,12 @@ public class Renderer
         }
 
         // Set the window's title to the argument
-        window.Title = $"{EngineManager.EngineTitle} - {args[1].ToString().Replace( "_", " " )}";
-        Log.Info( $"Set the window's title to \"{args[1].ToString().Replace( "_", " " )}\"!", true );
+        window.Title = argCount == 1 || bool.Parse( (string)args[2] ) 
+            ? $"{EngineManager.EngineTitle} - {args[1].ToString().Replace( "_", " " )}"
+            : $"{args[1].ToString().Replace("_", " ")}";
+
+        // Log the title change!
+        Log.Info( $"Set the window's title to \"{window.Title}\"!", true );
     }
 
     /// <summary>

@@ -13,7 +13,7 @@ namespace Toast.Engine.Resources.Input;
 
 public static class InputManager
 {
-    private const string PATH_KEYBINDS = "resources/keybinds.txt";
+    private const string PATH_KEYBINDS = "resources/keybinds.json";
 
     private static Dictionary<Key, bool> keys = new();
     private static Dictionary<Key, bool> prevKeys = new();

@@ -17,7 +17,7 @@ namespace Toast.Engine.Resources.Console;
 public static class ConsoleManager
 {
     // The default path to the saved commands
-    private const string PATH_COMMANDS = "resources/commands.txt";
+    private const string PATH_COMMANDS = "resources/commands.json";
 
     // All of the found commands
     private static List<ConsoleCommand> commands = new();

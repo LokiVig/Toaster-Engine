@@ -109,6 +109,9 @@ public struct Log
 
             // Write to the log file
             logWriter.WriteLine( $"[INFO] ({DateTime.Now.ToLongTimeString()}) : (Line {line}) {caller}.{method}; {message}" );
+
+            // Write to the debug output
+            Debug.WriteLine( $"[INFO] ({DateTime.Now.ToLongTimeString()}) : (Line {line}) {caller}.{method}; {message}" );
         }
         else // Otherwise...
         {
@@ -117,6 +120,9 @@ public struct Log
 
             // Write to the log file
             logWriter.WriteLine( $"[INFO] ({DateTime.Now.ToLongTimeString()}) : {message}" );
+
+            // Write to the debug output
+            Debug.WriteLine( $"[INFO] ({DateTime.Now.ToLongTimeString()}) : {message}" );
         }
     }
 
@@ -128,7 +134,7 @@ public struct Log
     public static void Success( string message, [CallerLineNumber] int line = 0, [CallerFilePath] string src = "", [CallerMemberName] string method = "" )
     {
         // Play the engine's default success sound
-        AudioManager.PlaySuccess();
+        //AudioManager.PlaySuccess();
 
         // Get the name of the class that called us
         string caller = Path.GetFileNameWithoutExtension( src );
@@ -145,6 +151,9 @@ public struct Log
 
         // Write to the log file
         logWriter.WriteLine( $"[SUCCESS] ({DateTime.Now.ToLongTimeString()}) : (Line {line}) {caller}.{method}; {message}" );
+
+        // Write to the debug output
+        Debug.WriteLine( $"[SUCCESS] ({DateTime.Now.ToLongTimeString()}) :  (Line {line}) {caller}.{method}; {message}" );
     }
 
     /// <summary>
@@ -172,6 +181,9 @@ public struct Log
 
         // Write to the log file
         logWriter.WriteLine( $"[WARNING] ({DateTime.Now.ToLongTimeString()}) : (Line {line}) {caller}.{method}; {message}" );
+
+        // Write to the debug output
+        Debug.WriteLine( $"[WARNING] ({DateTime.Now.ToLongTimeString()}) :  (Line {line}) {caller}.{method}; {message}" );
     }
 
     /// <summary>
@@ -200,6 +212,9 @@ public struct Log
 
         // Write to the log file
         logWriter.WriteLine( $"[ERROR] ({DateTime.Now.ToLongTimeString()}) : (Line {line}) {caller}.{method}; {message}" );
+
+        // Write to the debug output
+        Debug.WriteLine( $"[ERROR] ({DateTime.Now.ToLongTimeString()}) :  (Line {line}) {caller}.{method}; {message}" );
 
         // Create an exception from the type designated by the caller
         T exception = new T();
@@ -240,6 +255,9 @@ public struct Log
 
         // Write to the log file
         logWriter.WriteLine( $"[ERROR] ({DateTime.Now.ToLongTimeString()}) : (Line {line}) {caller}.{method}; {message}" );
+
+        // Write to the debug output
+        Debug.WriteLine( $"[ERROR] ({DateTime.Now.ToLongTimeString()}) :  (Line {line}) {caller}.{method}; {message}" );
 
         // If we have an exception...
         if ( exception != null )

@@ -4,17 +4,17 @@ using Silk.NET.OpenAL;
 
 namespace Toast.Engine.Resources.Audio;
 
-public unsafe class AudioFile : IDisposable
+public class AudioFile : IDisposable
 {
     public string filepath;
     public float volume;
     public bool repeats;
 
     public AL alApi;
-    public Device* alDevice;
     public ALContext alContext;
 
-    public Context* ctx;
+    public unsafe Device* alDevice;
+    public unsafe Context* alCtx;
 
     public uint src;
     public uint buf;
@@ -29,7 +29,7 @@ public unsafe class AudioFile : IDisposable
         alApi.GetSourceProperty( src, GetSourceInteger.SourceState, out int state );
 
         // If the source isn't stopped...
-        if ( state != (int)SourceState.Stopped )
+        if ( state != (int)SourceState.Stopped || state != 0 )
         {
             // Stop it!
             alApi.SourceStop( src );
@@ -38,9 +38,13 @@ public unsafe class AudioFile : IDisposable
         // Handle smaller variables
         alApi.DeleteSource( src );
         alApi.DeleteBuffer( buf );
-        alContext.DestroyContext( ctx );
-        alContext.CloseDevice( alDevice );
-        
+
+        unsafe
+        {
+            alContext.DestroyContext( alCtx );
+            alContext.CloseDevice( alDevice );
+        }
+
         // Dispose of the API and context
         alApi.Dispose();
         alContext.Dispose();

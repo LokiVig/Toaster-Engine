@@ -63,4 +63,12 @@ public class SoundEntity : ToolEntity
             playing = false;
         }
     }
+
+    protected override void OnDelete()
+    {
+        base.OnDelete();
+
+        // Stop our playing sound
+        StopSound();
+    }
 }

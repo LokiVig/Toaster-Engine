@@ -23,7 +23,7 @@ public class Transform
     /// </summary>
     public Transform()
     {
-        // Do nothing... The values should be defaulted automatically
+        // Do nothing... The values should be set to their defaults automatically
     }
 
     /// <summary>

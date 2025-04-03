@@ -316,6 +316,14 @@ public class Entity
         OnDeath();
     }
 
+    /// <summary>
+    /// Does things right before this entity is deleted.
+    /// </summary>
+    protected virtual void OnDelete()
+    {
+
+    }
+
     #region ONEVENTS
     /// <summary>
     /// Call parameterless event
@@ -487,6 +495,9 @@ public class Entity
             // Remove this entity from its parent
             entity.GetParent().RemoveChild( entity );
         }
+
+        // Call the entity's on delete method
+        entity.OnDelete();
 
         EngineManager.OnUpdate -= entity.Update; // Unsubscribe the entity from the update function
         EngineManager.currentScene?.RemoveEntity( entity ); // Remove the entity from the scene
