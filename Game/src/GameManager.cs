@@ -40,7 +40,7 @@ public class GameManager
     /// </summary>
     public static GameState currentState = GameState.Active;
 
-    private Player mainPlayer;
+    private Player? mainPlayer;
 
     /// <summary>
     /// Initialize the game

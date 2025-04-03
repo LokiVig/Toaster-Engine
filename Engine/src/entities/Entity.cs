@@ -195,10 +195,10 @@ public class Entity
     {
         // We've been damaged by someone or something!
         // How queer! We must log this to the console immediately!!
-        Log.Info( $"Entity {this} took damage.\n" +
-                          $"\tDamage: {damage}\n" +
-                          $"\tSource: {( source != null ? source : "N/A" )}\n" +
-                          $"\tNew health: {health - damage}" );
+        Log.Info( $"Entity {this} took damage." );
+        Log.Info( $"\tDamage: {damage}" );
+        Log.Info( $"\tSource: {(source == null ? "N/A" : source)}" );
+        Log.Info( $"\tNew health: {health - damage}" );
 
         //
         // I guess we're taking damage now
@@ -303,8 +303,8 @@ public class Entity
         EngineManager.OnUpdate -= Update;
 
         // Log to the console that this entity has died!
-        Log.Info( $"Entity {this} has died.\n" +
-                          $"\tLast attacker: {( lastAttacker != null ? lastAttacker : "N/A" )}" );
+        Log.Info( $"Entity {this} has died." );
+        Log.Info( $"\tLast attacker: {( lastAttacker == null ? "N/A" : lastAttacker )}" );
     }
 
     /// <summary>
@@ -546,6 +546,15 @@ public class Entity
     }
 
     /// <summary>
+    /// Sets this entity's transform to the argument transform.
+    /// </summary>
+    /// <param name="transform">The transform we wish to apply to this entity.</param>
+    public void SetTransform( Transform transform )
+    {
+        this.transform.worldPosition = transform.worldPosition;
+    }
+
+    /// <summary>
     /// Set this entity's position by a <see cref="Vector3"/>
     /// </summary>
     /// <param name="position">The new, desired position of this entity</param>
@@ -604,6 +613,15 @@ public class Entity
     public string GetID()
     {
         return id;
+    }
+
+    /// <summary>
+    /// Gets this entity's transform.
+    /// </summary>
+    /// <returns>The transform of this entity.</returns>
+    public Transform GetTransform()
+    {
+        return transform;
     }
 
     /// <summary>

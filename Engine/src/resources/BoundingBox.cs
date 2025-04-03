@@ -6,7 +6,7 @@ namespace Toast.Engine.Resources;
 /// <summary>
 /// A bounding box, defining the height, width and depth of an object
 /// </summary>
-public class BoundingBox
+public struct BoundingBox
 {
     public Vector3 mins; // The minimum extents of this BBox
     public Vector3 maxs; // The maximum extents of this BBox
@@ -166,5 +166,15 @@ public class BoundingBox
     public static bool operator !=( BoundingBox lhs, BoundingBox rhs )
     {
         return lhs.mins != rhs.mins || lhs.maxs != rhs.maxs;
+    }
+
+    public override bool Equals( object obj )
+    {
+        return base.Equals( obj );
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
     }
 }

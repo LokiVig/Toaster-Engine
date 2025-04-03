@@ -255,12 +255,20 @@ public struct Ray
     /// </summary>
     private static void LogTrace( Vector3 rayStart, Vector3 rayDirection, object hitObject, RayIgnore rayIgnore, object[] ignoredObjects )
     {
-        Log.Info( $"Trace {( hitObject != null ? "succeeded" : "failed" )}.\n" +
-                          $"\tStart: {rayStart}\n" +
-                          $"\tDirection: {rayDirection}\n" +
-                          $"\tHit object: {hitObject ?? "N/A"}\n" +
-                          $"\tRayIgnore: {rayIgnore}\n" +
-                          $"\tIgnored objects: {( ignoredObjects == null ? "N/A" : $"\n\t\t{string.Join( "\n\t\t", ignoredObjects.Select( obj => obj.ToString() ) )}" )}" );
+        // Log the information
+        Log.Info( $"Trace {( hitObject != null ? "succeeded" : "failed" )}");
+        Log.Info( $"\tStart: {rayStart}" );
+        Log.Info( $"\tDirection: {rayDirection}" );
+        Log.Info( $"\tHit object: {hitObject ?? "N/A"}" );
+        Log.Info( $"\tRayIgnore: {rayIgnore}" );
+        Log.Info( $"\tIgnored objects:" );
+
+        // For every ignored object...
+        foreach ( object ignored in ignoredObjects )
+        {
+            // Log about it!
+            Log.Info( $"\t\t{ignored}" );
+        }
     }
 }
 

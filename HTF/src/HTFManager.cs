@@ -38,7 +38,7 @@ public class HTFManager
     /// Determines whether or not the currently opened file has had any recent edits<br/>
     /// since it was last saved.
     /// </summary>
-    private bool isDirty;
+    private bool isDirty = false;
 
     /// <summary>
     /// Initialize the WTFEdit program

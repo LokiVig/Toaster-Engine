@@ -16,11 +16,9 @@ public class EntitySpawner : ToolEntity
         SetBoundingBox( BoundingBox.SmallTool );
     }
 
-    public EntitySpawner( Entity toSpawn ) : base()
+    public EntitySpawner( Entity toSpawn ) : this()
     {
         this.toSpawn = toSpawn;
-
-        SetBoundingBox( BoundingBox.SmallTool );
     }
 
     public EntitySpawner( Vector3 position ) : base( position )
@@ -28,17 +26,15 @@ public class EntitySpawner : ToolEntity
         SetBoundingBox( BoundingBox.SmallTool );
     }
 
-    public EntitySpawner( Entity toSpawn, Vector3 position ) : base( position )
+    public EntitySpawner( Entity toSpawn, Vector3 position ) : this( position )
     {
         this.toSpawn = toSpawn;
-
-        SetBoundingBox( BoundingBox.SmallTool );
     }
 
     /// <summary>
     /// Spawns an entity specified by a parameter.
     /// </summary>
-    /// <returns>The recently spawned entity</returns>
+    /// <returns>The recently spawned entity.</returns>
     public Entity SpawnEntity()
     {
         // Make sure the entity is not a tool entity!
@@ -48,25 +44,26 @@ public class EntitySpawner : ToolEntity
             return null;
         }
 
-        // Add the entity to the scene!
+        // Add the entity to the scene
         EngineManager.currentScene?.AddEntity( toSpawn );
 
-        // The entity should spawn!
+        // The entity should spawn
         toSpawn.Spawn();
 
         // Set the entity's parent to be us
         toSpawn.SetParent( this );
 
         // Set the entity's position to our position
-        toSpawn.SetPosition( GetPosition() );
+        toSpawn.SetTransform( GetTransform() );
 
         // Log the successfully spawned entity
-        Log.Info( $"Spawned entity {toSpawn}.\n" +
-                          $"\tSource: {this}\n" +
-                          $"\tPosition: {toSpawn.GetPosition()}\n" +
-                          $"\tRotation: {toSpawn.GetRotation()}\n" +
-                          $"\tBBox: {toSpawn.GetBoundingBox()}" );
+        Log.Info( $"Spawned entity {toSpawn}." );
+        Log.Info( $"\tSource: {this}" );
+        Log.Info( $"\tPosition: {toSpawn.GetPosition()}" );
+        Log.Info( $"\tRotation: {toSpawn.GetRotation()}" );
+        Log.Info( $"\tBounding box: {toSpawn.GetBoundingBox()}" );
 
+        // Return the spawned entity
         return toSpawn;
     }
 
@@ -94,11 +91,11 @@ public class EntitySpawner : ToolEntity
         // Add the newly spawned entity to the current scene
         EngineManager.currentScene?.AddEntity( ent );
 
-        Log.Info( $"Spawned entity {ent}.\n" +
-                          $"\tSource: {this}\n" +
-                          $"\tPosition: {ent.GetPosition()}\n" +
-                          $"\tRotation: {ent.GetRotation()}\n" +
-                          $"\tBBox: {ent.GetBoundingBox()}" );
+        Log.Info( $"Spawned entity {ent}." );
+        Log.Info( $"\tSource: {this}" );
+        Log.Info( $"\tPosition: {ent.GetPosition()}" );
+        Log.Info( $"\tRotation: {ent.GetRotation()}" );
+        Log.Info( $"\tBounding box: {ent.GetBoundingBox()}" );
 
         // And return the entity we just spawned
         return ent;

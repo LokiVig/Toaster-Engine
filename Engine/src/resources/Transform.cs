@@ -4,7 +4,7 @@ using System.Numerics;
 namespace Toast.Engine.Resources;
 
 /// <summary>
-/// This class defines a world and local position in 3D space, a world and local rotation, and a bounding box.
+/// This class defines a world and local position in 3D space, a world and local rotation, a velocity, and a bounding box.
 /// </summary>
 public class Transform
 {
@@ -17,6 +17,36 @@ public class Transform
     public Quaternion localRotation = Quaternion.Identity; // The local rotation of this transform
 
     public BoundingBox boundingBox = BoundingBox.One; // The bounding box of this transform
+
+    /// <summary>
+    /// Creates a normal transform, with all of its values as the defaults.
+    /// </summary>
+    public Transform()
+    {
+        // Do nothing... The values should be defaulted automatically
+    }
+
+    /// <summary>
+    /// Creates a new transform with values copied from another.
+    /// </summary>
+    /// <param name="other">The other transform of whoms values we wish to copy from.</param>
+    public Transform( Transform other )
+    {
+        // Set the positions
+        worldPosition = other.worldPosition;
+        localPosition = other.localPosition;
+
+        // Set the velocity
+        velocity = other.velocity;
+
+        // Set the rotations
+        worldRotation = other.worldRotation;
+        localRotation = other.localRotation;
+
+        // Set the bounding box
+        boundingBox.mins = other.boundingBox.mins;
+        boundingBox.maxs = other.boundingBox.maxs;
+    }
 
     /// <summary>
     /// Distance to another <see cref="Transform"/>.

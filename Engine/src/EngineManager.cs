@@ -267,7 +267,7 @@ public static class EngineManager
         settings.Save();
 
         // End file logging
-        Log.CloseLogFile();
+        Log.CloseLogFile(); 
 
         // Clear everything from the renderer
         Renderer.Shutdown();

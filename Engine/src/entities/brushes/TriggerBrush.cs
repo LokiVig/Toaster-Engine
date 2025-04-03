@@ -242,21 +242,22 @@ public class TriggerBrush : BrushEntity
             return false;
         }
 
-        Log.Info( $"TriggerBrush {this} has been triggered.\n" +
-                          $"\tTriggerer: {triggerEntity}\n" +
-                          $"\tTarget: {foundTarget}\n" +
-                          $"\tEvent: {targetEvent}\n" +
-                          $"\tValues:\n" +
-                          $"\t\tiValue: {iValue}\n" +
-                          $"\t\tfValue: {fValue}\n" +
-                          $"\t\tbValue: {( bValue == DefaultBValue ? "N/A" : ( bValue >= 1 ? "False" : "True" ) )}\n" +
-                          $"\t\tvValue: {v3Value}\n" +
-                          $"\t\tqValue: {qValue}\n" +
-                          $"\t\teValue: {( eValue == DefaultEValue ? "N/A" : eValue )}\n" +
-                          $"\t\tbbValue: {bbValue}\n" +
-                          $"\tTrigger type: {triggerType}\n" +
-                          $"\tTrigger by: {triggerBy}\n" +
-                          $"\tTrigger on: {triggerOn}" );
+        // Log all information
+        Log.Info( $"TriggerBrush {this} has been triggered." );
+        Log.Info( $"\tTriggerer: {triggerEntity}" );
+        Log.Info( $"\tTarget: {foundTarget}" );
+        Log.Info( $"\tEvent: {targetEvent}" );
+        Log.Info( $"\tValues:" );
+        Log.Info( $"\t\tiValue: {iValue}" );
+        Log.Info( $"\t\tfValue: {fValue}" );
+        Log.Info( $"\t\tbValue: {( bValue == DefaultBValue ? "N/A" : ( bValue >= 1 ? "False" : "True" ) )}" );
+        Log.Info( $"\t\tv3Value: {v3Value}" );
+        Log.Info( $"\t\tqValue: {qValue}" );
+        Log.Info( $"\t\teValue: {(eValue == DefaultEValue ? "N/A" : eValue)}" );
+        Log.Info( $"\t\tbbValue: {bbValue}" );
+        Log.Info( $"\tTrigger type: {triggerType}" );
+        Log.Info( $"\tTrigger by: {triggerBy}" );
+        Log.Info( $"\tTrigger on: {triggerOn}" );
 
         if ( iValue != DefaultIValue ) // Int value event
         {

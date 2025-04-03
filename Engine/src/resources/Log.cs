@@ -13,8 +13,8 @@ namespace Toast.Engine.Resources;
 public struct Log
 {
     // The path to the engine's logging file
-    // This should just be our root dir, saved in a file called "engine.log"
-    private const string PATH_LOG = "engine.log";
+    // This should just be our root dir, saved in a file called "Toaster.Engine.log"
+    private const string PATH_LOG = "Toaster.Engine.log";
 
     // The different colors that logs can have in the console
     private static Vector4 colSuc = new Vector4( 0, 1, 0, 1 ); // Log.Success
