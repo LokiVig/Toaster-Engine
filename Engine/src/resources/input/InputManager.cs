@@ -41,6 +41,9 @@ public static class InputManager
                 keys.Add( key, false );
             }
         }
+
+        // Log our success!
+        Log.Success( "Successfully initialized input manager!" );
     }
 
     /// <summary>

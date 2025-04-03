@@ -2,6 +2,9 @@
 
 namespace Toast.Engine.Rendering;
 
+/// <summary>
+/// A 3D model with vertices, indices, etc.
+/// </summary>
 public class Model
 {
     public string path; // The direct path to the model's file

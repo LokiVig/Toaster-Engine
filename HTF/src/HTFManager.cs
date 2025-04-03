@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections.Generic;
 
 using Toast.Engine;
@@ -8,10 +9,13 @@ using Toast.Engine.Attributes;
 using Toast.Engine.Resources.Input;
 using Toast.Engine.Resources.Console;
 
+using Toast.HTF.Rendering;
+
 namespace Toast.HTF;
 
 public class Program
 {
+    [STAThread]
     public static void Main()
     {
         HTFManager htf = new HTFManager();
@@ -19,9 +23,21 @@ public class Program
     }
 }
 
+/// <summary>
+/// Toaster Engine's map editor.<br/>
+/// HTF stands for "Here's The Files!".
+/// </summary>
 public class HTFManager
 {
-    private static WTF currentFile;
+    /// <summary>
+    /// Is the object properties UI open?
+    /// </summary>
+    private static bool entityEditOpen;
+    
+    /// <summary>
+    /// Determines whether or not the currently opened file has had any recent edits<br/>
+    /// since it was last saved.
+    /// </summary>
     private bool isDirty;
 
     /// <summary>
@@ -32,6 +48,7 @@ public class HTFManager
         // Initialize the engine
         EngineManager.Initialize( "HTF" );
         EngineManager.OnUpdate += Update;
+        EngineManager.OnUIUpdate += UIUpdate;
 
         // Create HTF keybinds
         CreateKeybinds();
@@ -61,6 +78,14 @@ public class HTFManager
             comboKey = Veldrid.Key.ControlLeft,
             commandAlias = "htf_save_map"
         } );
+
+        InputManager.AddKeybind( new Keybind()
+        {
+            alias = "open_entity_edit",
+            key = Veldrid.Key.Enter,
+            comboKey = Veldrid.Key.AltLeft,
+            commandAlias = "htf_entity_edit"
+        } );
     }
 
     /// <summary>
@@ -68,7 +93,27 @@ public class HTFManager
     /// </summary>
     private void Update()
     {
-        Renderer.SetWindowTitle( $"HTF{( currentFile == null ? "" : $" - \"{currentFile.path}\"{( isDirty ? "*" : "" )}" )}" );
+        Renderer.SetWindowTitle( $"HTF{( EngineManager.currentFile == null ? "" : $" - \"{EngineManager.currentFile.path}\"{( isDirty ? "*" : "" )}" )}" );
+    }
+
+    /// <summary>
+    /// Updates UI elements, such as ImGui.
+    /// </summary>
+    private void UIUpdate()
+    {
+        if ( entityEditOpen )
+        {
+            EntityEditUI.Display( ref entityEditOpen, null );
+        }
+    }
+
+    /// <summary>
+    /// Toggles whether or not the entity edit UI should be visible.
+    /// </summary>
+    [ConsoleCommand("htf_entity_edit", "Toggles the entity edit UI.")]
+    private static void ToggleEntityEdit()
+    {
+        entityEditOpen = !entityEditOpen;
     }
 
     /// <summary>
@@ -114,7 +159,7 @@ public class HTFManager
     /// <param name="path">The path to the map we wish to load.</param>
     public static void LoadMap( string path )
     {
-        currentFile = WTF.LoadFile( path );
+        EngineManager.currentFile = WTF.LoadFile( path );
         Log.Info( $"Successfully loaded map \"{path}\"!", true );
     }
 
@@ -132,20 +177,20 @@ public class HTFManager
     /// </summary>
     public static void UnloadMap()
     {
-        currentFile = null;
+        EngineManager.currentFile = null;
     }
 
     [ConsoleCommand( "htf_save_map", "Saves the currently loaded map." )]
     public static void SaveMap()
     {
-        if ( currentFile == null )
+        if ( EngineManager.currentFile == null )
         {
             Log.Error( "Can't save map, because no map is loaded!" );
             return;
         }
 
-        WTF.SaveFile( currentFile?.path, currentFile );
-        Log.Info( $"Successfully saved map \"{currentFile.path}\"!", true );
+        WTF.SaveFile( EngineManager.currentFile?.path, EngineManager.currentFile );
+        Log.Info( $"Successfully saved map \"{EngineManager.currentFile.path}\"!", true );
     }
 
     /// <summary>
@@ -162,13 +207,13 @@ public class HTFManager
             return;
         }
 
-        if ( currentFile == null )
+        if ( EngineManager.currentFile == null )
         {
             Log.Error( "Can't save map, because no map is loaded!" );
             return;
         }
 
-        WTF.SaveFile( (string)args[1], currentFile );
-        Log.Info( $"Successfully saved map \"{currentFile.path}\"!", true );
+        WTF.SaveFile( (string)args[1], EngineManager.currentFile );
+        Log.Info( $"Successfully saved map \"{EngineManager.currentFile.path}\"!", true );
     }
 }

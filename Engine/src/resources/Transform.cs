@@ -46,11 +46,21 @@ public class Transform
 
     /// <summary>
     /// Updates positions, rotations, etc. every frame.<br/>
-    /// Mainly this is to update the local positions / rotations to let them act as an offset from their world position.
+    /// This is mainly to update the local positions / rotations to let them act as an offset from their world position.
     /// </summary>
     public void Update()
     {
+        // Apply the world position to the local position
+        // The local positions are effectively offsets from the world position, after all
         localPosition += worldPosition;
         localRotation += worldRotation;
+
+        // Can't have bounding boxes where the maxs have a less value than mins, or vice versa
+        if ( boundingBox.mins.X >= boundingBox.maxs.X ||
+             boundingBox.mins.Y >= boundingBox.maxs.Y ||
+             boundingBox.mins.Z >= boundingBox.maxs.Z )
+        {
+            Log.Error<ArithmeticException>( $"{this}'s bound boxes are mismatched! ({boundingBox})" );
+        }
     }
 }

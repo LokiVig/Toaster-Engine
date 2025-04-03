@@ -14,10 +14,10 @@ namespace Toast.Engine.Entities;
 /// </summary>
 public class Entity
 {
-    public virtual EntityType type { get; private set; } = EntityType.None; // This entity's type, e.g. player / NPC
-    public virtual float maxHealth { get; private set; } // This entity's max health
+    public virtual EntityType type { get; set; } = EntityType.None; // This entity's type, e.g. player / NPC
+    public virtual float maxHealth { get; set; } // This entity's max health
 
-    public Transform transform; // The position, rotation and bounding box of this entity
+    public Transform transform { get; set; } // The position, rotation and bounding box of this entity
 
     public string id; // This entity's identifier
     public string modelPath; // The path to this entity's visually pleasing model
@@ -112,15 +112,8 @@ public class Entity
     /// </summary>
     protected virtual void Update()
     {
-        // Can't have bounding boxes where the maxs have a less value than mins, or vice versa
-        if ( transform.boundingBox.mins.X >= transform.boundingBox.maxs.X ||
-             transform.boundingBox.mins.Y >= transform.boundingBox.maxs.Y ||
-             transform.boundingBox.mins.Z >= transform.boundingBox.maxs.Z )
-        {
-            Log.Error<ArithmeticException>( $"{this}'s bound boxes are mismatched! ({transform.boundingBox})" );
-        }
-
-
+        // Update our transforms
+        transform.Update();
     }
 
     /// <summary>
@@ -225,6 +218,12 @@ public class Entity
     /// </summary>
     public void GenerateID()
     {
+        // Make sure we don't already have an ID!
+        if ( !string.IsNullOrEmpty( GetID() ) )
+        {
+            return;
+        }
+
         // Easier to use variable for the list of entities in the current scene
         List<Entity> entities = EngineManager.currentScene?.GetEntities();
 
@@ -238,11 +237,12 @@ public class Entity
                 if ( this is PlayerEntity )
                 {
                     SetID( "player" ); // We're lucky! We have that special designation on us now
-                    return; // We don't want to overwrite that special ID
+                    break; // We don't want to overwrite that special ID
                 }
 
                 // We're just some regular joe, set our entity ID appropriately
                 SetID( $"entity {i}" );
+                break;
             }
         }
     }

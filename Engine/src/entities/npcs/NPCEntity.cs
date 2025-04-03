@@ -15,7 +15,7 @@ public class NPCEntity : Entity
 
     private NPCPathfinder pathfinder;
 
-    public NPCEntity() { }
+    public NPCEntity() : base() { }
 
     public NPCEntity( Vector3 position ) : base( position ) { }
 

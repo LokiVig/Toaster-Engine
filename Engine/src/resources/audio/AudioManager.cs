@@ -9,6 +9,7 @@ using Toast.Engine.Attributes;
 using System.Buffers.Binary;
 using System.Reflection;
 using System.Text;
+using System.Numerics;
 
 namespace Toast.Engine.Resources.Audio;
 
@@ -44,7 +45,7 @@ public static class AudioManager
             // Get the volume
             if ( !float.TryParse( args[2].ToString().Replace( ".", "," ), out volume ) )
             {
-                Log.Warning( "Second argument is an invalid float!" );
+                Log.Error( "Second argument is an invalid float!" );
                 return;
             }
         }
@@ -55,7 +56,7 @@ public static class AudioManager
             // Do we repeat?
             if ( !bool.TryParse( (string)args[3], out repeats ) )
             {
-                Log.Warning( "Third argument is an invalid bool!" );
+                Log.Error( "Third argument is an invalid bool!" );
                 return;
             }
         }
@@ -72,263 +73,74 @@ public static class AudioManager
     /// <param name="repeats">Determines whether or not this sound should repeat (loop) or not.</param>
     public static AudioFile PlaySound( string filepath, float volume = 1.0f, bool repeats = false )
     {
-        //
-        // Most of this is from the wave format sample from Silk.NET's OpenAL bindings!
-        // If possible, find out a cleaner, if not easier way to handle this... Shouldn't be all too encompassing
-        // for this engine's purposes after all, I don't wanna limit ourselves to just wave, either.
-        //
-        // Source:
-        //  - https://github.com/dotnet/Silk.NET/blob/main/examples/CSharp/OpenAL%20Demos/WavePlayer/Program.cs
-        //
-
         try
         {
-            // Read the file
-            ReadOnlySpan<byte> file = File.ReadAllBytes( filepath );
-            int fileIndex = 0;
+            // The file we're about to create
+            AudioFile file = null;
 
-            // Check if the file is of RIFF format...
-            if ( file[fileIndex++] != 'R' || file[fileIndex++] != 'I' || file[fileIndex++] != 'F' || file[fileIndex++] != 'F' )
+            // If we're using the OpenAL backend OR settings is null...
+            if ( EngineManager.settings == null 
+              || EngineManager.settings.AudioBackend == AudioBackend.OpenAL )
             {
-                Log.Info( "File is not in RIFF format!", true );
-                return null;
+                // Create the audio file based on the OAL API
+                file = CreateOALAudio( filepath, volume, repeats );
+
+                // Start playback of the AudioFile
+                file.alApi.SourcePlay( file.src );
+
+                // Add the newly made and playing audio to the list of playing files
+                playingFiles.Add( file );
             }
 
-            // Go back to the start to read other formats
-            int chunkSize = BinaryPrimitives.ReadInt32LittleEndian( file.Slice( fileIndex, 4 ) );
-            fileIndex += 4;
-
-            // Check if the file is of WAVE format...
-            if ( file[fileIndex++] != 'W' || file[fileIndex++] != 'A' || file[fileIndex++] != 'V' || file[fileIndex++] != 'E' )
-            {
-                Log.Info( "File is not in WAVE format!", true );
-                return null;
-            }
-
-            short numChannels = -1;
-            int sampleRate = -1;
-            int byteRate = -1;
-            short blockAlign = -1;
-            short bitsPerSample = -1;
-            BufferFormat format = 0;
-
-            AudioFile audio = null;
-
-            unsafe
-            {
-                // Get the ALContext and AL API itself
-                ALContext alc = ALContext.GetApi();
-                AL al = AL.GetApi();
-
-                // Get the device
-                Device* device = alc.OpenDevice( $"" );
-
-                // Make sure the device isn't null
-                if ( device == null )
-                {
-                    Log.Info( "Could not create device!", true );
-                    return null;
-                }
-
-                // Create a context
-                Context* ctx = alc.CreateContext( device, null );
-                alc.MakeContextCurrent( ctx );
-
-                // Get any errors that might've occurred
-                al.GetError();
-
-                uint src = al.GenSource();
-                uint buf = al.GenBuffer();
-
-                // If the sound should repeat...
-                if ( repeats )
-                {
-                    // Set its property to reflect that
-                    al.SetSourceProperty( src, SourceBoolean.Looping, true );
-                }
-
-                // Read the file
-                while ( fileIndex + 4 < file.Length )
-                {
-                    // Read the section identifier
-                    string identifier = "" + (char)file[fileIndex++] + (char)file[fileIndex++] + (char)file[fileIndex++] + (char)file[fileIndex++];
-                    int size = BinaryPrimitives.ReadInt32LittleEndian( file.Slice( fileIndex, 4 ) );
-                    fileIndex += 4;
-
-                    // If we're reading the format section of the file...
-                    if ( identifier == "fmt " )
-                    {
-                        // If the size of the section doesn't fit...
-                        if ( size != 16 )
-                        {
-                            // Log the faulty file!
-                            Log.Info( $"Unknown audio format with subchunk1 size: {size}", true );
-                            return null;
-                        }
-                        else // Otherwise, if we have a perfectly fine sized file...
-                        {
-                            // Get the audio format of the file...
-                            short audioFormat = BinaryPrimitives.ReadInt16LittleEndian( file.Slice( fileIndex, 2 ) );
-                            fileIndex += 2;
-
-                            // If we have a faulty audio format...
-                            if ( audioFormat != 1 )
-                            {
-                                // Log the faulty file!
-                                Log.Info( $"Unknown audio format with ID: {audioFormat}", true );
-                                return null;
-                            }
-                            else // Otherwise, if we have a perfectly fine audio format...
-                            {
-                                // Get information about the audio...
-                                // Get the number of channels
-                                numChannels = BinaryPrimitives.ReadInt16LittleEndian( file.Slice( fileIndex, 2 ) );
-                                fileIndex += 2;
-
-                                // Get the sample rate
-                                sampleRate = BinaryPrimitives.ReadInt32LittleEndian( file.Slice( fileIndex, 4 ) );
-                                fileIndex += 4;
-
-                                // Get the byte rate
-                                byteRate = BinaryPrimitives.ReadInt32LittleEndian( file.Slice( fileIndex, 4 ) );
-                                fileIndex += 4;
-
-                                // Get the block align
-                                blockAlign = BinaryPrimitives.ReadInt16LittleEndian( file.Slice( fileIndex, 2 ) );
-                                fileIndex += 2;
-
-                                // Get the bits per sample
-                                bitsPerSample = BinaryPrimitives.ReadInt16LittleEndian( file.Slice( fileIndex, 2 ) );
-                                fileIndex += 2;
-
-                                // If we have mono sound...
-                                if ( numChannels == 1 )
-                                {
-                                    // If we have only 8 bits per sample...
-                                    if ( bitsPerSample == 8 )
-                                    {
-                                        // Format is mono 8-bits-per-sample!
-                                        format = BufferFormat.Mono8;
-                                    }
-                                    else if ( bitsPerSample == 16 ) // If we have a whopping 16 bits per sample...
-                                    {
-                                        // Format is mono 16-bits-per-sample!
-                                        format = BufferFormat.Mono16;
-                                    }
-                                    else // If we have an unknown bits per sample count...
-                                    {
-                                        // Log the faulty file!
-                                        Log.Info( $"Can't play mono {bitsPerSample} sound!", true );
-                                        return null;
-                                    }
-                                }
-                                else if ( numChannels == 2 ) // If we have stereo sound...
-                                {
-                                    // If we only have 8 bits per sample...
-                                    if ( bitsPerSample == 8 )
-                                    {
-                                        // Format is stereo 8-bits-per-sample!
-                                        format = BufferFormat.Stereo8;
-                                    }
-                                    else if ( bitsPerSample == 16 ) // If we have a whopping 16 bits per sample...
-                                    {
-                                        // Format is stereo 16-bits-per-sample!
-                                        format = BufferFormat.Stereo16;
-                                    }
-                                    else // If we have an unknown bits per sample count...
-                                    {
-                                        // Log the faulty file!
-                                        Log.Info( $"Can't play stereo {bitsPerSample} sound!", true );
-                                        return null;
-                                    }
-                                }
-                                else // If we have an unknown amount of channels...
-                                {
-                                    // Log the faulty file!
-                                    Log.Info( $"Can't play audio with {numChannels} channels!", true );
-                                    return null;
-                                }
-                            }
-                        }
-                    }
-                    else if ( identifier == "data" ) // If this section contains general data...
-                    {
-                        // Read the data
-                        ReadOnlySpan<byte> data = file.Slice( fileIndex, size );
-                        fileIndex += size;
-
-                        // Buffer the data to the AL API
-                        fixed ( byte* pData = data )
-                        {
-                            al.BufferData( buf, format, pData, size, sampleRate );
-                        }
-                    }
-                    else if ( identifier == "JUNK" ) // If this section is junk...
-                    {
-                        // This exists to align things
-                        fileIndex += size;
-                    }
-                    else if ( identifier == "iXML" ) // If this section is XML content..
-                    {
-                        // Read the section
-                        ReadOnlySpan<byte> v = file.Slice( fileIndex, size );
-                        string str = Encoding.ASCII.GetString( v );
-
-                        fileIndex += size;
-                    }
-                    else // Otherwise we've encountered an unknown section...
-                    {
-                        // Skip over it!
-                        fileIndex += size;
-                    }
-
-                    // Create a new audio file with our specifications
-                    audio = new AudioFile( numChannels, sampleRate, byteRate, blockAlign, bitsPerSample, format );
-                    audio.alContext = alc; // Set the ALContext
-                    audio.alApi = al; // Set the AL API
-                    audio.alDevice = device; // Set its device
-                    audio.ctx = ctx; // Set its local context
-
-                    audio.src = src; // Set its source
-                    audio.buf = buf; // Set its buffer
-
-                    // Set the properties of the audio
-                    audio.alApi.SetSourceProperty( audio.src, SourceFloat.Gain, volume );
-                    audio.alApi.SetSourceProperty( audio.src, SourceInteger.Buffer, audio.buf );
-
-                    // Start playback!
-                    audio.alApi.SourcePlay( audio.src );
-                }
-
-                // Add the audio file to the list of playing files, and return the newly made playing file!
-                playingFiles.Add( audio );
-                return audio;
-            }
+            // Return the file!
+            return file;
         }
         catch ( Exception exc )
         {
+            // If the file / directory isn't found...
             if ( exc is FileNotFoundException || exc is DirectoryNotFoundException )
             {
+                // Log the warning!
+                // If the warning sound itself is missing, it will cause an infinite recursion... Whoopsies!
                 Log.Warning( $"Couldn't find file at \"{filepath}\"!" );
                 return null;
             }
 
+            // Log an error with the unmanaged exception!
+            // If the error sound is missing or causes an exception for any reason,
+            // it means that this will cause an infinite recursion... Whoopsies!
             Log.Error( "Exception caught playing sound!", exc );
             return null;
         }
     }
 
     /// <summary>
-    /// Plays a sound from a specified entity, to another specified entity.
+    /// Plays a sound from a specified entity, utilizing its position and velocity to determine 3D values.
     /// </summary>
     /// <param name="source">The source of this audio.</param>
     /// <param name="listener">A listener to this audio.</param>
     /// <param name="filepath">The path to the specific sound we wish to play.</param>
     /// <param name="volume">Determines the volume of which this sound should play at. (Scale of 0.0f - 1.0f)</param>
     /// <param name="repeats">Determines whether or not this sound should repeat (loop) or not.</param>
-    public static AudioFile PlaySound( Entity source, Entity listener, string filepath, float volume = 1.0f, bool repeats = false )
+    public static AudioFile PlaySound( Entity source, string filepath, float volume = 1.0f, bool repeats = false )
     {
-        throw new NotImplementedException();
+        // If we're using the OpenAL backend...
+        // Create the file based on the OAL API
+        AudioFile file = CreateOALAudio( filepath, volume, repeats );
+
+        // Set the file's 3D properties
+        file.alApi.SetSourceProperty( file.src, SourceVector3.Position, source.GetPosition() );
+        file.alApi.SetSourceProperty( file.src, SourceVector3.Direction, Vector3.Normalize( (Vector3)( source.GetPosition() - EngineManager.currentScene?.GetPlayer().GetPosition() ) ) );
+        file.alApi.SetSourceProperty( file.src, SourceVector3.Velocity, source.GetVelocity() );
+
+        // Play the file
+        file.alApi.SourcePlay( file.src );
+
+        // Add the file to the list of playing files
+        playingFiles.Add( file );
+
+        // Return the file!
+        return file;
     }
 
     /// <summary>
@@ -433,6 +245,240 @@ public static class AudioManager
     }
 
     /// <summary>
+    /// Creates an <see cref="AudioFile"/> based on the OpenAL backend.
+    /// </summary>
+    private static AudioFile CreateOALAudio( string filepath, float volume = 1.0f, bool repeats = false )
+    {
+        //
+        // Most of this is from the wave format sample from Silk.NET's OpenAL bindings!
+        // If possible, find out a cleaner, if not easier way to handle this... Shouldn't be all too encompassing
+        // for this engine's purposes after all, I don't wanna limit ourselves to just wave, either.
+        //
+        // Source:
+        //  - https://github.com/dotnet/Silk.NET/blob/main/examples/CSharp/OpenAL%20Demos/WavePlayer/Program.cs
+        //
+
+        // Read the file
+        ReadOnlySpan<byte> file = File.ReadAllBytes( filepath );
+        int fileIndex = 0;
+
+        // Check if the file is of RIFF format...
+        if ( file[fileIndex++] != 'R' || file[fileIndex++] != 'I' || file[fileIndex++] != 'F' || file[fileIndex++] != 'F' )
+        {
+            Log.Info( "File is not in RIFF format!", true );
+            return null;
+        }
+
+        // Go back to the start to read other formats
+        int chunkSize = BinaryPrimitives.ReadInt32LittleEndian( file.Slice( fileIndex, 4 ) );
+        fileIndex += 4;
+
+        // Check if the file is of WAVE format...
+        if ( file[fileIndex++] != 'W' || file[fileIndex++] != 'A' || file[fileIndex++] != 'V' || file[fileIndex++] != 'E' )
+        {
+            Log.Info( "File is not in WAVE format!", true );
+            return null;
+        }
+
+        // Audio parameters, gained from reading the file below
+        short numChannels = -1;
+        int sampleRate = -1;
+        int byteRate = -1;
+        short blockAlign = -1;
+        short bitsPerSample = -1;
+        BufferFormat format = 0;
+
+        AudioFile audio = null;
+
+        unsafe
+        {
+            // Get the ALContext and AL API itself
+            ALContext alc = ALContext.GetApi();
+            AL al = AL.GetApi();
+
+            // Get the device
+            Device* device = alc.OpenDevice( $"" );
+
+            // Make sure the device isn't null
+            if ( device == null )
+            {
+                Log.Info( "Could not create device!", true );
+                return null;
+            }
+
+            // Create a context
+            Context* ctx = alc.CreateContext( device, null );
+            alc.MakeContextCurrent( ctx );
+
+            // Get any errors that might've occurred
+            al.GetError();
+
+            uint src = al.GenSource();
+            uint buf = al.GenBuffer();
+
+            // If the sound should repeat...
+            if ( repeats )
+            {
+                // Set its property to reflect that
+                al.SetSourceProperty( src, SourceBoolean.Looping, true );
+            }
+
+            // Read the file
+            while ( fileIndex + 4 < file.Length )
+            {
+                // Read the section identifier
+                string identifier = "" + (char)file[fileIndex++] + (char)file[fileIndex++] + (char)file[fileIndex++] + (char)file[fileIndex++];
+                int size = BinaryPrimitives.ReadInt32LittleEndian( file.Slice( fileIndex, 4 ) );
+                fileIndex += 4;
+
+                // If we're reading the format section of the file...
+                if ( identifier == "fmt " )
+                {
+                    // If the size of the section doesn't fit...
+                    if ( size != 16 )
+                    {
+                        // Log the faulty file!
+                        Log.Info( $"Unknown audio format with subchunk1 size: {size}", true );
+                        return null;
+                    }
+                    else // Otherwise, if we have a perfectly fine sized file...
+                    {
+                        // Get the audio format of the file...
+                        short audioFormat = BinaryPrimitives.ReadInt16LittleEndian( file.Slice( fileIndex, 2 ) );
+                        fileIndex += 2;
+
+                        // If we have a faulty audio format...
+                        if ( audioFormat != 1 )
+                        {
+                            // Log the faulty file!
+                            Log.Info( $"Unknown audio format with ID: {audioFormat}", true );
+                            return null;
+                        }
+                        else // Otherwise, if we have a perfectly fine audio format...
+                        {
+                            // Get information about the audio...
+                            // Get the number of channels
+                            numChannels = BinaryPrimitives.ReadInt16LittleEndian( file.Slice( fileIndex, 2 ) );
+                            fileIndex += 2;
+
+                            // Get the sample rate
+                            sampleRate = BinaryPrimitives.ReadInt32LittleEndian( file.Slice( fileIndex, 4 ) );
+                            fileIndex += 4;
+
+                            // Get the byte rate
+                            byteRate = BinaryPrimitives.ReadInt32LittleEndian( file.Slice( fileIndex, 4 ) );
+                            fileIndex += 4;
+
+                            // Get the block align
+                            blockAlign = BinaryPrimitives.ReadInt16LittleEndian( file.Slice( fileIndex, 2 ) );
+                            fileIndex += 2;
+
+                            // Get the bits per sample
+                            bitsPerSample = BinaryPrimitives.ReadInt16LittleEndian( file.Slice( fileIndex, 2 ) );
+                            fileIndex += 2;
+
+                            // If we have mono sound...
+                            if ( numChannels == 1 )
+                            {
+                                // If we have only 8 bits per sample...
+                                if ( bitsPerSample == 8 )
+                                {
+                                    // Format is mono 8-bits-per-sample!
+                                    format = BufferFormat.Mono8;
+                                }
+                                else if ( bitsPerSample == 16 ) // If we have a whopping 16 bits per sample...
+                                {
+                                    // Format is mono 16-bits-per-sample!
+                                    format = BufferFormat.Mono16;
+                                }
+                                else // If we have an unknown bits per sample count...
+                                {
+                                    // Log the faulty file!
+                                    Log.Info( $"Can't play mono {bitsPerSample} sound!", true );
+                                    return null;
+                                }
+                            }
+                            else if ( numChannels == 2 ) // If we have stereo sound...
+                            {
+                                // If we only have 8 bits per sample...
+                                if ( bitsPerSample == 8 )
+                                {
+                                    // Format is stereo 8-bits-per-sample!
+                                    format = BufferFormat.Stereo8;
+                                }
+                                else if ( bitsPerSample == 16 ) // If we have a whopping 16 bits per sample...
+                                {
+                                    // Format is stereo 16-bits-per-sample!
+                                    format = BufferFormat.Stereo16;
+                                }
+                                else // If we have an unknown bits per sample count...
+                                {
+                                    // Log the faulty file!
+                                    Log.Info( $"Can't play stereo {bitsPerSample} sound!", true );
+                                    return null;
+                                }
+                            }
+                            else // If we have an unknown amount of channels...
+                            {
+                                // Log the faulty file!
+                                Log.Info( $"Can't play audio with {numChannels} channels!", true );
+                                return null;
+                            }
+                        }
+                    }
+                }
+                else if ( identifier == "data" ) // If this section contains general data...
+                {
+                    // Read the data
+                    ReadOnlySpan<byte> data = file.Slice( fileIndex, size );
+                    fileIndex += size;
+
+                    // Buffer the data to the AL API
+                    fixed ( byte* pData = data )
+                    {
+                        al.BufferData( buf, format, pData, size, sampleRate );
+                    }
+                }
+                else if ( identifier == "JUNK" ) // If this section is junk...
+                {
+                    // This exists to align things
+                    fileIndex += size;
+                }
+                else if ( identifier == "iXML" ) // If this section is XML content..
+                {
+                    // Read the section
+                    ReadOnlySpan<byte> v = file.Slice( fileIndex, size );
+                    string str = Encoding.ASCII.GetString( v );
+
+                    fileIndex += size;
+                }
+                else // Otherwise we've encountered an unknown section...
+                {
+                    // Skip over it!
+                    fileIndex += size;
+                }
+
+                // Create a new audio file and fill some of its variables
+                audio = new AudioFile();
+                audio.alContext = alc; // Set the ALContext
+                audio.alApi = al; // Set the AL API
+                audio.alDevice = device; // Set its device
+                audio.ctx = ctx; // Set its local context
+
+                audio.src = src; // Set its source
+                audio.buf = buf; // Set its buffer
+
+                // Set the properties of the audio
+                audio.alApi.SetSourceProperty( audio.src, SourceFloat.Gain, volume );
+                audio.alApi.SetSourceProperty( audio.src, SourceInteger.Buffer, audio.buf );
+            }
+
+            // Return the newly made file!
+            return audio;
+        }
+    }
+
+    /// <summary>
     /// Plays the engine's success sound.
     /// </summary>
     public static void PlaySuccess()
@@ -455,4 +501,16 @@ public static class AudioManager
     {
         PlaySound( PATH_AUDIO_ERROR );
     }
+}
+
+/// <summary>
+/// The different audio backends we can use in the engine.
+/// </summary>
+public enum AudioBackend
+{
+    /// <summary>
+    /// The OpenAL backend is a very modular backend, letting you easily create 3D audio<br/>
+    /// at the cost of not having channels built-in.
+    /// </summary>
+    OpenAL,
 }

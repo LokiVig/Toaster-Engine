@@ -188,9 +188,9 @@ public static class ConsoleManager
             // Make a new console command
             ConsoleCommand command = new ConsoleCommand
             {
-                alias = attribute.alias, // The alias of the console command
-                description = attribute.description, // The description of the console command
-                conditions = attribute.conditions, // Determines whether or not this command requires cheats to be called
+                alias = attribute.Alias, // The alias of the console command
+                description = attribute.Description, // The description of the console command
+                conditions = attribute.Conditions, // Determines whether or not this command requires cheats to be called
 
                 onCall = onCall, // Regular call method
                 onArgsCall = onArgsCall, // Argumented call method
@@ -199,6 +199,9 @@ public static class ConsoleManager
             // Add the command
             AddCommand( command );
         }
+
+        // Log our success!
+        Log.Success( "Successfully registered all console commands!" );
     }
 
     /// <summary>
@@ -230,7 +233,7 @@ public static class ConsoleManager
     /// Log the information about a specific command.
     /// </summary>
     [ConsoleCommand( "help", "Displays information about a command, or the list of available commands." )]
-    public static void DisplayCommand( List<object> args )
+    public static void DisplayCommands( List<object> args )
     {
         // Amount of arguments
         int argCount = args.Count - 1;
@@ -312,7 +315,7 @@ public static class ConsoleManager
             if ( !command.enabled )
             {
                 // Log such to the console and get outta here!
-                Log.Info( $"Found command \"{command.alias}\", but the command is disabled, therefore we cannot call it!", true );
+                Log.Warning( $"Found command \"{command.alias}\", but the command is disabled, therefore we cannot call it!" );
                 return;
             }
 
@@ -330,7 +333,7 @@ public static class ConsoleManager
                     if ( !EngineManager.cheatsEnabled )
                     {
                         // Log this revelating information to the console, then skedaddle!
-                        Log.Info( $"Command \"{command.alias}\" requires cheats, but cheats are disabled!", true );
+                        Log.Warning( $"Command \"{command.alias}\" requires cheats, but cheats are disabled!" );
                         return;
                     }
 

@@ -30,12 +30,15 @@ public class Program
 
 /// <summary>
 /// The game itself.<br/>
-/// This class handles initializing and running everything game-wise, meaning it holds the Update function,
-/// important variables such as deltaTime, the current file, and the current scene.
+/// This class handles initializing and running everything game-wise, handling specificities that should<br/>
+/// only pertain to the game.
 /// </summary>
 public class GameManager
 {
-    public static GameState currentState = GameState.Active; // The state the game currently is in
+    /// <summary>
+    /// The state the game is currently in.
+    /// </summary>
+    public static GameState currentState = GameState.Active;
 
     private Player mainPlayer;
 
@@ -45,7 +48,7 @@ public class GameManager
     public void Initialize()
     {
         // Initialize the engine
-        EngineManager.Initialize( "Game", WindowState.Normal ); // Call the engine's initialize function
+        EngineManager.Initialize( "Game" ); // Call the engine's initialize function, with "Game" as its title
         EngineManager.OnUpdate += Update; // After the engine's done updating, the game manager itself (us) should update
                                           // The engine's update function is a lot more focused on engine-wide prospects,
                                           // while the game manager should be focused more on the game-specific functionalities
@@ -67,7 +70,7 @@ public class GameManager
 
         // Sound entity which should play some background music for us
         SoundEntity soundEntity = new SoundEntity( new Vector3( 0, 0, 15.0f ) );
-        soundEntity.audioPath = "resources/audio/music/debugmusic.mp3";
+        soundEntity.audioPath = "resources/audio/music/debugmusic.wav";
         soundEntity.audioVolume = 0.25f;
         soundEntity.audioRepeats = true;
 

@@ -31,7 +31,7 @@ public class Renderer
     /// Initializes a OpenGL rendered window with a specified title.
     /// </summary>
     /// <param name="title">The title of the window we wish to open.</param>
-    public static void Initialize( string title, WindowState initialWindowState = WindowState.Normal )
+    public static void Initialize( string title )
     {
         // The window info
         SDL_DisplayMode mode;
@@ -48,7 +48,7 @@ public class Renderer
             WindowWidth = 1280,
             WindowHeight = 720,
             WindowTitle = title,
-            WindowInitialState = initialWindowState
+            WindowInitialState = WindowState.Normal
         };
 
         // Places the window in the middle of the screen, dependant on width and height
@@ -79,6 +79,16 @@ public class Renderer
         {
             graphicsDevice.MainSwapchain.Resize( (uint)window.Width, (uint)window.Height );
             controller.WindowResized( window.Width, window.Height );
+
+            if ( window.Width < WINDOW_MIN_WIDTH )
+            {
+                window.Width = WINDOW_MIN_WIDTH;
+            }
+
+            if ( window.Height < WINDOW_MIN_HEIGHT )
+            {
+                window.Height = WINDOW_MIN_HEIGHT;
+            }
         };
 
         // Create an ImGui context
@@ -89,6 +99,12 @@ public class Renderer
 
         // Create our default resources
         CreateResources();
+
+        // Load settings
+        SetWindowState( EngineManager.settings.WindowState );
+        SetVSync( EngineManager.settings.VSyncEnabled );
+        SetWindowWidth( EngineManager.settings.WindowResolution.width );
+        SetWindowHeight( EngineManager.settings.WindowResolution.height );
     }
 
     /// <summary>
@@ -294,6 +310,78 @@ public class Renderer
     private static void DrawEntity( Entity entity )
     {
 
+    }
+
+    /// <summary>
+    /// Get the renderer's current window state.
+    /// </summary>
+    /// <returns>The state of the window as <see cref="WindowState"/></returns>
+    public static WindowState GetWindowState()
+    {
+        return window.WindowState;
+    }
+
+    /// <summary>
+    /// Is VSync enabled on the renderer?
+    /// </summary>
+    /// <returns><see langword="true"/> if it is, <see langword="false"/> otherwise.</returns>
+    public static bool IsVSyncEnabled()
+    {
+        return graphicsDevice.MainSwapchain.SyncToVerticalBlank;
+    }
+
+    /// <summary>
+    /// Gets the width of the renderer's window.
+    /// </summary>
+    /// <returns>The width of the active window.</returns>
+    public static int GetWindowWidth()
+    {
+        return window.Width;
+    }
+
+    /// <summary>
+    /// Gets the height of the renderer's window.
+    /// </summary>
+    /// <returns>The height of the active window.</returns>
+    public static int GetWindowHeight()
+    {
+        return window.Height;
+    }
+
+    /// <summary>
+    /// Sets the value of the window's window state.
+    /// </summary>
+    /// <param name="windowState">The window state we should switch to.</param>
+    public static void SetWindowState( WindowState windowState)
+    {
+        window.WindowState = windowState;
+    }
+
+    /// <summary>
+    /// Sets the value of VSync to the parameter.
+    /// </summary>
+    /// <param name="vSync">Determines whether or not VSync should be enabled.</param>
+    public static void SetVSync( bool vSync )
+    {
+        graphicsDevice.MainSwapchain.SyncToVerticalBlank = vSync;
+    }
+
+    /// <summary>
+    /// Sets the window's width.
+    /// </summary>
+    /// <param name="width">The new width of the window.</param>
+    public static void SetWindowWidth( int width )
+    {
+        window.Width = width;
+    }
+
+    /// <summary>
+    /// Sets the window's height.
+    /// </summary>
+    /// <param name="height">The new height of the window.</param>
+    public static void SetWindowHeight( int height )
+    {
+        window.Height = height;
     }
 
     /// <summary>

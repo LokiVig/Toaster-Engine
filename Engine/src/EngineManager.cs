@@ -29,10 +29,18 @@ public static class EngineManager
     //---------------------------------------//
 
     /// <summary>
-    /// Whenever we should update things, this event gets called.
+    /// Whenever we update things, this event gets called.
     /// </summary>
     public static event Action OnUpdate;
 
+    /// <summary>
+    /// Whenever UI elements get updated, this event gets called.
+    /// </summary>
+    public static event Action OnUIUpdate;
+
+    /// <summary>
+    /// The constant title the engine should feature.
+    /// </summary>
     public static readonly string EngineTitle = $"Toaster Engine [V.{VERSION}]";
 
 #if DEBUG // If we're debugging, we should, by default, be cheating
@@ -56,6 +64,11 @@ public static class EngineManager
     /// The currently running scene, should be initialized from the current file.
     /// </summary>
     public static Scene currentScene;
+
+    /// <summary>
+    /// The engine's settings.
+    /// </summary>
+    public static Settings settings;
 
     /// <summary>
     /// Helps stopping you from using FPS-dependant calculations.<br/>
@@ -82,30 +95,28 @@ public static class EngineManager
     /// Initialize a new Toaster Engine instance with an optional <paramref name="title"/> argument.
     /// </summary>
     /// <param name="title">The title this Toaster Engine instance should have.</param>
-    /// <param name="initialWindowState">The initial window state the instance should run from.</param>
-    public static void Initialize( string title = null, WindowState initialWindowState = WindowState.Normal )
+    public static void Initialize( string title = null )
     {
-
         // Try to...
         try
         {
             // Initialize file logging
             Log.OpenLogFile();
-            Log.Success( "Successfully initialized logging system!" );
+         
+            // Load the settings
+            settings = Settings.Load() ?? new Settings();
 
             // Initialize our input manager
             InputManager.Initialize();
-            Log.Success( "Successfully initialized input manager!" );
-
+            
             // Register the default console commands
             ConsoleManager.RegisterCommands();
-            Log.Success( "Successfully registered all console commands!" );
-            
+
             // Create default keybinds
             CreateKeybinds();
 
             // Initialize the renderer
-            Renderer.Initialize( $"{EngineTitle}{( title != null ? $" - {title}" : "" )}", initialWindowState );
+            Renderer.Initialize( $"{EngineTitle}{( title != null ? $" - {title}" : "" )}" );
             Log.Success( "Successfully initialized renderer." );
         }
         catch ( Exception exc ) // Handle any exceptions we encounter!
@@ -116,6 +127,64 @@ public static class EngineManager
         // Connect our InputManager's events to the Renderer's events for simplicity's sakes
         Renderer.window.KeyDown += InputManager.OnKeyDown;
         Renderer.window.KeyUp += InputManager.OnKeyUp;
+    }
+
+    /// <summary>
+    /// Things to do for every frame.
+    /// </summary>
+    public static void Update()
+    {
+        Stopwatch watch = Stopwatch.StartNew();
+
+        // While the renderer isn't shutting down...
+        while ( !Renderer.ShuttingDown() )
+        {
+            // Calculate the time elapsed since the last frame
+            float currentTime = (float)watch.Elapsed.TotalSeconds;
+            deltaTime = currentTime - lastFrameTime;
+            lastFrameTime = currentTime;
+
+            // Ensure deltaTime is non-negative
+            deltaTime = Math.Max( 0, deltaTime );
+
+            // Update the audio manager
+            AudioManager.Update();
+
+            // Update the input manager
+            InputManager.Update();
+
+            // Manage UI elements (mainly ImGui related)
+            UIUpdate();
+
+            // Call the OnUpdate event
+            // This makes it so everything subscribed to the event will call their own,
+            // subsidiary update method
+            OnUpdate?.Invoke();
+
+            // Call the RenderFrame method from the renderer
+            Renderer.RenderFrame( currentScene ?? null );
+        }
+    }
+
+    /// <summary>
+    /// Updates UI elements, such as ImGui.
+    /// </summary>
+    private static void UIUpdate()
+    {
+        // Manage the console
+        if ( consoleOpen )
+        {
+            ConsoleUI.Display( ref consoleOpen );
+        }
+
+        // Manage the debug UI
+        if ( debugOpen )
+        {
+            DebugUI.Display( ref debugOpen );
+        }
+
+        // Call the UI update event
+        OnUIUpdate?.Invoke();
     }
 
     /// <summary>
@@ -176,58 +245,6 @@ public static class EngineManager
     }
 
     /// <summary>
-    /// Things to do for every frame.
-    /// </summary>
-    public static void Update()
-    {
-        Stopwatch watch = Stopwatch.StartNew();
-
-        // While the renderer isn't shutting down...
-        while ( !Renderer.ShuttingDown() )
-        {
-            // Calculate the time elapsed since the last frame
-            float currentTime = (float)watch.Elapsed.TotalSeconds;
-            deltaTime = currentTime - lastFrameTime;
-            lastFrameTime = currentTime;
-
-            // Ensure deltaTime is non-negative
-            deltaTime = Math.Max( 0, deltaTime );
-
-            // Update the audio manager
-            AudioManager.Update();
-
-            // Update the input manager
-            InputManager.Update();
-
-            // Manage UI elements (mainly ImGui related)
-            ManageUI();
-
-            // Call the OnUpdate event
-            // This makes it so everything subscribed to the event will call their own,
-            // subsidiary update method
-            OnUpdate?.Invoke();
-
-            // Call the RenderFrame method from the renderer
-            Renderer.RenderFrame( currentScene ?? null );
-        }
-    }
-
-    private static void ManageUI()
-    {
-        // Manage the console
-        if ( consoleOpen )
-        {
-            ConsoleUI.Display( ref consoleOpen );
-        }
-
-        // Manage the debug UI
-        if ( debugOpen )
-        {
-            DebugUI.Display( ref debugOpen );
-        }
-    }
-
-    /// <summary>
     /// Used primarily for the "quit" console command, instantly closes the application with the code 0.
     /// </summary>
     [ConsoleCommand( "quit", "Shuts the engine down entirely." )]
@@ -247,6 +264,9 @@ public static class EngineManager
 
         // Save our commands
         ConsoleManager.SaveCommands();
+
+        // Save our settings
+        settings.Save();
 
         // End file logging
         Log.CloseLogFile();

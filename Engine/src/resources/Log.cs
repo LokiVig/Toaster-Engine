@@ -59,6 +59,9 @@ public struct Log
 
         // Start our runtime clock
         runtime = Stopwatch.StartNew();
+
+        // Log our success!
+        Success( "Successfully initialized logging system!" );
     }
 
     /// <summary>
@@ -193,10 +196,10 @@ public struct Log
         }
 
         // Write to the console what just happened
-        ConsoleUI.WriteLine( $"[ERROR] (Line {line}) {caller}.{method}; {message}" );
+        ConsoleUI.WriteLine( $"[ERROR] (Line {line}) {caller}.{method}; {message}", colErr );
 
         // Write to the log file
-        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : [ERROR] (Line {line}) {caller}.{method}; {message}", colErr );
+        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : [ERROR] (Line {line}) {caller}.{method}; {message}" );
 
         // Create an exception from the type designated by the caller
         T exception = new T();
@@ -233,10 +236,10 @@ public struct Log
         }
 
         // Write to the console what just happened
-        ConsoleUI.WriteLine( $"[ERROR] (Line {line}) {caller}.{method}; {message}" );
+        ConsoleUI.WriteLine( $"[ERROR] (Line {line}) {caller}.{method}; {message}", colErr );
 
         // Write to the log file
-        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : [ERROR] (Line {line}) {caller}.{method}; {message}", colErr );
+        logWriter.WriteLine( $"{DateTime.Now.ToLongTimeString()} : [ERROR] (Line {line}) {caller}.{method}; {message}" );
 
         // If we have an exception...
         if ( exception != null )

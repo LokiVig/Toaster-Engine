@@ -19,29 +19,6 @@ public unsafe class AudioFile : IDisposable
     public uint src;
     public uint buf;
 
-    private short numChannels;
-    private int sampleRate;
-    private int byteRate;
-    private short blockAlign;
-    private short bitsPerSample;
-    private BufferFormat format;
-
-    public AudioFile(
-        short numChannels = -1,
-        int sampleRate = -1,
-        int byteRate = -1,
-        short blockAlign = -1,
-        short bitsPerSample = -1,
-        BufferFormat format = 0 )
-    {
-        this.numChannels = numChannels;
-        this.sampleRate = sampleRate;
-        this.byteRate = byteRate;
-        this.blockAlign = blockAlign;
-        this.bitsPerSample = bitsPerSample;
-        this.format = format;
-    }
-
     public void Dispose()
     {
         //

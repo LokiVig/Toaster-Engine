@@ -51,6 +51,9 @@ public class EntitySpawner : ToolEntity
         // The entity should spawn!
         toSpawn.Spawn();
 
+        // Set the entity's parent to be us
+        toSpawn.SetParent( this );
+
         // Set the entity's position to our position
         toSpawn.SetPosition( transform.worldPosition );
 

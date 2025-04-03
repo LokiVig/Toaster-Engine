@@ -123,6 +123,11 @@ public class BoundingBox
 
     public override string ToString()
     {
+        //
+        // This is a bit of a mess...
+        // Find a way to improve this! I wanna actually be able to read this!
+        //
+
         if ( this == SmallTool )
         {
             return "Small Tool";
