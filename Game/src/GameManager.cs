@@ -47,80 +47,14 @@ public class GameManager
     /// </summary>
     public void Initialize()
     {
-        // Initialize the engine
-        EngineManager.Initialize( "Game" ); // Call the engine's initialize function, with "Game" as its title
-        EngineManager.OnUpdate += Update; // After the engine's done updating, the game manager itself (us) should update
-                                          // The engine's update function is a lot more focused on engine-wide prospects,
-                                          // while the game manager should be focused more on the game-specific functionalities
-
         // Create our default keybinds
         CreateKeybinds();
 
-        // Initialize everything necessary before the game is actually run
-        // DEBUG: Setting up a basic scene to test out certain aspects of what's done
-        EngineManager.currentFile = new WTF( "test.wtf" );
-
-        // References to the player and NPC entity
-        TestNPC npc = new TestNPC();
-        Player player = new Player();
-
-        // Entity spawners of the NPC and player which should spawn an instance of each
-        EntitySpawner npcSpawner = new( npc, new Vector3( 0, 5.0f, 0 ) );
-        EntitySpawner playerSpawner = new( player, Vector3.Zero );
-
-        // Sound entity which should play some background music for us
-        SoundEntity soundEntity = new SoundEntity( new Vector3( 0, 0, 15.0f ) );
-        soundEntity.audioPath = "resources/audio/music/debugmusic.wav";
-        soundEntity.audioVolume = 0.25f;
-        soundEntity.audioRepeats = true;
-
-        // A trigger brush entity, which should start the sound entity's playback
-        TriggerBrush trigger = new TriggerBrush();
-        trigger.SetBoundingBox( new BoundingBox( new Vector3( -15 ), new Vector3( 15 ) ) );
-        trigger.triggerBy = TriggerBy.Player;
-        trigger.triggerOn = TriggerOn.Trigger;
-        trigger.triggerType = TriggerType.Once;
-        trigger.targetEvent = EntityEvent.PlaySound;
-        trigger.targetEntity = "entity 3"; // DEBUG!
-
-        // Debug brush!
-        Brush debugBrush = new Brush( new Vector3( -5.0f ), new Vector3( 5.0f ) );
-
-        // Add all the entities to the active file
-        EngineManager.currentFile.AddEntity( npcSpawner );
-        EngineManager.currentFile.AddEntity( playerSpawner );
-        EngineManager.currentFile.AddEntity( trigger );
-        EngineManager.currentFile.AddEntity( soundEntity );
-
-        // Add the debugging brush to the file aswell
-        EngineManager.currentFile.AddBrush( debugBrush );
-
-        // Save the file to its path
-        EngineManager.currentFile.Save();
-
-        // Load our scene from the newly made file
-        EngineManager.currentScene = Scene.LoadFromFile( EngineManager.currentFile );
-
-        // Spawn all of the entities
-        npcSpawner.Spawn();
-        playerSpawner.Spawn();
-        trigger.Spawn();
-        soundEntity.Spawn();
-
-        // Tell the NPC and player spawner to spawn their respective entities
-        player = mainPlayer = (Player)playerSpawner.SpawnEntity();
-        TestNPC newNpc = (TestNPC)npcSpawner.SpawnEntity();
-
-        // Trace from the main player towards the NPC that was just spawned
-        Ray.Trace( mainPlayer, newNpc, out object hitObject, RayIgnore.Brushes | RayIgnore.BrushEntities );
-        ( hitObject as Entity )?.TakeDamage( 25, mainPlayer );
-
-        // Start updating the engine
-        EngineManager.Update();
-
-        // After of which, we should call the engine shutdown function
-        EngineManager.OnUpdate -= Update; // Unsubscribe ourselves from the engine update function
-        EngineManager.Shutdown(); // Actually call the engine shutdown function
+        // Initialize the engine
+        EngineManager.OnUpdate += Update; // After the engine's done updating, the game manager itself (us) should update
+                                          // The engine's update function is a lot more focused on engine-wide prospects,
+                                          // while the game manager should be focused more on the game-specific functionalities
+        EngineManager.Initialize( "Game" ); // Call the engine's initialize function, with "Game" as its title
     }
 
     /// <summary>

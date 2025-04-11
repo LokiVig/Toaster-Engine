@@ -1,15 +1,14 @@
 ﻿using System;
 using System.IO;
+using System.Text;
+using System.Numerics;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 
 using Silk.NET.OpenAL;
 
 using Toast.Engine.Entities;
 using Toast.Engine.Attributes;
-using System.Buffers.Binary;
-using System.Reflection;
-using System.Text;
-using System.Numerics;
 
 namespace Toast.Engine.Resources.Audio;
 

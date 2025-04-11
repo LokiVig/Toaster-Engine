@@ -89,6 +89,7 @@ public class Settings
     {
         // Simply call the engine's setting's save method
         EngineManager.settings.Save();
+        Log.Success( $"Successfully saved settings to \"{PATH_SETTINGS}\"!" );
     }
 
     /// <summary>

@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Toast.Engine.Entities;
+namespace Toast.Engine.Entities.Tools;
 
 /// <summary>
 /// Wrapper for all tool entities.<br/>

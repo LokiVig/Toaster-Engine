@@ -2,6 +2,8 @@
 using System.Numerics;
 
 using Toast.Engine.Resources;
+using Toast.Engine.Entities.NPC;
+using Toast.Engine.Entities.Tools;
 
 namespace Toast.Engine.Entities.Brushes;
 

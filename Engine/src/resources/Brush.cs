@@ -2,7 +2,7 @@
 
 using Newtonsoft.Json;
 
-using Toast.Engine.Entities;
+using Toast.Engine.Entities.Brushes;
 using Toast.Engine.Rendering;
 
 namespace Toast.Engine.Resources;

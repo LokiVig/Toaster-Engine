@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 
 using Toast.Engine.Entities;
+using Toast.Engine.Entities.Tools;
 
 namespace Toast.Engine.Rendering;
 

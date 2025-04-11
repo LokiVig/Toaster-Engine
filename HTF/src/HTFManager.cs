@@ -45,19 +45,13 @@ public class HTFManager
     /// </summary>
     public void Initialize()
     {
-        // Initialize the engine
-        EngineManager.Initialize( "HTF" );
-        EngineManager.OnUpdate += Update;
-        EngineManager.OnUIUpdate += UIUpdate;
-
         // Create HTF keybinds
         CreateKeybinds();
 
-        // Start the engine's update function
-        EngineManager.Update();
-
-        // After having run the update for however many times, shut down the engine
-        EngineManager.Shutdown();
+        // Initialize the engine
+        EngineManager.OnUpdate += Update;
+        EngineManager.OnUIUpdate += UIUpdate;
+        EngineManager.Initialize( "HTF" );
     }
 
     private void CreateKeybinds()

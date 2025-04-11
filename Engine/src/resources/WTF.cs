@@ -262,18 +262,6 @@ public class WTF
     {
         WTF file = null; // A local variable for storing the file
 
-        // Ensure that the "maps/" directory actually exists
-        if ( !Directory.Exists( "maps/" ) )
-        {
-            Directory.CreateDirectory( "maps/" );
-        }
-
-        // If the input directory doesn't contain the maps folder...
-        if ( !path.Contains( "maps/" ) )
-        {
-            path = Path.Combine( "maps/", path ); // Add the maps prefix, we should only ever save maps
-        }                                         // in the maps/ folder
-
         // If we already have a file open, set the path to the current file
         if ( EngineManager.currentFile != null && !string.IsNullOrEmpty( EngineManager.currentFile.path ) )
         {
@@ -286,7 +274,7 @@ public class WTF
         }
         else // We couldn't find a file to save, error!
         {
-            Log.Error<NullReferenceException>( "Error saving file, SaveFile().inFile == null && EngineProgram.currentFile == null!" );
+            Log.Error<NullReferenceException>( "Error saving file, inFile == null && EngineProgram.currentFile == null!" );
         }
 
         // Call the file's OnSave function

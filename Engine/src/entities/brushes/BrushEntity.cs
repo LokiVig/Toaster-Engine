@@ -2,7 +2,7 @@
 
 using Toast.Engine.Resources;
 
-namespace Toast.Engine.Entities;
+namespace Toast.Engine.Entities.Brushes;
 
 public class BrushEntity : Entity
 {

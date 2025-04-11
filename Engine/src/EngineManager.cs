@@ -6,6 +6,7 @@ using Veldrid;
 using Toast.Engine.Rendering;
 using Toast.Engine.Resources;
 using Toast.Engine.Attributes;
+using Toast.Engine.Resources.API;
 using Toast.Engine.Resources.Input;
 using Toast.Engine.Resources.Audio;
 using Toast.Engine.Resources.Console;
@@ -111,6 +112,8 @@ public static class EngineManager
             // Register the default console commands
             ConsoleManager.RegisterCommands();
 
+            DiscordManager.Initialize();
+
             // Create default keybinds
             CreateKeybinds();
 
@@ -125,6 +128,9 @@ public static class EngineManager
         // Connect our InputManager's events to the Renderer's events for simplicity's sakes
         Renderer.window.KeyDown += InputManager.OnKeyDown;
         Renderer.window.KeyUp += InputManager.OnKeyUp;
+
+        // Call our update function
+        Update();
     }
 
     /// <summary>
@@ -162,6 +168,9 @@ public static class EngineManager
             // Update UI elements
             UIUpdate();
         }
+
+        // We should stop everything and call our shutdown!
+        Shutdown();
     }
 
     /// <summary>
@@ -218,7 +227,7 @@ public static class EngineManager
     /// <summary>
     /// Toggles the debug UI. Mainly used with console commands.
     /// </summary>
-    [ConsoleCommand( "debug", "Toggles the debug UI menu, displaying specific engine and game information.", CommandConditions.Cheats )]
+    [ConsoleCommand( "debug", "Toggles the debug UI menu, displaying specific engine and game information.", Conditions = CommandConditions.Cheats )]
     private static void ToggleDebug()
     {
         debugOpen = !debugOpen;
@@ -243,16 +252,6 @@ public static class EngineManager
     }
 
     /// <summary>
-    /// Used primarily for the "quit" console command, instantly closes the application with the code 0.
-    /// </summary>
-    [ConsoleCommand( "quit", "Shuts the engine down entirely." )]
-    public static void EngineShutdown()
-    {
-        Shutdown(); // Call the regular shutdown function
-        Environment.Exit( 0 ); // Exit the environment
-    }
-
-    /// <summary>
     /// Shut down the engine after a hard day of calling update functions and etc.
     /// </summary>
     public static void Shutdown()
@@ -266,10 +265,23 @@ public static class EngineManager
         // Save our settings
         settings.Save();
 
+        // Shutdown the Discord RPC
+        DiscordManager.Shutdown();
+
         // End file logging
         Log.CloseLogFile(); 
 
         // Clear everything from the renderer
         Renderer.Shutdown();
+    }
+
+    /// <summary>
+    /// Used primarily for the "quit" console command, instantly closes the application with the code 0.
+    /// </summary>
+    [ConsoleCommand( "quit", "Shuts the engine down entirely." )]
+    public static void EngineShutdown()
+    {
+        Shutdown(); // Call the regular shutdown function
+        Environment.Exit( 0 ); // Exit the environment
     }
 }

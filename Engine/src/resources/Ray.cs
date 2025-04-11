@@ -181,9 +181,13 @@ public struct Ray
             direction = rayDirection
         };
 
-        Trace( rayStart, rayDirection, out object hitObject, rayIgnore, ignoredObjects, logInfo, rayLength );
-        result.hit = hitObject;
+        if ( !Trace( rayStart, rayDirection, out object hitObject, rayIgnore, ignoredObjects, logInfo, rayLength ) )
+        {
+            Log.Warning( "Failed tracing a regular ray!" );
+            return default;
+        }
 
+        result.hit = hitObject;
         return result;
     }
 

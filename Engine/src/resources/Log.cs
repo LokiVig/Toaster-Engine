@@ -10,7 +10,7 @@ using Toast.Engine.Resources.Audio;
 
 namespace Toast.Engine.Resources;
 
-public struct Log
+public static class Log
 {
     // The path to the engine's logging file
     // This should just be our root dir, saved in a file called "Toaster.Engine.log"

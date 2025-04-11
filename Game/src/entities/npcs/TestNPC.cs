@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 
-using Toast.Engine.Entities;
 using Toast.Engine.Resources;
+using Toast.Engine.Entities.NPC;
 
 namespace Toast.Game.Entities.NPC;
 

@@ -2,9 +2,8 @@
 using System.Numerics;
 
 using Toast.Engine.Resources;
-using Toast.Engine.Entities.NPC;
 
-namespace Toast.Engine.Entities;
+namespace Toast.Engine.Entities.NPC;
 
 public class NPCEntity : Entity
 {

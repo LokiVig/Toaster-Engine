@@ -31,13 +31,16 @@ public class Renderer
 
     private static ImGuiController controller;
 
+    // The window info
+    private static SDL_DisplayMode screenInfo;
+
     /// <summary>
     /// Initializes a OpenGL rendered window with a specified title.
     /// </summary>
     /// <param name="title">The title of the window we wish to open.</param>
     public static void Initialize( string title )
     {
-        // The window info
+        // Buffer
         SDL_DisplayMode mode;
 
         // Why did they gotta have it be a pointer :(
@@ -46,6 +49,9 @@ public class Renderer
             // Used to get information about the user's main display
             Sdl2Native.SDL_GetCurrentDisplayMode( 0, &mode );
         }
+
+        // Set our screen info to the acquired info
+        screenInfo = mode;
 
         // Create a window using Veldrid's StartupUtilities
         // These are the default values a window should be created with
@@ -59,8 +65,8 @@ public class Renderer
 
         // Places the window in the middle of the screen, dependant on width and height
         // Clamped to 0 for top-left corner, just incase
-        windowCI.X = Math.Max( 0, ( windowCI.WindowWidth - mode.w ) / 2 );
-        windowCI.Y = Math.Max( 0, ( windowCI.WindowHeight - mode.h ) / 2 );
+        windowCI.X = Math.Max( 0, ( windowCI.WindowWidth - screenInfo.w ) / 2 );
+        windowCI.Y = Math.Max( 0, ( windowCI.WindowHeight - screenInfo.h ) / 2 );
 
         // Create our window
         window = VeldridStartup.CreateWindow( ref windowCI );
@@ -116,7 +122,7 @@ public class Renderer
         SetVSync( EngineManager.settings.VSyncEnabled );
         SetWindowWidth( EngineManager.settings.WindowResolution.width );
         SetWindowHeight( EngineManager.settings.WindowResolution.height );
-        
+
         // Log our successful initialization!
         Log.Success( "Successfully initialized renderer!" );
     }
@@ -135,7 +141,7 @@ public class Renderer
     /// Sets the renderer's window title to <paramref name="args"/>.
     /// </summary>
     /// <param name="args">The window's new title.</param>
-    [ConsoleCommand( "r_setwindowtitle", "Sets the renderer's window's title to the argument string. For spaces, place underscores.", CommandConditions.Cheats )]
+    [ConsoleCommand( "r_setwindowtitle", "Sets the renderer's window's title to the argument string. For spaces, place underscores." )]
     public static void SetWindowTitle( List<object> args )
     {
         // Get the count of arguments
@@ -149,9 +155,9 @@ public class Renderer
         }
 
         // Set the window's title to the argument
-        window.Title = argCount == 1 || bool.Parse( (string)args[2] ) 
+        window.Title = argCount == 1 || bool.Parse( (string)args[2] )
             ? $"{EngineManager.EngineTitle} - {args[1].ToString().Replace( "_", " " )}"
-            : $"{args[1].ToString().Replace("_", " ")}";
+            : $"{args[1].ToString().Replace( "_", " " )}";
 
         // Log the title change!
         Log.Info( $"Set the window's title to \"{window.Title}\"!", true );
@@ -248,6 +254,20 @@ public class Renderer
         {
             Log.Warning( $"Couldn't set window height to {height} as it's less than the minimum acceptable height ({WINDOW_MIN_HEIGHT})!" );
             height = WINDOW_MIN_HEIGHT;
+        }
+
+        // Make sure the width isn't more than the screen's width
+        if ( width > screenInfo.w )
+        {
+            Log.Warning( $"Couldn't set window width to {width} as it's more than the screen's width ({screenInfo.w})!" );
+            width = screenInfo.w;
+        }
+
+        // Make sure the height isn't more than the screen's height
+        if ( height > screenInfo.h )
+        {
+            Log.Warning( $"Couldn't set window height to {height} as it's more than the screen's height ({screenInfo.h})!" );
+            height = screenInfo.h;
         }
 
         // Set the window's width and height appropriately!
@@ -370,7 +390,7 @@ public class Renderer
     /// Sets the value of the window's window state.
     /// </summary>
     /// <param name="windowState">The window state we should switch to.</param>
-    public static void SetWindowState( WindowState windowState)
+    public static void SetWindowState( WindowState windowState )
     {
         window.WindowState = windowState;
     }

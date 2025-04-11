@@ -25,9 +25,12 @@
 		<IsTrimmable>True</IsTrimmable>
 	</PropertyGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<!-- API - Discord -->
+		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)resources\api\discord\*&quot; &quot;$(OutDir)resources\api\discord\&quot;" />
+
 		<!-- Shaders -->
 		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)resources\shaders\*&quot; &quot;$(OutDir)resources\shaders\&quot;" />
-		
+
 		<!-- Textures -->
 		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)resources\textures\*&quot; &quot;$(OutDir)resources\textures\&quot;" />
 
@@ -35,6 +38,7 @@
 		<Exec Command="xcopy /E /S /Y &quot;$(ProjectDir)resources\audio\*&quot; &quot;$(OutDir)resources\audio\&quot;" />
 	</Target>
 	<ItemGroup>
+		<PackageReference Include="DiscordRichPresence" Version="1.2.1.24" />
 		<PackageReference Include="ImGui.NET" Version="1.91.6.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Silk.NET.Core" Version="2.22.0" />
