@@ -104,7 +104,10 @@ public static class EngineManager
             Log.OpenLogFile();
          
             // Load the settings
-            settings = Settings.Load() ?? new Settings();
+            if ( !Settings.Load( out settings ) )
+            {
+                settings = new Settings();
+            }
 
             // Initialize our input manager
             InputManager.Initialize();

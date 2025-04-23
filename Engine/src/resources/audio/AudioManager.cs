@@ -106,8 +106,7 @@ public static class AudioManager
             }
 
             // Log an error with the unmanaged exception!
-            // If the error sound is missing or causes an exception for any reason,
-            // it means that this will cause an infinite recursion... Whoopsies!
+            // If the error sound is missing, it means that this will cause an infinite recursion... Whoopsies!
             Log.Error( "Exception caught playing sound!", exc );
             return null;
         }

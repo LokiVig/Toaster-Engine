@@ -8,6 +8,7 @@ using Toast.Engine.Resources;
 using Toast.Engine.Entities.Brushes;
 using Toast.Engine.Entities.Tools;
 using System;
+using Toast.Engine.Resources.Console;
 
 namespace Toast.Engine.Rendering;
 
@@ -268,6 +269,16 @@ public static class DebugUI
             // Debug Commands \\
             if ( ImGui.TreeNodeEx( "Commands", ImGuiTreeNodeFlags.Framed | ImGuiTreeNodeFlags.DefaultOpen ) )
             {
+                if ( ImGui.Button( "Save Settings" ) )
+                {
+                    EngineManager.settings.Save();
+                }
+
+                if ( ImGui.Button( "Load Settings" ) )
+                {
+                    Settings.Load(out EngineManager.settings);
+                }
+
                 if ( ImGui.Button( "Shutdown" ) )
                 {
                     EngineManager.EngineShutdown();

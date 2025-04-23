@@ -40,6 +40,9 @@ public class Renderer
     /// <param name="title">The title of the window we wish to open.</param>
     public static void Initialize( string title )
     {
+        // Subscribe to the settings load event
+        Settings.OnSettingsLoaded += LoadSettings;
+
         // Buffer
         SDL_DisplayMode mode;
 
@@ -117,14 +120,20 @@ public class Renderer
         // Create our default resources
         CreateResources();
 
+        // Log our successful initialization!
+        Log.Success( "Successfully initialized renderer!" );
+    }
+
+    /// <summary>
+    /// Applies settings that have just been loaded.
+    /// </summary>
+    private static void LoadSettings()
+    {
         // Load settings
         SetWindowState( EngineManager.settings.WindowState );
         SetVSync( EngineManager.settings.VSyncEnabled );
         SetWindowWidth( EngineManager.settings.WindowResolution.width );
         SetWindowHeight( EngineManager.settings.WindowResolution.height );
-
-        // Log our successful initialization!
-        Log.Success( "Successfully initialized renderer!" );
     }
 
     /// <summary>

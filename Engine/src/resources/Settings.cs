@@ -22,6 +22,11 @@ public class Settings
     /// </summary>
     public const string PATH_SETTINGS = "settings.json";
 
+    /// <summary>
+    /// Event to happen after loading settings.<br/>
+    /// </summary>
+    public static event Action OnSettingsLoaded;
+
     //---------------------------------------//
     //             Audio Settings            //
     //---------------------------------------//
@@ -95,13 +100,11 @@ public class Settings
     /// <summary>
     /// Loads settings from a JSON file at the path of <see cref="PATH_SETTINGS"/>.
     /// </summary>
-    public static Settings Load()
+    /// <returns><see langword="true"/> if settings were successfully loaded, <see langword="false"/> otherwise.</returns>
+    public static bool Load(out Settings settings)
     {
         try
         {
-            // Return value
-            Settings settings = null;
-
             // Load the settings from our JSON file
             using ( StreamReader sr = new StreamReader( PATH_SETTINGS ) )
             {
@@ -116,12 +119,17 @@ public class Settings
             {
                 // Log our error and return null!
                 Log.Error( "Error loading settings, serializer failed deserializing / file isn't encoded properly!" );
-                return null;
+                return false;
             }
 
-            // Log our success and return the successfully deserialized settings!
+            // Log our success
             Log.Success( "Successfully loaded settings!" );
-            return settings;
+
+            // Invoke the OnSettingsLoaded event
+            OnSettingsLoaded?.Invoke();
+
+            // Return a successful settings loading
+            return true;
         }
         catch ( Exception exc )
         {
@@ -130,12 +138,14 @@ public class Settings
             {
                 // Log a standard error explaining what went wrong
                 Log.Error( "Error loading settings, there is no existing settings file!" );
-                return null;
+                settings = null;
+                return false;
             }
 
             // We've hit an unmanaged exception, throw it!
             Log.Error( "Error loading settings!", exc );
-            return null;
+            settings = null;
+            return false;
         }
     }
 }

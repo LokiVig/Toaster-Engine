@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 
+using Toast.Engine.Attributes;
 using Toast.Engine.Entities;
 using Toast.Engine.Rendering;
 
@@ -45,5 +46,29 @@ public class Player : PlayerEntity
 
         // We have taken damage, OnDamage call!
         OnDamage();
+    }
+
+    [ConsoleCommand("+move_forward", "Moves the game's player forward.")]
+    private static void MoveForward()
+    {
+
+    }
+
+    [ConsoleCommand("+move_backward", "Moves the game's player backward." )]
+    private static void MoveBackward()
+    {
+
+    }
+
+    [ConsoleCommand("+move_left", "Moves the game's player left." )]
+    private static void MoveLeft()
+    {
+
+    }
+
+    [ConsoleCommand("+move_right", "Moves the game's player right.")]
+    private static void MoveRight()
+    {
+
     }
 }
